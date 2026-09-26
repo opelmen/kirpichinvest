@@ -1,0 +1,21 @@
+name: Deploy to Beget
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via rsync
+        env:
+          SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
+          rsync -avz --delete --exclude '.git' --exclude '.github' ./ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
