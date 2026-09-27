@@ -18,4 +18,4 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
-          rsync -avz --delete --exclude '.git' --exclude '.github' ./ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
+          rsync -avz --delete --exclude '.git' --exclude '.github' --exclude '.gitignore' --exclude '_project' --exclude '.DS_Store' --exclude 'README.txt' ./ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
