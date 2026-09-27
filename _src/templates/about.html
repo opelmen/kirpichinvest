@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% from "_form.html" import lead_form %}
+{% block main %}<div class="wrap">
+<p class="crumbs"><a href="/">Главная</a> / О нас</p>
+<h1>О нас</h1>
+<div class="split" style="padding-bottom:64px">
+<div>
+<p class="lead">{{ cfg.SITE_NAME }} — проект {{ author.name }}, брокера по недвижимости и залоговым сделкам в Санкт-Петербурге. Занимаемся проблемными и залоговыми активами: подбираем, проверяем и сопровождаем покупку жилья с торгов.</p>
+<h2>Как работаем</h2>
+<p>Отслеживаем торги по банкротству и реализации арестованного имущества в Петербурге и Ленобласти. По выбранному лоту проверяем документы, обременения, жильцов и долги, считаем максимальную ставку, участвуем в торгах от имени клиента и ведём сделку до регистрации права.</p>
+<p>Мы не организатор торгов, не продаём лоты и не принимаем деньги клиентов: задаток и оплата идут по реквизитам из извещения о торгах.</p>
+<p>Лоты на сайте собираются автоматически из открытого реестра ГИС Торги. Перед сделкой каждый лот проверяем вручную.</p>
+<h2>Контакты и реквизиты</h2>
+<table class="t"><tr><th>Исполнитель</th><td>{{ cfg.SITE_OWNER }}</td></tr>
+{% if cfg.SITE_INN %}<tr><th>ИНН</th><td>{{ cfg.SITE_INN }}</td></tr>{% endif %}
+{% if cfg.SITE_OGRNIP %}<tr><th>ОГРНИП</th><td>{{ cfg.SITE_OGRNIP }}</td></tr>{% endif %}
+<tr><th>Город</th><td>{{ cfg.SITE_ADDRESS }}</td></tr>
+<tr><th>Телефон</th><td><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></td></tr>
+<tr><th>Почта</th><td><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></td></tr>
+{% if cfg.SITE_TELEGRAM %}<tr><th>Telegram</th><td><a href="{{ cfg.SITE_TELEGRAM }}">написать</a></td></tr>{% endif %}
+<tr><th>Часы работы</th><td>Пн–Пт, 10:00–19:00</td></tr></table>
+</div>
+{{ lead_form("buy", "Связаться с нами", "", "Отправить", [{"name":"q","label":"Вопрос","area":true}]) }}
+</div></div>{% endblock %}

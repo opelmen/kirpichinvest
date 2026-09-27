@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}{% if path != '/' %} — {{ cfg.SITE_NAME }}{% endif %}</title>
+<meta name="description" content="{{ description }}">
+<link rel="canonical" href="{{ canonical }}">
+{% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:site_name" content="{{ cfg.SITE_NAME }}">
+<meta property="og:locale" content="ru_RU">
+<link rel="preload" href="/static/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/site.css?v=1">
+<script type="application/ld+json">{{ {
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": cfg.SITE_NAME,
+  "legalName": cfg.SITE_OWNER,
+  "url": cfg.SITE_URL,
+  "telephone": cfg.SITE_PHONE,
+  "email": cfg.SITE_EMAIL,
+  "description": "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в Санкт-Петербурге и Ленинградской области. Не является организатором торгов.",
+  "areaServed": ["Санкт-Петербург", "Ленинградская область"],
+  "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
+  "founder": {"@type": "Person", "name": author.name, "jobTitle": author.role},
+  "taxID": cfg.SITE_INN or None
+} | tojson }}</script>
+{% block ld %}{% endblock %}
+{% if cfg.METRIKA_ID %}<script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym({{ cfg.METRIKA_ID }},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});</script>{% endif %}
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/"><i aria-hidden="true"></i>{{ cfg.SITE_NAME }}</a>
+  <button class="burger" aria-label="Меню" onclick="document.querySelector('.nav').classList.toggle('open')">Меню</button>
+  <nav class="nav">
+    <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Лоты</a>
+    <a href="/kupit-kvartiru-s-torgov/" {% if path.startswith('/kupit') %}aria-current="page"{% endif %}>Купить под ключ</a>
+    <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>
+    <a href="/investoram/" {% if path.startswith('/invest') %}aria-current="page"{% endif %}>Инвесторам</a>
+    <a href="/kalkulyator-stavki/" {% if path.startswith('/kalk') %}aria-current="page"{% endif %}>Калькулятор</a>
+    <a href="/stati/" {% if path.startswith('/stati') %}aria-current="page"{% endif %}>Статьи</a>
+  </nav>
+  <a class="phone" href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a>
+</div></header>
+<main>{% block main %}{% endblock %}</main>
+<footer><div class="wrap">
+  <div class="cols">
+    <div>
+      <p><b style="color:#fff">{{ cfg.SITE_NAME }}</b> — подбор, проверка и сопровождение покупки жилья с торгов в Санкт-Петербурге и Ленинградской области.</p>
+      <p>Мы не организатор торгов и не продавец лотов. Информация о лотах взята из открытых источников (ГИС Торги) и носит справочный характер. Сайт не является публичной офертой.</p>
+      <p>{{ cfg.SITE_OWNER }}{% if cfg.SITE_INN %} · ИНН {{ cfg.SITE_INN }}{% endif %}{% if cfg.SITE_OGRNIP %} · ОГРНИП {{ cfg.SITE_OGRNIP }}{% endif %}<br>{{ cfg.SITE_ADDRESS }}</p>
+    </div>
+    <div><h3>Разделы</h3><ul>
+      <li><a href="/torgi/spb/">Лоты в СПб</a></li><li><a href="/torgi/lenoblast/">Лоты в Ленобласти</a></li>
+      <li><a href="/kupit-kvartiru-s-torgov/">Покупка под ключ</a></li><li><a href="/proverka-lota/">Проверка лота</a></li>
+      <li><a href="/investoram/">Инвесторам</a></li><li><a href="/stati/">Статьи</a></li><li><a href="/slovar/">Словарь терминов</a></li></ul></div>
+    <div><h3>Контакты</h3><ul>
+      <li><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></li>
+      <li><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></li>
+      {% if cfg.SITE_TELEGRAM %}<li><a href="{{ cfg.SITE_TELEGRAM }}">Telegram</a></li>{% endif %}
+      <li><a href="/o-nas/">О нас и реквизиты</a></li><li><a href="/politika/">Политика обработки ПД</a></li></ul></div>
+  </div>
+  <p style="margin-top:24px">© {{ year }} {{ cfg.SITE_NAME }}</p>
+</div></footer>
+<script>
+(function(){var p=new URLSearchParams(location.search),u=[];["utm_source","utm_medium","utm_campaign","utm_term","yclid"].forEach(function(k){if(p.get(k))u.push(k+"="+p.get(k))});
+try{if(u.length)sessionStorage.setItem("utm",u.join("&"))}catch(e){}
+document.querySelectorAll("form[data-lead]").forEach(function(f){f.addEventListener("submit",function(ev){ev.preventDefault();
+var d=new FormData(f);d.append("page",location.pathname);try{d.append("utm",sessionStorage.getItem("utm")||"")}catch(e){}
+var b=f.querySelector("button");b.disabled=true;var er=f.querySelector(".err");er.style.display="none";
+fetch("{{ cfg.LEAD_URL }}",{method:"POST",body:d}).then(function(r){return r.json()}).then(function(j){
+if(j.ok){f.querySelector(".fields").style.display="none";f.querySelector(".ok").style.display="block";if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}
+else{er.textContent=j.error||"Не отправилось. Позвоните нам.";er.style.display="block";b.disabled=false}})
+.catch(function(){er.textContent="Нет связи. Позвоните: {{ cfg.SITE_PHONE }}";er.style.display="block";b.disabled=false})})})})();
+</script>
+</body></html>

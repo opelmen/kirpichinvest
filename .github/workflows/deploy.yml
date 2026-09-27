@@ -3,12 +3,34 @@ name: Deploy to Beget
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "15 3,9,15 * * *"   # пересборка со свежими лотами 3 раза в день (UTC)
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build site
+        run: |
+          pip install -q jinja2==3.1.4 markdown==3.7
+          if curl -sf --max-time 60 https://check.kirpichinvest.ru/public/lots.json -o /tmp/lots.json \
+             && python -c "import json,sys; d=json.load(open('/tmp/lots.json')); print('лотов из сервиса:', len(d)); sys.exit(0 if isinstance(d, list) else 1)"; then
+            cp /tmp/lots.json _src/data/lots.json
+          else
+            echo "!! сервис лотов недоступен — собираю без обновления лотов"
+          fi
+          python _src/build.py
 
       - name: Deploy via rsync
         env:
@@ -18,4 +40,5 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
-          rsync -avz --delete --exclude '.git' --exclude '.github' --exclude '.gitignore' --exclude '_project' --exclude '.DS_Store' --exclude 'README.txt' ./ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
+          rsync -az --delete --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
+          echo "Опубликовано страниц: $(find _site -name '*.html' | wc -l)"
