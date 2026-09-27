@@ -86,6 +86,7 @@ for d in LOTS:
         except ValueError:
             d["days_left"] = None
 LOTS = [d for d in LOTS if d.get("days_left") is None or d["days_left"] >= 0]
+
 LOTS.sort(key=lambda d: d.get("first_seen") or "", reverse=True)
 
 
@@ -94,11 +95,57 @@ def translit(s):
     return re.sub(r"-+", "-", "".join(t.get(c, c if c.isalnum() else "-") for c in s.lower())).strip("-")
 
 
-def lo_town(d):
-    a = d.get("address") or d.get("name") or ""
-    m = re.search(r"(?:г\.|город|пос\.|п\.|посёлок|поселок|гп|г\.п\.|дер\.|д\.)\s*([А-ЯЁ][а-яё\-]+(?:\s[А-ЯЁ][а-яё\-]+)?)", a)
-    return m.group(1) if (m and d.get("region") == "47" and "Санкт" not in m.group(1)) else None
+def clean_address(d):
+    """Адрес без персональных данных должника и служебного текста извещения."""
+    a = str(d.get("address") or d.get("name") or "")
+    m = re.search(r"(?:по\s+адресу|адрес)[:\s]+(.+)$", a, re.I)
+    if m:
+        a = m.group(1)
+    elif re.search(r"должник|взыскател|принадлежащ", a, re.I):
+        a = ""
+    a = re.sub(r"\bСПБ\b|Санкт-Петербург г\.?", "Санкт-Петербург", a)
+    a = re.sub(r"обл\.\s*Ленинградская", "Ленинградская область", a)
+    a = re.sub(r"вн\.тер\.г\.\s*", "", a)
+    a = re.sub(r"Российская Федерация,?\s*", "", a)
+    a = re.sub(r"^(Ленинградская область|Санкт-Петербург)\s+(?=Ленинградская область|Санкт-Петербург|г\.? Санкт)", "", a)
+    a = re.sub(r"^г\s+Санкт", "г. Санкт", a)
+    a = re.sub(r"\s+", " ", a).strip(" ,.")
+    if len(a) < 12 or a in ("Ленинградская область", "Санкт-Петербург"):
+        a = ("Санкт-Петербург" if d.get("region") == "78" else "Ленинградская область") + (", адрес уточняется" if len(a) < 12 else "")
+    return a[:160]
 
+
+def object_label(d):
+    t = str(d.get("address") or d.get("name") or "").lower()
+    kind = "Доля в квартире" if re.search(r"дол[яиейю]", t) else ("Комната" if "комнат" in t and "квартир" not in t else "Квартира")
+    area = f" {d['area']:g} м²".replace(".", ",") if d.get("area") and 8 <= d["area"] <= 400 else ""
+    return kind + area
+
+
+DISTRICT_RE = re.compile(r"(?:м\.р-н|р-н\.?|м\.о\.|г\.о\.)\s*([А-ЯЁ][а-яё]+(?:ский|цкий))|([А-ЯЁ][а-яё]+(?:ский|цкий))\s+(?:муниципальный\s+)?район")
+
+
+def lo_district(d):
+    if d.get("region") != "47":
+        return None
+    m = DISTRICT_RE.search(str(d.get("address") or d.get("name") or ""))
+    if not m:
+        return None
+    name = m.group(1) or m.group(2)
+    return name + (" городской округ" if name == "Сосновоборский" else " район")
+
+
+def lo_town(d):
+    if d.get("region") != "47":
+        return None
+    m = re.search(r"(?:(?<![а-яё.])г\.|город)\s*([А-ЯЁ][а-яё\-]+(?:\s[А-ЯЁ][а-яё]+)?)", str(d.get("address") or ""))
+    return m.group(1) if m else None
+
+
+for _d in LOTS:
+    _d["caddr"] = clean_address(_d)
+    _d["label"] = object_label(_d)
+    _d.pop("description", None)  # в извещениях бывают ФИО должников — на сайт не выводим
 
 FACETS = [  # slug, название, фильтр, заголовок-формулировка
     ("odnokomnatnye", "Однокомнатные", lambda d: d.get("rooms") == 1, "Однокомнатные квартиры с торгов"),
@@ -157,9 +204,10 @@ def build():
 
     towns = {}
     for d in LOTS:
-        t = lo_town(d)
-        if t:
-            towns.setdefault(t, []).append(d)
+        for t in (lo_district(d), lo_town(d)):
+            if t:
+                towns.setdefault(t, []).append(d)
+    towns = {t: v for t, v in towns.items() if "район" in t or "округ" in t or len(v) >= 2}
     env.globals["town_links"] = sorted((f"/torgi/lenoblast/{translit(t)}/", f"{t} ({len(v)})") for t, v in towns.items())
     listing("/torgi/", LOTS, "Квартиры с торгов в Санкт-Петербурге и Ленинградской области", "в Санкт-Петербурге и Ленинградской области", [("Лоты", "/torgi/")], "0.9")
     for slug, (code, name, where) in REGIONS.items():
@@ -170,16 +218,15 @@ def build():
         if fl:
             listing(f"/torgi/{slug}/", fl, f"{h1} в СПб и Ленобласти", "в СПб и Ленобласти", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")])
     for t, tl in towns.items():
-        listing(f"/torgi/lenoblast/{translit(t)}/", tl, f"Квартиры с торгов: {t}", f"— {t}, Ленинградская область",
+        listing(f"/torgi/lenoblast/{translit(t)}/", tl, f"Квартиры с торгов: {t}" + ("" if "район" in t or "округ" in t else ", Ленинградская область"), f"— {t}, Ленинградская область",
                 [("Лоты", "/torgi/"), ("Ленинградская область", "/torgi/lenoblast/"), (t, f"/torgi/lenoblast/{translit(t)}/")], "0.7")
 
     for d in LOTS:
         similar = [x for x in LOTS if x.get("region") == d.get("region") and x["id"] != d["id"]][:4]
-        rooms = f"{d['rooms']}-комн. квартира" if d.get("rooms") else "Жильё"
         write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=(d.get("first_seen") or TODAY)[:10],
               d=d, active=True, similar=similar,
-              title=f"{rooms} с торгов: {(d.get('address') or '')[:70]}",
-              description=f"Лот с торгов: {d.get('address') or ''}. Начальная цена {rub(d.get('price'))}. Риски, срок заявок, как рассчитать ставку.")
+              title=f"{d['label']} с торгов: {d['caddr'][:70]}",
+              description=f"{d['label']} с торгов: {d['caddr']}. Начальная цена {rub(d.get('price'))}. Риски, срок приёма заявок, расчёт ставки.")
 
     pages = [("kupit-kvartiru-s-torgov", "buy.html", "Купить квартиру с торгов под ключ в СПб — подбор и сопровождение",
               "Подберём квартиру на торгах по банкротству и арестованному имуществу, проверим риски, подадим заявку и сопроводим до регистрации права."),

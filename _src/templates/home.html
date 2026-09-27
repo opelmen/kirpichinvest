@@ -23,7 +23,7 @@
     <h2>Свежие лоты · обновляется каждые 30 минут</h2>
     {% for d in lots %}
     <a class="lotrow" href="/torgi/lot/{{ d.id }}/">
-      <span class="addr">{{ (d.address or d.name)[:90] }}</span><span class="price">{{ d.price|rub }}</span>
+      <span class="addr">{{ d.caddr[:90] }}</span><span class="price">{{ d.price|rub }}</span>
       <span class="meta">{% if d.area %}{{ d.area|round(1) }} м² · {% endif %}{% if d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
       <span>{% if d.days_left is not none and d.days_left >= 0 %}<span class="tag">заявки ещё {{ d.days_left|round|int }} дн.</span>{% endif %}</span>
     </a>
