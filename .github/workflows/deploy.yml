@@ -48,9 +48,14 @@ jobs:
 
       - name: Save log
         if: always()
+        env:
+          GH: ${{ github.token }}
         run: |
           { echo "== $(date -u) ${GITHUB_SHA::7} ${{ github.event_name }}"; cat /tmp/build.log 2>/dev/null; echo "result: ${{ job.status }}"; } > /tmp/last.log
+          cp _src/data/lots.json /tmp/lots.json 2>/dev/null || true
+          find _site -name index.html 2>/dev/null | sed 's#_site##;s#index.html##' | sort > /tmp/pages.txt || true
+          mkdir /tmp/lr && cd /tmp/lr && git init -q && git remote add origin "https://x-access-token:${GH}@github.com/${GITHUB_REPOSITORY}.git"
           git config user.name deploy-bot; git config user.email deploy@bot
           git fetch -q origin deploy-log && git checkout -q deploy-log || git checkout -q --orphan deploy-log
-          git rm -rq --cached . 2>/dev/null || true
-          cp /tmp/last.log last.log && cp _src/data/lots.json lots.json 2>/dev/null; find _site -name index.html | sed 's#_site##;s#index.html##' | sort > pages.txt 2>/dev/null; git add last.log lots.json pages.txt 2>/dev/null; git add last.log && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log
+          cp /tmp/last.log /tmp/lots.json /tmp/pages.txt . 2>/dev/null || true
+          git add -A && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log
