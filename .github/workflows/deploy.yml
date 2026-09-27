@@ -53,4 +53,4 @@ jobs:
           git config user.name deploy-bot; git config user.email deploy@bot
           git fetch -q origin deploy-log && git checkout -q deploy-log || git checkout -q --orphan deploy-log
           git rm -rq --cached . 2>/dev/null || true
-          cp /tmp/last.log last.log && git add last.log && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log
+          cp /tmp/last.log last.log && cp _src/data/lots.json lots.json 2>/dev/null; find _site -name index.html | sed 's#_site##;s#index.html##' | sort > pages.txt 2>/dev/null; git add last.log lots.json pages.txt 2>/dev/null; git add last.log && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log
