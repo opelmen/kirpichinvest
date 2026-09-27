@@ -10,7 +10,7 @@
 {% block main %}
 <div class="hero"><div class="wrap">
   <div>
-    <h1>Квартиры с торгов в Петербурге и Ленобласти</h1>
+    <h1>Квартиры с торгов в Москве, Петербурге и городах-миллионниках</h1>
     <p class="lead">Находим лоты, проверяем риски до подачи заявки и считаем максимальную ставку. Покупаете на своё имя, деньги идут напрямую на площадку и продавцу.</p>
     <div class="cta"><a class="btn" href="/torgi/">Смотреть лоты</a><a class="btn ghost" href="#zayavka">Подобрать квартиру</a></div>
     <div class="facts">
@@ -31,6 +31,12 @@
     <a class="more" href="/torgi/">Все лоты</a>
   </div>
 </div></div>
+
+<section class="alt"><div class="wrap">
+  <h2>Лоты по городам</h2>
+  <p class="mute">16 городов-миллионников и населённые пункты в радиусе 100 км. Торги электронные — участвовать можно из любого города.</p>
+  <nav class="filters" aria-label="Города" style="margin-top:14px">{% for slug, name, where, n in cities %}<a href="/torgi/{{ slug }}/">{{ name }}{% if n %} · {{ n }}{% endif %}</a>{% endfor %}</nav>
+</div></section>
 
 <section><div class="wrap">
   <h2>С чего начнём</h2>
@@ -78,7 +84,7 @@
   <div class="faq"><h2>Частые вопросы</h2>{% for q, a in faq %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
   <div id="zayavka">{{ lead_form("buy", "Подобрать квартиру с торгов", "Пришлём подходящие лоты и разберём первый бесплатно.", "Отправить заявку",
     [{"name":"budget","label":"Бюджет","options":["до 5 млн ₽","5–8 млн ₽","8–12 млн ₽","12–20 млн ₽","больше 20 млн ₽"]},
-     {"name":"where","label":"Где ищете","options":["Санкт-Петербург","Ленинградская область","Не важно"]},
+     {"name":"where","label":"Город","options":(cities|map(attribute=1)|list) + ["Другой город"]},
      {"name":"wish","label":"Пожелания","area":true,"ph":"Район, метро, комнаты, срок"}]) }}</div>
 </div></section>
 {% endblock %}

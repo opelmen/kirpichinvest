@@ -46,6 +46,27 @@ jobs:
           rsync -az --delete --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
           echo "Опубликовано страниц: $(find _site -name '*.html' | wc -l)" | tee -a /tmp/build.log
 
+      - name: IndexNow (Яндекс, Bing) — новые страницы
+        continue-on-error: true
+        run: |
+          git fetch -q origin deploy-log && git show origin/deploy-log:urls.txt > /tmp/prev_urls.txt 2>/dev/null || : > /tmp/prev_urls.txt
+          sort -u _site/urls.txt > /tmp/cur.txt; sort -u /tmp/prev_urls.txt > /tmp/prev.txt
+          comm -13 /tmp/prev.txt /tmp/cur.txt | head -9000 > /tmp/new_urls.txt
+          echo "новых URL для IndexNow: $(wc -l < /tmp/new_urls.txt)" | tee -a /tmp/build.log
+          python - <<'PY' | tee -a /tmp/build.log
+          import json, urllib.request
+          key = json.load(open("_src/config.json")).get("INDEXNOW_KEY", "")
+          urls = [u.strip() for u in open("/tmp/new_urls.txt") if u.strip()]
+          if key and urls:
+              body = json.dumps({"host": "kirpichinvest.ru", "key": key, "keyLocation": f"https://kirpichinvest.ru/{key}.txt", "urlList": urls}).encode()
+              for ep in ("https://yandex.com/indexnow", "https://api.indexnow.org/indexnow"):
+                  try:
+                      r = urllib.request.urlopen(urllib.request.Request(ep, data=body, headers={"Content-Type": "application/json; charset=utf-8"}), timeout=30)
+                      print("IndexNow", ep, r.status)
+                  except Exception as e:
+                      print("IndexNow", ep, "ошибка:", e)
+          PY
+
       - name: Save log
         if: always()
         env:
@@ -54,8 +75,9 @@ jobs:
           { echo "== $(date -u) ${GITHUB_SHA::7} ${{ github.event_name }}"; cat /tmp/build.log 2>/dev/null; echo "result: ${{ job.status }}"; } > /tmp/last.log
           cp _src/data/lots.json /tmp/lots.json 2>/dev/null || true
           find _site -name index.html 2>/dev/null | sed 's#_site##;s#index.html##' | sort > /tmp/pages.txt || true
+          cp _site/urls.txt /tmp/urls.txt 2>/dev/null || true
           mkdir /tmp/lr && cd /tmp/lr && git init -q && git remote add origin "https://x-access-token:${GH}@github.com/${GITHUB_REPOSITORY}.git"
           git config user.name deploy-bot; git config user.email deploy@bot
           git fetch -q origin deploy-log && git checkout -q deploy-log || git checkout -q --orphan deploy-log
-          cp /tmp/last.log /tmp/lots.json /tmp/pages.txt . 2>/dev/null || true
+          cp /tmp/last.log /tmp/lots.json /tmp/pages.txt /tmp/urls.txt . 2>/dev/null || true
           git add -A && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log

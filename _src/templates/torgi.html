@@ -5,11 +5,11 @@
 <h1>{{ h1 }}</h1>
 <p class="lead">Жилые помещения, которые сейчас продаются на торгах: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным ГИС Торги.</p>
 <nav class="filters" aria-label="Подборки">{% for u, n in facet_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>
-{% if path.startswith('/torgi/lenoblast/') and town_links %}<nav class="filters" aria-label="Города области"><span class="mute small" style="align-self:center">Города:</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
+{% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">Районы и города:</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
-    <span>{{ d.caddr[:120] }}</span>
+    <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>
     <span class="mute small">{% if d.area %}{{ d.area|round(1) }} м²{% endif %}{% if d.ppm2 %} · {{ d.ppm2|rub }}/м²{% endif %}{% if d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
     {% if d.flags %}<span class="flags">{{ d.flags }}</span>{% endif %}

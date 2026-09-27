@@ -6,6 +6,9 @@
 <title>{{ title }}{% if path != '/' %} — {{ cfg.SITE_NAME }}{% endif %}</title>
 <meta name="description" content="{{ description }}">
 <link rel="canonical" href="{{ canonical }}">
+{% if cfg.YANDEX_VERIFICATION %}<meta name="yandex-verification" content="{{ cfg.YANDEX_VERIFICATION }}">{% endif %}
+{% if cfg.GOOGLE_VERIFICATION %}<meta name="google-site-verification" content="{{ cfg.GOOGLE_VERIFICATION }}">{% endif %}
+{% if cfg.BING_VERIFICATION %}<meta name="msvalidate.01" content="{{ cfg.BING_VERIFICATION }}">{% endif %}
 {% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
 <meta property="og:type" content="{% block og_type %}website{% endblock %}">
 <meta property="og:title" content="{{ title }}">
@@ -24,8 +27,8 @@
   "url": cfg.SITE_URL,
   "telephone": cfg.SITE_PHONE,
   "email": cfg.SITE_EMAIL,
-  "description": "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в Санкт-Петербурге и Ленинградской области. Не является организатором торгов.",
-  "areaServed": ["Санкт-Петербург", "Ленинградская область"],
+  "description": "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в городах-миллионниках России и в 100 км от них. Не является организатором торгов.",
+  "areaServed": cities|map(attribute=1)|list,
   "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
   "founder": {"@type": "Person", "name": author.name, "jobTitle": author.role},
   "taxID": cfg.SITE_INN or None
@@ -51,12 +54,12 @@
 <footer><div class="wrap">
   <div class="cols">
     <div>
-      <p><b style="color:#fff">{{ cfg.SITE_NAME }}</b> — подбор, проверка и сопровождение покупки жилья с торгов в Санкт-Петербурге и Ленинградской области.</p>
+      <p><b style="color:#fff">{{ cfg.SITE_NAME }}</b> — подбор, проверка и сопровождение покупки жилья с торгов в 16 городах-миллионниках России и в 100 км от них.</p>
       <p>Мы не организатор торгов и не продавец лотов. Информация о лотах взята из открытых источников (ГИС Торги) и носит справочный характер. Сайт не является публичной офертой.</p>
       <p>{{ cfg.SITE_OWNER }}{% if cfg.SITE_INN %} · ИНН {{ cfg.SITE_INN }}{% endif %}{% if cfg.SITE_OGRNIP %} · ОГРНИП {{ cfg.SITE_OGRNIP }}{% endif %}<br>{{ cfg.SITE_ADDRESS }}</p>
     </div>
     <div><h3>Разделы</h3><ul>
-      <li><a href="/torgi/spb/">Лоты в СПб</a></li><li><a href="/torgi/lenoblast/">Лоты в Ленобласти</a></li>
+      <li><a href="/torgi/moskva/">Лоты в Москве</a></li><li><a href="/torgi/sankt-peterburg/">Лоты в Петербурге</a></li><li><a href="/torgi/">Все города</a></li>
       <li><a href="/kupit-kvartiru-s-torgov/">Покупка под ключ</a></li><li><a href="/proverka-lota/">Проверка лота</a></li>
       <li><a href="/investoram/">Инвесторам</a></li><li><a href="/stati/">Статьи</a></li><li><a href="/slovar/">Словарь терминов</a></li></ul></div>
     <div><h3>Контакты</h3><ul>

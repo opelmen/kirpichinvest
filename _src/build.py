@@ -22,7 +22,8 @@ cfg = SimpleNamespace(
     SITE_NAME="КирпичИнвест", SITE_URL="https://kirpichinvest.ru", SITE_PHONE="+7 995 595-54-00",
     SITE_EMAIL="fond178@gmail.com", SITE_OWNER="ИП Смирнов Илья Александрович", SITE_INN="", SITE_OGRNIP="",
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
-    PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead")
+    PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
+    YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="")
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
     for k, v in json.loads(cfg_file.read_text(encoding="utf-8")).items():
@@ -126,7 +127,7 @@ DISTRICT_RE = re.compile(r"(?:м\.р-н|р-н\.?|м\.о\.|г\.о\.)\s*([А-ЯЁ]
 
 
 def lo_district(d):
-    if d.get("region") != "47":
+    if str(d.get("region")) in ("77", "78"):
         return None
     m = DISTRICT_RE.search(str(d.get("address") or d.get("name") or ""))
     if not m:
@@ -136,16 +137,12 @@ def lo_district(d):
 
 
 def lo_town(d):
-    if d.get("region") != "47":
+    if str(d.get("region")) in ("77", "78"):
         return None
     m = re.search(r"(?:(?<![а-яё.])г\.|город)\s*([А-ЯЁ][а-яё\-]+(?:\s[А-ЯЁ][а-яё]+)?)", str(d.get("address") or ""))
-    return m.group(1) if m else None
+    t = m.group(1) if m else None
+    return None if (t and t in CITY_NAME.values()) else t
 
-
-for _d in LOTS:
-    _d["caddr"] = clean_address(_d)
-    _d["label"] = object_label(_d)
-    _d.pop("description", None)  # в извещениях бывают ФИО должников — на сайт не выводим
 
 FACETS = [  # slug, название, фильтр, заголовок-формулировка
     ("odnokomnatnye", "Однокомнатные", lambda d: d.get("rooms") == 1, "Однокомнатные квартиры с торгов"),
@@ -156,7 +153,26 @@ FACETS = [  # slug, название, фильтр, заголовок-форм�
     ("do-5-mln", "До 5 млн ₽", lambda d: (d.get("price") or 1e12) <= 5_000_000, "Квартиры с торгов до 5 млн рублей"),
     ("povtornye-torgi", "Повторные торги", lambda d: "повторные" in (d.get("flags") or ""), "Квартиры на повторных торгах"),
 ]
-REGIONS = {"spb": ("78", "Санкт-Петербург", "в Санкт-Петербурге"), "lenoblast": ("47", "Ленинградская область", "в Ленинградской области")}
+CITIES = [  # slug, название, «где», субъекты
+    ("moskva", "Москва", "в Москве и Подмосковье"), ("sankt-peterburg", "Санкт-Петербург", "в Санкт-Петербурге и Ленобласти"),
+    ("novosibirsk", "Новосибирск", "в Новосибирске и области"), ("ekaterinburg", "Екатеринбург", "в Екатеринбурге и области"),
+    ("kazan", "Казань", "в Казани и пригородах"), ("krasnoyarsk", "Красноярск", "в Красноярске и пригородах"),
+    ("nizhniy-novgorod", "Нижний Новгород", "в Нижнем Новгороде и области"), ("chelyabinsk", "Челябинск", "в Челябинске и области"),
+    ("ufa", "Уфа", "в Уфе и пригородах"), ("krasnodar", "Краснодар", "в Краснодаре и пригородах"),
+    ("samara", "Самара", "в Самаре, Тольятти и области"), ("rostov-na-donu", "Ростов-на-Дону", "в Ростове-на-Дону и области"),
+    ("omsk", "Омск", "в Омске и пригородах"), ("voronezh", "Воронеж", "в Воронеже и области"),
+    ("perm", "Пермь", "в Перми и пригородах"), ("volgograd", "Волгоград", "в Волгограде и Волжском"),
+]
+CITY_NAME = {c[0]: c[1] for c in CITIES}
+
+for _d in LOTS:
+    _d["caddr"] = clean_address(_d)
+    _d["label"] = object_label(_d)
+    _d["city"] = _d.get("city") or ("sankt-peterburg" if str(_d.get("region")) in ("78", "47") else None)
+    _d["city_name"] = CITY_NAME.get(_d["city"], "")
+    _d.pop("description", None)  # в извещениях бывают ФИО должников — на сайт не выводим
+
+
 
 
 def stats(lots):
@@ -189,37 +205,46 @@ def build():
     shutil.copytree(SRC / "static", OUT / "static")
     if (ROOT / "check").exists():
         shutil.copytree(ROOT / "check", OUT / "check")
+    city_counts = {c[0]: sum(1 for d in LOTS if d.get("city") == c[0]) for c in CITIES}
+    env.globals["cities"] = [(c[0], c[1], c[2], city_counts[c[0]]) for c in CITIES]
     st = stats(LOTS)
     board = [d for d in LOTS if d.get("price")][:6]
     write("/", "home.html", priority="1.0", lots=board, st=st, articles=ARTICLES[:6],
           title="Квартиры с торгов в СПб и Ленобласти: подбор, проверка, покупка под ключ",
           description="Свежие лоты с торгов по жилью в Санкт-Петербурге и Ленинградской области. Проверим лот, рассчитаем максимальную ставку и сопроводим покупку до ключей.")
 
-    facet_links = [("/torgi/", "Все")] + [(f"/torgi/{k}/", v[1]) for k, v in REGIONS.items()] + \
-                  [(f"/torgi/{s}/", n) for s, n, flt, _ in FACETS if any(flt(d) for d in LOTS)]
-    def listing(path, lots, h1, where_txt, crumbs, priority="0.8"):
-        write(path, "torgi.html", priority=priority, lots=lots[:300], st=stats(lots), h1=h1, where=where_txt,
-              crumbs=crumbs, facet_links=facet_links, noindex=not lots,
-              title=f"{h1} — актуальные лоты {TODAY[:4]}", description=f"{h1}: {len(lots)} актуальных лотов, цена, цена за м², срок подачи заявок, риски. Обновляется несколько раз в день.")
 
-    towns = {}
-    for d in LOTS:
-        for t in (lo_district(d), lo_town(d)):
-            if t:
-                towns.setdefault(t, []).append(d)
-    towns = {t: v for t, v in towns.items() if "район" in t or "округ" in t or len(v) >= 2}
-    env.globals["town_links"] = sorted((f"/torgi/lenoblast/{translit(t)}/", f"{t} ({len(v)})") for t, v in towns.items())
-    listing("/torgi/", LOTS, "Квартиры с торгов в Санкт-Петербурге и Ленинградской области", "в Санкт-Петербурге и Ленинградской области", [("Лоты", "/torgi/")], "0.9")
-    for slug, (code, name, where) in REGIONS.items():
-        rl = [d for d in LOTS if d.get("region") == code]
-        listing(f"/torgi/{slug}/", rl, f"Квартиры с торгов {where}", where, [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], "0.9")
+    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8"):
+        write(path, "torgi.html", priority=priority, lots=lots[:300], st=stats(lots), h1=h1, crumbs=crumbs,
+              facet_links=links, town_links=sorted(sub_links), noindex=not lots,
+              title=f"{h1} — актуальные лоты {TODAY[:4]}",
+              description=f"{h1}: {len(lots)} актуальных лотов — цена, цена за м², срок подачи заявок, риски. Обновляется несколько раз в день.")
+
+    city_links = [("/torgi/", "Все города")] + [(f"/torgi/{c[0]}/", f"{c[1]} ({city_counts[c[0]]})") for c in CITIES if city_counts[c[0]]]
+    listing("/torgi/", LOTS, "Квартиры с торгов в городах-миллионниках России", [("Лоты", "/torgi/")],
+            city_links + [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], priority="0.9")
     for slug, name, flt, h1 in FACETS:
         fl = [d for d in LOTS if flt(d)]
         if fl:
-            listing(f"/torgi/{slug}/", fl, f"{h1} в СПб и Ленобласти", "в СПб и Ленобласти", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")])
-    for t, tl in towns.items():
-        listing(f"/torgi/lenoblast/{translit(t)}/", tl, f"Квартиры с торгов: {t}" + ("" if "район" in t or "округ" in t else ", Ленинградская область"), f"— {t}, Ленинградская область",
-                [("Лоты", "/torgi/"), ("Ленинградская область", "/torgi/lenoblast/"), (t, f"/torgi/lenoblast/{translit(t)}/")], "0.7")
+            listing(f"/torgi/{slug}/", fl, f"{h1} в городах-миллионниках", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], city_links)
+    for cslug, cname, where in CITIES:
+        cl = [d for d in LOTS if d.get("city") == cslug]
+        subs = {}
+        for d in cl:
+            for t in (lo_district(d), lo_town(d)):
+                if t:
+                    subs.setdefault(t, []).append(d)
+        subs = {t: v for t, v in subs.items() if len(v) >= 2 or ("район" in t or "округ" in t)}
+        sub_links = [(f"/torgi/{cslug}/{translit(t)}/", f"{t} ({len(v)})") for t, v in subs.items()]
+        facets_here = [(f, [d for d in cl if f[2](d)]) for f in FACETS]
+        facets_here = [(f, v) for f, v in facets_here if len(v) >= 3]
+        links = [(f"/torgi/{cslug}/", "Все")] + [(f"/torgi/{cslug}/{f[0]}/", f[1]) for f, v in facets_here]
+        base_crumbs = [("Лоты", "/torgi/"), (cname, f"/torgi/{cslug}/")]
+        listing(f"/torgi/{cslug}/", cl, f"Квартиры с торгов {where}", base_crumbs, links, sub_links, "0.9")
+        for f, v in facets_here:
+            listing(f"/torgi/{cslug}/{f[0]}/", v, f"{f[3]}: {cname}", base_crumbs + [(f[1], f"/torgi/{cslug}/{f[0]}/")], links, sub_links)
+        for t, v in subs.items():
+            listing(f"/torgi/{cslug}/{translit(t)}/", v, f"Квартиры с торгов: {t}", base_crumbs + [(t, f"/torgi/{cslug}/{translit(t)}/")], links, sub_links, "0.7")
 
     for d in LOTS:
         similar = [x for x in LOTS if x.get("region") == d.get("region") and x["id"] != d["id"]][:4]
@@ -280,6 +305,9 @@ RewriteEngine On
 RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} ^www\\. [NC]
 RewriteRule ^(.*)$ https://kirpichinvest.ru/$1 [R=301,L]
+RewriteRule ^torgi/spb/?$ /torgi/sankt-peterburg/ [R=301,L]
+RewriteRule ^torgi/lenoblast/?$ /torgi/sankt-peterburg/ [R=301,L]
+RewriteRule ^torgi/lenoblast/(.+)$ /torgi/sankt-peterburg/$1 [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !/$
 RewriteCond %{REQUEST_URI} !\\.[a-z0-9]+$ [NC]
@@ -294,6 +322,9 @@ ExpiresByType text/html "access plus 10 minutes"
 AddOutputFilterByType DEFLATE text/html text/css application/javascript application/xml text/plain application/json
 </IfModule>
 """, encoding="utf-8")
+    if getattr(cfg, "INDEXNOW_KEY", ""):
+        (OUT / f"{cfg.INDEXNOW_KEY}.txt").write_text(cfg.INDEXNOW_KEY, encoding="utf-8")
+    (OUT / "urls.txt").write_text("\n".join(cfg.SITE_URL + u for u, _, _ in SITEMAP), encoding="utf-8")
     print(f"OK: страниц {len(SITEMAP)} в sitemap, лотов {len(LOTS)}, статей {len(ARTICLES)}")
 
 
