@@ -1,6 +1,0 @@
-{% extends "base.html" %}{% block main %}<div class="wrap" style="padding-bottom:64px">
-<p class="crumbs"><a href="/">Главная</a> / Статьи</p>
-<h1>Статьи о покупке недвижимости с торгов</h1>
-<p class="lead">Как устроены торги по банкротству и арестованному имуществу, какие риски у покупателя и как считать ставку. Со ссылками на нормы закона.</p>
-<div class="posts" style="margin-top:28px">{% for a in articles %}<a class="post" href="/stati/{{ a.slug }}/"><h3>{{ a.title }}</h3><p>{{ a.description }}</p><p class="small">Обновлено {{ a.updated or a.date }}</p></a>{% endfor %}</div>
-</div>{% endblock %}
