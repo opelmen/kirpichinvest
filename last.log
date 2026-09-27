@@ -1,8 +1,8 @@
-== Sun Sep 27 14:24:42 UTC 2026 28f2d32 push
-лотов из сервиса: 32
-OK: страниц 60 в sitemap, лотов 31, статей 6
-Опубликовано страниц: 78
-новых URL для IndexNow: 60
-IndexNow https://yandex.com/indexnow 202
-IndexNow https://api.indexnow.org/indexnow 202
+== Sun Sep 27 18:59:21 UTC 2026 28f2d32 schedule
+лотов из сервиса: 335
+OK: страниц 411 в sitemap, лотов 334, статей 6
+Опубликовано страниц: 416
+новых URL для IndexNow: 351
+IndexNow https://yandex.com/indexnow 200
+IndexNow https://api.indexnow.org/indexnow 200
 result: success
