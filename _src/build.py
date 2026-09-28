@@ -305,8 +305,18 @@ def build():
              ("politika", "privacy.html", "Политика обработки персональных данных", "Политика обработки персональных данных.")]
     for slug, tpl, title, desc in pages:
         write(f"/{slug}/", tpl, sitemap=slug != "politika", priority="0.8", title=title, description=desc, st=st)
+    rp = SRC / "data" / "results.json"
+    RES = json.loads(rp.read_text(encoding="utf-8")) if rp.exists() else []
+    res_rows = []
+    for cslug, cname, _w in CITIES:
+        r = [x for x in RES if x.get("city") == cslug or (not x.get("city") and cslug == "sankt-peterburg" and str(x.get("region")) in ("78", "47"))]
+        if not r:
+            continue
+        ok = [x for x in r if x.get("result_status") == "SUCCEED"]
+        ratios = [x["result_price"] / x["price"] for x in ok if x.get("result_price") and x.get("price")]
+        res_rows.append((cslug, cname, len(r), round(100 * len(ok) / len(r)), median(ratios)))
     tot = city_stats(LOTS)
-    write("/analitika/", "analytics.html", priority="0.8", rows=CITY_STATS, tot=tot,
+    write("/analitika/", "analytics.html", priority="0.8", rows=CITY_STATS, tot=tot, res_rows=res_rows,
           title=f"Статистика торгов недвижимостью по городам-миллионникам — {date.today().strftime('%m.%Y')}",
           description="Сколько квартир продаётся с торгов в Москве, Петербурге и других миллионниках, медианные цены за м², доля долей и повторных торгов. Обновляется несколько раз в день.")
     write("/podpiska/", "subscribe.html", priority="0.6", title="Подборка лотов с торгов в Telegram",
