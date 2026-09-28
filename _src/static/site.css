@@ -27,9 +27,9 @@ p{margin:0 0 1em}.lead{font-size:clamp(18px,1.6vw,21px);color:#2A3647;max-width:
 .logo{font-family:Unbounded,Onest,sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
 .logo i{display:inline-block;width:14px;height:22px;background:var(--ochre);clip-path:polygon(0 0,100% 0,100% 72%,50% 100%,0 72%)}
 .nav{display:flex;gap:22px;flex:1}.nav a{color:var(--ink);text-decoration:none;font-weight:500;font-size:15px}.nav a:hover,.nav a[aria-current]{color:var(--petrol)}
-.top .phone{font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap}
+.head-cta{padding:10px 16px;font-size:15px;white-space:nowrap}
 .burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:inherit}
-@media (max-width:900px){.nav{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;padding:16px 24px;border-bottom:1px solid var(--line)}.nav.open{display:flex}.burger{display:block;margin-left:auto}.top .phone{display:none}}
+@media (max-width:900px){.nav{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;padding:16px 24px;border-bottom:1px solid var(--line)}.nav.open{display:flex}.burger{display:block;margin-left:auto}.head-cta{display:none}}
 
 /* кнопки */
 .btn{display:inline-block;background:var(--petrol);color:#fff;border:0;border-radius:var(--r);padding:14px 22px;font:600 16px/1.2 Onest,sans-serif;text-decoration:none;cursor:pointer}
