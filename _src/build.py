@@ -203,6 +203,9 @@ def build():
         shutil.rmtree(OUT)
     OUT.mkdir()
     shutil.copytree(SRC / "static", OUT / "static")
+    if (SRC / "root").exists():  # файлы подтверждения и прочее в корень сайта
+        for f in (SRC / "root").iterdir():
+            shutil.copy(f, OUT / f.name)
     if (ROOT / "check").exists():
         shutil.copytree(ROOT / "check", OUT / "check")
     city_counts = {c[0]: sum(1 for d in LOTS if d.get("city") == c[0]) for c in CITIES}
