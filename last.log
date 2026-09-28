@@ -1,6 +1,8 @@
-== Mon Sep 28 20:32:50 UTC 2026 a3183b6 push
+== Mon Sep 28 20:38:47 UTC 2026 1b14bb2 push
 лотов из сервиса: 396
-OK: страниц 466 в sitemap, лотов 388, статей 6
-Опубликовано страниц: 473
-новых URL для IndexNow: 0
+OK: страниц 472 в sitemap, лотов 388, статей 9
+Опубликовано страниц: 479
+новых URL для IndexNow: 6
+IndexNow https://yandex.com/indexnow 200
+IndexNow https://api.indexnow.org/indexnow 200
 result: success
