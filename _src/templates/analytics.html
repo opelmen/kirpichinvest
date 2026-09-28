@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block ld %}{{ ld({"@context":"https://schema.org","@type":"Dataset","name":"Статистика торгов жилой недвижимостью по городам-миллионникам России",
+ "description":"Число активных лотов жилья на торгах (ГИС Торги), медианные начальные цены и цены за м², доля долей и повторных торгов в радиусе 100 км от 16 городов-миллионников.",
+ "creator":{"@type":"Organization","name":cfg.SITE_NAME},"dateModified":today,"spatialCoverage":"Россия","license":"https://creativecommons.org/licenses/by/4.0/",
+ "isAccessibleForFree":true}) }}{{ crumbs_ld([("Главная","/"),("Статистика торгов", path)]) }}{% endblock %}
+{% block main %}<div class="wrap" style="padding-bottom:64px">
+<p class="crumbs"><a href="/">Главная</a> / Статистика торгов</p>
+<h1>Статистика торгов недвижимостью по городам</h1>
+<p class="lead">Сколько жилья сейчас продаётся с торгов в каждом городе-миллионнике и в 100 км от него, по какой стартовой цене и что это за лоты. Считаем по открытому реестру ГИС Торги, данные на {{ today }}.</p>
+<div class="scroll" style="margin-top:24px"><table class="t">
+<tr><th>Город</th><th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные</th><th>С жильцами*</th></tr>
+{% for slug, name, where, c in rows|sort(attribute='3.count', reverse=true) %}<tr>
+<td>{% if c.count %}<a href="/torgi/{{ slug }}/">{{ name }}</a>{% else %}{{ name }}{% endif %}</td><td>{{ c.count }}</td><td>{{ c.week_new }}</td>
+<td>{{ c.median_price|rub }}</td><td>{{ c.median_ppm2|rub }}</td><td>{% if c.count %}{{ c.share_doli }}%{% else %}—{% endif %}</td>
+<td>{% if c.count %}{{ c.share_povt }}%{% else %}—{% endif %}</td><td>{% if c.count %}{{ c.share_reg }}%{% else %}—{% endif %}</td></tr>{% endfor %}
+<tr><td><b>Всего</b></td><td><b>{{ tot.count }}</b></td><td>{{ tot.week_new }}</td><td>{{ tot.median_price|rub }}</td><td>{{ tot.median_ppm2|rub }}</td><td>{{ tot.share_doli }}%</td><td>{{ tot.share_povt }}%</td><td>{{ tot.share_reg }}%</td></tr>
+</table></div>
+<p class="mute small">* по тексту извещения: упоминание зарегистрированных или проживающих лиц. Медианы считаются по начальным ценам лотов, итоговая цена на аукционе может быть выше.</p>
+<h2 style="margin-top:40px">Как читать таблицу</h2>
+<p><b>Медиана цены</b> — половина лотов стоит дешевле, половина дороже. Среднее искажают дорогие объекты, медиана точнее показывает типичный лот.</p>
+<p><b>Доли</b> — продаётся часть квартиры, а не целиком. Цена за м² у долей ниже, но пользоваться и перепродавать их сложнее.</p>
+<p><b>Повторные торги</b> — первые не состоялись, стартовая цена снижена: на 10% в банкротстве, на 15% на вторичных торгах арестованного имущества.</p>
+<p>При цитировании ссылайтесь на {{ cfg.SITE_NAME }} (kirpichinvest.ru) и дату данных.</p>
+</div>{% endblock %}

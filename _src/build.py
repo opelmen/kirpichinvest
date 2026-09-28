@@ -175,6 +175,37 @@ for _d in LOTS:
 
 
 
+def median(xs):
+    xs = [x for x in xs if x]
+    return statistics.median(xs) if xs else None
+
+
+def city_stats(lots):
+    n = len(lots)
+    return {"count": n, "median_price": median([d.get("price") for d in lots]),
+            "median_ppm2": median([d.get("ppm2") for d in lots]),
+            "share_doli": round(100 * sum(1 for d in lots if "доля" in (d.get("flags") or "")) / n) if n else None,
+            "share_povt": round(100 * sum(1 for d in lots if "повторные" in (d.get("flags") or "")) / n) if n else None,
+            "share_reg": round(100 * sum(1 for d in lots if "зарегистрированы" in (d.get("flags") or "")) / n) if n else None,
+            "min_price": min((d["price"] for d in lots if d.get("price")), default=None),
+            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= (now - timedelta(days=7)).isoformat())}
+
+
+def city_faq(cname, where, cs):
+    if not cs["count"]:
+        return []
+    f = [(f"Сколько квартир продаётся с торгов {where}?",
+          f"На {date.today().strftime('%d.%m.%Y')} в открытом реестре ГИС Торги {cs['count']} активных лотов жилья {where} (в радиусе 100 км от города), за последние 7 дней появилось {cs['week_new']}.")]
+    if cs["median_price"]:
+        f.append((f"Сколько стоит квартира с торгов {where}?",
+                  f"Медианная начальная цена лота — {rub(cs['median_price'])}" + (f", медиана за квадратный метр — {rub(cs['median_ppm2'])}." if cs["median_ppm2"] else ".") +
+                  f" Самый дешёвый активный лот — {rub(cs['min_price'])}. Это стартовые цены: на аукционе цена может вырасти."))
+    if cs["share_doli"] is not None:
+        f.append(("Что чаще всего продаётся на торгах в этом городе?",
+                  f"Доли в квартирах составляют {cs['share_doli']}% активных лотов, повторные торги — {cs['share_povt']}%, лоты с зарегистрированными жильцами по тексту извещения — {cs['share_reg']}%. Доли и лоты с жильцами дешевле, но сложнее в продаже и освобождении."))
+    return f
+
+
 def stats(lots):
     ppm = [d["ppm2"] for d in lots if d.get("ppm2")]
     cutoff = (now - timedelta(days=7)).isoformat()
@@ -185,6 +216,7 @@ def stats(lots):
 
 # ---------- запись ----------
 SITEMAP = []
+CITY_STATS = []
 
 
 def write(path, tpl, sitemap=True, priority="0.6", lastmod=TODAY, **ctx):
@@ -217,9 +249,9 @@ def build():
           description="Свежие лоты с торгов по жилью в Санкт-Петербурге и Ленинградской области. Проверим лот, рассчитаем максимальную ставку и сопроводим покупку до ключей.")
 
 
-    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8"):
+    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None):
         write(path, "torgi.html", priority=priority, lots=lots[:300], st=stats(lots), h1=h1, crumbs=crumbs,
-              facet_links=links, town_links=sorted(sub_links), noindex=not lots,
+              facet_links=links, town_links=sorted(sub_links), noindex=not lots, faq=faq or [], cs=cs,
               title=f"{h1} — актуальные лоты {TODAY[:4]}",
               description=f"{h1}: {len(lots)} актуальных лотов — цена, цена за м², срок подачи заявок, риски. Обновляется несколько раз в день.")
 
@@ -243,7 +275,10 @@ def build():
         facets_here = [(f, v) for f, v in facets_here if len(v) >= 3]
         links = [(f"/torgi/{cslug}/", "Все")] + [(f"/torgi/{cslug}/{f[0]}/", f[1]) for f, v in facets_here]
         base_crumbs = [("Лоты", "/torgi/"), (cname, f"/torgi/{cslug}/")]
-        listing(f"/torgi/{cslug}/", cl, f"Квартиры с торгов {where}", base_crumbs, links, sub_links, "0.9")
+        cs = city_stats(cl)
+        CITY_STATS.append((cslug, cname, where, cs))
+        listing(f"/torgi/{cslug}/", cl, f"Квартиры с торгов {where}", base_crumbs, links, sub_links, "0.9",
+                faq=city_faq(cname, where, cs), cs=cs)
         for f, v in facets_here:
             listing(f"/torgi/{cslug}/{f[0]}/", v, f"{f[3]}: {cname}", base_crumbs + [(f[1], f"/torgi/{cslug}/{f[0]}/")], links, sub_links)
         for t, v in subs.items():
@@ -270,6 +305,14 @@ def build():
              ("politika", "privacy.html", "Политика обработки персональных данных", "Политика обработки персональных данных.")]
     for slug, tpl, title, desc in pages:
         write(f"/{slug}/", tpl, sitemap=slug != "politika", priority="0.8", title=title, description=desc, st=st)
+    tot = city_stats(LOTS)
+    write("/analitika/", "analytics.html", priority="0.8", rows=CITY_STATS, tot=tot,
+          title=f"Статистика торгов недвижимостью по городам-миллионникам — {date.today().strftime('%m.%Y')}",
+          description="Сколько квартир продаётся с торгов в Москве, Петербурге и других миллионниках, медианные цены за м², доля долей и повторных торгов. Обновляется несколько раз в день.")
+    write("/podpiska/", "subscribe.html", priority="0.6", title="Подборка лотов с торгов в Telegram",
+          description="Пришлём новые лоты с торгов по вашему городу, бюджету и типу жилья в Telegram.")
+    write("/partneram/", "partners.html", priority="0.6", title="Арбитражным управляющим и залоговым кредиторам: продвижение лотов",
+          description="Покажем ваш лот покупателям и инвесторам: карточка на сайте, Telegram, подготовка лота к продаже — фото, документы, проверка.")
     write("/stati/", "articles.html", priority="0.7", articles=ARTICLES, title="Статьи о покупке недвижимости с торгов",
           description="Как устроены торги по банкротству и арестованному имуществу, риски, проверка лота, расчёт ставки.")
     for a in ARTICLES:

@@ -54,6 +54,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
     <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>
     <a href="/investoram/" {% if path.startswith('/invest') %}aria-current="page"{% endif %}>Инвесторам</a>
     <a href="/kalkulyator-stavki/" {% if path.startswith('/kalk') %}aria-current="page"{% endif %}>Калькулятор</a>
+    <a href="/analitika/" {% if path.startswith('/analitika') %}aria-current="page"{% endif %}>Аналитика</a>
     <a href="/stati/" {% if path.startswith('/stati') %}aria-current="page"{% endif %}>Статьи</a>
   </nav>
   <a class="btn head-cta" href="/#zayavka">Оставить заявку</a>
@@ -69,7 +70,8 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
     <div><h3>Разделы</h3><ul>
       <li><a href="/torgi/moskva/">Лоты в Москве</a></li><li><a href="/torgi/sankt-peterburg/">Лоты в Петербурге</a></li><li><a href="/torgi/">Все города</a></li>
       <li><a href="/kupit-kvartiru-s-torgov/">Покупка под ключ</a></li><li><a href="/proverka-lota/">Проверка лота</a></li>
-      <li><a href="/investoram/">Инвесторам</a></li><li><a href="/stati/">Статьи</a></li><li><a href="/slovar/">Словарь терминов</a></li></ul></div>
+      <li><a href="/investoram/">Инвесторам</a></li><li><a href="/stati/">Статьи</a></li><li><a href="/slovar/">Словарь терминов</a></li><li><a href="/analitika/">Статистика торгов</a></li>
+      <li><a href="/podpiska/">Подборка лотов в Telegram</a></li><li><a href="/partneram/">Управляющим и кредиторам</a></li></ul></div>
     <div><h3>Контакты</h3><ul>
       <li><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></li>
       <li><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></li>

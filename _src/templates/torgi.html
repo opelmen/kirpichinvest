@@ -1,11 +1,15 @@
 {% extends "base.html" %}{% from "_form.html" import lead_form %}
-{% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% endblock %}
+{% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% if faq %}{{ faq_ld(faq) }}{% endif %}{% endblock %}
 {% block main %}<div class="wrap">
 <p class="crumbs"><a href="/">Главная</a>{% for n, u in crumbs %} / {% if loop.last %}{{ n }}{% else %}<a href="{{ u }}">{{ n }}</a>{% endif %}{% endfor %}</p>
 <h1>{{ h1 }}</h1>
 <p class="lead">Жилые помещения, которые сейчас продаются на торгах: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным ГИС Торги.</p>
 <nav class="filters" aria-label="Подборки">{% for u, n in facet_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>
 {% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">Районы и города:</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
+{% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
+<th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
+<tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
+<p class="mute small">Данные на {{ today }} по открытому реестру ГИС Торги. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
@@ -16,9 +20,14 @@
   </a>
 {% else %}<p>Сейчас в этой подборке нет активных лотов. Оставьте заявку — пришлём, как только появятся.</p>{% endfor %}
 </div>
+{% if faq %}<section style="padding-bottom:0"><div class="faq"><h2>Коротко о торгах в этом городе</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>{% endif %}
 <section><div class="split">
   <div><h2>Нашли интересный лот?</h2><p>Проверим его до подачи заявки: выписка ЕГРН, жильцы, долги по капремонту, дело о банкротстве, рыночные аналоги. Назовём максимальную ставку.</p>
   <p class="note small">Сведения о лотах взяты из открытого реестра ГИС Торги и могут отличаться от документов организатора. Перед подачей заявки сверяйтесь с извещением на площадке.</p></div>
   {{ lead_form("check", "Проверить лот", "", "Отправить на проверку", [{"name":"lot","label":"Ссылка на лот или адрес","ph":"https://torgi.gov.ru/..."}]) }}
+</div></section>
+<section style="padding-top:0"><div class="split">
+  <div><h2>Новые лоты — в Telegram</h2><p>Пришлём свежие лоты по вашему городу и бюджету, как только они появятся в реестре. Без спама: только то, что подходит под условия.</p></div>
+  {{ lead_form("subscribe", "Подписаться на подборку", "", "Хочу подборку", [{"name":"city","label":"Город","options":(cities|map(attribute=1)|list)},{"name":"budget","label":"Бюджет","options":["до 3 млн ₽","3–5 млн ₽","5–8 млн ₽","8–12 млн ₽","больше 12 млн ₽"]},{"name":"type","label":"Что ищете","options":["Квартира целиком","Доля (для инвестиций)","Не важно"]}]) }}
 </div></section>
 </div>{% endblock %}
