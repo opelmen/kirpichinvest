@@ -12,12 +12,12 @@
 <p class="lead">Сначала — бесплатный экспресс-отчёт: оценка, дисконт, максимальная ставка и обременения за 1–2 минуты. Если лот интересен — полная проверка с выводом «брать или нет».</p>
 
 <div class="tiers" style="margin:28px 0">
-  <div class="tier"><h3>Экспресс-отчёт</h3><div class="price">0 ₽</div>
+  <div class="tier pro"><span class="tag" style="margin-bottom:8px">Начните здесь</span><h3>Экспресс-отчёт</h3><div class="price">Бесплатно</div>
     <ul><li>Рыночная цена по объявлениям рядом</li><li>Ликвидационная стоимость и дисконт</li><li>Максимальная ставка под вашу доходность</li><li>Обременения по Росреестру</li><li>Риски из текста извещения</li></ul>
-    <a class="btn" href="#express">Получить бесплатно</a></div>
-  <div class="tier pro"><h3>Полная проверка</h3><div class="price">{{ cfg.PRICE_CHECK or "по запросу" }}</div>
+    <a class="btn" href="#express" onclick="setTimeout(function(){document.getElementById('x-lot').focus()},400)">Получить бесплатный отчёт</a></div>
+  <div class="tier"><h3>Полная проверка</h3><div class="price">{{ cfg.PRICE_CHECK or "по запросу" }}</div>
     <ul><li>Всё из экспресс-отчёта</li><li>Дело о банкротстве: жалобы, споры, риск отмены торгов</li><li>История квартиры, прежние собственники, отказники от приватизации</li><li>Жильцы и дети, долги по капремонту, срок выселения</li><li>Ловушки в извещении и проекте договора</li><li>Письменное заключение и стратегия ставки, 30 минут консультации</li></ul>
-    <a class="btn" href="#full">Заказать</a> <a class="btn ghost" href="/proverka-lota/primer/">Пример отчёта</a></div>
+    <a class="btn ghost" href="#full">Заказать полную проверку</a> <a class="btn ghost" href="/proverka-lota/primer/">Пример отчёта</a></div>
 </div>
 
 <section id="express" style="padding-top:12px"><div class="split">
@@ -26,14 +26,15 @@
 <p>Вставьте ссылку на лот с torgi.gov.ru или с нашего сайта. Если лот есть в нашей базе (16 городов-миллионников и 100 км вокруг), отчёт появится здесь через 1–2 минуты. Для лотов с других площадок пришлём разбор в течение рабочего дня.</p>
 <p class="mute small">До 3 отчётов в сутки. Контакт нужен, чтобы продублировать отчёт и ответить на вопросы.</p>
 </div>
-<form class="form" id="xform" novalidate>
-  <h3>Экспресс-отчёт по лоту</h3>
+<form class="form" id="xform" novalidate style="border:2px solid var(--petrol)">
+  <span class="tag">Бесплатно · без оплаты и обязательств</span>
+  <h3 style="margin-top:10px">Бесплатный экспресс-отчёт</h3>
   <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
   <label for="x-lot">Ссылка на лот или номер</label><input id="x-lot" name="lot" required placeholder="https://torgi.gov.ru/new/public/lots/lot/...">
   <div class="row2"><div><label for="x-name">Имя</label><input id="x-name" name="name"></div>
   <div><label for="x-contact">Телефон или Telegram *</label><input id="x-contact" name="contact" required placeholder="+7 ... или @ник"></div></div>
   <label class="consent"><input type="checkbox" name="consent" value="1" required> Согласен на обработку персональных данных по <a href="/politika/" target="_blank">политике</a></label>
-  <p class="err"></p><button class="btn" type="submit" style="margin-top:12px;width:100%">Получить отчёт</button>
+  <p class="err"></p><button class="btn" type="submit" style="margin-top:12px;width:100%">Получить бесплатный отчёт</button>
 </form></div>
 <div id="xresult"></div></section>
 
@@ -49,7 +50,7 @@
 <tr><td>Цена</td><td>Аналоги и сделки, ликвидность, максимальная ставка и стратегия на публичном предложении</td></tr>
 </table></div>
 <p style="margin-top:14px"><a href="/proverka-lota/primer/">Посмотреть пример отчёта</a></p></div>
-{{ lead_form("check", "Заказать полную проверку · " ~ (cfg.PRICE_CHECK or ""), "Ответим в течение рабочего дня.", "Заказать проверку", [{"name":"lot","label":"Ссылка на лот или номер торгов","ph":"https://..."}]) }}
+{{ lead_form("check", "Полная проверка · " ~ (cfg.PRICE_CHECK or "") ~ " (платная)", "Свяжемся, согласуем лот и сроки. Оплата — после согласования, до начала работы.", "Заказать платную проверку", [{"name":"lot","label":"Ссылка на лот или номер торгов","ph":"https://..."}]) }}
 </div></section>
 
 <section style="padding-top:0"><div class="faq"><h2>Вопросы</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>
