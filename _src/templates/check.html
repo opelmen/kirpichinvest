@@ -1,22 +1,83 @@
 {% extends "base.html" %}{% from "_form.html" import lead_form %}
-{% block ld %}{{ crumbs_ld([("Главная","/"),("Проверка лота", path)]) }}{% endblock %}
-{% block main %}<div class="hero"><div class="wrap">
-<div><p class="crumbs" style="margin-top:0"><a href="/">Главная</a> / Проверка лота</p>
-<h1>Проверка лота перед торгами</h1>
-<p class="lead">Нашли квартиру на торгах? Проверим её до подачи заявки и скажем, сколько максимум предлагать. Результат — короткое заключение: можно ли участвовать, какие риски, какая ставка.</p>
-<p><b>Стоимость:</b> {{ cfg.PRICE_CHECK or "называем после того, как увидим лот" }}</p></div>
-<div>{{ lead_form("check", "Отправить лот на проверку", "Пришлите ссылку на лот или номер торгов.", "Проверить лот", [{"name":"lot","label":"Ссылка на лот или номер торгов","ph":"https://..."}]) }}</div>
-</div></div>
-<section><div class="wrap">
-<h2>Что проверяем</h2>
+{% set faq = [
+ ("Что входит в бесплатный экспресс-отчёт?", "Рыночная оценка по объявлениям рядом, ликвидационная стоимость для быстрой продажи, дисконт к рынку, максимальная ставка под доходность 25% годовых, обременения по данным Росреестра и риски из текста извещения. Считается автоматически за 1–2 минуты."),
+ ("Чем полная проверка отличается от экспресс-отчёта?", "Экспресс-отчёт — это цифры по открытым данным. Полную проверку делает человек: читает дело о банкротстве и жалобы, проверяет историю квартиры и прежних собственников, жильцов и долги, документы торгов, и даёт письменное заключение — брать или нет и сколько максимум ставить."),
+ ("Сколько занимает полная проверка?", "Обычно 1–2 рабочих дня. Если до окончания приёма заявок меньше суток — предупредите, возьмём в приоритет."),
+ ("Засчитывается ли проверка, если покупать через вас?", "Да. Если после проверки вы покупаете лот с нашим сопровождением под ключ, стоимость проверки засчитывается."),
+] %}
+{% block ld %}{{ faq_ld(faq) }}{{ crumbs_ld([("Главная","/"),("Проверка лота", path)]) }}{% endblock %}
+{% block main %}<div class="wrap">
+<p class="crumbs"><a href="/">Главная</a> / Проверка лота</p>
+<h1 style="font-size:clamp(28px,4.4vw,48px)">Проверка лота перед торгами</h1>
+<p class="lead">Сначала — бесплатный экспресс-отчёт: оценка, дисконт, максимальная ставка и обременения за 1–2 минуты. Если лот интересен — полная проверка с выводом «брать или нет».</p>
+
+<div class="tiers" style="margin:28px 0">
+  <div class="tier"><h3>Экспресс-отчёт</h3><div class="price">0 ₽</div>
+    <ul><li>Рыночная цена по объявлениям рядом</li><li>Ликвидационная стоимость и дисконт</li><li>Максимальная ставка под вашу доходность</li><li>Обременения по Росреестру</li><li>Риски из текста извещения</li></ul>
+    <a class="btn" href="#express">Получить бесплатно</a></div>
+  <div class="tier pro"><h3>Полная проверка</h3><div class="price">{{ cfg.PRICE_CHECK or "по запросу" }}</div>
+    <ul><li>Всё из экспресс-отчёта</li><li>Дело о банкротстве: жалобы, споры, риск отмены торгов</li><li>История квартиры, прежние собственники, отказники от приватизации</li><li>Жильцы и дети, долги по капремонту, срок выселения</li><li>Ловушки в извещении и проекте договора</li><li>Письменное заключение и стратегия ставки, 30 минут консультации</li></ul>
+    <a class="btn" href="#full">Заказать</a> <a class="btn ghost" href="/proverka-lota/primer/">Пример отчёта</a></div>
+</div>
+
+<section id="express" style="padding-top:12px"><div class="split">
+<div>
+<h2>Бесплатный экспресс-отчёт</h2>
+<p>Вставьте ссылку на лот с torgi.gov.ru или с нашего сайта. Если лот есть в нашей базе (16 городов-миллионников и 100 км вокруг), отчёт появится здесь через 1–2 минуты. Для лотов с других площадок пришлём разбор в течение рабочего дня.</p>
+<p class="mute small">До 3 отчётов в сутки. Контакт нужен, чтобы продублировать отчёт и ответить на вопросы.</p>
+</div>
+<form class="form" id="xform" novalidate>
+  <h3>Экспресс-отчёт по лоту</h3>
+  <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <label for="x-lot">Ссылка на лот или номер</label><input id="x-lot" name="lot" required placeholder="https://torgi.gov.ru/new/public/lots/lot/...">
+  <div class="row2"><div><label for="x-name">Имя</label><input id="x-name" name="name"></div>
+  <div><label for="x-contact">Телефон или Telegram *</label><input id="x-contact" name="contact" required placeholder="+7 ... или @ник"></div></div>
+  <label class="consent"><input type="checkbox" name="consent" value="1" required> Согласен на обработку персональных данных по <a href="/politika/" target="_blank">политике</a></label>
+  <p class="err"></p><button class="btn" type="submit" style="margin-top:12px;width:100%">Получить отчёт</button>
+</form></div>
+<div id="xresult"></div></section>
+
+<section id="full"><div class="split">
+<div><h2>Что проверяем в полной проверке</h2>
 <div class="scroll"><table class="t">
-<tr><th>Блок</th><th>Что смотрим</th><th>Источник</th></tr>
-<tr><td>Права и обременения</td><td>Собственник, аресты, ипотека, запреты, история перехода прав</td><td>Выписка ЕГРН</td></tr>
-<tr><td>Жильцы</td><td>Кто зарегистрирован, есть ли несовершеннолетние, кто фактически живёт</td><td>УК, выписка из домовой книги, осмотр</td></tr>
-<tr><td>Долги</td><td>Взносы на капремонт (переходят к покупателю), коммунальные долги</td><td>Фонд капремонта, УК</td></tr>
-<tr><td>Процедура торгов</td><td>Сроки, размер задатка, проект договора, повторные ли торги</td><td>Извещение, ЕФРСБ / ГИС Торги</td></tr>
-<tr><td>Риск оспаривания</td><td>Жалобы, споры в деле о банкротстве, действия управляющего</td><td>Картотека арбитражных дел, ЕФРСБ</td></tr>
-<tr><td>Цена</td><td>Сделки и объявления рядом, ликвидность, срок продажи</td><td>Росреестр, объявления, наша база</td></tr>
+<tr><th>Блок</th><th>Что смотрим</th></tr>
+<tr><td>Процедура</td><td>Сообщение и проект договора, сроки, задаток, стадия торгов, жалобы на торги</td></tr>
+<tr><td>Дело о банкротстве</td><td>Споры о порядке продажи, оспаривание сделок должника, действия управляющего</td></tr>
+<tr><td>Права</td><td>История переходов, дарения и наследство, приватизация с отказниками, аресты и ипотека</td></tr>
+<tr><td>Люди</td><td>Должник и прежние собственники: ФССП, суды, банкротство, споры о совместно нажитом</td></tr>
+<tr><td>Жильцы и долги</td><td>Кто прописан, есть ли дети, реальный срок выселения, долг по капремонту</td></tr>
+<tr><td>Цена</td><td>Аналоги и сделки, ликвидность, максимальная ставка и стратегия на публичном предложении</td></tr>
 </table></div>
-<p style="margin-top:20px">Посчитать ставку можно и самим — в <a href="/kalkulyator-stavki/">калькуляторе</a>. Порядок проверки описан в статье <a href="/stati/proverka-kvartiry-s-torgov/">«Как проверить квартиру с торгов»</a>.</p>
-</div></section>{% endblock %}
+<p style="margin-top:14px"><a href="/proverka-lota/primer/">Посмотреть пример отчёта</a></p></div>
+{{ lead_form("check", "Заказать полную проверку · " ~ (cfg.PRICE_CHECK or ""), "Ответим в течение рабочего дня.", "Заказать проверку", [{"name":"lot","label":"Ссылка на лот или номер торгов","ph":"https://..."}]) }}
+</div></section>
+
+<section style="padding-top:0"><div class="faq"><h2>Вопросы</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>
+</div>
+<script>
+(function(){
+var f=document.getElementById("xform"),out=document.getElementById("xresult"),p=new URLSearchParams(location.search);
+if(p.get("lot"))document.getElementById("x-lot").value=p.get("lot");
+var R=function(v){return v?Math.round(v).toLocaleString("ru-RU")+" ₽":"—"},E=function(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML};
+f.addEventListener("submit",function(ev){ev.preventDefault();var er=f.querySelector(".err"),b=f.querySelector("button");er.style.display="none";
+if(!f.lot.value.trim()){er.textContent="Вставьте ссылку на лот";er.style.display="block";return}
+var d=new FormData(f);d.append("page",location.pathname);try{d.append("utm",sessionStorage.getItem("utm")||"")}catch(e){}
+b.disabled=true;out.innerHTML='<div class="xr"><span class="spin"></span>Считаем оценку и проверяем Росреестр — до 2 минут…</div>';out.scrollIntoView({behavior:"smooth"});
+fetch("{{ cfg.LEAD_URL|replace('/lead','/express') }}",{method:"POST",body:d}).then(function(r){return r.json()}).then(function(j){b.disabled=false;
+if(!j.ok){out.innerHTML="";er.textContent=j.error||"Не получилось";er.style.display="block";return}
+{% if cfg.METRIKA_ID %}if(window.ym)ym({{ cfg.METRIKA_ID }},"reachGoal","lead_express");{% endif %}
+if(!j.found){out.innerHTML='<div class="xr"><h3>Заявка принята</h3><p>Этого лота нет в нашей базе — возможно, он с площадки банкротства или из другого региона. Разберём вручную и пришлём ответ по указанному контакту в течение рабочего дня.</p></div>';return}
+var h='<div class="xr"><p class="mute small">Экспресс-отчёт · '+new Date().toLocaleDateString("ru-RU")+'</p><h2 style="font-size:24px">'+E(j.label)+(j.city?' · '+E(j.city):'')+'</h2><p>'+E(j.address)+'</p>';
+h+='<div class="kpi"><div><span>Стартовая цена</span><b>'+R(j.price)+'</b>'+(j.ppm2?'<span>'+R(j.ppm2)+'/м²</span>':'')+'</div>';
+h+='<div><span>Рынок по объявлениям</span><b>'+R(j.market)+'</b>'+(j.market_range&&j.market_range.low?'<span>'+R(j.market_range.low)+' – '+R(j.market_range.high)+'</span>':'')+'</div>';
+h+='<div><span>Дисконт к рынку</span><b>'+(j.discount!=null?Math.round(j.discount)+"%":"—")+'</b></div>';
+h+='<div><span>Быстрая продажа (2–3 мес)</span><b>'+R(j.liq)+'</b></div>';
+h+='<div class="hl"><span>Максимальная ставка</span><b>'+R(j.maxbid)+'</b><span>осторожно: '+R(j.maxbid_liq)+'</span></div></div>';
+h+='<p class="mute small">Расчёт ставки: '+E(j.assumptions)+'. Осторожный вариант — если продавать срочно по ликвидационной цене.</p>';
+if(j.rosreestr){h+='<h3>Росреестр</h3><ul>'+(j.rosreestr.rights||[]).map(function(x){return"<li>Право: "+E(x)+"</li>"}).join("")+((j.rosreestr.encumbrances||[]).length?(j.rosreestr.encumbrances.map(function(x){return'<li style="color:var(--red)">'+E(x)+"</li>"}).join("")):"<li>Обременения не найдены</li>")+'</ul>'}
+h+='<h3>Риски из извещения</h3>'+((j.flags||[]).length?'<ul>'+j.flags.map(function(x){return'<li style="color:var(--red)">'+E(x)+"</li>"}).join("")+"</ul>":'<p>По тексту извещения явных рисков не видно — но это не проверка.</p>');
+h+='<h3>Что не видно в открытых данных</h3><ul class="no"><li>Жалобы и споры в деле о банкротстве — риск отмены торгов</li><li>История квартиры и прежние собственники, отказники от приватизации</li><li>Кто реально живёт, есть ли дети, срок выселения</li><li>Ловушки в проекте договора</li></ul>';
+h+='<p><a class="btn" href="#full">Полная проверка · {{ cfg.PRICE_CHECK }}</a> <a class="btn ghost" href="'+E(j.link)+'" target="_blank" rel="nofollow noopener">Лот на ГИС Торги</a></p>';
+h+='<p class="mute small">Оценка по объявлениям — ориентир, не отчёт об оценке. Информация не является офертой.</p></div>';out.innerHTML=h;
+}).catch(function(){b.disabled=false;out.innerHTML="";er.textContent="Нет связи с сервером. Попробуйте ещё раз.";er.style.display="block"})})})();
+</script>{% endblock %}

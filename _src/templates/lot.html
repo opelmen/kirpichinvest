@@ -30,5 +30,5 @@
   {% if similar %}<h2>Похожие лоты</h2><div class="lots">{% for s in similar %}<a class="lot" href="/torgi/lot/{{ s.id }}/"><span>{{ s.caddr[:90] }}</span><span class="p">{{ s.price|rub }}</span></a>{% endfor %}</div>{% endif %}
   <p class="mute small" style="margin-top:24px">Данные о лоте получены из открытого реестра ГИС Торги и обновляются автоматически. Мы не являемся организатором торгов.</p>
 </div>
-<aside><div class="box">{{ lead_form("lot", "Разобрать этот лот", "Проверим риски и назовём максимальную ставку.", "Хочу разбор", [{"name":"lot","label":"Лот","value": d.caddr ~ " (лот " ~ d.id ~ ")"}]) }}</div></aside>
+<aside><div class="box" style="margin-bottom:14px"><h3 style="margin:0 0 8px">Экспресс-отчёт бесплатно</h3><p class="mute small" style="margin:0 0 12px">Рынок, дисконт, максимальная ставка и обременения по этому лоту за 1–2 минуты.</p><a class="btn" style="width:100%;text-align:center" href="/proverka-lota/?lot={{ d.id }}#express">Получить отчёт</a></div><div class="box">{{ lead_form("lot", "Разобрать этот лот", "Проверим риски и назовём максимальную ставку.", "Хочу разбор", [{"name":"lot","label":"Лот","value": d.caddr ~ " (лот " ~ d.id ~ ")"}]) }}</div></aside>
 </div></div>{% endblock %}
