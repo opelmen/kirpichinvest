@@ -1,1 +1,1 @@
-{"enabled": true, "setup": "2026-09-29T07:43:50+00:00", "last_error": null, "history": [{"at": "2026-09-29T07:47:04+00:00", "slot": "lot_am", "result": "22000155390000000227_1"}], "subs": {"n": 0, "u": 0}}
+{"enabled": true, "setup": "2026-09-29T07:43:50+00:00", "last_error": null, "history": [{"at": "2026-09-29T07:47:04+00:00", "slot": "lot_am", "result": "22000155390000000227_1"}, {"at": "2026-09-29T08:02:05+00:00", "slot": "digest", "result": "подписчикам: 1"}], "subs": {"n": 1, "u": 1}}

@@ -1,7 +1,9 @@
-== Tue Sep 29 07:51:55 UTC 2026 619ec9d workflow_dispatch
+== Tue Sep 29 08:06:02 UTC 2026 340dddd push
 лотов из сервиса: 386
 итогов торгов: 10
-OK: страниц 469 в sitemap, лотов 386, статей 9
-Опубликовано страниц: 476
-новых URL для IndexNow: 0
+OK: страниц 470 в sitemap, лотов 386, статей 9
+Опубликовано страниц: 477
+новых URL для IndexNow: 1
+IndexNow https://yandex.com/indexnow 200
+IndexNow https://api.indexnow.org/indexnow 200
 result: success

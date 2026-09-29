@@ -9,6 +9,7 @@
 /podpiska/
 /politika/
 /proverka-lota/
+/proverka-lota/primer/
 /slovar/
 /stati/
 /stati/ecp-dlya-torgov/
