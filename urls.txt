@@ -21,7 +21,6 @@ https://kirpichinvest.ru/torgi/sankt-peterburg/gatchinskiy-rayon/
 https://kirpichinvest.ru/torgi/sankt-peterburg/vsevolozhskiy-rayon/
 https://kirpichinvest.ru/torgi/sankt-peterburg/kingiseppskiy-rayon/
 https://kirpichinvest.ru/torgi/sankt-peterburg/tosnenskiy-rayon/
-https://kirpichinvest.ru/torgi/sankt-peterburg/kirovskiy-rayon/
 https://kirpichinvest.ru/torgi/novosibirsk/
 https://kirpichinvest.ru/torgi/novosibirsk/do-5-mln/
 https://kirpichinvest.ru/torgi/ekaterinburg/
@@ -429,8 +428,6 @@ https://kirpichinvest.ru/torgi/lot/24000037870000000017_3/
 https://kirpichinvest.ru/torgi/lot/24000037870000000017_2/
 https://kirpichinvest.ru/torgi/lot/22000012000000000189_1/
 https://kirpichinvest.ru/torgi/lot/22000012000000000189_14/
-https://kirpichinvest.ru/torgi/lot/22000012000000000190_11/
-https://kirpichinvest.ru/torgi/lot/22000012000000000190_4/
 https://kirpichinvest.ru/torgi/lot/22000035990000000021_1/
 https://kirpichinvest.ru/torgi/lot/22000012000000000193_1/
 https://kirpichinvest.ru/torgi/lot/24000000540000000107_5/
