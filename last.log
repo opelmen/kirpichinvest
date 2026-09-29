@@ -1,7 +1,9 @@
-== Tue Sep 29 08:13:17 UTC 2026 0e996c2 push
-лотов из сервиса: 386
+== Tue Sep 29 09:52:13 UTC 2026 0e996c2 schedule
+лотов из сервиса: 390
 итогов торгов: 10
-OK: страниц 470 в sitemap, лотов 386, статей 9
-Опубликовано страниц: 477
-новых URL для IndexNow: 0
+OK: страниц 474 в sitemap, лотов 390, статей 9
+Опубликовано страниц: 481
+новых URL для IndexNow: 4
+IndexNow https://yandex.com/indexnow 200
+IndexNow https://api.indexnow.org/indexnow 200
 result: success
