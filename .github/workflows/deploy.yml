@@ -37,6 +37,7 @@ jobs:
             && python -c "import json; print('итогов торгов:', len(json.load(open('_src/data/results.json'))))" | tee -a /tmp/build.log \
             || echo '[]' > _src/data/results.json
           curl -sf --max-time 60 https://check.kirpichinvest.ru/public/results-debug.json -o /tmp/results_debug.json || true
+          curl -sf --max-time 60 https://check.kirpichinvest.ru/public/channel-status.json -o /tmp/channel_status.json || true
           python _src/build.py | tee -a /tmp/build.log
 
       - name: Deploy via rsync
@@ -83,5 +84,5 @@ jobs:
           mkdir /tmp/lr && cd /tmp/lr && git init -q && git remote add origin "https://x-access-token:${GH}@github.com/${GITHUB_REPOSITORY}.git"
           git config user.name deploy-bot; git config user.email deploy@bot
           git fetch -q origin deploy-log && git checkout -q deploy-log || git checkout -q --orphan deploy-log
-          cp /tmp/last.log /tmp/lots.json /tmp/pages.txt /tmp/urls.txt /tmp/results_debug.json . 2>/dev/null || true
+          cp /tmp/last.log /tmp/lots.json /tmp/pages.txt /tmp/urls.txt /tmp/results_debug.json /tmp/channel_status.json . 2>/dev/null || true
           git add -A && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log
