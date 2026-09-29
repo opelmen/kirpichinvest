@@ -21,3 +21,10 @@
   <div class="ok">Заявка отправлена. Свяжемся в рабочее время в течение дня.</div>
 </form>
 {% endmacro %}
+
+{% macro tg_block(city_slug="", city_name="") %}
+{% if cfg.TG_CHANNEL %}<div class="tgbar">
+  <p><b>Лот дня с предоценкой — в Telegram.</b> Каждый день разбираем лот{% if city_name %}, а бот пришлёт новые лоты {{ city_name }} под ваш бюджет{% else %}, а бот пришлёт новые лоты под ваш город и бюджет{% endif %}.</p>
+  <span style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn tg" href="{{ cfg.TG_BOT }}{% if city_slug %}?start={{ city_slug }}{% endif %}">Подборка в боте</a><a class="btn ghost" style="color:#fff;border-color:#fff" href="{{ cfg.TG_CHANNEL }}">Канал</a></span>
+</div>{% endif %}
+{% endmacro %}

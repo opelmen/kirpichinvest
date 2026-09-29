@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="640" height="640">
+  <rect width="640" height="640" fill="#0F1B2D"/>
+  <circle cx="320" cy="320" r="250" fill="#13233A"/>
+  <!-- рост: три ряда кирпичей лестницей вверх -->
+  <g stroke="#0F1B2D" stroke-width="10" stroke-linejoin="round">
+    <rect x="150" y="380" width="120" height="70" rx="8" fill="#E8A317"/>
+    <rect x="270" y="380" width="120" height="70" rx="8" fill="#E8A317"/>
+    <rect x="390" y="380" width="120" height="70" rx="8" fill="#E8A317"/>
+    <rect x="270" y="310" width="120" height="70" rx="8" fill="#F2B83A"/>
+    <rect x="390" y="310" width="120" height="70" rx="8" fill="#F2B83A"/>
+    <rect x="390" y="240" width="120" height="70" rx="8" fill="#FFD166"/>
+  </g>
+  <!-- монета-рубль над верхним кирпичом -->
+  <circle cx="450" cy="170" r="52" fill="#0B6E69" stroke="#0F1B2D" stroke-width="10"/>
+  <text x="450" y="192" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="64" fill="#FFFFFF">₽</text>
+  <!-- стрелка роста -->
+  <path d="M170 330 L285 250 L345 285 L395 215" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <path d="M372 205 L400 210 L396 238" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+</svg>

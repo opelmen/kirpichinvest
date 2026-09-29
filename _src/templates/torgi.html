@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% from "_form.html" import lead_form %}
+{% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}
 {% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% if faq %}{{ faq_ld(faq) }}{% endif %}{% endblock %}
 {% block main %}<div class="wrap">
 <p class="crumbs"><a href="/">Главная</a>{% for n, u in crumbs %} / {% if loop.last %}{{ n }}{% else %}<a href="{{ u }}">{{ n }}</a>{% endif %}{% endfor %}</p>
@@ -10,6 +10,8 @@
 <th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
 <tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
 <p class="mute small">Данные на {{ today }} по открытому реестру ГИС Торги. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
+{% set cslug = (path.split('/')[2] if path.count('/') >= 3 else '') %}
+<div style="margin:0 0 20px">{{ tg_block(cslug if cslug in (cities|map(attribute=0)|list) else "", "") }}</div>
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">

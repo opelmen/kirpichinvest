@@ -23,7 +23,8 @@ cfg = SimpleNamespace(
     SITE_EMAIL="fond178@gmail.com", SITE_OWNER="ИП Смирнов Илья Александрович", SITE_INN="", SITE_OGRNIP="",
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
-    YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="")
+    YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
+    TG_CHANNEL="", TG_BOT="")
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
     for k, v in json.loads(cfg_file.read_text(encoding="utf-8")).items():

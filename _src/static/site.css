@@ -25,7 +25,9 @@ p{margin:0 0 1em}.lead{font-size:clamp(18px,1.6vw,21px);color:#2A3647;max-width:
 .top{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 .top .wrap{display:flex;align-items:center;gap:28px;height:64px}
 .logo{font-family:Unbounded,Onest,sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
-.logo i{display:inline-block;width:14px;height:22px;background:var(--ochre);clip-path:polygon(0 0,100% 0,100% 72%,50% 100%,0 72%)}
+.logo img{width:30px;height:30px;border-radius:7px}
+.tgbar{background:var(--ink);color:#fff;border-radius:14px;padding:22px 26px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.tgbar p{margin:0;color:#C6D0DC}.tgbar b{color:#fff}.btn.tg{background:#2AABEE}.btn.tg:hover{background:#1d93d2}
 .nav{display:flex;gap:22px;flex:1}.nav a{color:var(--ink);text-decoration:none;font-weight:500;font-size:15px}.nav a:hover,.nav a[aria-current]{color:var(--petrol)}
 .head-cta{padding:10px 16px;font-size:15px;white-space:nowrap}
 .burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:inherit}

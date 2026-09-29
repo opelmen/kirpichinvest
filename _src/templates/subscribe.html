@@ -4,6 +4,8 @@
 <div class="split"><div>
 <h1 style="font-size:clamp(28px,4vw,44px)">Новые лоты с торгов — в Telegram</h1>
 <p class="lead">Каждый день в реестр выходят новые квартиры с торгов. Оставьте условия — будем присылать только подходящие лоты: город, бюджет, тип жилья.</p>
+<p><a class="btn tg" href="{{ cfg.TG_BOT }}">Открыть бота @kirpichinvest_bot</a> <a class="btn ghost" href="{{ cfg.TG_CHANNEL }}">Канал @investkirpich</a></p>
+<p class="mute small">Или выберите город сразу: {% for slug, name, where, n in cities %}<a href="{{ cfg.TG_BOT }}?start={{ slug }}">{{ name }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
 <ul><li>Лоты по 16 городам-миллионникам и в 100 км от них.</li><li>В каждом лоте: цена, цена за м², срок приёма заявок, на что обратить внимание.</li><li>Отписаться можно в любой момент.</li></ul>
 </div>
 {{ lead_form("subscribe", "Настроить подборку", "", "Подписаться", [{"name":"city","label":"Город","options":(cities|map(attribute=1)|list)},{"name":"budget","label":"Бюджет","options":["до 3 млн ₽","3–5 млн ₽","5–8 млн ₽","8–12 млн ₽","больше 12 млн ₽"]},{"name":"type","label":"Что ищете","options":["Квартира целиком","Доля (для инвестиций)","Не важно"]}]) }}

@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% from "_form.html" import lead_form %}{% block og_type %}article{% endblock %}
+{% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}{% block og_type %}article{% endblock %}
 {% block ld %}{{ ld({"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,
  "datePublished":a.date,"dateModified":a.updated or a.date,"inLanguage":"ru-RU","mainEntityOfPage":canonical,
  "author":{"@type":"Person","name":author.name,"jobTitle":author.role},
@@ -13,6 +13,7 @@
   {{ a.html|safe }}
   {% if a.faq %}<div class="faq" style="margin-top:32px"><h2>Частые вопросы</h2>{% for f in a.faq %}<details><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}</div>{% endif %}
   <p class="mute small" style="margin-top:28px">Материал носит справочный характер и не является юридической консультацией. Нормы указаны по состоянию на дату обновления.</p>
+  <div style="margin:28px 0">{{ tg_block() }}</div>
   <h2>Читайте также</h2><ul>{% for r in related %}<li><a href="/stati/{{ r.slug }}/">{{ r.title }}</a></li>{% endfor %}</ul>
 </article>
 <aside><div class="box">{{ lead_form("check", "Проверим лот за вас", "Риски, рыночная цена и максимальная ставка до подачи заявки.", "Отправить лот", [{"name":"lot","label":"Ссылка на лот","ph":"https://..."}]) }}</div></aside>

@@ -18,7 +18,8 @@
 <meta property="og:locale" content="ru_RU">
 <link rel="preload" href="/static/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/static/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/static/site.css?v=1">
+<link rel="icon" href="/static/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/site.css?v=2">
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
   "@type": "RealEstateAgent",
@@ -31,6 +32,7 @@
   "areaServed": cities|map(attribute=1)|list,
   "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
   "founder": {"@type": "Person", "name": author.name, "jobTitle": author.role},
+  "sameAs": [cfg.TG_CHANNEL] if cfg.TG_CHANNEL else [],
   "taxID": cfg.SITE_INN or None
 } | tojson }}</script>
 {% block ld %}{% endblock %}
@@ -46,7 +48,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="logo" href="/"><i aria-hidden="true"></i>{{ cfg.SITE_NAME }}</a>
+  <a class="logo" href="/"><img src="/static/logo.svg" alt="" width="30" height="30">{{ cfg.SITE_NAME }}</a>
   <button class="burger" aria-label="Меню" onclick="document.querySelector('.nav').classList.toggle('open')">Меню</button>
   <nav class="nav">
     <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Лоты</a>
@@ -75,7 +77,8 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
     <div><h3>Контакты</h3><ul>
       <li><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></li>
       <li><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></li>
-      {% if cfg.SITE_TELEGRAM %}<li><a href="{{ cfg.SITE_TELEGRAM }}">Telegram</a></li>{% endif %}
+      {% if cfg.TG_CHANNEL %}<li><a href="{{ cfg.TG_CHANNEL }}">Telegram-канал: лот дня</a></li>{% endif %}
+      {% if cfg.TG_BOT %}<li><a href="{{ cfg.TG_BOT }}">Бот: подборка лотов</a></li>{% endif %}
       <li><a href="/o-nas/">О нас и реквизиты</a></li><li><a href="/politika/">Политика обработки ПД</a></li></ul></div>
   </div>
   <p style="margin-top:24px">© {{ year }} {{ cfg.SITE_NAME }}</p>
