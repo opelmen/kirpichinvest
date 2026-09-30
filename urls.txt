@@ -65,6 +65,13 @@ https://kirpichinvest.ru/torgi/perm/do-5-mln/
 https://kirpichinvest.ru/torgi/perm/permskiy-rayon/
 https://kirpichinvest.ru/torgi/volgograd/
 https://kirpichinvest.ru/torgi/volgograd/do-5-mln/
+https://kirpichinvest.ru/torgi/lot/21000005000000034068_1/
+https://kirpichinvest.ru/torgi/lot/22000158680000000136_4/
+https://kirpichinvest.ru/torgi/lot/21000005000000034062_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034063_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034056_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034054_1/
+https://kirpichinvest.ru/torgi/lot/21000030950000002051_1/
 https://kirpichinvest.ru/torgi/lot/23000000130000000825_1/
 https://kirpichinvest.ru/torgi/lot/23000000130000000825_5/
 https://kirpichinvest.ru/torgi/lot/23000000130000000825_3/
@@ -378,11 +385,6 @@ https://kirpichinvest.ru/torgi/lot/24000035310000000627_13/
 https://kirpichinvest.ru/torgi/lot/24000035320000000586_14/
 https://kirpichinvest.ru/torgi/lot/24000035330000000606_14/
 https://kirpichinvest.ru/torgi/lot/24000035330000000607_7/
-https://kirpichinvest.ru/torgi/lot/26000013000000000989_1/
-https://kirpichinvest.ru/torgi/lot/26000013000000000990_1/
-https://kirpichinvest.ru/torgi/lot/26000013000000000991_1/
-https://kirpichinvest.ru/torgi/lot/26000013000000000992_1/
-https://kirpichinvest.ru/torgi/lot/26000013000000000993_1/
 https://kirpichinvest.ru/torgi/lot/26000013000000001003_1/
 https://kirpichinvest.ru/torgi/lot/26000013000000001005_1/
 https://kirpichinvest.ru/torgi/lot/26000013000000001011_1/
@@ -479,9 +481,6 @@ https://kirpichinvest.ru/torgi/lot/22000012000000000189_14/
 https://kirpichinvest.ru/torgi/lot/22000035990000000021_1/
 https://kirpichinvest.ru/torgi/lot/22000012000000000193_1/
 https://kirpichinvest.ru/torgi/lot/24000000540000000107_5/
-https://kirpichinvest.ru/torgi/lot/22000155390000000223_3/
-https://kirpichinvest.ru/torgi/lot/22000155390000000223_6/
-https://kirpichinvest.ru/torgi/lot/22000155390000000223_4/
 https://kirpichinvest.ru/torgi/lot/22000012000000000189_4/
 https://kirpichinvest.ru/torgi/lot/22000062980000000298_10/
 https://kirpichinvest.ru/torgi/lot/22000062980000000298_12/
