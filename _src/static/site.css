@@ -121,3 +121,7 @@ footer h3{color:#fff;font-size:15px}footer ul{list-style:none;padding:0;margin:0
 .tier{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:24px}.tier.pro{border:2px solid var(--petrol)}
 .tier .price{font-family:Unbounded,Onest,sans-serif;font-size:28px;font-weight:700;margin:6px 0 12px}.tier li{margin:6px 0}
 @media (max-width:1180px){.top .head-cta{display:none}.burger{white-space:nowrap}}
+
+.head-tg{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:#2AABEE;color:#fff;flex:none}
+.head-tg:hover{background:#1d93d2;color:#fff}.nav .nav-tg{display:none}
+@media (max-width:1180px){.nav .nav-tg{display:block;color:#1d7fb8;font-weight:600}.head-tg{width:38px;height:38px}}

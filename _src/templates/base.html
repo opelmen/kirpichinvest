@@ -19,7 +19,7 @@
 <link rel="preload" href="/static/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/static/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/static/site.css?v=3">
+<link rel="stylesheet" href="/static/site.css?v=4">
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
   "@type": "RealEstateAgent",
@@ -58,11 +58,14 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
     <a href="/kalkulyator-stavki/" {% if path.startswith('/kalk') %}aria-current="page"{% endif %}>Калькулятор</a>
     <a href="/analitika/" {% if path.startswith('/analitika') %}aria-current="page"{% endif %}>Аналитика</a>
     <a href="/stati/" {% if path.startswith('/stati') %}aria-current="page"{% endif %}>Статьи</a>
+    {% if cfg.TG_CHANNEL %}<a class="nav-tg" href="{{ cfg.TG_CHANNEL }}">Telegram-канал · лот дня</a>{% endif %}
     <a class="btn nav-cta" href="/#zayavka">Оставить заявку</a>
   </nav>
+  {% if cfg.TG_CHANNEL %}<a class="head-tg" href="{{ cfg.TG_CHANNEL }}" title="Telegram-канал: лот дня" aria-label="Telegram-канал"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13.1l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 2.8c.9-.3 1.7.2 1.4 1.5z"/></svg></a>{% endif %}
   <a class="btn head-cta" href="/#zayavka">Оставить заявку</a>
 </div></header>
-<main>{% block main %}{% endblock %}</main>
+<main>{% block main %}{% endblock %}
+{% from "_form.html" import tg_block %}{% block tgglobal %}<section style="padding:0 0 48px"><div class="wrap">{{ tg_block() }}</div></section>{% endblock %}</main>
 <footer><div class="wrap">
   <div class="cols">
     <div>
@@ -91,7 +94,7 @@ document.querySelectorAll("form[data-lead]").forEach(function(f){f.addEventListe
 var d=new FormData(f);d.append("page",location.pathname);try{d.append("utm",sessionStorage.getItem("utm")||"")}catch(e){}
 var b=f.querySelector("button");b.disabled=true;var er=f.querySelector(".err");er.style.display="none";
 fetch("{{ cfg.LEAD_URL }}",{method:"POST",body:d}).then(function(r){return r.json()}).then(function(j){
-if(j.ok){f.querySelector(".fields").style.display="none";f.querySelector(".ok").style.display="block";if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}
+if(j.ok){f.querySelector(".fields").style.display="none";var ok=f.querySelector(".ok");ok.style.display="block";{% if cfg.TG_CHANNEL %}ok.innerHTML+=' Пока ждёте — <a href="{{ cfg.TG_CHANNEL }}">лоты дня с предоценкой в нашем Telegram-канале</a>.';{% endif %}if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}
 else{er.textContent=j.error||"Не отправилось. Позвоните нам.";er.style.display="block";b.disabled=false}})
 .catch(function(){er.textContent="Нет связи. Позвоните: {{ cfg.SITE_PHONE }}";er.style.display="block";b.disabled=false})})})})();
 </script>

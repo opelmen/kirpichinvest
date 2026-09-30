@@ -24,15 +24,15 @@
     {% for d in lots %}
     <a class="lotrow" href="/torgi/lot/{{ d.id }}/">
       <span class="addr">{{ d.caddr[:90] }}</span><span class="price">{{ d.price|rub }}</span>
-      <span class="meta">{% if d.area %}{{ d.area|round(1) }} м² · {% endif %}{% if d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
-      <span>{% if d.days_left is not none and d.days_left >= 0 %}<span class="tag">заявки ещё {{ d.days_left|round|int }} дн.</span>{% endif %}</span>
+      <span class="meta">{% if d.area %}{{ d.area|round(1) }} м² · {% endif %}{% if d.eff_market %}рынок ≈ {{ d.eff_market|rub }}{% elif d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
+      <span>{% if d.eff_discount and d.eff_discount > 0 %}<span class="tag">−{{ d.eff_discount|round|int }}% к рынку</span>{% elif d.days_left is not none and d.days_left >= 0 %}<span class="tag">заявки ещё {{ d.days_left|round|int }} дн.</span>{% endif %}</span>
     </a>
     {% else %}<p style="padding:12px">Лоты загружаются. Загляните через несколько минут.</p>{% endfor %}
     <a class="more" href="/torgi/">Все лоты</a>
   </div>
 </div></div>
 
-<section style="padding:32px 0 0"><div class="wrap">{{ tg_block() }}</div></section>
+
 <section class="alt"><div class="wrap">
   <h2>Лоты по городам</h2>
   <p class="mute">16 городов-миллионников и населённые пункты в радиусе 100 км. Торги электронные — участвовать можно из любого города.</p>

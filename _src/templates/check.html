@@ -67,7 +67,7 @@ b.disabled=true;out.innerHTML='<div class="xr"><span class="spin"></span>Счи�
 fetch("{{ cfg.LEAD_URL|replace('/lead','/express') }}",{method:"POST",body:d}).then(function(r){return r.json()}).then(function(j){b.disabled=false;
 if(!j.ok){out.innerHTML="";er.textContent=j.error||"Не получилось";er.style.display="block";return}
 {% if cfg.METRIKA_ID %}if(window.ym)ym({{ cfg.METRIKA_ID }},"reachGoal","lead_express");{% endif %}
-if(!j.found){out.innerHTML='<div class="xr"><h3>Заявка принята</h3><p>Этого лота нет в нашей базе — возможно, он с площадки банкротства или из другого региона. Разберём вручную и пришлём ответ по указанному контакту в течение рабочего дня.</p></div>';return}
+if(!j.found){out.innerHTML='<div class="xr"><h3>Заявка принята</h3><p>Этого лота нет в нашей базе — возможно, он с площадки банкротства или из другого региона. Разберём вручную и пришлём ответ по указанному контакту в течение рабочего дня.</p>{% if cfg.TG_CHANNEL %}<p>Пока ждёте — <a href="{{ cfg.TG_CHANNEL }}">лоты дня с предоценкой в Telegram</a>.</p>{% endif %}</div>';return}
 var h='<div class="xr"><p class="mute small">Экспресс-отчёт · '+new Date().toLocaleDateString("ru-RU")+'</p><h2 style="font-size:24px">'+E(j.label)+(j.city?' · '+E(j.city):'')+'</h2><p>'+E(j.address)+'</p>';
 h+='<div class="kpi"><div><span>Стартовая цена</span><b>'+R(j.price)+'</b>'+(j.ppm2?'<span>'+R(j.ppm2)+'/м²</span>':'')+'</div>';
 h+='<div><span>Рынок по объявлениям</span><b>'+R(j.market)+'</b>'+(j.market_range&&j.market_range.low?'<span>'+R(j.market_range.low)+' – '+R(j.market_range.high)+'</span>':'')+'</div>';
@@ -79,6 +79,8 @@ if(j.rosreestr){h+='<h3>Росреестр</h3><ul>'+(j.rosreestr.rights||[]).ma
 h+='<h3>Риски из извещения</h3>'+((j.flags||[]).length?'<ul>'+j.flags.map(function(x){return'<li style="color:var(--red)">'+E(x)+"</li>"}).join("")+"</ul>":'<p>По тексту извещения явных рисков не видно — но это не проверка.</p>');
 h+='<h3>Что не видно в открытых данных</h3><ul class="no"><li>Жалобы и споры в деле о банкротстве — риск отмены торгов</li><li>История квартиры и прежние собственники, отказники от приватизации</li><li>Кто реально живёт, есть ли дети, срок выселения</li><li>Ловушки в проекте договора</li></ul>';
 h+='<p><a class="btn" href="#full">Полная проверка · {{ cfg.PRICE_CHECK }}</a> <a class="btn ghost" href="'+E(j.link)+'" target="_blank" rel="nofollow noopener">Лот на ГИС Торги</a></p>';
-h+='<p class="mute small">Оценка по объявлениям — ориентир, не отчёт об оценке. Информация не является офертой.</p></div>';out.innerHTML=h;
+h+='<p class="mute small">Оценка по объявлениям — ориентир, не отчёт об оценке. Информация не является офертой.</p>';
+{% if cfg.TG_CHANNEL %}h+='<p style="margin-top:12px">📣 Такие разборы — каждый день в <a href="{{ cfg.TG_CHANNEL }}">нашем Telegram-канале</a>. Подборка новых лотов под ваш город — в <a href="{{ cfg.TG_BOT }}">боте</a>.</p>';{% endif %}
+h+='</div>';out.innerHTML=h;
 }).catch(function(){b.disabled=false;out.innerHTML="";er.textContent="Нет связи с сервером. Попробуйте ещё раз.";er.style.display="block"})})})();
 </script>{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}
+{% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}{% block tgglobal %}{% endblock %}
 {% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% if faq %}{{ faq_ld(faq) }}{% endif %}{% endblock %}
 {% block main %}<div class="wrap">
 <p class="crumbs"><a href="/">Главная</a>{% for n, u in crumbs %} / {% if loop.last %}{{ n }}{% else %}<a href="{{ u }}">{{ n }}</a>{% endif %}{% endfor %}</p>
@@ -17,6 +17,7 @@
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
     <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>
+    {% if d.eff_market %}<span class="small">Рынок ≈ {{ d.eff_market|rub }}{% if d.eff_discount and d.eff_discount > 0 %} · <b style="color:var(--petrol)">дисконт {{ d.eff_discount|round|int }}%</b>{% endif %}</span>{% endif %}
     <span class="mute small">{% if d.area %}{{ d.area|round(1) }} м²{% endif %}{% if d.ppm2 %} · {{ d.ppm2|rub }}/м²{% endif %}{% if d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
     {% if d.flags %}<span class="flags">{{ d.flags }}</span>{% endif %}
   </a>

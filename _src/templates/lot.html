@@ -11,6 +11,8 @@
     <tr><th>Начальная цена</th><td><b>{{ d.price|rub }}</b></td></tr>
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
     {% if d.ppm2 %}<tr><th>Цена за м²</th><td>{{ d.ppm2|rub }}</td></tr>{% endif %}
+    {% if d.eff_market %}<tr><th>Рыночная цена (оценка)</th><td><b>{{ d.eff_market|rub }}</b>{% if d.eff_discount and d.eff_discount > 0 %} · дисконт {{ d.eff_discount|round|int }}%{% endif %}<div class="mute small">Ориентир по объявлениям рядом, не отчёт об оценке</div></td></tr>{% endif %}
+    {% if d.liq %}<tr><th>Быстрая продажа (2–3 мес)</th><td>≈ {{ d.liq|rub }}</td></tr>{% endif %}
     {% if d.rooms %}<tr><th>Комнат</th><td>{{ d.rooms }}</td></tr>{% endif %}
     {% if d.floor %}<tr><th>Этаж</th><td>{{ d.floor }}</td></tr>{% endif %}
     {% if d.cadastral %}<tr><th>Кадастровый номер</th><td>{{ d.cadastral }}</td></tr>{% endif %}
