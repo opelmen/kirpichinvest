@@ -1,9 +1,9 @@
-== Wed Sep 30 05:44:46 UTC 2026 19a0539 push
-лотов из сервиса: 421
-итогов торгов: 10
-OK: страниц 509 в sitemap, лотов 421, статей 9
-Опубликовано страниц: 516
-новых URL для IndexNow: 20
+== Wed Sep 30 09:44:56 UTC 2026 19a0539 schedule
+лотов из сервиса: 428
+итогов торгов: 13
+OK: страниц 515 в sitemap, лотов 428, статей 9
+Опубликовано страниц: 522
+новых URL для IndexNow: 10
 IndexNow https://yandex.com/indexnow 200
 IndexNow https://api.indexnow.org/indexnow 200
 result: success

@@ -37,7 +37,6 @@ https://kirpichinvest.ru/torgi/nizhniy-novgorod/
 https://kirpichinvest.ru/torgi/nizhniy-novgorod/do-5-mln/
 https://kirpichinvest.ru/torgi/nizhniy-novgorod/dzerzhinsk/
 https://kirpichinvest.ru/torgi/chelyabinsk/
-https://kirpichinvest.ru/torgi/chelyabinsk/odnokomnatnye/
 https://kirpichinvest.ru/torgi/chelyabinsk/komnaty/
 https://kirpichinvest.ru/torgi/chelyabinsk/doli/
 https://kirpichinvest.ru/torgi/chelyabinsk/do-5-mln/
@@ -66,6 +65,16 @@ https://kirpichinvest.ru/torgi/perm/do-5-mln/
 https://kirpichinvest.ru/torgi/perm/permskiy-rayon/
 https://kirpichinvest.ru/torgi/volgograd/
 https://kirpichinvest.ru/torgi/volgograd/do-5-mln/
+https://kirpichinvest.ru/torgi/lot/23000000130000000825_1/
+https://kirpichinvest.ru/torgi/lot/23000000130000000825_5/
+https://kirpichinvest.ru/torgi/lot/23000000130000000825_3/
+https://kirpichinvest.ru/torgi/lot/23000000130000000825_6/
+https://kirpichinvest.ru/torgi/lot/23000051770000001053_11/
+https://kirpichinvest.ru/torgi/lot/23000051770000001053_15/
+https://kirpichinvest.ru/torgi/lot/23000051770000001053_14/
+https://kirpichinvest.ru/torgi/lot/23000051770000001053_1/
+https://kirpichinvest.ru/torgi/lot/23000051770000001053_18/
+https://kirpichinvest.ru/torgi/lot/23000051770000001053_16/
 https://kirpichinvest.ru/torgi/lot/23000000130000000821_70/
 https://kirpichinvest.ru/torgi/lot/23000000130000000821_33/
 https://kirpichinvest.ru/torgi/lot/23000000130000000821_71/
@@ -478,9 +487,6 @@ https://kirpichinvest.ru/torgi/lot/22000062980000000298_10/
 https://kirpichinvest.ru/torgi/lot/22000062980000000298_12/
 https://kirpichinvest.ru/torgi/lot/22000062980000000298_9/
 https://kirpichinvest.ru/torgi/lot/22000062980000000298_11/
-https://kirpichinvest.ru/torgi/lot/24000000540000000105_1/
-https://kirpichinvest.ru/torgi/lot/24000000540000000105_2/
-https://kirpichinvest.ru/torgi/lot/24000000540000000105_3/
 https://kirpichinvest.ru/torgi/lot/22000062980000000299_2/
 https://kirpichinvest.ru/torgi/lot/22000012000000000194_4/
 https://kirpichinvest.ru/torgi/lot/22000012000000000194_1/
