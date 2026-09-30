@@ -26,6 +26,8 @@
 /torgi/chelyabinsk/chelyabinskiy-rayon/
 /torgi/chelyabinsk/do-5-mln/
 /torgi/chelyabinsk/doli/
+/torgi/chelyabinsk/komnaty/
+/torgi/chelyabinsk/odnokomnatnye/
 /torgi/do-5-mln/
 /torgi/doli/
 /torgi/dvuhkomnatnye/
@@ -131,6 +133,13 @@
 /torgi/lot/21000014380000001047_1/
 /torgi/lot/21000018950000004330_1/
 /torgi/lot/21000018950000004351_1/
+/torgi/lot/21000018950000004375_1/
+/torgi/lot/21000018950000004376_1/
+/torgi/lot/21000018950000004377_1/
+/torgi/lot/21000018950000004378_1/
+/torgi/lot/21000018950000004379_1/
+/torgi/lot/21000018950000004380_1/
+/torgi/lot/21000018950000004382_1/
 /torgi/lot/21000019010000001461_3/
 /torgi/lot/21000019010000001462_1/
 /torgi/lot/21000019010000001462_2/
@@ -190,6 +199,7 @@
 /torgi/lot/21000030790000000338_1/
 /torgi/lot/21000030790000000339_1/
 /torgi/lot/21000030790000000341_1/
+/torgi/lot/21000030790000000343_1/
 /torgi/lot/21000031920000000427_1/
 /torgi/lot/21000031920000000431_1/
 /torgi/lot/21000031920000000431_2/
@@ -225,6 +235,7 @@
 /torgi/lot/22000027410000000270_5/
 /torgi/lot/22000027410000000272_1/
 /torgi/lot/22000027410000000272_2/
+/torgi/lot/22000027410000000273_9/
 /torgi/lot/22000034760000002071_1/
 /torgi/lot/22000035990000000021_1/
 /torgi/lot/22000062980000000298_10/
@@ -296,6 +307,13 @@
 /torgi/lot/23000000130000000816_49/
 /torgi/lot/23000000130000000816_50/
 /torgi/lot/23000000130000000816_9/
+/torgi/lot/23000000130000000821_33/
+/torgi/lot/23000000130000000821_37/
+/torgi/lot/23000000130000000821_39/
+/torgi/lot/23000000130000000821_54/
+/torgi/lot/23000000130000000821_64/
+/torgi/lot/23000000130000000821_70/
+/torgi/lot/23000000130000000821_71/
 /torgi/lot/23000028580000000158_14/
 /torgi/lot/23000028580000000158_15/
 /torgi/lot/23000028580000000158_4/
@@ -457,6 +475,8 @@
 /torgi/nizhniy-novgorod/dzerzhinsk/
 /torgi/novosibirsk/
 /torgi/novosibirsk/do-5-mln/
+/torgi/novosibirsk/moshkovskiy-rayon/
+/torgi/novosibirsk/povtornye-torgi/
 /torgi/odnokomnatnye/
 /torgi/omsk/
 /torgi/omsk/do-5-mln/
