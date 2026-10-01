@@ -24,6 +24,7 @@ https://kirpichinvest.ru/torgi/sankt-peterburg/tosnenskiy-rayon/
 https://kirpichinvest.ru/torgi/novosibirsk/
 https://kirpichinvest.ru/torgi/novosibirsk/do-5-mln/
 https://kirpichinvest.ru/torgi/novosibirsk/povtornye-torgi/
+https://kirpichinvest.ru/torgi/novosibirsk/toguchinskiy-rayon/
 https://kirpichinvest.ru/torgi/novosibirsk/moshkovskiy-rayon/
 https://kirpichinvest.ru/torgi/ekaterinburg/
 https://kirpichinvest.ru/torgi/ekaterinburg/komnaty/
@@ -35,7 +36,6 @@ https://kirpichinvest.ru/torgi/krasnoyarsk/do-5-mln/
 https://kirpichinvest.ru/torgi/krasnoyarsk/povtornye-torgi/
 https://kirpichinvest.ru/torgi/nizhniy-novgorod/
 https://kirpichinvest.ru/torgi/nizhniy-novgorod/do-5-mln/
-https://kirpichinvest.ru/torgi/nizhniy-novgorod/dzerzhinsk/
 https://kirpichinvest.ru/torgi/chelyabinsk/
 https://kirpichinvest.ru/torgi/chelyabinsk/komnaty/
 https://kirpichinvest.ru/torgi/chelyabinsk/doli/
@@ -65,6 +65,17 @@ https://kirpichinvest.ru/torgi/perm/do-5-mln/
 https://kirpichinvest.ru/torgi/perm/permskiy-rayon/
 https://kirpichinvest.ru/torgi/volgograd/
 https://kirpichinvest.ru/torgi/volgograd/do-5-mln/
+https://kirpichinvest.ru/torgi/lot/21000005000000034081_1/
+https://kirpichinvest.ru/torgi/lot/23000000130000000827_5/
+https://kirpichinvest.ru/torgi/lot/23000000130000000827_2/
+https://kirpichinvest.ru/torgi/lot/23000000130000000827_6/
+https://kirpichinvest.ru/torgi/lot/21000020070000000293_1/
+https://kirpichinvest.ru/torgi/lot/21000019010000001490_2/
+https://kirpichinvest.ru/torgi/lot/21000019010000001490_4/
+https://kirpichinvest.ru/torgi/lot/21000019010000001489_5/
+https://kirpichinvest.ru/torgi/lot/21000019010000001489_1/
+https://kirpichinvest.ru/torgi/lot/21000019010000001489_4/
+https://kirpichinvest.ru/torgi/lot/21000019010000001489_2/
 https://kirpichinvest.ru/torgi/lot/21000005000000034068_1/
 https://kirpichinvest.ru/torgi/lot/22000158680000000136_4/
 https://kirpichinvest.ru/torgi/lot/21000005000000034062_1/
@@ -336,9 +347,6 @@ https://kirpichinvest.ru/torgi/lot/23000000130000000816_31/
 https://kirpichinvest.ru/torgi/lot/23000000130000000816_24/
 https://kirpichinvest.ru/torgi/lot/23000000130000000816_39/
 https://kirpichinvest.ru/torgi/lot/23000000130000000816_49/
-https://kirpichinvest.ru/torgi/lot/21000032000000000691_4/
-https://kirpichinvest.ru/torgi/lot/21000032000000000691_2/
-https://kirpichinvest.ru/torgi/lot/21000032000000000691_1/
 https://kirpichinvest.ru/torgi/lot/22000027410000000267_2/
 https://kirpichinvest.ru/torgi/lot/22000027410000000270_3/
 https://kirpichinvest.ru/torgi/lot/22000027410000000270_5/
