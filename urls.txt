@@ -30,6 +30,7 @@ https://kirpichinvest.ru/torgi/novosibirsk/moshkovskiy-rayon/
 https://kirpichinvest.ru/torgi/ekaterinburg/
 https://kirpichinvest.ru/torgi/ekaterinburg/doli/
 https://kirpichinvest.ru/torgi/ekaterinburg/do-5-mln/
+https://kirpichinvest.ru/torgi/kazan/
 https://kirpichinvest.ru/torgi/krasnoyarsk/
 https://kirpichinvest.ru/torgi/krasnoyarsk/doli/
 https://kirpichinvest.ru/torgi/krasnoyarsk/do-5-mln/
@@ -65,6 +66,12 @@ https://kirpichinvest.ru/torgi/perm/do-5-mln/
 https://kirpichinvest.ru/torgi/perm/permskiy-rayon/
 https://kirpichinvest.ru/torgi/volgograd/
 https://kirpichinvest.ru/torgi/volgograd/do-5-mln/
+https://kirpichinvest.ru/torgi/lot/21000025550000000494_3/
+https://kirpichinvest.ru/torgi/lot/21000005000000034101_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034102_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034103_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034104_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034100_1/
 https://kirpichinvest.ru/torgi/lot/22000150590000000285_1/
 https://kirpichinvest.ru/torgi/lot/22000150590000000285_3/
 https://kirpichinvest.ru/torgi/lot/22000150590000000285_4/
