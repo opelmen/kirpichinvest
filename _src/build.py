@@ -10,6 +10,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from lot_history import merge_history
+from budget_collections import budget_lots, budget_summary, object_group
 
 import markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -56,6 +57,7 @@ def crumbs_ld(items):
 
 env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]))
 env.filters["rub"] = rub
+env.globals["object_group"] = object_group
 def terms_list(terms):
     return [{"@type": "DefinedTerm", "name": t, "description": d, "url": f"{cfg.SITE_URL}/slovar/#{s}"} for t, s, d in terms]
 
@@ -267,7 +269,7 @@ def build():
           description="Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки.")
 
 
-    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False):
+    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False, budget=None):
         page_size = 60
         count = max(1, (len(lots) + page_size - 1) // page_size)
         pages = [(path if n == 1 else f"{path}page/{n}/", n) for n in range(1, count + 1)]
@@ -279,9 +281,20 @@ def build():
             write(url, "torgi.html", priority=priority, lots=lots[(n-1)*page_size:n*page_size],
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots, faq=(faq or []) if n == 1 else [],
-                  cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive,
+                  cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget,
                   title=f"{h1}{suffix} — {'архив' if archive else 'актуальные лоты ' + TODAY[:4]}",
                   description=description + suffix)
+
+    budgets = [dict(budget_summary(LOTS, n*1_000_000), url=f"/torgi/do-{n}-mln/", million=n) for n in (1, 2, 3)]
+    budget_links = [("/byudzhet/", "Выбрать бюджет")] + [(b["url"], f"До {b['million']} млн ₽ ({b['count']})") for b in budgets if b["count"]]
+    env.globals["budget_links"] = budget_links
+    write("/byudzhet/", "budget.html", budgets=budgets,
+          city_budgets=[(c[0], c[1], [budget_summary([d for d in LOTS if d.get("city") == c[0]], n*1_000_000)["count"] for n in (1, 2, 3)]) for c in CITIES],
+          title="Что можно найти на торгах до 1, 2 и 3 млн рублей",
+          description="Сравните жильё с торгов по бюджету и городам: актуальные цены, доли и комнаты, состав лотов и расходы сверх ставки.")
+    for b in budgets:
+        listing(b["url"], budget_lots(LOTS, b["cap"]), f"Жильё с торгов до {b['million']} млн рублей",
+                [("Лоты", "/torgi/"), ("Бюджет", "/byudzhet/"), (f"До {b['million']} млн ₽", b["url"])], budget_links, budget=b)
 
     city_links = [("/torgi/", "Все города")] + [(f"/torgi/{c[0]}/", f"{c[1]} ({city_counts[c[0]]})") for c in CITIES if city_counts[c[0]]]
     listing("/torgi/", LOTS, "Квартиры с торгов в городах-миллионниках России", [("Лоты", "/torgi/")],

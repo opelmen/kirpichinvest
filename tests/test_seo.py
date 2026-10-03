@@ -44,6 +44,7 @@ class BuildTests(unittest.TestCase):
             base = Path(tmp)
             shutil.copytree(ROOT / '_src', base / '_src')
             rows = [dict(id=f'test_{i}', city='moskva', region='77', address='Москва, Тестовая улица, дом 1', price=1000000, area=40, bidd_end='2099-01-01T00:00:00Z') for i in range(65)]
+            rows[1]['bidd_type'] = 'Реализация имущества должников'
             data = base / '_src/data'
             rows[0].update(city='sankt-peterburg', region='47', address='Ленинградская область, Гатчинский район, г. Гатчина, Тестовая улица, дом 1')
             (data/'lot_history.json').write_text('[]')
@@ -52,14 +53,20 @@ class BuildTests(unittest.TestCase):
                 subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
             build()
             site = base/'_site'
+            self.assertIn('Состав права нужно проверить', (site/'torgi/do-1-mln/index.html').read_text())
+            self.assertIn('/byudzhet/', (site/'index.html').read_text())
             self.assertTrue((site/'torgi/sankt-peterburg/gatchinskiy-rayon/index.html').exists())
             self.assertTrue((site/'torgi/page/2/index.html').exists())
             page2 = (site/'torgi/page/2/index.html').read_text()
             self.assertIn('rel="canonical" href="https://kirpichinvest.ru/torgi/page/2/"', page2)
             self.assertEqual(page2.count('class="lot"'), 5)
             self.assertIn('/torgi/page/2/', (site/'torgi/index.html').read_text())
+            rows[1]['status'] = 'ignored'  # Build derives lifecycle from source/deadline.
+            rows[1]['bidd_type'] = 'Аренда'
             (data/'lots.json').write_text(json.dumps(rows[1:]))
             build()
+            self.assertIn('noindex', (site/'torgi/do-1-mln/index.html').read_text())
+            self.assertNotIn('https://kirpichinvest.ru/torgi/do-1-mln/', (site/'sitemap.xml').read_text())
             card = (site/'torgi/lot/test_0/index.html').read_text()
             self.assertIn('Результат торгов и факт продажи не подтверждены', card)
             self.assertNotIn('Получить отчёт', card)
