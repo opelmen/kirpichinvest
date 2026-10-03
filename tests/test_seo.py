@@ -53,6 +53,8 @@ class BuildTests(unittest.TestCase):
                 subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
             build()
             site = base/'_site'
+            self.assertIn('noindex', (site/'torgi/doli/index.html').read_text())
+            self.assertNotIn('https://kirpichinvest.ru/torgi/doli/', (site/'sitemap.xml').read_text())
             self.assertIn('Состав права нужно проверить', (site/'torgi/do-1-mln/index.html').read_text())
             self.assertIn('/byudzhet/', (site/'index.html').read_text())
             self.assertTrue((site/'torgi/sankt-peterburg/gatchinskiy-rayon/index.html').exists())

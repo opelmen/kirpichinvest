@@ -2,5 +2,6 @@
 <p class="crumbs"><a href="/">Главная</a> / Статьи</p>
 <h1>Статьи о покупке недвижимости с торгов</h1>
 <p class="lead">Как устроены торги по банкротству и арестованному имуществу, какие риски у покупателя и как считать ставку. Со ссылками на нормы закона.</p>
+<nav class="filters" aria-label="Популярные вопросы"><a href="/stati/ipoteka-na-kvartiru-s-torgov/">Покупка в ипотеку</a><a href="/stati/proverka-kvartiry-s-torgov/">Риски и чек-лист</a><a href="/torgi/doli/#kak-proverit">Что означает покупка доли</a><a href="/byudzhet/">Выбор по бюджету</a></nav>
 <div class="posts" style="margin-top:28px">{% for a in articles %}<a class="post" href="/stati/{{ a.slug }}/"><h3>{{ a.title }}</h3><p>{{ a.description }}</p><p class="small">Обновлено {{ a.updated or a.date }}</p></a>{% endfor %}</div>
 </div>{% endblock %}

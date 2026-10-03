@@ -301,7 +301,7 @@ def build():
             city_links + [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], priority="0.9")
     for slug, name, flt, h1 in FACETS:
         fl = [d for d in LOTS if flt(d)]
-        if fl:
+        if fl or slug == "doli":
             listing(f"/torgi/{slug}/", fl, f"{h1} в городах-миллионниках", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], city_links)
     for cslug, cname, where in CITIES:
         cl = [d for d in LOTS if d.get("city") == cslug]
@@ -375,8 +375,12 @@ def build():
     write("/stati/", "articles.html", priority="0.7", articles=ARTICLES, title="Статьи о покупке недвижимости с торгов",
           description="Как устроены торги по банкротству и арестованному имуществу, риски, проверка лота, расчёт ставки.")
     for a in ARTICLES:
+        preferred = [slug.strip() for slug in a.get("related", "").split(",") if slug.strip()]
+        candidates = {x["slug"]: x for x in ARTICLES if x["slug"] != a["slug"]}
+        related = [candidates.pop(slug) for slug in dict.fromkeys(preferred) if slug in candidates]
+        related.extend(candidates.values())
         write(f"/stati/{a['slug']}/", "article.html", priority="0.7", lastmod=a.get("updated") or a.get("date") or TODAY,
-              a=a, related=[x for x in ARTICLES if x["slug"] != a["slug"]][:4], title=a["title"], description=a["description"])
+              a=a, related=related[:4], title=a["title"], description=a["description"])
     write("/404.html", "404.html", sitemap=False, noindex=True, title="Страница не найдена", description="")
 
     body = "".join(f"<url><loc>{cfg.SITE_URL}{u}</loc><lastmod>{m}</lastmod><priority>{p}</priority></url>" for u, m, p in SITEMAP)

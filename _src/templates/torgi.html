@@ -17,6 +17,7 @@
 <p class="mute small">Данные на {{ today }} по открытому реестру ГИС Торги. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
 {% set cslug = (path.split('/')[2] if path.count('/') >= 3 else '') %}
 <div style="margin:0 0 20px">{{ tg_block(cslug if cslug in (cities|map(attribute=0)|list) else "", "") }}</div>
+{% if path == '/torgi/doli/' %}{% include "_share_guide.html" %}{% elif '/doli/' in path and current_page == 1 %}<p><a href="/torgi/doli/#kak-proverit">Доля или комната: что проверить до ставки</a></p>{% endif %}
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
