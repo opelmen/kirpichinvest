@@ -535,3 +535,4 @@
 /torgi/volgograd/
 /torgi/volgograd/do-5-mln/
 /torgi/voronezh/
+/uslugi/
