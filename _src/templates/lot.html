@@ -5,8 +5,8 @@
 <div class="article" style="padding-top:8px">
 <div class="body">
   <h1 style="font-size:clamp(24px,3vw,34px)">{{ d.label }} с торгов: {{ d.caddr }}</h1>
-  <p class="mute small">Данные обновлены {{ today }}.</p>
-  {% if not active %}<p class="note">Приём заявок по этому лоту завершён. Посмотрите <a href="/torgi/">актуальные лоты</a>.</p>{% endif %}
+  <p class="mute small">{% if active %}Последняя проверка источника: {{ d.last_seen }}.{% else %}Последний раз в источнике: {{ d.last_seen }}.{% endif %}</p>
+  {% if not active %}<p class="note">{{ "Приём заявок по этому лоту завершён." if d.status == "ended" else "Лот отсутствует в текущей выгрузке. Актуальный статус уточняйте у организатора." }} Результат торгов и факт продажи не подтверждены. Посмотрите <a href="/torgi/">актуальные лоты</a>.</p>{% endif %}
   <div class="scroll"><table class="t">
     <tr><th>Начальная цена</th><td><b>{{ d.price|rub }}</b></td></tr>
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
@@ -20,7 +20,8 @@
     {% if d.bidd_end %}<tr><th>Приём заявок до</th><td>{{ d.bidd_end[:16]|replace('T',' ') }}</td></tr>{% endif %}
     {% if d.flags %}<tr><th>На что обратить внимание</th><td style="color:var(--red)">{{ d.flags }}</td></tr>{% endif %}
   </table></div>
-  <p style="margin-top:16px"><a href="https://torgi.gov.ru/new/public/lots/lot/{{ d.id }}" rel="nofollow noopener" target="_blank">Извещение и документы на ГИС Торги</a></p>
+  <p style="margin-top:16px"><a href="{{ d.source_url }}" rel="nofollow noopener" target="_blank">Извещение и документы на ГИС Торги</a></p>
+  {% if d.city_name %}<p><a href="/torgi/{{ d.city }}/">Актуальные лоты: {{ d.city_name }}</a></p>{% endif %}
   <h2>Что проверить перед заявкой</h2>
   <ul>
     <li>Выписку ЕГРН: собственник, аресты, ипотека, запреты регистрационных действий.</li>
@@ -32,5 +33,5 @@
   {% if similar %}<h2>Похожие лоты</h2><div class="lots">{% for s in similar %}<a class="lot" href="/torgi/lot/{{ s.id }}/"><span>{{ s.caddr[:90] }}</span><span class="p">{{ s.price|rub }}</span></a>{% endfor %}</div>{% endif %}
   <p class="mute small" style="margin-top:24px">Данные о лоте получены из открытого реестра ГИС Торги и обновляются автоматически. Мы не являемся организатором торгов.</p>
 </div>
-<aside><div class="box" style="margin-bottom:14px"><h3 style="margin:0 0 8px">Экспресс-отчёт бесплатно</h3><p class="mute small" style="margin:0 0 12px">Рынок, дисконт, максимальная ставка и обременения по этому лоту за 1–2 минуты.</p><a class="btn" style="width:100%;text-align:center" href="/proverka-lota/?lot={{ d.id }}#express">Получить отчёт</a></div><div class="box">{{ lead_form("lot", "Разобрать этот лот", "Проверим риски и назовём максимальную ставку.", "Хочу разбор", [{"name":"lot","label":"Лот","value": d.caddr ~ " (лот " ~ d.id ~ ")"}]) }}</div></aside>
+<aside>{% if active %}<div class="box" style="margin-bottom:14px"><h3 style="margin:0 0 8px">Экспресс-отчёт бесплатно</h3><p class="mute small" style="margin:0 0 12px">Рынок, дисконт, максимальная ставка и обременения по этому лоту за 1–2 минуты.</p><a class="btn" style="width:100%;text-align:center" href="/proverka-lota/?lot={{ d.id }}#express">Получить отчёт</a></div><div class="box">{{ lead_form("lot", "Разобрать этот лот", "Проверим риски и назовём максимальную ставку.", "Хочу разбор", [{"name":"lot","label":"Лот","value": d.caddr ~ " (лот " ~ d.id ~ ")"}]) }}</div>{% else %}<div class="box"><h3>Ищете похожий объект?</h3><p>Это архивная карточка. Доступность предложения и результат торгов необходимо уточнять у организатора.</p><a class="btn" href="{{ "/torgi/" ~ d.city ~ "/" if d.city else "/torgi/" }}">Актуальные лоты города</a></div>{% endif %}</aside>
 </div></div>{% endblock %}

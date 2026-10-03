@@ -10,7 +10,7 @@
 {% block main %}
 <div class="hero"><div class="wrap">
   <div>
-    <h1>Квартиры с торгов в Москве, Петербурге и городах-миллионниках</h1>
+    <h1>Квартиры с торгов в 16 городах-миллионниках России</h1>
     <p class="lead">Находим лоты, проверяем риски до подачи заявки и считаем максимальную ставку. Покупаете на своё имя, деньги идут напрямую на площадку и продавцу.</p>
     <div class="cta"><a class="btn" href="/torgi/">Смотреть лоты</a><a class="btn ghost" href="#zayavka">Подобрать квартиру</a></div>
     <div class="facts">
@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="board">
-    <h2>Свежие лоты · обновляется каждые 30 минут</h2>
+    <h2>Свежие лоты с торгов</h2>
     {% for d in lots %}
     <a class="lotrow" href="/torgi/lot/{{ d.id }}/">
       <span class="addr">{{ d.caddr[:90] }}</span><span class="price">{{ d.price|rub }}</span>

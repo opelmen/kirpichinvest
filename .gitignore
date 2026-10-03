@@ -3,3 +3,6 @@
 _project/
 
 _site/
+
+__pycache__/
+_src/data/lot_history.json

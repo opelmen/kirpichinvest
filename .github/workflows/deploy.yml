@@ -24,32 +24,71 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build site
-        run: |
-          pip install -q jinja2==3.1.4 markdown==3.7
-          if curl -sf --max-time 60 https://check.kirpichinvest.ru/public/lots.json -o /tmp/lots.json \
-             && python -c "import json,sys; d=json.load(open('/tmp/lots.json')); print('лотов из сервиса:', len(d)); sys.exit(0 if isinstance(d, list) else 1)" | tee /tmp/build.log; then
-            cp /tmp/lots.json _src/data/lots.json
-          else
-            echo "!! сервис лотов недоступен — собираю без обновления лотов"
-          fi
-          curl -sf --max-time 60 https://check.kirpichinvest.ru/public/results.json -o _src/data/results.json \
-            && python -c "import json; print('итогов торгов:', len(json.load(open('_src/data/results.json'))))" | tee -a /tmp/build.log \
-            || echo '[]' > _src/data/results.json
-          curl -sf --max-time 60 https://check.kirpichinvest.ru/public/results-debug.json -o /tmp/results_debug.json || true
-          curl -sf --max-time 60 https://check.kirpichinvest.ru/public/channel-status.json -o /tmp/channel_status.json || true
-          python _src/build.py | tee -a /tmp/build.log
-
-      - name: Deploy via rsync
+      - name: Prepare SSH and load persistent card history
         env:
           SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
         run: |
+          set -euo pipefail
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
-          rsync -az --delete --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
-          echo "Опубликовано страниц: $(find _site -name '*.html' | wc -l)" | tee -a /tmp/build.log
+          ssh fond178@fond178.beget.tech 'if test -f ~/kirpichinvest-seo/lot_history.json; then cat ~/kirpichinvest-seo/lot_history.json; else printf "[]"; fi' > _src/data/lot_history.json
+          python -c "import json; assert isinstance(json.load(open('_src/data/lot_history.json')), list)"
+
+      - name: Build and test site (fail closed on missing feed)
+        run: |
+          set -euo pipefail
+          pip install -q jinja2==3.1.4 markdown==3.7
+          curl -fsS --retry 2 --max-time 60 https://check.kirpichinvest.ru/public/lots.json -o /tmp/lots.json
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          data = json.load(open('/tmp/lots.json'))
+          history = json.load(open('_src/data/lot_history.json'))
+          assert isinstance(data, list) and data, 'Empty/invalid feed: keep existing website'
+          assert all(isinstance(d, dict) and d.get('id') for d in data)
+          assert len({str(d['id']) for d in data}) == len(data), 'Duplicate feed IDs'
+          previous_active = sum(d.get('status') == 'active' for d in history)
+          assert not previous_active or len(data) >= previous_active * .5, 'Feed fell by over 50%; review before deploying'
+          Path('_src/data/lots.json').write_text(json.dumps(data, ensure_ascii=False))
+          PYCODE
+          curl -fsS --max-time 60 https://check.kirpichinvest.ru/public/results.json -o _src/data/results.json || echo '[]' > _src/data/results.json
+          python -m unittest discover -s tests -v
+          python _src/build.py | tee /tmp/build.log
+          node tests/check_forms.cjs _site/index.html
+
+      - name: Server backup and deploy
+        run: |
+          set -euo pipefail
+          release="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          ssh fond178@fond178.beget.tech "bash -s -- '$release'" <<'REMOTE'
+          set -euo pipefail
+          umask 077
+          release="$1"
+          mkdir -p "$HOME/kirpichinvest-backups/$release" "$HOME/kirpichinvest-seo"
+          backup="$HOME/kirpichinvest-backups/$release"
+          tar -czf "$backup/site.tar.gz" -C "$HOME/kirpichinvest.ru" public_html
+          tar -tzf "$backup/site.tar.gz" >/dev/null
+          if test -f "$HOME/kirpichinvest-seo/lot_history.json"; then
+            cp "$HOME/kirpichinvest-seo/lot_history.json" "$backup/lot_history.json"
+          fi
+          sha256sum "$backup/site.tar.gz" > "$backup/SHA256SUMS"
+          printf 'release=%s\nverified_tar=true\n' "$release" > "$backup/manifest.txt"
+          cat "$backup/SHA256SUMS"
+          printf 'BACKUP=%s\n' "$backup"
+          REMOTE
+          # Persist history first: a interrupted rsync cannot lose newly known IDs on the next run.
+          scp _src/data/lot_history.json fond178@fond178.beget.tech:kirpichinvest-seo/lot_history.next.json
+          ssh fond178@fond178.beget.tech 'chmod 600 ~/kirpichinvest-seo/lot_history.next.json && mv ~/kirpichinvest-seo/lot_history.next.json ~/kirpichinvest-seo/lot_history.json'
+          rsync -az --delay-updates --delete-delay --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
+          echo "Published release $release" | tee -a /tmp/build.log
+
+      - name: Verify live publication
+        run: |
+          set -euo pipefail
+          python _src/verify_live.py | tee -a /tmp/build.log
+          touch /tmp/site-verified
 
       - name: IndexNow (Яндекс, Bing) — новые страницы
         continue-on-error: true
@@ -78,11 +117,11 @@ jobs:
           GH: ${{ github.token }}
         run: |
           { echo "== $(date -u) ${GITHUB_SHA::7} ${{ github.event_name }}"; cat /tmp/build.log 2>/dev/null; echo "result: ${{ job.status }}"; } > /tmp/last.log
-          cp _src/data/lots.json /tmp/lots.json 2>/dev/null || true
           find _site -name index.html 2>/dev/null | sed 's#_site##;s#index.html##' | sort > /tmp/pages.txt || true
           cp _site/urls.txt /tmp/urls.txt 2>/dev/null || true
           mkdir /tmp/lr && cd /tmp/lr && git init -q && git remote add origin "https://x-access-token:${GH}@github.com/${GITHUB_REPOSITORY}.git"
           git config user.name deploy-bot; git config user.email deploy@bot
           git fetch -q origin deploy-log && git checkout -q deploy-log || git checkout -q --orphan deploy-log
-          cp /tmp/last.log /tmp/lots.json /tmp/pages.txt /tmp/urls.txt /tmp/results_debug.json /tmp/channel_status.json . 2>/dev/null || true
+          cp /tmp/last.log .
+          if test -f /tmp/site-verified; then cp /tmp/pages.txt /tmp/urls.txt .; fi
           git add -A && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log

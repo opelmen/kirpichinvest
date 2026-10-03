@@ -3,7 +3,8 @@
 {% block main %}<div class="wrap">
 <p class="crumbs"><a href="/">Главная</a>{% for n, u in crumbs %} / {% if loop.last %}{{ n }}{% else %}<a href="{{ u }}">{{ n }}</a>{% endif %}{% endfor %}</p>
 <h1>{{ h1 }}</h1>
-<p class="lead">Жилые помещения, которые сейчас продаются на торгах: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным ГИС Торги.</p>
+{% if archive %}<p class="lead">Завершённые или отсутствующие в текущем источнике предложения: {{ st.count }} карточек. Истечение срока заявки не подтверждает продажу объекта. Актуальные предложения — в <a href="/torgi/">каталоге</a>.</p>{% else %}<p class="lead">Жилые помещения, которые сейчас продаются на торгах: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным ГИС Торги.</p>{% endif %}
+{% if has_archive and not archive %}<p><a href="/torgi/arhiv/">Архив предложений</a></p>{% endif %}
 <nav class="filters" aria-label="Подборки">{% for u, n in facet_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>
 {% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">Районы и города:</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
 {% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
@@ -17,12 +18,14 @@
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
     <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>
+    {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}
     {% if d.eff_market %}<span class="small">Рынок ≈ {{ d.eff_market|rub }}{% if d.eff_discount and d.eff_discount > 0 %} · <b style="color:var(--petrol)">дисконт {{ d.eff_discount|round|int }}%</b>{% endif %}</span>{% endif %}
-    <span class="mute small">{% if d.area %}{{ d.area|round(1) }} м²{% endif %}{% if d.ppm2 %} · {{ d.ppm2|rub }}/м²{% endif %}{% if d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
+    <span class="mute small">{% if d.area %}{{ d.area|round(1) }} м²{% endif %}{% if d.ppm2 %} · {{ d.ppm2|rub }}/м²{% endif %}{% if not archive and d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
     {% if d.flags %}<span class="flags">{{ d.flags }}</span>{% endif %}
   </a>
 {% else %}<p>Сейчас в этой подборке нет активных лотов. Оставьте заявку — пришлём, как только появятся.</p>{% endfor %}
 </div>
+{% if pagination|length > 1 %}<nav class="filters" aria-label="Страницы каталога">{% for url, number in pagination %}<a href="{{ url }}" {% if number == current_page %}aria-current="page"{% endif %}>{{ number }}</a>{% endfor %}</nav>{% endif %}
 {% if faq %}<section style="padding-bottom:0"><div class="faq"><h2>Коротко о торгах в этом городе</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>{% endif %}
 <section><div class="split">
   <div><h2>Нашли интересный лот?</h2><p>Проверим его до подачи заявки: выписка ЕГРН, жильцы, долги по капремонту, дело о банкротстве, рыночные аналоги. Назовём максимальную ставку.</p>
