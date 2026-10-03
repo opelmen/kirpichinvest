@@ -1,5 +1,6 @@
 /
 /analitika/
+/byudzhet/
 /check/
 /investoram/
 /kalkulyator-stavki/
@@ -16,6 +17,7 @@
 /stati/ipoteka-na-kvartiru-s-torgov/
 /stati/kak-kupit-kvartiru-na-torgah-po-bankrotstvu/
 /stati/kak-rasschitat-stavku-na-torgah/
+/stati/kvartira-s-torgov-s-dolgami/
 /stati/proverka-kvartiry-s-torgov/
 /stati/publichnoe-predlozhenie/
 /stati/torgi-po-bankrotstvu-i-torgi-arestovannogo-imushchestva/
@@ -27,6 +29,12 @@
 /torgi/chelyabinsk/do-5-mln/
 /torgi/chelyabinsk/doli/
 /torgi/chelyabinsk/komnaty/
+/torgi/do-1-mln/
+/torgi/do-2-mln/
+/torgi/do-2-mln/page/2/
+/torgi/do-3-mln/
+/torgi/do-3-mln/page/2/
+/torgi/do-3-mln/page/3/
 /torgi/do-5-mln/
 /torgi/do-5-mln/page/2/
 /torgi/do-5-mln/page/3/

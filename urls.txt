@@ -1,4 +1,11 @@
 https://kirpichinvest.ru/
+https://kirpichinvest.ru/byudzhet/
+https://kirpichinvest.ru/torgi/do-1-mln/
+https://kirpichinvest.ru/torgi/do-2-mln/
+https://kirpichinvest.ru/torgi/do-2-mln/page/2/
+https://kirpichinvest.ru/torgi/do-3-mln/
+https://kirpichinvest.ru/torgi/do-3-mln/page/2/
+https://kirpichinvest.ru/torgi/do-3-mln/page/3/
 https://kirpichinvest.ru/torgi/
 https://kirpichinvest.ru/torgi/page/2/
 https://kirpichinvest.ru/torgi/page/3/
@@ -524,3 +531,4 @@ https://kirpichinvest.ru/stati/publichnoe-predlozhenie/
 https://kirpichinvest.ru/stati/zadatok-na-torgah/
 https://kirpichinvest.ru/stati/ecp-dlya-torgov/
 https://kirpichinvest.ru/stati/ipoteka-na-kvartiru-s-torgov/
+https://kirpichinvest.ru/stati/kvartira-s-torgov-s-dolgami/
