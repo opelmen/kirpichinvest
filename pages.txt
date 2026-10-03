@@ -28,7 +28,11 @@
 /torgi/chelyabinsk/doli/
 /torgi/chelyabinsk/komnaty/
 /torgi/do-5-mln/
+/torgi/do-5-mln/page/2/
+/torgi/do-5-mln/page/3/
+/torgi/do-5-mln/page/4/
 /torgi/doli/
+/torgi/doli/page/2/
 /torgi/dvuhkomnatnye/
 /torgi/ekaterinburg/
 /torgi/ekaterinburg/do-5-mln/
@@ -472,6 +476,8 @@
 /torgi/moskva/doli/
 /torgi/moskva/dvuhkomnatnye/
 /torgi/moskva/komnaty/
+/torgi/moskva/page/2/
+/torgi/moskva/page/3/
 /torgi/moskva/trehkomnatnye/
 /torgi/nizhniy-novgorod/
 /torgi/nizhniy-novgorod/do-5-mln/
@@ -485,6 +491,13 @@
 /torgi/omsk/
 /torgi/omsk/do-5-mln/
 /torgi/omsk/doli/
+/torgi/page/2/
+/torgi/page/3/
+/torgi/page/4/
+/torgi/page/5/
+/torgi/page/6/
+/torgi/page/7/
+/torgi/page/8/
 /torgi/perm/
 /torgi/perm/do-5-mln/
 /torgi/perm/doli/

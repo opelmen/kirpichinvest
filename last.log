@@ -1,7 +1,8 @@
-== Sat Oct  3 14:19:49 UTC 2026 c787164 schedule
-лотов из сервиса: 424
-итогов торгов: 76
-OK: страниц 513 в sitemap, лотов 424, статей 9
-Опубликовано страниц: 519
-новых URL для IndexNow: 0
+== Sat Oct  3 16:47:22 UTC 2026 3b29aa2 push
+OK: страниц 526 в sitemap, лотов 424, статей 9
+Published release 37137970852-1
+Live verification: 547 files, 0 errors
+новых URL для IndexNow: 13
+IndexNow https://yandex.com/indexnow 200
+IndexNow https://api.indexnow.org/indexnow 200
 result: success
