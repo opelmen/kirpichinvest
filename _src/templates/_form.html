@@ -7,7 +7,7 @@
     <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
     {% for f in fields %}
       <label for="{{ scenario }}-{{ f.name }}">{{ f.label }}</label>
-      {% if f.options %}<select id="{{ scenario }}-{{ f.name }}" name="{{ f.label }}">{% for o in f.options %}<option>{{ o }}</option>{% endfor %}</select>
+      {% if f.options %}<select id="{{ scenario }}-{{ f.name }}" name="{{ f.label }}"><option value="">Не выбрано</option>{% for o in f.options %}<option>{{ o }}</option>{% endfor %}</select>
       {% elif f.area %}<textarea id="{{ scenario }}-{{ f.name }}" name="{{ f.label }}" rows="3" placeholder="{{ f.ph or '' }}">{{ f.value or '' }}</textarea>
       {% else %}<input id="{{ scenario }}-{{ f.name }}" name="{{ f.label }}" placeholder="{{ f.ph or '' }}" value="{{ f.value or '' }}">{% endif %}
     {% endfor %}
@@ -16,10 +16,11 @@
       <div><label for="{{ scenario }}-contact">Телефон или Telegram *</label><input id="{{ scenario }}-contact" name="contact" required autocomplete="tel" placeholder="+7 ... или @ник"></div>
     </div>
     <label class="consent"><input type="checkbox" name="consent" value="1" required> Согласен на обработку персональных данных по <a href="/politika/" target="_blank">политике</a></label>
-    <p class="err"></p>
+    <p class="err" role="alert"></p>
     <button class="btn" type="submit" style="margin-top:12px;width:100%">{{ button }}</button>
   </div>
-  <div class="ok">Заявка отправлена. Свяжемся в рабочее время в течение дня.</div>
+  <div class="ok" role="status">Заявка отправлена. Свяжемся в рабочее время в течение дня.</div>
+  <p class="small mute">Можно оставить только контакт и согласие. Если удобнее обсудить сразу: <a href="{{ cfg.SITE_TELEGRAM }}">написать Илье в Telegram</a> или <a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a>.</p>
 </form>
 {% endmacro %}
 

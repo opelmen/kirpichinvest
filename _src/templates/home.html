@@ -85,7 +85,7 @@
 <section><div class="wrap split">
   <div class="faq"><h2>Частые вопросы</h2>{% for q, a in faq %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
   <div id="zayavka">{{ lead_form("buy", "Подобрать квартиру с торгов", "Пришлём подходящие лоты и разберём первый бесплатно.", "Отправить заявку",
-    [{"name":"budget","label":"Бюджет","options":["до 5 млн ₽","5–8 млн ₽","8–12 млн ₽","12–20 млн ₽","больше 20 млн ₽"]},
+    [{"name":"budget","label":"Бюджет","options":["до 3 млн ₽","3–5 млн ₽","5–8 млн ₽","8–12 млн ₽","12–20 млн ₽","больше 20 млн ₽"]},
      {"name":"where","label":"Город","options":(cities|map(attribute=1)|list) + ["Другой город"]},
      {"name":"wish","label":"Пожелания","area":true,"ph":"Район, метро, комнаты, срок"}]) }}</div>
 </div></section>

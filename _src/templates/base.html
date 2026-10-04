@@ -89,7 +89,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <p style="margin-top:24px">© {{ year }} {{ cfg.SITE_NAME }}</p>
 </div></footer>
 <script>
-(function(){var p=new URLSearchParams(location.search),u=[];["utm_source","utm_medium","utm_campaign","utm_term","yclid"].forEach(function(k){if(p.get(k))u.push(k+"="+p.get(k))});
+(function(){var p=new URLSearchParams(location.search),u=[];["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){if(p.get(k))u.push(k+"="+p.get(k))});
 try{if(u.length)sessionStorage.setItem("utm",u.join("&"))}catch(e){}
 document.querySelectorAll("form[data-lead]").forEach(function(f){f.addEventListener("submit",function(ev){ev.preventDefault();
 if(!f.reportValidity())return;
