@@ -50,7 +50,6 @@
 /torgi/komnaty/
 /torgi/krasnodar/
 /torgi/krasnodar/do-5-mln/
-/torgi/krasnodar/gelendzhik/
 /torgi/krasnoyarsk/
 /torgi/krasnoyarsk/do-5-mln/
 /torgi/krasnoyarsk/doli/
@@ -159,6 +158,10 @@
 /torgi/lot/21000005000000034141_1/
 /torgi/lot/21000005000000034142_1/
 /torgi/lot/21000005000000034150_1/
+/torgi/lot/21000005000000034151_1/
+/torgi/lot/21000005000000034153_1/
+/torgi/lot/21000005000000034155_1/
+/torgi/lot/21000005000000034156_1/
 /torgi/lot/21000007570000000503_29/
 /torgi/lot/21000007570000000503_36/
 /torgi/lot/21000007570000000512_3/
@@ -522,7 +525,6 @@
 /torgi/page/5/
 /torgi/page/6/
 /torgi/page/7/
-/torgi/page/8/
 /torgi/perm/
 /torgi/perm/do-5-mln/
 /torgi/perm/doli/
