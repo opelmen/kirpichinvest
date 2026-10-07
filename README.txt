@@ -1,5 +1,7 @@
 kirpichinvest.ru — сайт о покупке жилья с торгов (СПб и ЛО).
 
+Для полной карты рабочего пространства, концепции продуктов, статуса сборщика лотов и SEO/GEO-плана см. PROJECT_HANDOFF_RU.md. Перед любой работой также прочитайте AGENTS.md и постоянный журнал в _project/00_План и журнал/.
+
 Как устроено:
 - _src/ — исходники: шаблоны (templates), статьи (content/*.md), стили и шрифты (static), сборщик build.py.
 - При push в main и 3 раза в день GitHub Actions берёт свежие лоты с https://check.kirpichinvest.ru/public/lots.json,
