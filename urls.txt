@@ -83,6 +83,8 @@ https://kirpichinvest.ru/torgi/krasnodar/do-5-mln/
 https://kirpichinvest.ru/torgi/krasnodar/krymskiy-rayon/
 https://kirpichinvest.ru/torgi/samara/
 https://kirpichinvest.ru/torgi/samara/do-5-mln/
+https://kirpichinvest.ru/torgi/samara/kirovskiy-rayon/
+https://kirpichinvest.ru/torgi/samara/krasnoglinskiy-rayon/
 https://kirpichinvest.ru/torgi/rostov-na-donu/
 https://kirpichinvest.ru/torgi/rostov-na-donu/doli/
 https://kirpichinvest.ru/torgi/rostov-na-donu/do-5-mln/
@@ -209,6 +211,7 @@ https://kirpichinvest.ru/torgi/lot/21000005000000034156_1/
 https://kirpichinvest.ru/torgi/lot/21000005000000034191_1/
 https://kirpichinvest.ru/torgi/lot/21000005000000034212_1/
 https://kirpichinvest.ru/torgi/lot/21000005000000034213_1/
+https://kirpichinvest.ru/torgi/lot/21000005000000034224_1/
 https://kirpichinvest.ru/torgi/lot/21000007570000000503_29/
 https://kirpichinvest.ru/torgi/lot/21000007570000000503_36/
 https://kirpichinvest.ru/torgi/lot/21000007570000000512_3/
@@ -239,6 +242,16 @@ https://kirpichinvest.ru/torgi/lot/21000018950000004378_1/
 https://kirpichinvest.ru/torgi/lot/21000018950000004379_1/
 https://kirpichinvest.ru/torgi/lot/21000018950000004380_1/
 https://kirpichinvest.ru/torgi/lot/21000018950000004382_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004398_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004399_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004400_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004401_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004402_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004404_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004405_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004406_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004407_1/
+https://kirpichinvest.ru/torgi/lot/21000018950000004408_1/
 https://kirpichinvest.ru/torgi/lot/21000019010000001461_3/
 https://kirpichinvest.ru/torgi/lot/21000019010000001462_1/
 https://kirpichinvest.ru/torgi/lot/21000019010000001462_2/
@@ -309,6 +322,7 @@ https://kirpichinvest.ru/torgi/lot/21000030790000000338_1/
 https://kirpichinvest.ru/torgi/lot/21000030790000000339_1/
 https://kirpichinvest.ru/torgi/lot/21000030790000000341_1/
 https://kirpichinvest.ru/torgi/lot/21000030790000000343_1/
+https://kirpichinvest.ru/torgi/lot/21000030790000000344_1/
 https://kirpichinvest.ru/torgi/lot/21000030950000002051_1/
 https://kirpichinvest.ru/torgi/lot/21000030950000002088_1/
 https://kirpichinvest.ru/torgi/lot/21000031920000000427_1/
@@ -442,6 +456,13 @@ https://kirpichinvest.ru/torgi/lot/23000028580000000159_1/
 https://kirpichinvest.ru/torgi/lot/23000028580000000159_15/
 https://kirpichinvest.ru/torgi/lot/23000028580000000159_2/
 https://kirpichinvest.ru/torgi/lot/23000028580000000159_4/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_1/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_11/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_12/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_2/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_4/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_5/
+https://kirpichinvest.ru/torgi/lot/23000028580000000162_9/
 https://kirpichinvest.ru/torgi/lot/23000042610000000180_14/
 https://kirpichinvest.ru/torgi/lot/23000045720000000002_1/
 https://kirpichinvest.ru/torgi/lot/23000050620000000092_10/
