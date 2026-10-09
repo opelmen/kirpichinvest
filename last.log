@@ -1,11 +1,9 @@
-== Fri Oct  9 18:50:50 UTC 2026 4b4151f push
+== Fri Oct  9 20:11:14 UTC 2026 4b4151f schedule
 OK: страниц 795 в sitemap, лотов 553, статей 10
-Published release 37975694778-1
+Published release 37984820854-1
 Live verification: 816 files, 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 795
-IndexNow https://yandex.com/indexnow 202
-IndexNow https://api.indexnow.org/indexnow ошибка: HTTP Error 403: Forbidden
+новых URL для IndexNow: 0
 result: success
