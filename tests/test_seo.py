@@ -89,6 +89,7 @@ class BuildTests(unittest.TestCase):
                        bidd_end='2099-01-01T00:00:00+00:00', first_seen='2026-10-09T00:00:00+00:00')
             rows = [dict(row, id='gistorgi:21000000000000000001_1', source='gistorgi', kind='arrest', category='land', city='kazan')]
             rows += [dict(row, id=f'mets:{i}') for i in range(3)]
+            rows.append(dict(row, id='mets:9', discount_pct=55.0, suspect=True))
             (data/'market.json').write_text(json.dumps({'lots': rows}, ensure_ascii=False))
             subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
             site = base/'_site'
@@ -100,8 +101,13 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Извещение и документы на МЭТС', card)
             self.assertIn('/lot/mets%3A0', card)
             self.assertIn('RealEstateListing', card)
+            self.assertIn('проверьте оценку', (site/'torgi/lot/mets-9/index.html').read_text())
             self.assertTrue((site/'torgi/lot/21000000000000000001_1/index.html').exists())  # адреса ГИС Торги прежние
             self.assertIn('Земельный участок', (site/'torgi/zemlya/index.html').read_text())
+            land = (site/'torgi/lot/21000000000000000001_1/index.html').read_text()
+            self.assertIn('Земля: оценка вручную', land)  # оценка по квартирам к земле не применяется
+            self.assertNotIn('Выгодно', land)
+            self.assertIn('?buy=1', card)  # отчёт ведёт сразу к покупке в приложении
 
 if __name__ == '__main__':
     unittest.main()

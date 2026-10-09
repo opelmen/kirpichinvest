@@ -79,6 +79,9 @@ def mln(v):
     return f"{v / 1e6:.1f}".replace(".", ",") + " млн"
 
 
+NONRES = {"commercial": "Нежилое", "land": "Земля", "garage": "Гараж", "other": "Объект"}
+
+
 def verdict(d):
     """Короткий «Рентген» для статической страницы: ярлык и вывод одной фразой. Логика как в приложении."""
     found = d.get("risks") or []
@@ -89,6 +92,11 @@ def verdict(d):
     if d.get("category") == "share":
         return ("mid", "Доля — только для опытных",
                 "Продаётся доля, а не целый объект: с рыночной ценой не сравнить, пользоваться и продать можно только договорившись с сособственниками.")
+    if (not market or disc is None or not price) and d.get("category") in NONRES:
+        tail = f"Из извещения видно: {', '.join(high + other)}." if found else "Явных рисков в извещении не видно."
+        return ("none", f"{NONRES[d['category']]}: оценка вручную",
+                "Для помещений, земли и гаражей автоматической оценки нет: аналогов мало и они слишком разные. "
+                f"Сравните цену за м² с объявлениями рядом или закажите проверку эксперта. {tail}")
     if not market or disc is None or not price:
         tail = f"Из извещения видно: {', '.join(high + other)}." if found else "Явных рисков в извещении не видно."
         return ("none", "Нужна оценка рынка", f"Рыночной цены пока нет, поэтому выгоду не посчитать. {tail}")
@@ -98,6 +106,9 @@ def verdict(d):
         risk = f"риски устранимые ({', '.join(other)}), до владения {own}"
     else:
         risk = "серьёзных рисков в извещении не нашли"
+    if disc >= 10 and d.get("suspect"):
+        return ("mid", "Похоже на выгоду — проверьте оценку",
+                f"По оценке дешевле рынка на {round(disc)}%, но такая скидка встречается редко: сверьте цену с объявлениями вручную; {risk}.")
     if disc >= 10:
         badge = "Выгодно, но с рисками" if high else ("Выгодно, риски устранимы" if other else "Выгодно — стоит участвовать")
         return ("mid" if high else "good", badge, f"Дешевле рынка на {round(disc)}% (≈{mln(market - price)} ₽), {risk}.")
@@ -120,7 +131,8 @@ def from_market(rows):
             flags.append("повторные торги")
         if "residents" in keys:
             flags.append("зарегистрированы жильцы")
-        rough = r.get("market_conf") == "low"
+        # оценка по аналогам-квартирам: у нежилого её не показываем, даже если пришла из старой выгрузки
+        rough = r.get("market_conf") == "low" or cat in NONRES
         d = {
             "id": site_id(r["id"]), "app_id": r["id"], "source": r.get("source"),
             "source_name": SOURCE.get(r.get("source"), r.get("source")),
@@ -134,7 +146,7 @@ def from_market(rows):
             "eff_discount": None if rough or cat == "share" else r.get("discount_pct"),
             "liq": None if rough else r.get("liq_price"),
             "flags": ", ".join(dict.fromkeys(flags)), "risks": r.get("risks") or [], "own_time": r.get("own_time"),
-            "photo": r.get("photo"), "status": "active",
+            "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
         }
         tone, badge, text = verdict(d)
         d["verdict"] = [tone, badge, text.replace("..", ".")]
