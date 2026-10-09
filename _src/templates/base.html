@@ -16,16 +16,23 @@
 <meta property="og:url" content="{{ canonical }}">
 <meta property="og:site_name" content="{{ cfg.SITE_NAME }}">
 <meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="{{ cfg.SITE_URL }}/static/brand/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <link rel="preload" href="/static/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/static/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="/static/logo.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/static/site.css?v=4">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/static/brand/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="/static/site.css?v=5">
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
   "@type": "RealEstateAgent",
   "name": cfg.SITE_NAME,
   "legalName": cfg.SITE_OWNER,
   "url": cfg.SITE_URL,
+  "logo": cfg.SITE_URL + "/static/brand/icon-512.png",
+  "image": cfg.SITE_URL + "/static/brand/og-image.png",
   "telephone": cfg.SITE_PHONE,
   "email": cfg.SITE_EMAIL,
   "description": "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в городах-миллионниках России и в 100 км от них. Не является организатором торгов.",
@@ -48,7 +55,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="logo" href="/"><img src="/static/logo.svg" alt="" width="30" height="30">{{ cfg.SITE_NAME }}</a>
+  <a class="logo" href="/"><img src="/static/brand/logo-light.svg" alt="{{ cfg.SITE_NAME }}" width="141" height="36"></a>
   <button class="burger" aria-label="Меню" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰ Меню</button>
   <nav class="nav">
     <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Лоты</a>

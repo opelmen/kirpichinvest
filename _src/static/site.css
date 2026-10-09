@@ -25,7 +25,7 @@ p{margin:0 0 1em}.lead{font-size:clamp(18px,1.6vw,21px);color:#2A3647;max-width:
 .top{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 .top .wrap{display:flex;align-items:center;gap:22px;height:64px}
 .logo{font-family:Unbounded,Onest,sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
-.logo img{width:30px;height:30px;border-radius:7px}
+.logo img{display:block;width:auto;height:36px}
 .tgbar{background:var(--ink);color:#fff;border-radius:14px;padding:22px 26px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .tgbar p{margin:0;color:#C6D0DC}.tgbar b{color:#fff}.btn.tg{background:#2AABEE}.btn.tg:hover{background:#1d93d2}
 .nav{display:flex;gap:18px;flex:1;justify-content:center}.nav a{color:var(--ink);text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
@@ -35,7 +35,7 @@ p{margin:0 0 1em}.lead{font-size:clamp(18px,1.6vw,21px);color:#2A3647;max-width:
 @media (max-width:1180px){.nav{display:none;position:absolute;top:64px;left:0;right:0;background:var(--white);flex-direction:column;gap:0;padding:8px 24px 16px;border-bottom:1px solid var(--line);box-shadow:0 12px 24px -12px rgba(15,27,45,.25)}
 .nav.open{display:flex}.nav a{padding:12px 0;font-size:17px;border-bottom:1px solid var(--line)}.nav .nav-cta{display:block;margin-top:12px;text-align:center;border:0;color:#fff}
 .burger{display:block;margin-left:auto;padding:8px 14px}.head-cta{display:none}}
-@media (max-width:560px){.wrap{padding:0 16px}.logo{font-size:16px}.hero .cta .btn{flex:1;text-align:center}.form{padding:20px}section{padding:44px 0}}
+@media (max-width:560px){.wrap{padding:0 16px}.logo img{height:30px}.hero .cta .btn{flex:1;text-align:center}.form{padding:20px}section{padding:44px 0}}
 
 /* кнопки */
 .btn{display:inline-block;background:var(--petrol);color:#fff;border:0;border-radius:var(--r);padding:14px 22px;font:600 16px/1.2 Onest,sans-serif;text-decoration:none;cursor:pointer}
