@@ -8,7 +8,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1] / '_site'
-BASE = 'https://kirpichinvest.ru'
+BASE = 'https://torggid.ru'
 STAMP = os.environ.get('GITHUB_RUN_ID', str(int(time.time())))
 
 def check(path):
@@ -18,7 +18,7 @@ def check(path):
         url_path = url_path[:-10]
     for attempt in range(3):
         try:
-            req = urllib.request.Request(BASE + url_path + '?seo_verify=' + STAMP, headers={'User-Agent':'KirpichInvest-Release-Check/1.0','Cache-Control':'no-cache'})
+            req = urllib.request.Request(BASE + url_path + '?seo_verify=' + STAMP, headers={'User-Agent':'TorgGid-Release-Check/1.0','Cache-Control':'no-cache'})
             with urllib.request.urlopen(req, timeout=25) as r:
                 body = r.read()
                 if r.status == 200 and hashlib.sha256(body).digest() == hashlib.sha256(path.read_bytes()).digest():

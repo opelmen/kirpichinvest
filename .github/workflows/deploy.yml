@@ -58,6 +58,16 @@ jobs:
           python _src/build.py | tee /tmp/build.log
           node tests/check_forms.cjs _site/index.html
 
+      - name: Lead API accepts forms from the site domain (CORS)
+        run: |
+          set -euo pipefail
+          origin=$(python -c "import sys; sys.path.insert(0, '_src'); from build import cfg; print(cfg.SITE_URL)")
+          allowed=$(curl -sS -X OPTIONS -D - -o /dev/null --max-time 30 -H "Origin: $origin" \
+            -H "Access-Control-Request-Method: POST" https://check.kirpichinvest.ru/public/lead \
+            | tr -d '\r' | sed -n 's/^[Aa]ccess-[Cc]ontrol-[Aa]llow-[Oo]rigin: //p')
+          echo "CORS for $origin: ${allowed:-none}"
+          test "$allowed" = "$origin"
+
       - name: Server backup and deploy
         run: |
           set -euo pipefail
@@ -68,12 +78,15 @@ jobs:
           release="$1"
           mkdir -p "$HOME/kirpichinvest-backups/$release" "$HOME/kirpichinvest-seo"
           backup="$HOME/kirpichinvest-backups/$release"
-          tar -czf "$backup/site.tar.gz" -C "$HOME/kirpichinvest.ru" public_html
+          mkdir -p "$HOME/torggid.ru/public_html"
+          tar -czf "$backup/site.tar.gz" -C "$HOME/torggid.ru" public_html
           tar -tzf "$backup/site.tar.gz" >/dev/null
+          tar -czf "$backup/old-domain.tar.gz" -C "$HOME/kirpichinvest.ru" public_html
+          tar -tzf "$backup/old-domain.tar.gz" >/dev/null
           if test -f "$HOME/kirpichinvest-seo/lot_history.json"; then
             cp "$HOME/kirpichinvest-seo/lot_history.json" "$backup/lot_history.json"
           fi
-          sha256sum "$backup/site.tar.gz" > "$backup/SHA256SUMS"
+          sha256sum "$backup/site.tar.gz" "$backup/old-domain.tar.gz" > "$backup/SHA256SUMS"
           printf 'release=%s\nverified_tar=true\n' "$release" > "$backup/manifest.txt"
           cat "$backup/SHA256SUMS"
           printf 'BACKUP=%s\n' "$backup"
@@ -81,7 +94,7 @@ jobs:
           # Persist history first: a interrupted rsync cannot lose newly known IDs on the next run.
           scp _src/data/lot_history.json fond178@fond178.beget.tech:kirpichinvest-seo/lot_history.next.json
           ssh fond178@fond178.beget.tech 'chmod 600 ~/kirpichinvest-seo/lot_history.next.json && mv ~/kirpichinvest-seo/lot_history.next.json ~/kirpichinvest-seo/lot_history.json'
-          rsync -az --delay-updates --delete-delay --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
+          rsync -az --delay-updates --delete-delay --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/torggid.ru/public_html/
           echo "Published release $release" | tee -a /tmp/build.log
 
       - name: Verify live publication
@@ -89,6 +102,16 @@ jobs:
           set -euo pipefail
           python _src/verify_live.py | tee -a /tmp/build.log
           touch /tmp/site-verified
+
+      - name: Old domain kirpichinvest.ru -> 301 to torggid.ru (only after the new site is verified)
+        run: |
+          set -euo pipefail
+          rsync -az --delay-updates --delete-delay _site_old_domain/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
+          for path in / /torgi/ /stati/proverka-kvartiry-s-torgov/; do
+            loc=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "https://kirpichinvest.ru$path")
+            echo "kirpichinvest.ru$path -> $loc" | tee -a /tmp/build.log
+            test "$loc" = "301 https://torggid.ru$path"
+          done
 
       - name: IndexNow (Яндекс, Bing) — новые страницы
         continue-on-error: true
@@ -102,7 +125,7 @@ jobs:
           key = json.load(open("_src/config.json")).get("INDEXNOW_KEY", "")
           urls = [u.strip() for u in open("/tmp/new_urls.txt") if u.strip()]
           if key and urls:
-              body = json.dumps({"host": "kirpichinvest.ru", "key": key, "keyLocation": f"https://kirpichinvest.ru/{key}.txt", "urlList": urls}).encode()
+              body = json.dumps({"host": "torggid.ru", "key": key, "keyLocation": f"https://torggid.ru/{key}.txt", "urlList": urls}).encode()
               for ep in ("https://yandex.com/indexnow", "https://api.indexnow.org/indexnow"):
                   try:
                       r = urllib.request.urlopen(urllib.request.Request(ep, data=body, headers={"Content-Type": "application/json; charset=utf-8"}), timeout=30)

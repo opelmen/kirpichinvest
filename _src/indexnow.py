@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
-HOST = "kirpichinvest.ru"
+HOST = "torggid.ru"
 BASE = "https://" + HOST
 ENDPOINTS = ("https://yandex.com/indexnow", "https://api.indexnow.org/indexnow")
 
