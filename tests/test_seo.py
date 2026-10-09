@@ -90,6 +90,7 @@ class BuildTests(unittest.TestCase):
             rows = [dict(row, id='gistorgi:21000000000000000001_1', source='gistorgi', kind='arrest', category='land', city='kazan')]
             rows += [dict(row, id=f'mets:{i}') for i in range(3)]
             rows.append(dict(row, id='mets:9', discount_pct=55.0, suspect=True))
+            rows.append(dict(row, id='mets:10', address='г. Казань, Иванов Иван Иванович, ул. Ленина, д. 7', market_conf='low'))
             (data/'market.json').write_text(json.dumps({'lots': rows}, ensure_ascii=False))
             subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
             site = base/'_site'
@@ -101,13 +102,23 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Извещение и документы на МЭТС', card)
             self.assertIn('/lot/mets%3A0', card)
             self.assertIn('RealEstateListing', card)
-            self.assertIn('проверьте оценку', (site/'torgi/lot/mets-9/index.html').read_text())
+            sus = (site/'torgi/lot/mets-9/index.html').read_text()
+            self.assertIn('проверьте оценку', sus)
+            self.assertNotIn('дисконт 55%', sus)  # громкий процент при подозрительной скидке не выносим
+            self.assertIn('Цена сейчас', card)  # публичное предложение
+            self.assertIn('Аресты и залоги — <span class="st">нет данных', card)
+            home = (site/'index.html').read_text()
+            self.assertIn('Все торги недвижимостью в России', home)
+            self.assertNotIn('Земельный участок', home.split('class="board"')[1].split('</div>')[0])
             self.assertTrue((site/'torgi/lot/21000000000000000001_1/index.html').exists())  # адреса ГИС Торги прежние
             self.assertIn('Земельный участок', (site/'torgi/zemlya/index.html').read_text())
             land = (site/'torgi/lot/21000000000000000001_1/index.html').read_text()
             self.assertIn('Земля: оценка вручную', land)  # оценка по квартирам к земле не применяется
             self.assertNotIn('Выгодно', land)
             self.assertIn('?buy=1', card)  # отчёт ведёт сразу к покупке в приложении
+            low = (site/'torgi/lot/mets-10/index.html').read_text()
+            self.assertNotIn('Иванов', low)  # ФИО должника из строки адреса убрано
+            self.assertIn('Ориентир по городу', low)
 
 if __name__ == '__main__':
     unittest.main()

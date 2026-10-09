@@ -106,6 +106,9 @@ def translit(s):
     return re.sub(r"-+", "-", "".join(t.get(c, c if c.isalnum() else "-") for c in s.lower())).strip("-")
 
 
+FIO = re.compile(r"[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\s+(?:[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+(?:вич|вна|ична|инична|оглы|кызы)\b|[А-ЯЁ]\.\s?[А-ЯЁ]\.)\s*,?")
+
+
 def clean_address(d):
     """Адрес без персональных данных должника и служебного текста извещения."""
     a = str(d.get("address") or d.get("name") or "")
@@ -122,8 +125,9 @@ def clean_address(d):
     a = re.sub(r"^г\s+Санкт", "г. Санкт", a)
     a = re.sub(r"муниципальный округ [^,]+,\s*", "", a)
     a = re.split(r"\.\s*(?:Обремен|н/ц|Начальн|Собственник|Должник)", a, flags=re.I)[0]
-    a = re.split(r",?\s*(?:общей\s+площадью|общ\.?\s*пл|площадью|кадастров|кад\.\s*№|к\.н\.)", a, flags=re.I)[0]
+    a = re.split(r",?\s*(?:общей\s+площадью|общ\.?\s*пл|площадью|кадастров|кад\.\s*№|к\.н\.|общая\s+долевая|\(?доля\s+в\s+праве|н/ц\b)", a, flags=re.I)[0]
     a = re.sub(r",?\s*\b(кв\.?|квартира|комн\.?|пом\.?)\s*\d+[а-яА-Я]?\b", "", a)  # номер квартиры не публикуем
+    a = re.sub(FIO, "", a)  # ФИО должника иногда стоит прямо в строке адреса
     a = re.sub(r"\s+", " ", a).strip(" ,.")
     if len(a) < 12 or a in ("Ленинградская область", "Санкт-Петербург"):
         a = CITY_NAME.get(d.get("city"), "Адрес уточняется")
@@ -248,7 +252,8 @@ def stats(lots):
     cutoff = (now - timedelta(days=7)).isoformat()
     return {"count": len(lots), "median_ppm2": statistics.median(ppm) if ppm else None,
             "min_price": min((d["price"] for d in lots if d.get("price")), default=None),
-            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= cutoff)}
+            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= cutoff),
+            "closing": sum(1 for d in lots if d.get("days_left") is not None and 0 <= d["days_left"] <= 3)}
 
 
 # ---------- запись ----------
@@ -283,7 +288,10 @@ def build():
     env.globals["region_paths"] = {f"/torgi/{r[0]}/" for r in REGIONS.values()}
     env.globals["cities"] = [(c[0], c[1], c[2], city_counts[c[0]]) for c in CITIES]
     st = stats(LOTS)
-    board = [d for d in LOTS if d.get("price")][:6]
+    # на главной только жильё с правдоподобной ценой, свежие сверху: земля и цены-«кадастровые номера» не попадают
+    sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)]
+    board = sorted([d for d in sane if d.get("category", "flat") in ("flat", "room", "house")] if WIDE else sane,
+                   key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
     write("/", "home.html", priority="1.0", lots=board, st=st, articles=ARTICLES[:6],
           title=(f"Недвижимость с торгов по всей России — {cfg.SITE_NAME}" if WIDE else f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}"),
           description=("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России: квартиры, дома, земля, коммерция. Цена к рынку, риски, сроки заявок и расчёт максимальной ставки."

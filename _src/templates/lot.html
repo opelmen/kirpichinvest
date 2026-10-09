@@ -12,15 +12,22 @@
     <p class="mute small" style="margin:0 0 4px">Рентген лота</p>
     <p class="badge v-{{ d.verdict[0] }}">{{ d.verdict[1] }}</p>
     <p>{{ d.verdict[2] }}</p>
-    {% if d.risks %}<ul>{% for r in d.risks %}<li>{{ r.title }}{% if r.level == "high" %} — <b style="color:var(--red)">высокий риск</b>{% endif %}</li>{% endfor %}</ul>{% endif %}
-    {% if d.own_time %}<p class="small">Ориентир до полного владения: <b>{{ d.own_time }}</b></p><p class="mute small">Риски найдены по тексту извещения: если чего-то нет в списке, значит, в извещении об этом не сказано.</p>{% endif %}
+    {% set rk = d.risks|map(attribute="key")|list %}<ul>
+    {% for r in d.risks %}<li>{{ r.title }} — <span class="st">заявлено в извещении</span>{% if r.level == "high" %}, <b style="color:var(--red)">высокий риск</b>{% endif %}</li>{% endfor %}
+    {% if d.category in ("flat", "room", "share", "house") and "residents" not in rk and "minors" not in rk %}<li class="nodata">Жильцы — <span class="st">нет данных</span>: кто зарегистрирован, в извещении не сказано. Спросите организатора торгов или управляющую компанию до заявки.</li>{% endif %}
+    {% if "encumbrance" not in rk and "arrest" not in rk %}<li class="nodata">Аресты и залоги — <span class="st">нет данных</span>: видны в свежей выписке ЕГРН.</li>{% endif %}
+    {% if d.kind == "bankruptcy" and "dispute" not in rk %}<li class="nodata">Оспаривание сделки — <span class="st">нет данных</span>: проверьте споры по должнику в kad.arbitr.ru.</li>{% endif %}
+    </ul>
+    {% if d.own_time %}<p class="small">Ориентир до полного владения: <b>{{ d.own_time }}</b></p>{% endif %}
     {% if d.app_id %}<a class="btn" href="{{ cfg.APP_URL }}/lot/{{ d.app_id|urlencode }}">Полный Рентген, калькулятор ставки и документы</a>{% endif %}
   </div>{% endif %}
   {% if not active %}<p class="note">{{ "Приём заявок по этому лоту завершён." if d.status == "ended" else "Лот отсутствует в текущей выгрузке. Актуальный статус уточняйте у организатора." }} Результат торгов и факт продажи не подтверждены. Посмотрите <a href="/torgi/">актуальные лоты</a>.</p>{% endif %}
   <div class="scroll"><table class="t">
-    <tr><th>Начальная цена</th><td><b>{{ d.price|rub }}</b></td></tr>
+    {% set pub = d.bidd_type and "убличн" in d.bidd_type %}
+    <tr><th>{{ "Цена сейчас" if pub else "Начальная цена" }}</th><td><b>{{ d.price|rub }}</b>{% if pub %}{% if d.price_start and d.price_start > d.price %}<div class="mute small">Старт {{ d.price_start|rub }}. Цена снижается по графику, даты и цены шагов — в извещении.</div>{% else %}<div class="mute small">Публичное предложение: цена снижается по графику, даты и цены шагов — в извещении.</div>{% endif %}{% endif %}</td></tr>
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
     {% if d.ppm2 %}<tr><th>Цена за м²</th><td>{{ d.ppm2|rub }}</td></tr>{% endif %}
+    {% if d.city_market %}<tr><th>Ориентир по городу</th><td>≈ {{ d.city_market|rub }}<div class="mute small">Оценка грубая: похожих объявлений рядом мало, поэтому скидку в процентах не показываем.</div></td></tr>{% endif %}
     {% if d.eff_market %}<tr><th>Рыночная цена (оценка)</th><td><b>{{ d.eff_market|rub }}</b>{% if d.eff_discount and d.eff_discount > 0 %} · дисконт {{ d.eff_discount|round|int }}%{% endif %}<div class="mute small">Ориентир по объявлениям рядом, не отчёт об оценке</div></td></tr>{% endif %}
     {% if d.liq %}<tr><th>Быстрая продажа (2–3 мес)</th><td>≈ {{ d.liq|rub }}</td></tr>{% endif %}
     {% if d.rooms %}<tr><th>Комнат</th><td>{{ d.rooms }}</td></tr>{% endif %}

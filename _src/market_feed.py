@@ -105,10 +105,10 @@ def verdict(d):
     elif other:
         risk = f"риски устранимые ({', '.join(other)}), до владения {own}"
     else:
-        risk = "серьёзных рисков в извещении не нашли"
+        risk = "серьёзных рисков в извещении не указано"
     if disc >= 10 and d.get("suspect"):
         return ("mid", "Похоже на выгоду — проверьте оценку",
-                f"По оценке дешевле рынка на {round(disc)}%, но такая скидка встречается редко: сверьте цену с объявлениями вручную; {risk}.")
+                f"Цена заметно ниже нашей оценки, но такая скидка встречается редко, и оценка может ошибаться: сверьте цену с объявлениями рядом; {risk}.")
     if disc >= 10:
         badge = "Выгодно, но с рисками" if high else ("Выгодно, риски устранимы" if other else "Выгодно — стоит участвовать")
         return ("mid" if high else "good", badge, f"Дешевле рынка на {round(disc)}% (≈{mln(market - price)} ₽), {risk}.")
@@ -148,7 +148,11 @@ def from_market(rows):
             "flags": ", ".join(dict.fromkeys(flags)), "risks": r.get("risks") or [], "own_time": r.get("own_time"),
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
         }
+        if r.get("market_conf") == "low" and cat not in NONRES and cat != "share" and r.get("market_price"):
+            d["city_market"] = r["market_price"]  # грубый ориентир по городу: показываем суммой, без процента
         tone, badge, text = verdict(d)
         d["verdict"] = [tone, badge, text.replace("..", ".")]
+        if d["suspect"]:
+            d["eff_discount"] = None  # скидка больше 50%: процент не выносим, вывод Рентгена объясняет почему
         out.append(d)
     return out

@@ -24,6 +24,7 @@
     <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{% if d.category %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>{% if budget %}<span class="small">{{ object_group(d) }}</span>{% endif %}
     {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}
+    {% if d.city_market and not budget %}<span class="small">По городу ≈ {{ d.city_market|rub }} · оценка грубая</span>{% endif %}
     {% if d.eff_market and not budget %}<span class="small">Рынок ≈ {{ d.eff_market|rub }}{% if d.eff_discount and d.eff_discount > 0 %} · <b style="color:var(--petrol)">дисконт {{ d.eff_discount|round|int }}%</b>{% endif %}</span>{% endif %}
     <span class="mute small">{% if d.area %}{{ d.area|round(1) }} м²{% endif %}{% if d.ppm2 %} · {{ d.ppm2|rub }}/м²{% endif %}{% if not archive and d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
     {% if d.verdict %}<span class="small"><b class="v-{{ d.verdict[0] }}">{{ d.verdict[1] }}</b></span>{% endif %}

@@ -8,7 +8,7 @@ FIELDS = ('id', 'city', 'city_name', 'region', 'caddr', 'label', 'price', 'area'
           'ppm2', 'rooms', 'floor', 'bidd_type', 'bidd_end', 'flags',
           'eff_market', 'eff_discount', 'liq', 'source_url', 'first_seen', 'cadastral', 'district', 'town',
           'app_id', 'source_name', 'kind', 'kind_name', 'category', 'risks', 'own_time', 'verdict',
-          'region_slug', 'region_name')
+          'region_slug', 'region_name', 'price_start', 'city_market')
 
 
 def merge_history(current, previous, now):
