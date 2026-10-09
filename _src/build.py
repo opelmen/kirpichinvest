@@ -1,4 +1,4 @@
-"""Сборка статического сайта kirpichinvest.ru.
+"""Сборка статического сайта torggid.ru (до 10.2026 — kirpichinvest.ru).
 Данные лотов: https://check.kirpichinvest.ru/public/lots.json (снимок в data/lots.json).
 Запуск: python _src/build.py  → результат в _site/"""
 import json
@@ -21,7 +21,7 @@ ROOT = SRC.parent
 OUT = ROOT / "_site"
 
 cfg = SimpleNamespace(
-    SITE_NAME="КирпичИнвест", SITE_URL="https://kirpichinvest.ru", SITE_PHONE="+7 995 595-54-00",
+    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="+7 995 595-54-00",
     SITE_EMAIL="fond178@gmail.com", SITE_OWNER="ИП Смирнов Илья Александрович", SITE_INN="", SITE_OGRNIP="",
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
@@ -265,7 +265,7 @@ def build():
     st = stats(LOTS)
     board = [d for d in LOTS if d.get("price")][:6]
     write("/", "home.html", priority="1.0", lots=board, st=st, articles=ARTICLES[:6],
-          title="Квартиры с торгов в 16 городах России — КирпичИнвест",
+          title=f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}",
           description="Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки.")
 
 
@@ -394,7 +394,7 @@ def build():
     arts = "\n".join(f"- [{a['title']}]({cfg.SITE_URL}/stati/{a['slug']}/): {a['description']}" for a in ARTICLES)
     (OUT / "llms.txt").write_text(f"""# {cfg.SITE_NAME}
 
-> КирпичИнвест — каталог жилья с торгов, проверка лотов и сопровождение покупки в 16 городах-миллионниках России и в радиусе 100 км. {cfg.SITE_OWNER}. Не организатор торгов; задаток и оплата объекта идут организатору торгов и продавцу.
+> {cfg.SITE_NAME} — каталог жилья с торгов, проверка лотов и сопровождение покупки в 16 городах-миллионниках России и в радиусе 100 км. {cfg.SITE_OWNER}. Не организатор торгов; задаток и оплата объекта идут организатору торгов и продавцу.
 
 ## География
 {", ".join(c[1] for c in CITIES)}. Наличие активных лотов зависит от города; пустая подборка не означает наличие предложения.
@@ -418,7 +418,7 @@ Options -Indexes
 RewriteEngine On
 RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} ^www\\. [NC]
-RewriteRule ^(.*)$ https://kirpichinvest.ru/$1 [R=301,L]
+RewriteRule ^(.*)$ """ + cfg.SITE_URL + """/$1 [R=301,L]
 RewriteRule ^torgi/spb/?$ /torgi/sankt-peterburg/ [R=301,L]
 RewriteRule ^torgi/lenoblast/?$ /torgi/sankt-peterburg/ [R=301,L]
 RewriteRule ^torgi/lenoblast/(.+)$ /torgi/sankt-peterburg/$1 [R=301,L]
@@ -439,7 +439,32 @@ AddOutputFilterByType DEFLATE text/html text/css application/javascript applicat
     if getattr(cfg, "INDEXNOW_KEY", ""):
         (OUT / f"{cfg.INDEXNOW_KEY}.txt").write_text(cfg.INDEXNOW_KEY, encoding="utf-8")
     (OUT / "urls.txt").write_text("\n".join(cfg.SITE_URL + u for u, _, _ in SITEMAP), encoding="utf-8")
+    build_old_domain()
     print(f"OK: страниц {len(SITEMAP)} в sitemap, лотов {len(LOTS)}, статей {len(ARTICLES)}")
+
+
+OLD_OUT = ROOT / "_site_old_domain"
+
+
+def build_old_domain():
+    """public_html старого домена kirpichinvest.ru после переезда: постраничный 301 на тот же путь нового домена.
+    Файлы подтверждения Вебмастера/Search Console и ключ IndexNow отдаются как есть, чтобы не потерять права
+    на старый сайт во время склейки."""
+    if OLD_OUT.exists():
+        shutil.rmtree(OLD_OUT)
+    OLD_OUT.mkdir()
+    keep = sorted(f.name for f in (SRC / "root").iterdir()) if (SRC / "root").exists() else []
+    for name in keep:
+        shutil.copy(SRC / "root" / name, OLD_OUT / name)
+    if getattr(cfg, "INDEXNOW_KEY", ""):
+        keep.append(f"{cfg.INDEXNOW_KEY}.txt")
+        (OLD_OUT / keep[-1]).write_text(cfg.INDEXNOW_KEY, encoding="utf-8")
+    exempt = "".join(f"RewriteCond %{{REQUEST_URI}} !^/{re.escape(n)}$\n" for n in keep)
+    (OLD_OUT / ".htaccess").write_text(f"""AddDefaultCharset UTF-8
+Options -Indexes
+RewriteEngine On
+{exempt}RewriteRule ^(.*)$ {cfg.SITE_URL}/$1 [R=301,L]
+""", encoding="utf-8")
 
 
 if __name__ == "__main__":
