@@ -2,6 +2,7 @@
 import concurrent.futures
 import hashlib
 import os
+import random
 import time
 import urllib.error
 import urllib.request
@@ -10,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1] / '_site'
 BASE = 'https://torggid.ru'
 STAMP = os.environ.get('GITHUB_RUN_ID', str(int(time.time())))
+LOT_SAMPLE = int(os.environ.get('VERIFY_LOT_SAMPLE', '400'))
 
 def check(path):
     relative = path.relative_to(ROOT).as_posix()
@@ -30,15 +32,20 @@ def check(path):
     return {'path':url_path, 'error':error}
 
 if __name__ == '__main__':
-    files = list(ROOT.rglob('*.html')) + [p for p in (ROOT/'static').rglob('*') if p.is_file()] + [ROOT/n for n in ('sitemap.xml','robots.txt','llms.txt')]
+    pages = list(ROOT.rglob('*.html'))
+    # Карточек лотов по всей стране десятки тысяч: сверяем все остальные страницы и случайную выборку карточек,
+    # иначе проверка идёт больше часа на каждой выкладке.
+    lots = [p for p in pages if '/lot/' in p.as_posix()]
+    sample = random.Random(STAMP).sample(lots, min(len(lots), LOT_SAMPLE))
+    files = [p for p in pages if '/lot/' not in p.as_posix()] + sample + [p for p in (ROOT/'static').rglob('*') if p.is_file()] + [ROOT/n for n in ('sitemap.xml','robots.txt','llms.txt')]
     assert files and (ROOT/'index.html').exists()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         errors = [e for e in pool.map(check, files) if e]
     try:
         urllib.request.urlopen(BASE+'/seo-release-missing-page-check/', timeout=25)
         errors.append({'path':'missing-page','error':'expected 404'})
     except urllib.error.HTTPError as e:
         if e.code != 404: errors.append({'path':'missing-page','error':str(e.code)})
-    print(f'Live verification: {len(files)} files, {len(errors)} errors')
+    print(f'Live verification: {len(files)} files ({len(sample)} of {len(lots)} lot pages), {len(errors)} errors')
     for error in errors: print(error)
     raise SystemExit(bool(errors))
