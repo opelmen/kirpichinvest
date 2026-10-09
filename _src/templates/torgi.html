@@ -6,11 +6,11 @@
 {% if budget %}<p class="lead">{{ budget.count }} предложений с указанной ценой до {{ budget.cap|rub }}. Сортировка от меньшей цены. Это цена лота в источнике, а не полный бюджет покупки; ставка может вырасти.</p>
 <p class="note">В подборке: {{ budget.shares }} с отметкой «доля», {{ budget.rooms }} с отметкой комнаты без отметки доли, {{ budget.other }} — без этих отметок. Отсутствие отметки не подтверждает продажу квартиры целиком. Все сведения нужно сверить с документами организатора.</p>
 <p><a href="/byudzhet/">Сравнить бюджеты и города</a> · <a href="/kalkulyator-stavki/">Рассчитать максимальную ставку</a> · <a href="/stati/kvartira-s-torgov-s-dolgami/">Какие долги учитывать</a></p>
-{% elif archive %}<p class="lead">Завершённые или отсутствующие в текущем источнике предложения: {{ st.count }} карточек. Истечение срока заявки не подтверждает продажу объекта. Актуальные предложения — в <a href="/torgi/">каталоге</a>.</p>{% else %}<p class="lead">Жилые помещения, которые сейчас продаются на торгах: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным ГИС Торги.</p>{% endif %}
+{% elif archive %}<p class="lead">Завершённые или отсутствующие в текущем источнике предложения: {{ st.count }} карточек. Истечение срока заявки не подтверждает продажу объекта. Актуальные предложения — в <a href="/torgi/">каталоге</a>.</p>{% else %}<p class="lead">{% if wide %}Недвижимость, которая сейчас продаётся на торгах по банкротству и арестованному имуществу{% else %}Жилые помещения, которые сейчас продаются на торгах{% endif %}: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным {{ "ГИС Торги и площадок банкротства" if wide else "ГИС Торги" }}. <a href="{{ cfg.APP_URL }}/">Открыть на карте с фильтрами</a>.</p>{% endif %}
 {% if has_archive and not archive %}<p><a href="/torgi/arhiv/">Архив предложений</a></p>{% endif %}
 {% if not budget and not archive %}<p><a href="/byudzhet/">Что можно найти до 1, 2 и 3 млн рублей</a></p>{% endif %}
 <nav class="filters" aria-label="Подборки">{% for u, n in facet_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>
-{% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">Районы и города:</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
+{% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">{{ "Регионы:" if town_links[0][0] in region_paths else "Районы и города:" }}</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
 {% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
 <th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
 <tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
@@ -21,11 +21,12 @@
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
-    <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{{ d.caddr[:120] }}</span>
+    <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{% if d.category %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>{% if budget %}<span class="small">{{ object_group(d) }}</span>{% endif %}
     {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}
     {% if d.eff_market and not budget %}<span class="small">Рынок ≈ {{ d.eff_market|rub }}{% if d.eff_discount and d.eff_discount > 0 %} · <b style="color:var(--petrol)">дисконт {{ d.eff_discount|round|int }}%</b>{% endif %}</span>{% endif %}
     <span class="mute small">{% if d.area %}{{ d.area|round(1) }} м²{% endif %}{% if d.ppm2 %} · {{ d.ppm2|rub }}/м²{% endif %}{% if not archive and d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
+    {% if d.verdict %}<span class="small"><b class="v-{{ d.verdict[0] }}">{{ d.verdict[1] }}</b></span>{% endif %}
     {% if d.flags %}<span class="flags">{{ d.flags }}</span>{% endif %}
   </a>
 {% else %}<p>Сейчас в этой подборке нет активных лотов. Оставьте заявку — пришлём, как только появятся.</p>{% endfor %}

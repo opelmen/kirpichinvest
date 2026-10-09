@@ -43,6 +43,7 @@ class BuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
             shutil.copytree(ROOT / '_src', base / '_src')
+            (base / '_src/data/market.json').unlink(missing_ok=True)  # тест прежнего фида Залог-Деска
             rows = [dict(id=f'test_{i}', city='moskva', region='77', address='Москва, Тестовая улица, дом 1', price=1000000, area=40, bidd_end='2099-01-01T00:00:00Z') for i in range(65)]
             rows[1]['bidd_type'] = 'Реализация имущества должников'
             data = base / '_src/data'
@@ -74,6 +75,33 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn('Получить отчёт', card)
             self.assertIn('/torgi/arhiv/', (site/'torgi/index.html').read_text())
             self.assertEqual(len(list((site/'torgi/lot').glob('*/index.html'))),65)
+
+    def test_market_feed_whole_country(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            shutil.copytree(ROOT / '_src', base / '_src')
+            data = base / '_src/data'
+            (data/'lot_history.json').write_text('[]')
+            row = dict(source='mets', source_url='https://m-ets.ru/x', kind='bankruptcy', stage='repeat', procedure='Публичное предложение',
+                       category='flat', title='Квартира', address='Республика Татарстан, г. Альметьевск, ул. Ленина, д. 5', city=None, region='16',
+                       area=40.5, rooms=1, price=2_000_000, price_start=2_500_000, market_price=3_000_000, market_conf='medium', discount_pct=33.3,
+                       risks=[dict(key='minors', title='Несовершеннолетние', level='high')], own_time='4–11 мес.',
+                       bidd_end='2099-01-01T00:00:00+00:00', first_seen='2026-10-09T00:00:00+00:00')
+            rows = [dict(row, id='gistorgi:21000000000000000001_1', source='gistorgi', kind='arrest', category='land', city='kazan')]
+            rows += [dict(row, id=f'mets:{i}') for i in range(3)]
+            (data/'market.json').write_text(json.dumps({'lots': rows}, ensure_ascii=False))
+            subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
+            site = base/'_site'
+            self.assertIn('по всей России', (site/'torgi/index.html').read_text())
+            region = (site/'torgi/tatarstan/index.html').read_text()
+            self.assertIn('Недвижимость с торгов в Татарстане', region)
+            card = (site/'torgi/lot/mets-0/index.html').read_text()
+            self.assertIn('Выгодно, но с рисками', card)
+            self.assertIn('Извещение и документы на МЭТС', card)
+            self.assertIn('/lot/mets%3A0', card)
+            self.assertIn('RealEstateListing', card)
+            self.assertTrue((site/'torgi/lot/21000000000000000001_1/index.html').exists())  # адреса ГИС Торги прежние
+            self.assertIn('Земельный участок', (site/'torgi/zemlya/index.html').read_text())
 
 if __name__ == '__main__':
     unittest.main()
