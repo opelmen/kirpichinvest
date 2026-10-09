@@ -10,22 +10,25 @@
 {% block main %}
 <div class="hero"><div class="wrap">
   <div>
-    <h1>Квартиры с торгов в 16 городах-миллионниках России</h1>
-    <p class="lead">Находим лоты, проверяем риски до подачи заявки и считаем максимальную ставку. Покупаете на своё имя, деньги идут напрямую на площадку и продавцу.</p>
-    <div class="cta"><a class="btn" href="/torgi/">Смотреть лоты</a><a class="btn ghost" href="#zayavka">Подобрать квартиру</a></div>
+    {% if wide %}<h1>Все торги недвижимостью в России с честным разбором каждого лота</h1>
+    <p class="lead">Что продаётся на самом деле, сколько это будет стоить вам, что может пойти не так и сколько ставить. И напишем, когда цена дойдёт до вашей.</p>
+    {% else %}<h1>Квартиры с торгов в 16 городах-миллионниках России</h1>
+    <p class="lead">Находим лоты, проверяем риски до подачи заявки и считаем максимальную ставку. Покупаете на своё имя, деньги идут напрямую на площадку и продавцу.</p>{% endif %}
+    <div class="cta"><a class="btn" href="/torgi/">Смотреть лоты</a><a class="btn ghost" href="#zayavka">{{ "Подобрать объект" if wide else "Подобрать квартиру" }}</a></div>
     <div class="facts">
-      <div><b>{{ st.count }}</b><span>активных лотов жилья</span></div>
+      <div><b>{{ st.count }}</b><span>{{ "лотов на торгах сейчас" if wide else "активных лотов жилья" }}</span></div>
       <div><b>{{ st.week_new }}</b><span>новых за 7 дней</span></div>
-      {% if st.median_ppm2 %}<div><b>{{ (st.median_ppm2/1000)|round|int }} тыс.</b><span>медиана начальной цены за м²</span></div>{% endif %}
+      {% if wide %}<div><b>{{ st.closing }}</b><span>заявки закрываются в ближайшие 3 дня</span></div>
+      {% elif st.median_ppm2 %}<div><b>{{ (st.median_ppm2/1000)|round|int }} тыс.</b><span>медиана начальной цены за м²</span></div>{% endif %}
     </div>
   </div>
   <div class="board">
     <h2>Свежие лоты с торгов</h2>
     {% for d in lots %}
     <a class="lotrow" href="/torgi/lot/{{ d.id }}/">
-      <span class="addr">{{ d.caddr[:90] }}</span><span class="price">{{ d.price|rub }}</span>
+      <span class="addr">{% if wide %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:90] }}</span><span class="price">{{ d.price|rub }}</span>
       <span class="meta">{% if d.area %}{{ d.area|round(1) }} м² · {% endif %}{% if d.eff_market %}рынок ≈ {{ d.eff_market|rub }}{% elif d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
-      <span>{% if d.eff_discount and d.eff_discount > 0 %}<span class="tag">−{{ d.eff_discount|round|int }}% к рынку</span>{% elif d.days_left is not none and d.days_left >= 0 %}<span class="tag">заявки ещё {{ d.days_left|round|int }} дн.</span>{% endif %}</span>
+      <span>{% if d.eff_discount and d.eff_discount > 0 %}<span class="tag">−{{ d.eff_discount|round|int }}% к рынку</span>{% elif d.city_market %}<span class="tag">ниже средней по городу</span>{% elif d.days_left is not none and d.days_left >= 0 %}<span class="tag">заявки ещё {{ d.days_left|round|int }} дн.</span>{% endif %}</span>
     </a>
     {% else %}<p style="padding:12px">Лоты загружаются. Загляните через несколько минут.</p>{% endfor %}
     <a class="more" href="/torgi/">Все лоты</a>
@@ -36,7 +39,7 @@
 <section class="alt"><div class="wrap">
   <h2>Лоты по городам</h2>
   <p><a href="/byudzhet/">Что можно найти на торгах до 1, 2 и 3 млн ₽</a> · <a href="/stati/kvartira-s-torgov-s-dolgami/">Покупка с долгами: что проверить</a></p>
-  <p class="mute">16 городов-миллионников и населённые пункты в радиусе 100 км. Торги электронные — участвовать можно из любого города.</p>
+  <p class="mute">{% if wide %}Ниже — 16 городов-миллионников; лоты остальных регионов в <a href="/torgi/">каталоге</a>.{% else %}16 городов-миллионников и населённые пункты в радиусе 100 км.{% endif %} Торги электронные — участвовать можно из любого города.</p>
   <nav class="filters" aria-label="Города" style="margin-top:14px">{% for slug, name, where, n in cities %}<a href="/torgi/{{ slug }}/">{{ name }}{% if n %} · {{ n }}{% endif %}</a>{% endfor %}</nav>
 </div></section>
 

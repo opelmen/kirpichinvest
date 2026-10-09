@@ -43,6 +43,7 @@ class BuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
             shutil.copytree(ROOT / '_src', base / '_src')
+            (base / '_src/data/market.json').unlink(missing_ok=True)  # тест прежнего фида Залог-Деска
             rows = [dict(id=f'test_{i}', city='moskva', region='77', address='Москва, Тестовая улица, дом 1', price=1000000, area=40, bidd_end='2099-01-01T00:00:00Z') for i in range(65)]
             rows[1]['bidd_type'] = 'Реализация имущества должников'
             data = base / '_src/data'
@@ -74,6 +75,50 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn('Получить отчёт', card)
             self.assertIn('/torgi/arhiv/', (site/'torgi/index.html').read_text())
             self.assertEqual(len(list((site/'torgi/lot').glob('*/index.html'))),65)
+
+    def test_market_feed_whole_country(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            shutil.copytree(ROOT / '_src', base / '_src')
+            data = base / '_src/data'
+            (data/'lot_history.json').write_text('[]')
+            row = dict(source='mets', source_url='https://m-ets.ru/x', kind='bankruptcy', stage='repeat', procedure='Публичное предложение',
+                       category='flat', title='Квартира', address='Республика Татарстан, г. Альметьевск, ул. Ленина, д. 5', city=None, region='16',
+                       area=40.5, rooms=1, price=2_000_000, price_start=2_500_000, market_price=3_000_000, market_conf='medium', discount_pct=33.3,
+                       risks=[dict(key='minors', title='Несовершеннолетние', level='high')], own_time='4–11 мес.',
+                       bidd_end='2099-01-01T00:00:00+00:00', first_seen='2026-10-09T00:00:00+00:00')
+            rows = [dict(row, id='gistorgi:21000000000000000001_1', source='gistorgi', kind='arrest', category='land', city='kazan')]
+            rows += [dict(row, id=f'mets:{i}') for i in range(3)]
+            rows.append(dict(row, id='mets:9', discount_pct=55.0, suspect=True))
+            rows.append(dict(row, id='mets:10', address='г. Казань, Иванов Иван Иванович, ул. Ленина, д. 7', market_conf='low'))
+            (data/'market.json').write_text(json.dumps({'lots': rows}, ensure_ascii=False))
+            subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
+            site = base/'_site'
+            self.assertIn('по всей России', (site/'torgi/index.html').read_text())
+            region = (site/'torgi/tatarstan/index.html').read_text()
+            self.assertIn('Недвижимость с торгов в Татарстане', region)
+            card = (site/'torgi/lot/mets-0/index.html').read_text()
+            self.assertIn('Выгодно, но с рисками', card)
+            self.assertIn('Извещение и документы на МЭТС', card)
+            self.assertIn('/lot/mets%3A0', card)
+            self.assertIn('RealEstateListing', card)
+            sus = (site/'torgi/lot/mets-9/index.html').read_text()
+            self.assertIn('проверьте оценку', sus)
+            self.assertNotIn('дисконт 55%', sus)  # громкий процент при подозрительной скидке не выносим
+            self.assertIn('Цена сейчас', card)  # публичное предложение
+            self.assertIn('Аресты и залоги — <span class="st">нет данных', card)
+            home = (site/'index.html').read_text()
+            self.assertIn('Все торги недвижимостью в России', home)
+            self.assertNotIn('Земельный участок', home.split('class="board"')[1].split('</div>')[0])
+            self.assertTrue((site/'torgi/lot/21000000000000000001_1/index.html').exists())  # адреса ГИС Торги прежние
+            self.assertIn('Земельный участок', (site/'torgi/zemlya/index.html').read_text())
+            land = (site/'torgi/lot/21000000000000000001_1/index.html').read_text()
+            self.assertIn('Земля: оценка вручную', land)  # оценка по квартирам к земле не применяется
+            self.assertNotIn('Выгодно', land)
+            self.assertIn('?buy=1', card)  # отчёт ведёт сразу к покупке в приложении
+            low = (site/'torgi/lot/mets-10/index.html').read_text()
+            self.assertNotIn('Иванов', low)  # ФИО должника из строки адреса убрано
+            self.assertIn('Ориентир по городу', low)
 
 if __name__ == '__main__':
     unittest.main()

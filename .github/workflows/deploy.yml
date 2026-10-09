@@ -40,18 +40,33 @@ jobs:
         run: |
           set -euo pipefail
           pip install -q jinja2==3.1.4 markdown==3.7
-          curl -fsS --retry 2 --max-time 60 https://check.kirpichinvest.ru/public/lots.json -o /tmp/lots.json
+          curl -fsS --retry 2 --max-time 60 https://check.kirpichinvest.ru/public/lots.json -o /tmp/lots.json || echo 'old feed unavailable'
+          # Выгрузка приложения ТоргГид: вся страна и все площадки. Пока её нет (или она подозрительно мала) — прежний фид Залог-Деска.
+          curl -fsS --retry 2 --max-time 180 "${MARKET_FEED_URL:-https://app.kirpichinvest.ru/api/v1/public/feed}" -o /tmp/market.json || echo 'market feed unavailable'
           python - <<'PYCODE'
           import json
           from pathlib import Path
-          data = json.load(open('/tmp/lots.json'))
           history = json.load(open('_src/data/lot_history.json'))
-          assert isinstance(data, list) and data, 'Empty/invalid feed: keep existing website'
-          assert all(isinstance(d, dict) and d.get('id') for d in data)
-          assert len({str(d['id']) for d in data}) == len(data), 'Duplicate feed IDs'
           previous_active = sum(d.get('status') == 'active' for d in history)
-          assert not previous_active or len(data) >= previous_active * .5, 'Feed fell by over 50%; review before deploying'
-          Path('_src/data/lots.json').write_text(json.dumps(data, ensure_ascii=False))
+          def load(path):
+              try:
+                  return json.load(open(path))
+              except (OSError, ValueError):
+                  return None
+          market = load('/tmp/market.json')
+          rows = market.get('lots') if isinstance(market, dict) else None
+          if (isinstance(rows, list) and rows and all(isinstance(d, dict) and d.get('id') for d in rows)
+                  and len({str(d['id']) for d in rows}) == len(rows) and len(rows) >= previous_active * .5):
+              Path('_src/data/market.json').write_text(json.dumps(market, ensure_ascii=False))
+              print(f'feed: market, {len(rows)} lots')
+          else:
+              data = load('/tmp/lots.json')
+              assert isinstance(data, list) and data, 'Empty/invalid feed: keep existing website'
+              assert all(isinstance(d, dict) and d.get('id') for d in data)
+              assert len({str(d['id']) for d in data}) == len(data), 'Duplicate feed IDs'
+              assert not previous_active or len(data) >= previous_active * .5, 'Feed fell by over 50%; review before deploying'
+              Path('_src/data/lots.json').write_text(json.dumps(data, ensure_ascii=False))
+              print(f'feed: zalog-desk, {len(data)} lots')
           PYCODE
           curl -fsS --max-time 60 https://check.kirpichinvest.ru/public/results.json -o _src/data/results.json || echo '[]' > _src/data/results.json
           python -m unittest discover -s tests -v

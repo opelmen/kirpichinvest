@@ -11,7 +11,7 @@ def budget_lots(lots, cap):
     selected = []
     for row in lots:
         price = row.get('price')
-        if (row.get('status') == 'active' and row.get('bidd_type') in SALE_TYPES
+        if (row.get('status') == 'active' and (row.get('bidd_type') in SALE_TYPES or row.get('kind') in ('arrest', 'bankruptcy'))
                 and isinstance(price, (int, float)) and not isinstance(price, bool)
                 and math.isfinite(price) and 0 < price <= cap):
             selected.append(row)

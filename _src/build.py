@@ -11,6 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from lot_history import merge_history
 from budget_collections import budget_lots, budget_summary, object_group
+from market_feed import CATEGORY, REGIONS, from_market
 
 import markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -26,7 +27,7 @@ cfg = SimpleNamespace(
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
     YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
-    TG_CHANNEL="", TG_BOT="")
+    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.kirpichinvest.ru", AUTO_URL="", REPORT_PRICE=490)
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
     for k, v in json.loads(cfg_file.read_text(encoding="utf-8")).items():
@@ -81,6 +82,12 @@ for f in sorted((SRC / "content").glob("*.md")):
 # ---------- лоты ----------
 lots_path = SRC / "data" / "lots.json"
 LOTS = json.loads(lots_path.read_text(encoding="utf-8")) if lots_path.exists() else []
+market_path = SRC / "data" / "market.json"  # выгрузка приложения: вся страна и все площадки
+WIDE = market_path.exists()
+GEO = "по всей России" if WIDE else "в городах-миллионниках"
+OBJ = "Недвижимость" if WIDE else "Квартиры"
+if WIDE:
+    LOTS = from_market(json.loads(market_path.read_text(encoding="utf-8"))["lots"])
 now = datetime.now(timezone.utc)
 for d in LOTS:
     if d.get("bidd_end"):
@@ -99,6 +106,9 @@ def translit(s):
     return re.sub(r"-+", "-", "".join(t.get(c, c if c.isalnum() else "-") for c in s.lower())).strip("-")
 
 
+FIO = re.compile(r"[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\s+(?:[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+(?:вич|вна|ична|инична|оглы|кызы)\b|[А-ЯЁ]\.\s?[А-ЯЁ]\.)\s*,?")
+
+
 def clean_address(d):
     """Адрес без персональных данных должника и служебного текста извещения."""
     a = str(d.get("address") or d.get("name") or "")
@@ -115,8 +125,9 @@ def clean_address(d):
     a = re.sub(r"^г\s+Санкт", "г. Санкт", a)
     a = re.sub(r"муниципальный округ [^,]+,\s*", "", a)
     a = re.split(r"\.\s*(?:Обремен|н/ц|Начальн|Собственник|Должник)", a, flags=re.I)[0]
-    a = re.split(r",?\s*(?:общей\s+площадью|общ\.?\s*пл|площадью|кадастров|кад\.\s*№|к\.н\.)", a, flags=re.I)[0]
+    a = re.split(r",?\s*(?:общей\s+площадью|общ\.?\s*пл|площадью|кадастров|кад\.\s*№|к\.н\.|общая\s+долевая|\(?доля\s+в\s+праве|н/ц\b)", a, flags=re.I)[0]
     a = re.sub(r",?\s*\b(кв\.?|квартира|комн\.?|пом\.?)\s*\d+[а-яА-Я]?\b", "", a)  # номер квартиры не публикуем
+    a = re.sub(FIO, "", a)  # ФИО должника иногда стоит прямо в строке адреса
     a = re.sub(r"\s+", " ", a).strip(" ,.")
     if len(a) < 12 or a in ("Ленинградская область", "Санкт-Петербург"):
         a = CITY_NAME.get(d.get("city"), "Адрес уточняется")
@@ -124,6 +135,9 @@ def clean_address(d):
 
 
 def object_label(d):
+    if d.get("category") in CATEGORY:
+        area = f" {d['area']:g} м²".replace(".", ",") if d.get("area") and 8 <= d["area"] <= 100_000 else ""
+        return CATEGORY[d["category"]][0] + area
     t = str(d.get("address") or d.get("name") or "").lower()
     kind = "Доля в квартире" if re.search(r"дол[яиейю]", t) else ("Комната" if "комнат" in t and "квартир" not in t else "Квартира")
     area = f" {d['area']:g} м²".replace(".", ",") if d.get("area") and 8 <= d["area"] <= 400 else ""
@@ -159,6 +173,12 @@ FACETS = [  # slug, название, фильтр, заголовок-форм�
     ("doli", "Доли", lambda d: "доля" in (d.get("flags") or ""), "Доли в квартирах с торгов"),
     ("do-5-mln", "До 5 млн ₽", lambda d: (d.get("price") or 1e12) <= 5_000_000, "Квартиры с торгов до 5 млн рублей"),
     ("povtornye-torgi", "Повторные торги", lambda d: "повторные" in (d.get("flags") or ""), "Квартиры на повторных торгах"),
+    ("doma", "Дома", lambda d: d.get("category") == "house", "Дома с торгов"),
+    ("zemlya", "Земля", lambda d: d.get("category") == "land", "Земельные участки с торгов"),
+    ("kommercheskaya", "Коммерческая", lambda d: d.get("category") == "commercial", "Коммерческая недвижимость с торгов"),
+    ("garazhi", "Гаражи", lambda d: d.get("category") == "garage", "Гаражи и машино-места с торгов"),
+    ("bankrotstvo", "Банкротство", lambda d: d.get("kind") == "bankruptcy", "Недвижимость с торгов по банкротству"),
+    ("arestovannoe", "Арестованное", lambda d: d.get("kind") == "arrest", "Арестованная недвижимость с торгов"),
 ]
 CITIES = [  # slug, название, «где», субъекты
     ("moskva", "Москва", "в Москве и Подмосковье"), ("sankt-peterburg", "Санкт-Петербург", "в Санкт-Петербурге и Ленобласти"),
@@ -179,13 +199,15 @@ for _d in LOTS:
     _d["city_name"] = CITY_NAME.get(_d["city"], "")
     _d["district"] = lo_district(_d)
     _d["town"] = lo_town(_d)
+    if _d.get("region") in REGIONS and str(_d.get("region")) not in ("77", "78"):
+        _d["region_slug"], _d["region_name"] = REGIONS[_d["region"]][:2]
     _d.pop("description", None)  # в извещениях бывают ФИО должников — на сайт не выводим
 
 
 
 # History contains only fields already rendered on public cards.
 for _d in LOTS:
-    _d["source_url"] = f"https://torgi.gov.ru/new/public/lots/lot/{_d['id']}"
+    _d["source_url"] = _d.get("source_url") or f"https://torgi.gov.ru/new/public/lots/lot/{_d['id']}"
 history_path = SRC / "data" / "lot_history.json"
 previous = json.loads(history_path.read_text(encoding="utf-8")) if history_path.exists() else []
 CARDS = merge_history(LOTS, previous, now)
@@ -230,7 +252,8 @@ def stats(lots):
     cutoff = (now - timedelta(days=7)).isoformat()
     return {"count": len(lots), "median_ppm2": statistics.median(ppm) if ppm else None,
             "min_price": min((d["price"] for d in lots if d.get("price")), default=None),
-            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= cutoff)}
+            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= cutoff),
+            "closing": sum(1 for d in lots if d.get("days_left") is not None and 0 <= d["days_left"] <= 3)}
 
 
 # ---------- запись ----------
@@ -261,12 +284,18 @@ def build():
         shutil.copytree(ROOT / "check", OUT / "check")
     city_counts = {c[0]: sum(1 for d in LOTS if d.get("city") == c[0]) for c in CITIES}
     env.globals["has_archive"] = bool(ARCHIVED)
+    env.globals["wide"] = WIDE
+    env.globals["region_paths"] = {f"/torgi/{r[0]}/" for r in REGIONS.values()}
     env.globals["cities"] = [(c[0], c[1], c[2], city_counts[c[0]]) for c in CITIES]
     st = stats(LOTS)
-    board = [d for d in LOTS if d.get("price")][:6]
+    # на главной только жильё с правдоподобной ценой, свежие сверху: земля и цены-«кадастровые номера» не попадают
+    sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)]
+    board = sorted([d for d in sane if d.get("category", "flat") in ("flat", "room", "house")] if WIDE else sane,
+                   key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
     write("/", "home.html", priority="1.0", lots=board, st=st, articles=ARTICLES[:6],
-          title=f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}",
-          description="Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки.")
+          title=(f"Недвижимость с торгов по всей России — {cfg.SITE_NAME}" if WIDE else f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}"),
+          description=("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России: квартиры, дома, земля, коммерция. Цена к рынку, риски, сроки заявок и расчёт максимальной ставки."
+                       if WIDE else "Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки."))
 
 
     def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False, budget=None):
@@ -297,12 +326,26 @@ def build():
                 [("Лоты", "/torgi/"), ("Бюджет", "/byudzhet/"), (f"До {b['million']} млн ₽", b["url"])], budget_links, budget=b)
 
     city_links = [("/torgi/", "Все города")] + [(f"/torgi/{c[0]}/", f"{c[1]} ({city_counts[c[0]]})") for c in CITIES if city_counts[c[0]]]
-    listing("/torgi/", LOTS, "Квартиры с торгов в городах-миллионниках России", [("Лоты", "/torgi/")],
-            city_links + [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], priority="0.9")
+    by_region = {}
+    for d in LOTS:
+        if d.get("region") in REGIONS and d["region"] not in ("77", "78"):  # Москва и Петербург — страницы городов
+            by_region.setdefault(d["region"], []).append(d)
+    region_links = sorted(((f"/torgi/{REGIONS[c][0]}/", f"{REGIONS[c][1]} ({len(v)})") for c, v in by_region.items()), key=lambda x: x[1])
+    listing("/torgi/", LOTS, f"{OBJ} с торгов {GEO}", [("Лоты", "/torgi/")],
+            city_links + [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], region_links, priority="0.9")
+    for code, rl in by_region.items():
+        rslug, rname, rwhere = REGIONS[code]
+        rfacets = [(f, [d for d in rl if f[2](d)]) for f in FACETS]
+        rfacets = [(f, v) for f, v in rfacets if len(v) >= 3]
+        rlinks = [(f"/torgi/{rslug}/", "Все")] + [(f"/torgi/{rslug}/{f[0]}/", f[1]) for f, v in rfacets]
+        rcrumbs = [("Лоты", "/torgi/"), (rname, f"/torgi/{rslug}/")]
+        listing(f"/torgi/{rslug}/", rl, f"Недвижимость с торгов {rwhere}", rcrumbs, rlinks, region_links, "0.8")
+        for f, v in rfacets:
+            listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
         fl = [d for d in LOTS if flt(d)]
         if fl or slug == "doli":
-            listing(f"/torgi/{slug}/", fl, f"{h1} в городах-миллионниках", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], city_links)
+            listing(f"/torgi/{slug}/", fl, f"{h1} {GEO}", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], city_links)
     for cslug, cname, where in CITIES:
         cl = [d for d in LOTS if d.get("city") == cslug]
         subs = {}
@@ -318,17 +361,22 @@ def build():
         base_crumbs = [("Лоты", "/torgi/"), (cname, f"/torgi/{cslug}/")]
         cs = city_stats(cl)
         CITY_STATS.append((cslug, cname, where, cs))
-        listing(f"/torgi/{cslug}/", cl, f"Квартиры с торгов {where}", base_crumbs, links, sub_links, "0.9",
+        listing(f"/torgi/{cslug}/", cl, f"{OBJ} с торгов {where}", base_crumbs, links, sub_links, "0.9",
                 faq=city_faq(cname, where, cs), cs=cs)
         for f, v in facets_here:
             listing(f"/torgi/{cslug}/{f[0]}/", v, f"{f[3]}: {cname}", base_crumbs + [(f[1], f"/torgi/{cslug}/{f[0]}/")], links, sub_links)
         for t, v in subs.items():
-            listing(f"/torgi/{cslug}/{translit(t)}/", v, f"Квартиры с торгов: {t}", base_crumbs + [(t, f"/torgi/{cslug}/{translit(t)}/")], links, sub_links, "0.7")
+            listing(f"/torgi/{cslug}/{translit(t)}/", v, f"{OBJ} с торгов: {t}", base_crumbs + [(t, f"/torgi/{cslug}/{translit(t)}/")], links, sub_links, "0.7")
 
     if ARCHIVED:
         listing("/torgi/arhiv/", ARCHIVED, "Архив предложений с торгов", [("Лоты", "/torgi/"), ("Архив", "/torgi/arhiv/")], city_links, archive=True)
+    near = {}
+    for x in LOTS:
+        key = x.get("city") or x.get("region")
+        if len(near.setdefault(key, [])) < 5:
+            near[key].append(x)
     for d in CARDS:
-        similar = [x for x in LOTS if x.get("city") == d.get("city") and x["id"] != d["id"]][:4]
+        similar = [x for x in near.get(d.get("city") or d.get("region"), []) if x["id"] != d["id"]][:4]
         active = d["status"] == "active"
         write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'],
               d=d, active=active, similar=similar,
@@ -394,20 +442,20 @@ def build():
     arts = "\n".join(f"- [{a['title']}]({cfg.SITE_URL}/stati/{a['slug']}/): {a['description']}" for a in ARTICLES)
     (OUT / "llms.txt").write_text(f"""# {cfg.SITE_NAME}
 
-> {cfg.SITE_NAME} — каталог жилья с торгов, проверка лотов и сопровождение покупки в 16 городах-миллионниках России и в радиусе 100 км. {cfg.SITE_OWNER}. Не организатор торгов; задаток и оплата объекта идут организатору торгов и продавцу.
+> {cfg.SITE_NAME} — {"каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России (ГИС Торги и электронные площадки банкротства)" if WIDE else "каталог жилья с торгов в 16 городах-миллионниках России и в радиусе 100 км"}, проверка лотов и сопровождение покупки. {cfg.SITE_OWNER}. Не организатор торгов; задаток и оплата объекта идут организатору торгов и продавцу.
 
 ## География
 {", ".join(c[1] for c in CITIES)}. Наличие активных лотов зависит от города; пустая подборка не означает наличие предложения.
 
 ## Разделы
-- [Актуальные лоты]({cfg.SITE_URL}/torgi/): обновляются несколько раз в день по данным ГИС Торги
+- [Актуальные лоты]({cfg.SITE_URL}/torgi/): обновляются несколько раз в день по данным {"ГИС Торги и площадок банкротства (МЭТС, ЦентрЕР, УТПЛ, НИС, РАД, ЦДТ, ЭТП ГПБ, Фабрикант)" if WIDE else "ГИС Торги"}
 - [Покупка квартиры с торгов под ключ]({cfg.SITE_URL}/kupit-kvartiru-s-torgov/)
 - [Проверка лота перед торгами]({cfg.SITE_URL}/proverka-lota/)
 - [Инвесторам]({cfg.SITE_URL}/investoram/)
 - [Калькулятор максимальной ставки]({cfg.SITE_URL}/kalkulyator-stavki/)
 - [Словарь терминов торгов]({cfg.SITE_URL}/slovar/)
 - [Статистика торгов по городам]({cfg.SITE_URL}/analitika/)
-- [Карта и фильтры каталога](https://app.kirpichinvest.ru/)
+- [Карта и фильтры каталога]({cfg.APP_URL}/)
 
 ## Статьи
 {arts}
