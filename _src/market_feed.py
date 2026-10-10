@@ -79,6 +79,10 @@ def mln(v):
     return f"{v / 1e6:.1f}".replace(".", ",") + " млн"
 
 
+# «Рисков не видно» звучит как чистая проверка, а мы видим только извещение: обременения и оспаривание не проверены.
+NO_RISKS = ("В извещении рисков не указано, но обременения и оспаривание сделок это не исключает: "
+            "их покажут свежая выписка ЕГРН и картотека арбитражных дел.")
+
 NONRES = {"commercial": "Нежилое", "land": "Земля", "garage": "Гараж", "other": "Объект"}
 
 
@@ -93,12 +97,12 @@ def verdict(d):
         return ("mid", "Доля — только для опытных",
                 "Продаётся доля, а не целый объект: с рыночной ценой не сравнить, пользоваться и продать можно только договорившись с сособственниками.")
     if (not market or disc is None or not price) and d.get("category") in NONRES:
-        tail = f"Из извещения видно: {', '.join(high + other)}." if found else "Явных рисков в извещении не видно."
+        tail = f"Из извещения видно: {', '.join(high + other)}." if found else NO_RISKS
         return ("none", f"{NONRES[d['category']]}: оценка вручную",
                 "Для помещений, земли и гаражей автоматической оценки нет: аналогов мало и они слишком разные. "
                 f"Сравните цену за м² с объявлениями рядом или закажите проверку эксперта. {tail}")
     if not market or disc is None or not price:
-        tail = f"Из извещения видно: {', '.join(high + other)}." if found else "Явных рисков в извещении не видно."
+        tail = f"Из извещения видно: {', '.join(high + other)}." if found else NO_RISKS
         return ("none", "Нужна оценка рынка", f"Рыночной цены пока нет, поэтому выгоду не посчитать. {tail}")
     if high:
         risk = f"но есть серьёзный риск ({', '.join(high)}): до полного владения {own}"
@@ -133,13 +137,16 @@ def from_market(rows):
             flags.append("зарегистрированы жильцы")
         # оценка по аналогам-квартирам: у нежилого её не показываем, даже если пришла из старой выгрузки
         rough = r.get("market_conf") == "low" or cat in NONRES
+        area, ppm2 = r.get("area"), r.get("ppm2")
+        if cat == "land" and area and area < 100:
+            area = ppm2 = None  # у земли «35,7 м²» — почти всегда сотки или гектары из извещения: лучше не показать, чем соврать
         d = {
             "id": site_id(r["id"]), "app_id": r["id"], "source": r.get("source"),
             "source_name": SOURCE.get(r.get("source"), r.get("source")),
             "source_url": r.get("source_url"), "kind": r.get("kind"), "kind_name": KIND.get(r.get("kind")),
             "category": cat, "name": r.get("title"), "address": r.get("address"),
             "city": r.get("city"), "region": region_code(r.get("region")),
-            "price": r.get("price"), "price_start": r.get("price_start"), "area": r.get("area"), "ppm2": r.get("ppm2"),
+            "price": r.get("price"), "price_start": r.get("price_start"), "area": area, "ppm2": ppm2,
             "rooms": r.get("rooms"), "floor": r.get("floor"), "cadastral": r.get("cadastral"),
             "bidd_type": r.get("procedure"), "bidd_end": r.get("bidd_end"), "first_seen": r.get("first_seen"),
             "eff_market": None if rough else r.get("market_price"),
