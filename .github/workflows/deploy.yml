@@ -42,7 +42,7 @@ jobs:
           pip install -q jinja2==3.1.4 markdown==3.7
           curl -fsS --retry 2 --max-time 60 https://check.kirpichinvest.ru/public/lots.json -o /tmp/lots.json || echo 'old feed unavailable'
           # Выгрузка приложения ТоргГид: вся страна и все площадки. Пока её нет (или она подозрительно мала) — прежний фид Залог-Деска.
-          curl -fsS --retry 2 --max-time 180 "${MARKET_FEED_URL:-https://app.kirpichinvest.ru/api/v1/public/feed}" -o /tmp/market.json || echo 'market feed unavailable'
+          curl -fsS --retry 2 --max-time 180 "${MARKET_FEED_URL:-https://api.torggid.ru/api/v1/public/feed}" -o /tmp/market.json || echo 'market feed unavailable'
           python - <<'PYCODE'
           import json
           from pathlib import Path
