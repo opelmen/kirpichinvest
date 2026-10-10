@@ -19851,6 +19851,7 @@
 /torgi/samara/arestovannoe/
 /torgi/samara/bankrotstvo/
 /torgi/samara/bankrotstvo/page/2/
+/torgi/samara/bezenchukskiy-rayon/
 /torgi/samara/do-5-mln/
 /torgi/samara/do-5-mln/page/2/
 /torgi/samara/doli/
@@ -19866,6 +19867,7 @@
 /torgi/samara/kuybyshevskiy-rayon/
 /torgi/samara/nurlat/
 /torgi/samara/odnokomnatnye/
+/torgi/samara/oktyabrsk/
 /torgi/samara/otradnyy/
 /torgi/samara/page/2/
 /torgi/samara/page/3/

@@ -3303,12 +3303,12 @@ https://torggid.ru/torgi/ekaterinburg/sysertskiy-rayon/
 https://torggid.ru/torgi/ekaterinburg/novouralskiy-rayon/
 https://torggid.ru/torgi/ekaterinburg/nizhnie-sergi/
 https://torggid.ru/torgi/ekaterinburg/novouralsk/
+https://torggid.ru/torgi/ekaterinburg/nizhneserginskiy-rayon/
 https://torggid.ru/torgi/ekaterinburg/asbest/
 https://torggid.ru/torgi/ekaterinburg/kirovgrad/
 https://torggid.ru/torgi/ekaterinburg/kirovgradskiy-rayon/
 https://torggid.ru/torgi/ekaterinburg/komsomolsk-na/
 https://torggid.ru/torgi/ekaterinburg/lesnoy/
-https://torggid.ru/torgi/ekaterinburg/nizhneserginskiy-rayon/
 https://torggid.ru/torgi/ekaterinburg/nizhnyaya-tura/
 https://torggid.ru/torgi/ekaterinburg/serov/
 https://torggid.ru/torgi/kazan/
@@ -3625,6 +3625,7 @@ https://torggid.ru/torgi/samara/garazhi/
 https://torggid.ru/torgi/samara/bankrotstvo/
 https://torggid.ru/torgi/samara/bankrotstvo/page/2/
 https://torggid.ru/torgi/samara/arestovannoe/
+https://torggid.ru/torgi/samara/oktyabrsk/
 https://torggid.ru/torgi/samara/zhigulevsk/
 https://torggid.ru/torgi/samara/kirovskiy-rayon/
 https://torggid.ru/torgi/samara/sergievskiy-rayon/
@@ -3633,6 +3634,7 @@ https://torggid.ru/torgi/samara/tolyatti/
 https://torggid.ru/torgi/samara/kinelskiy-rayon/
 https://torggid.ru/torgi/samara/krasnoarmeyskiy-rayon/
 https://torggid.ru/torgi/samara/krasnoyarskiy-rayon/
+https://torggid.ru/torgi/samara/bezenchukskiy-rayon/
 https://torggid.ru/torgi/samara/kuybyshevskiy-rayon/
 https://torggid.ru/torgi/samara/otradnyy/
 https://torggid.ru/torgi/samara/krasnoglinskiy-rayon/
