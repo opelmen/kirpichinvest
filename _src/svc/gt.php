@@ -71,9 +71,17 @@ if ($body === false || $code === 0) fail(502, 'proxy error: ' . $err);
 
 if ($file) {
     if ($code >= 400) fail(502, 'file error: HTTP ' . $code);
-    $body = substr($body, 0, 2100000);
-    $total = isset($headers['content-range']) ? $headers['content-range'] : '';
-    $total = $total !== '' ? substr($total, strrpos($total, '/') + 1) : (string) strlen($body);
+    if ($code == 206) {
+        $total = isset($headers['content-range']) ? $headers['content-range'] : '';
+        $total = $total !== '' ? substr($total, strrpos($total, '/') + 1) : (string) strlen($body);
+        $body = substr($body, 0, 2100000);
+    } else {
+        // ГИС Торги часто не понимает Range и отдаёт файл целиком (200): вырезаем запрошенный кусок сами,
+        // иначе клиент получил бы первые 2 МБ как весь файл
+        $parts = explode('-', $range);
+        $total = (string) strlen($body);
+        $body = (string) substr($body, (int) $parts[0], min(2100000, (int) $parts[1] - (int) $parts[0] + 1));
+    }
     header('Content-Type: text/plain');
     header('X-Total: ' . $total);
     header('X-Name: ' . rawurlencode(isset($headers['content-disposition']) ? $headers['content-disposition'] : ''));

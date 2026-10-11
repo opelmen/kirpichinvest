@@ -22,6 +22,11 @@ DATA = bytes(range(256)) * 4
 
 class Upstream(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
+        if self.path.startswith("/new/file-store/v1/full"):  # Range не понимает, отдаёт весь файл
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(DATA)
+            return
         if self.path.startswith("/new/file-store/v1/"):
             a, b = map(int, self.headers["Range"].split("=")[1].split("-"))
             self.send_response(206)
@@ -110,6 +115,12 @@ class TorgiProxyTest(unittest.TestCase):
         self.assertEqual(base64.b64decode(body), DATA[10:20])
         self.assertEqual(h["X-Total"], "1024")
         self.assertIn("lot.pdf", urllib.parse.unquote(h["X-Name"]))
+
+    def test_file_chunk_when_range_ignored(self):
+        code, h, body = self.get([("key", self.KEY), ("path", "/new/file-store/v1/full1"), ("range", "1000-1999")])
+        self.assertEqual(code, 200)
+        self.assertEqual(base64.b64decode(body), DATA[1000:])
+        self.assertEqual(h["X-Total"], "1024")
 
 
 if __name__ == "__main__":
