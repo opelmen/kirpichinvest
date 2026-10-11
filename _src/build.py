@@ -27,13 +27,15 @@ cfg = SimpleNamespace(
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
     YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
-    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490)
+    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
+    YANDEX_MAPS_URL="", VK_URL="", DZEN_URL="", SAME_AS=[])  # карточка в Яндекс Бизнесе и соцсети: попадают в sameAs и подвал
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
     for k, v in json.loads(cfg_file.read_text(encoding="utf-8")).items():
         setattr(cfg, k, v)
 
-AUTHOR = {"name": "Илья Смирнов", "role": "брокер по недвижимости и залоговым сделкам, Санкт-Петербург"}
+AUTHOR = {"name": "Илья Смирнов", "role": "брокер по недвижимости и залоговым сделкам, Санкт-Петербург", "path": "/avtor/ilya-smirnov/"}
+HOURS = ("Пн–Пт, 10:00–19:00", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "10:00", "19:00")
 TODAY = date.today().isoformat()
 
 
@@ -66,12 +68,18 @@ def list_ld(name, url, total, lots, offset=0):
 env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]))
 env.globals["list_ld"] = list_ld
 env.filters["rub"] = rub
+env.filters["digits"] = lambda v: int(re.sub(r"\D", "", str(v)) or 0)
 env.globals["object_group"] = object_group
 def terms_list(terms):
     return [{"@type": "DefinedTerm", "name": t, "description": d, "url": f"{cfg.SITE_URL}/slovar/#{s}"} for t, s, d in terms]
 
 
-env.globals.update(terms_list=terms_list, cfg=cfg, year=date.today().year, today=date.today().strftime("%d.%m.%Y"), author=AUTHOR, ld=ld, faq_ld=faq_ld, crumbs_ld=crumbs_ld)
+def same_as():
+    """Профили бренда вне сайта: нейросети и Яндекс сверяют по ним, что ТоргГид — одна и та же организация."""
+    return list(dict.fromkeys(u for u in [cfg.YANDEX_MAPS_URL, cfg.TG_CHANNEL, cfg.VK_URL, cfg.DZEN_URL, cfg.TG_BOT, *cfg.SAME_AS] if u))
+
+
+env.globals.update(terms_list=terms_list, cfg=cfg, same_as=same_as, hours=HOURS, year=date.today().year, today=date.today().strftime("%d.%m.%Y"), author=AUTHOR, ld=ld, faq_ld=faq_ld, crumbs_ld=crumbs_ld)
 
 # ---------- статьи ----------
 ARTICLES = []
@@ -318,12 +326,15 @@ def build():
         page_size = 60
         count = max(1, (len(lots) + page_size - 1) // page_size)
         pages = [(path if n == 1 else f"{path}page/{n}/", n) for n in range(1, count + 1)]
+        # дата изменения списка — последнее изменение его лотов, а не дата сборки: иначе lastmod меняется
+        # у всех страниц несколько раз в день и поисковики перестают ему доверять
+        lastmod = max((d.get("lastmod") or "" for d in lots), default="") or TODAY
         for url, n in pages:
             suffix = f" — страница {n}" if n > 1 else ""
             page_crumbs = crumbs + ([(f"Страница {n}", url)] if n > 1 else [])
             description = (f"{h1}: {len(lots)} карточек. История предложений, сроки и ссылки на источники. Результат продажи не подтверждён."
                            if archive else f"{h1}: {len(lots)} актуальных лотов — цены, сроки заявок и сведения об объектах.")
-            write(url, "torgi.html", priority=priority, lots=lots[(n-1)*page_size:n*page_size],
+            write(url, "torgi.html", priority=priority, lastmod=lastmod, lots=lots[(n-1)*page_size:n*page_size],
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots, faq=(faq or []) if n == 1 else [],
                   cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget,
@@ -447,6 +458,12 @@ def build():
         related.extend(candidates.values())
         write(f"/stati/{a['slug']}/", "article.html", priority="0.7", lastmod=a.get("updated") or a.get("date") or TODAY,
               a=a, related=related[:4], title=a["title"], description=a["description"])
+    write(AUTHOR["path"], "author.html", priority="0.5", articles=ARTICLES,
+          parts=[{"@type": "Article", "headline": a["title"], "url": f"{cfg.SITE_URL}/stati/{a['slug']}/"} for a in ARTICLES],
+          updated=max((a.get("updated") or a.get("date") or TODAY for a in ARTICLES), default=TODAY),
+          lastmod=max((a.get("updated") or a.get("date") or TODAY for a in ARTICLES), default=TODAY),
+          title=f"{AUTHOR['name']} — автор статей о торгах недвижимостью",
+          description=f"{AUTHOR['name']}, {AUTHOR['role']}. Статьи о торгах по банкротству и арестованному имуществу, проверке лотов и расчёте ставки.")
     write("/404.html", "404.html", sitemap=False, noindex=True, title="Страница не найдена", description="")
 
     write_sitemaps()
@@ -491,6 +508,16 @@ def build():
 - [Статистика торгов по городам]({cfg.SITE_URL}/analitika/)
 - [Карта и фильтры каталога]({cfg.APP_URL}/)
 
+## Услуги и цены
+- Отчёт по лоту (Рентген): {cfg.REPORT_PRICE} ₽, в приложении {cfg.APP_URL}/
+{f"- Полная проверка лота перед торгами: {cfg.PRICE_CHECK}, {cfg.SITE_URL}/proverka-lota/" + chr(10) if cfg.PRICE_CHECK else ""}- Покупка квартиры с торгов под ключ: 10 000 ₽ при заказе + 2% от цены покупки при победе, {cfg.SITE_URL}/kupit-kvartiru-s-torgov/
+- Работаем дистанционно по всей России: торги проходят на электронных площадках.
+
+## Контакты
+- Телефон: {cfg.SITE_PHONE}, почта: {cfg.SITE_EMAIL}, часы работы: {HOURS[0]} по Москве
+- {cfg.SITE_OWNER}{f", ИНН {cfg.SITE_INN}" if cfg.SITE_INN else ""}, {cfg.SITE_ADDRESS}
+- Автор статей: [{AUTHOR['name']}]({cfg.SITE_URL}{AUTHOR['path']}), {AUTHOR['role']}
+{"".join(f"- Профиль: {u}" + chr(10) for u in same_as())}
 ## Статьи
 {arts}
 """, encoding="utf-8")

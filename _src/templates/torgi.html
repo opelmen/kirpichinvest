@@ -12,11 +12,13 @@
 {% if not budget and not archive %}<p><a href="/byudzhet/">Что можно найти до 1, 2 и 3 млн рублей</a></p>{% endif %}
 <nav class="filters" aria-label="Подборки">{% for u, n in facet_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>
 {% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">{{ "Регионы:" if town_links[0][0] in region_paths else "Районы и города:" }}</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
+{% set cslug = (path.split('/')[2] if path.count('/') >= 3 else '') %}
+{% set other_cities = cities|rejectattr(0, "equalto", cslug)|selectattr(3)|list %}
+{% if path == '/torgi/' ~ cslug ~ '/' and cslug in (cities|map(attribute=0)|list) and other_cities %}<nav class="filters" aria-label="Другие города"><span class="mute small" style="align-self:center">Другие города:</span>{% for slug, name, where, n in other_cities %}<a href="/torgi/{{ slug }}/">{{ name }}</a>{% endfor %}</nav>{% endif %}
 {% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
 <th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
 <tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
-<p class="mute small">Данные на {{ today }} по открытому реестру ГИС Торги. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
-{% set cslug = (path.split('/')[2] if path.count('/') >= 3 else '') %}
+<p class="mute small">Данные на {{ today }} по {{ "ГИС Торги и площадкам банкротства" if wide else "открытому реестру ГИС Торги" }}. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
 <div style="margin:0 0 20px">{{ tg_block(cslug if cslug in (cities|map(attribute=0)|list) else "", "") }}</div>
 {% if path == '/torgi/doli/' %}{% include "_share_guide.html" %}{% elif '/doli/' in path and current_page == 1 %}<p><a href="/torgi/doli/#kak-proverit">Доля или комната: что проверить до ставки</a></p>{% endif %}
 <div class="lots">
