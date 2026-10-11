@@ -179,6 +179,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Извещение не раскрывает:', card)
             self.assertIn('Банкротное имущество', card)
             self.assertNotIn('повторные торги</', card.split('На что обратить')[-1][:200])
+            self.assertIn('/torgi/lot/mets-0/', (site/'torgi/tatarstan/povtornye-torgi/index.html').read_text())  # фасет по-прежнему собирается
             home = (site/'index.html').read_text()
             self.assertIn('Все торги недвижимостью в России', home)
             self.assertNotIn('Земельный участок', home.split('class="board"')[1].split('</div>')[0])

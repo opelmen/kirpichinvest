@@ -213,7 +213,7 @@ FACETS = [  # slug, название, фильтр, заголовок-форм�
     ("komnaty", "Комнаты", lambda d: "комната" in (d.get("flags") or ""), "Комнаты с торгов"),
     ("doli", "Доли", lambda d: "доля" in (d.get("flags") or ""), "Доли в квартирах с торгов"),
     ("do-5-mln", "До 5 млн ₽", lambda d: (d.get("price") or 1e12) <= 5_000_000, "Квартиры с торгов до 5 млн рублей"),
-    ("povtornye-torgi", "Повторные торги", lambda d: "повторные" in (d.get("flags") or ""), "Квартиры на повторных торгах"),
+    ("povtornye-torgi", "Повторные торги", lambda d: d.get("repeat"), "Квартиры на повторных торгах"),
     ("doma", "Дома", lambda d: d.get("category") == "house", "Дома с торгов"),
     ("zemlya", "Земля", lambda d: d.get("category") == "land", "Земельные участки с торгов"),
     ("kommercheskaya", "Коммерческая", lambda d: d.get("category") == "commercial", "Коммерческая недвижимость с торгов"),
@@ -267,7 +267,7 @@ def city_stats(lots):
     return {"count": n, "median_price": median([d.get("price") for d in lots]),
             "median_ppm2": median([d.get("ppm2") for d in lots]),
             "share_doli": round(100 * sum(1 for d in lots if "доля" in (d.get("flags") or "")) / n) if n else None,
-            "share_povt": round(100 * sum(1 for d in lots if "повторные" in (d.get("flags") or "")) / n) if n else None,
+            "share_povt": round(100 * sum(1 for d in lots if d.get("repeat")) / n) if n else None,
             "share_reg": round(100 * sum(1 for d in lots if "зарегистрированы" in (d.get("flags") or "")) / n) if n else None,
             "min_price": min((d["price"] for d in lots if d.get("price")), default=None),
             "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= (now - timedelta(days=7)).isoformat())}
@@ -354,7 +354,7 @@ def month_index(cards, ym, today=None):
                           "median_flat_price": med([x.get("price") for x in fl]),
                           "median_flat_ppm2": med([x.get("ppm2") for x in fl])})
     public = sum(1 for d in lots if "публичн" in (d.get("bidd_type") or "").lower())
-    repeat = sum(1 for d in lots if "повторные" in (d.get("flags") or ""))
+    repeat = sum(1 for d in lots if d.get("repeat"))
     closed = end < today
     return {
         "ym": ym, "month": MONTHS_RU[start.month - 1], "month_gen": MONTHS_GEN[start.month - 1], "month_prep": MONTHS_PREP[start.month - 1], "year": start.year,

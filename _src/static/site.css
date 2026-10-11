@@ -152,3 +152,4 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 .xray-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.xray-cta .btn{flex:1 1 220px;text-align:center}
 .kindtag{display:inline-block;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.2px;color:#1F4E79}.kindtag.k-arrest{color:#8A4B12}
 .lot .plus{color:#1F7A6D;font-weight:600}
+aside .box .form{border:0;padding:0;background:none;border-radius:0}aside .box .form h3{font-size:18px}
