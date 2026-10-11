@@ -28,4 +28,15 @@ class IndexNowTests(unittest.TestCase):
         data = b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://torggid.ru/</loc></url></urlset>'
         self.assertEqual(indexnow.sitemap_urls(data), ["https://torggid.ru/"])
         with self.assertRaises(ValueError):
-            indexnow.sitemap_urls(b'<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>')
+            indexnow.sitemap_urls(b'<rss/>')
+
+    def test_sitemap_index_is_expanded(self):
+        index = (b'<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                 b'<sitemap><loc>https://torggid.ru/sitemap-pages.xml</loc></sitemap>'
+                 b'<sitemap><loc>https://torggid.ru/sitemap-lots-1.xml</loc></sitemap></sitemapindex>')
+        parts = {"https://torggid.ru/sitemap-pages.xml": b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://torggid.ru/</loc></url></urlset>',
+                 "https://torggid.ru/sitemap-lots-1.xml": b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://torggid.ru/torgi/lot/a/</loc></url></urlset>'}
+        self.assertEqual(indexnow.sitemap_urls(index, fetch=parts.__getitem__), ["https://torggid.ru/", "https://torggid.ru/torgi/lot/a/"])
+        foreign = b'<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://evil.test/s.xml</loc></sitemap></sitemapindex>'
+        with self.assertRaises(ValueError):
+            indexnow.sitemap_urls(foreign, fetch=lambda u: b"")

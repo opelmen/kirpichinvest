@@ -38,8 +38,9 @@
   "description": "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в городах-миллионниках России и в 100 км от них. Не является организатором торгов.",
   "areaServed": cities|map(attribute=1)|list,
   "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
-  "founder": {"@type": "Person", "name": author.name, "jobTitle": author.role},
-  "sameAs": [cfg.TG_CHANNEL] if cfg.TG_CHANNEL else [],
+  "founder": {"@type": "Person", "name": author.name, "jobTitle": author.role, "sameAs": [cfg.SITE_TELEGRAM] if cfg.SITE_TELEGRAM else []},
+  "sameAs": [cfg.TG_CHANNEL, cfg.TG_BOT, cfg.APP_URL]|select|list,
+  "knowsAbout": ["торги по банкротству", "арестованное имущество", "публичное предложение", "проверка лота перед торгами"],
   "taxID": cfg.SITE_INN or None
 } | tojson }}</script>
 {% block ld %}{% endblock %}

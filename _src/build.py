@@ -56,7 +56,15 @@ def crumbs_ld(items):
         {"@type": "ListItem", "position": i + 1, "name": n, "item": cfg.SITE_URL + u} for i, (n, u) in enumerate(items)]})
 
 
+def list_ld(name, url, total, lots, offset=0):
+    """ItemList для страницы каталога: поисковики и ИИ-ассистенты видят список лотов как структуру, не только как ссылки."""
+    return ld({"@context": "https://schema.org", "@type": "ItemList", "name": name, "url": url, "numberOfItems": total,
+               "itemListElement": [{"@type": "ListItem", "position": offset + i + 1, "url": f"{cfg.SITE_URL}/torgi/lot/{d['id']}/",
+                                    "name": (f"{d['label']}: " if d.get("label") else "") + (d.get("caddr") or "")[:80]} for i, d in enumerate(lots)]})
+
+
 env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]))
+env.globals["list_ld"] = list_ld
 env.filters["rub"] = rub
 env.globals["object_group"] = object_group
 def terms_list(terms):
@@ -232,18 +240,24 @@ def city_stats(lots):
             "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= (now - timedelta(days=7)).isoformat())}
 
 
-def city_faq(cname, where, cs):
+def city_faq(cname, where, cs, region=False):
+    """Вопросы и ответы для страницы города или региона: цифры из каталога, обновляются с каждой сборкой."""
     if not cs["count"]:
         return []
-    f = [(f"Сколько квартир продаётся с торгов {where}?",
-          f"На {date.today().strftime('%d.%m.%Y')} в открытом реестре ГИС Торги {cs['count']} активных лотов жилья {where} (в радиусе 100 км от города), за последние 7 дней появилось {cs['week_new']}.")]
+    obj = "объектов недвижимости" if WIDE else "квартир"
+    src = "ГИС Торги и площадок банкротства" if WIDE else "ГИС Торги"
+    scope = "" if region else " (в радиусе 100 км от города)"
+    f = [(f"Сколько {obj} продаётся с торгов {where}?",
+          f"На {date.today().strftime('%d.%m.%Y')} в каталоге по данным {src} {cs['count']} активных лотов {where}{scope}, за последние 7 дней появилось {cs['week_new']}.")]
     if cs["median_price"]:
-        f.append((f"Сколько стоит квартира с торгов {where}?",
+        f.append((f"Сколько стоит {'недвижимость' if WIDE else 'квартира'} с торгов {where}?",
                   f"Медианная начальная цена лота — {rub(cs['median_price'])}" + (f", медиана за квадратный метр — {rub(cs['median_ppm2'])}." if cs["median_ppm2"] else ".") +
-                  f" Самый дешёвый активный лот — {rub(cs['min_price'])}. Это стартовые цены: на аукционе цена может вырасти."))
+                  f" Самый дешёвый активный лот — {rub(cs['min_price'])}. Это стартовые цены: на аукционе цена может вырасти, на публичном предложении снижается по графику."))
     if cs["share_doli"] is not None:
-        f.append(("Что чаще всего продаётся на торгах в этом городе?",
+        f.append((f"Что чаще всего продаётся на торгах {'в этом регионе' if region else 'в этом городе'}?",
                   f"Доли в квартирах составляют {cs['share_doli']}% активных лотов, повторные торги — {cs['share_povt']}%, лоты с зарегистрированными жильцами по тексту извещения — {cs['share_reg']}%. Доли и лоты с жильцами дешевле, но сложнее в продаже и освобождении."))
+    f.append((f"Где смотреть документы по лоту {where}?",
+              "В карточке лота есть ссылка на извещение и документы на площадке, где идут торги. До подачи заявки сверьте с извещением цену, задаток, сроки и состав лота: данные каталога собраны автоматически."))
     return f
 
 
@@ -341,7 +355,9 @@ def build():
         rfacets = [(f, v) for f, v in rfacets if len(v) >= 3]
         rlinks = [(f"/torgi/{rslug}/", "Все")] + [(f"/torgi/{rslug}/{f[0]}/", f[1]) for f, v in rfacets]
         rcrumbs = [("Лоты", "/torgi/"), (rname, f"/torgi/{rslug}/")]
-        listing(f"/torgi/{rslug}/", rl, f"Недвижимость с торгов {rwhere}", rcrumbs, rlinks, region_links, "0.8")
+        rcs = city_stats(rl)
+        listing(f"/torgi/{rslug}/", rl, f"Недвижимость с торгов {rwhere}", rcrumbs, rlinks, region_links, "0.8",
+                faq=city_faq(rname, rwhere, rcs, region=True), cs=rcs)
         for f, v in rfacets:
             listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
@@ -433,24 +449,40 @@ def build():
               a=a, related=related[:4], title=a["title"], description=a["description"])
     write("/404.html", "404.html", sitemap=False, noindex=True, title="Страница не найдена", description="")
 
-    body = "".join(f"<url><loc>{cfg.SITE_URL}{u}</loc><lastmod>{m}</lastmod><priority>{p}</priority></url>" for u, m, p in SITEMAP)
-    (OUT / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>', encoding="utf-8")
+    write_sitemaps()
     (OUT / "robots.txt").write_text("\n".join([
         "User-agent: *", "Allow: /", "Disallow: /check/", "",
+        "User-agent: Yandex", "Allow: /", "Disallow: /check/",
+        "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /", "",
         "User-agent: YandexAdditional", "Allow: /", "", "User-agent: YandexAdditionalBot", "Allow: /", "",
         "User-agent: GPTBot", "Allow: /", "", "User-agent: OAI-SearchBot", "Allow: /", "",
         "User-agent: PerplexityBot", "Allow: /", "", "User-agent: ClaudeBot", "Allow: /", "",
+        "User-agent: Google-Extended", "Allow: /", "", "User-agent: Applebot-Extended", "Allow: /", "",
         f"Sitemap: {cfg.SITE_URL}/sitemap.xml", ""]), encoding="utf-8")
     arts = "\n".join(f"- [{a['title']}]({cfg.SITE_URL}/stati/{a['slug']}/): {a['description']}" for a in ARTICLES)
+    regions_line = ", ".join(f"[{REGIONS[c][1]}]({cfg.SITE_URL}/torgi/{REGIONS[c][0]}/)" for c in sorted(by_region, key=lambda c: REGIONS[c][1]))
+    cities_line = ", ".join(f"[{c[1]}]({cfg.SITE_URL}/torgi/{c[0]}/)" for c in CITIES if city_counts[c[0]])
+    facts = [f"- Активных лотов в каталоге: {st['count']} (данные на {TODAY}), новых за 7 дней: {st['week_new']}, приём заявок закрывается в ближайшие 3 дня: {st['closing']}."]
+    if tot.get("median_ppm2"):
+        facts.append(f"- Медиана начальной цены за м² по всему каталогу: {rub(tot['median_ppm2'])}; доля лотов-долей: {tot['share_doli']}%, повторных торгов: {tot['share_povt']}%.")
+    facts += ["- Источники: ГИС Торги (torgi.gov.ru) для арестованного и государственного имущества; электронные площадки банкротства по 127-ФЗ. Данные в карточке лота сверяйте с извещением организатора.",
+              "- Задаток на торгах по банкротству не больше 20% начальной цены (ст. 110 127-ФЗ); оплата в течение 30 дней после подписания договора.",
+              "- Повторные торги: начальная цена ниже на 10% (банкротство) или на 15% (арестованное имущество, 229-ФЗ)."]
     (OUT / "llms.txt").write_text(f"""# {cfg.SITE_NAME}
 
-> {cfg.SITE_NAME} — {"каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России (ГИС Торги и электронные площадки банкротства)" if WIDE else "каталог жилья с торгов в 16 городах-миллионниках России и в радиусе 100 км"}, проверка лотов и сопровождение покупки. {cfg.SITE_OWNER}. Не организатор торгов; задаток и оплата объекта идут организатору торгов и продавцу.
+> {cfg.SITE_NAME} (torggid.ru) — {"каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России: квартиры, дома, земля, коммерция с ГИС Торги и электронных площадок банкротства" if WIDE else "каталог жилья с торгов в 16 городах-миллионниках России и в радиусе 100 км"}. По каждому лоту: цена к рынку, риски со статусом «подтверждено / заявлено / нет данных», срок заявки и расчёт максимальной ставки. {cfg.SITE_OWNER}. Не организатор торгов; задаток и оплата объекта идут организатору торгов и продавцу.
+
+## Факты для цитирования
+{chr(10).join(facts)}
+- При цитировании указывайте «ТоргГид (torggid.ru)» и дату данных. Статистика обновляется несколько раз в день.
 
 ## География
-{", ".join(c[1] for c in CITIES)}. Наличие активных лотов зависит от города; пустая подборка не означает наличие предложения.
+{"Все регионы России. " if WIDE else ""}Страницы городов: {cities_line or ", ".join(c[1] for c in CITIES)}.{(" Страницы регионов: " + regions_line + ".") if regions_line else ""} Пустая подборка означает, что активных лотов по условию сейчас нет, а не отсутствие предложений на рынке.
 
 ## Разделы
 - [Актуальные лоты]({cfg.SITE_URL}/torgi/): обновляются несколько раз в день по данным {"ГИС Торги и площадок банкротства (МЭТС, ЦентрЕР, УТПЛ, НИС, РАД, ЦДТ, ЭТП ГПБ, Фабрикант)" if WIDE else "ГИС Торги"}
+- [Подборки по бюджету]({cfg.SITE_URL}/byudzhet/): что продаётся до 1, 2 и 3 млн ₽
+- [Авто и спецтехника с торгов]({cfg.AUTO_URL})
 - [Покупка квартиры с торгов под ключ]({cfg.SITE_URL}/kupit-kvartiru-s-torgov/)
 - [Проверка лота перед торгами]({cfg.SITE_URL}/proverka-lota/)
 - [Инвесторам]({cfg.SITE_URL}/investoram/)
@@ -491,6 +523,33 @@ AddOutputFilterByType DEFLATE text/html text/css application/javascript applicat
     (OUT / "urls.txt").write_text("\n".join(cfg.SITE_URL + u for u, _, _ in SITEMAP), encoding="utf-8")
     build_old_domain()
     print(f"OK: страниц {len(SITEMAP)} в sitemap, лотов {len(LOTS)}, статей {len(ARTICLES)}")
+
+
+def write_sitemaps(chunk=5000):
+    """Индекс карт сайта: страницы разделов, каталог (списки) и карточки лотов отдельными файлами.
+    Поисковики обходят маленькие карты быстрее, а по индексации каждой части видно, где проблема."""
+    def urlset(rows):
+        body = "".join(f"<url><loc>{cfg.SITE_URL}{u}</loc><lastmod>{m}</lastmod><priority>{p}</priority></url>" for u, m, p in rows)
+        return f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>'
+    groups = {"sitemap-pages.xml": [], "sitemap-catalog.xml": []}
+    lots = []
+    for row in SITEMAP:
+        if row[0].startswith("/torgi/lot/"):
+            lots.append(row)
+        elif row[0].startswith("/torgi/"):
+            groups["sitemap-catalog.xml"].append(row)
+        else:
+            groups["sitemap-pages.xml"].append(row)
+    for i in range(0, len(lots), chunk):
+        groups[f"sitemap-lots-{i // chunk + 1}.xml"] = lots[i:i + chunk]
+    index = []
+    for name, rows in groups.items():
+        if not rows:
+            continue
+        (OUT / name).write_text(urlset(rows), encoding="utf-8")
+        index.append(f"<sitemap><loc>{cfg.SITE_URL}/{name}</loc><lastmod>{max(r[1] for r in rows)}</lastmod></sitemap>")
+    (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                                     + "".join(index) + "</sitemapindex>", encoding="utf-8")
 
 
 OLD_OUT = ROOT / "_site_old_domain"

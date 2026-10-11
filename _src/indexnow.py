@@ -27,9 +27,22 @@ def validate_urls(urls):
     return result
 
 
-def sitemap_urls(data):
+def fetch(url):
+    with urllib.request.urlopen(url, timeout=30) as response:
+        return response.read()
+
+
+def sitemap_urls(data, fetch=fetch):
+    """Адреса страниц из карты сайта. Индекс карт (sitemapindex) раскрывается: каждая вложенная карта
+    должна лежать на нашем домене, иначе её не читаем."""
     root = ET.fromstring(data)
     ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+    if root.tag == ns + "sitemapindex":
+        children = validate_urls([e.text or "" for e in root.findall(ns + "sitemap/" + ns + "loc")])
+        urls = []
+        for child in children:
+            urls.extend(sitemap_urls(fetch(child), fetch))
+        return validate_urls(urls)
     if root.tag != ns + "urlset":
         raise ValueError("Expected urlset sitemap")
     return validate_urls([e.text or "" for e in root.findall(ns + "url/" + ns + "loc")])
@@ -45,8 +58,7 @@ def main():
         parser.error("Choose --sitemap OR one or more explicit URLs")
     urls = args.urls
     if args.sitemap:
-        with urllib.request.urlopen(BASE + "/sitemap.xml", timeout=30) as response:
-            urls = sitemap_urls(response.read())
+        urls = sitemap_urls(fetch(BASE + "/sitemap.xml"))
     urls = validate_urls(urls)
     result = {"at": datetime.now(timezone.utc).isoformat(), "count": len(urls),
               "submitted": args.submit, "urls": urls, "responses": []}
