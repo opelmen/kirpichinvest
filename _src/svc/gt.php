@@ -3,7 +3,7 @@
 // в zalog-desk). Тот же протокол: key + path + параметры запроса; для файлов лота (/new/file-store/v1/) — range,
 // ответ base64 текстом с заголовками X-Total и X-Name. Ключ хранится только хешем; сам ключ — в .env Залог-Деска
 // (TORGI_PROXY2_KEY). Ходит только на torgi.gov.ru и только по двум открытым путям.
-const KEY_SHA256 = '3966f034d26022336ac45bd317a2ed1472bd80fb2c78d5d2409d285d87bfab27';
+const KEY_SHA256 = 'c497e1b7c75db3343a80d258f57b9e4c610088da53e049484c10f11c07522f82';
 define('BASE', getenv('TORGI_BASE') ?: 'https://torgi.gov.ru');  // подмена только для тестов
 const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
