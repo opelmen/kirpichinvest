@@ -7,6 +7,7 @@
 @font-face{font-family:Unbounded;font-weight:600;font-display:swap;src:url(/static/fonts/unbounded-cyrillic-600-normal.woff2) format("woff2");unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 @font-face{font-family:Unbounded;font-weight:600;font-display:swap;src:url(/static/fonts/unbounded-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
 @font-face{font-family:Unbounded;font-weight:700;font-display:swap;src:url(/static/fonts/unbounded-cyrillic-700-normal.woff2) format("woff2");unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Unbounded;font-weight:700;font-display:swap;src:url(/static/fonts/unbounded-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
 
 :root{--paper:#F6F7F9;--white:#fff;--ink:#0F1B2D;--mute:#5B6675;--line:#DCE1E7;--petrol:#0B6E69;--petrol-d:#08524E;--ochre:#E8A317;--ochre-l:#FFF3D6;--red:#B4432A;--r:10px}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -137,3 +138,12 @@ footer h3{color:#fff;font-size:15px}footer ul{list-style:none;padding:0;margin:0
 .appbar p{margin:0;flex:1 1 260px;font-size:15px}.appbar .btn{white-space:nowrap}
 .lotphoto{width:100%;max-height:360px;object-fit:cover;border-radius:12px;margin:0 0 16px;background:var(--line)}
 details.places{margin:0 0 16px}details.places summary{cursor:pointer;font-weight:500;padding:6px 0}details.places .filters{margin:10px 0 0}
+h1,h2{text-wrap:balance}
+.price,.p,.lot .p,.lotrow .price,.t td,.facts b{font-variant-numeric:tabular-nums}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:8px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px;z-index:1000}.skip:focus{left:8px}
+.h1-lot{font-family:Onest,system-ui,sans-serif;font-weight:600;font-size:clamp(22px,2.6vw,30px);letter-spacing:0;line-height:1.25}
+.lot .thumb{width:calc(100% + 36px);margin:-18px -18px 6px;aspect-ratio:16/10;object-fit:cover;border-radius:12px 12px 0 0;background:var(--paper)}
+.board .trust{font-size:12px;color:#9FB0C3;margin:10px 4px 0;text-align:center}
+.hero .alt-link{font-weight:500}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}

@@ -26,6 +26,7 @@
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
+    {% if d.photo %}<img class="thumb" src="{{ d.photo }}" alt="" width="320" height="200" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
     <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{% if d.category %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>{% if budget %}<span class="small">{{ object_group(d) }}</span>{% endif %}
     {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}

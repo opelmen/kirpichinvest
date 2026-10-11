@@ -14,8 +14,8 @@
     <p class="lead">Что продаётся на самом деле, сколько это будет стоить вам, что может пойти не так и сколько ставить. И напишем, когда цена дойдёт до вашей.</p>
     {% else %}<h1>Квартиры с торгов в 16 городах-миллионниках России</h1>
     <p class="lead">Находим лоты, проверяем риски до подачи заявки и считаем максимальную ставку. Покупаете на своё имя, деньги идут напрямую на площадку и продавцу.</p>{% endif %}
-    <div class="cta"><a class="btn" href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=home&amp;utm_campaign=hero">Найти лот на карте</a><a class="btn ghost" href="/torgi/vygodnye/">Лоты дешевле рынка</a><a class="btn ghost" href="#zayavka">{{ "Подобрать с экспертом" if wide else "Подобрать квартиру" }}</a></div>
-    <p class="mute small" style="margin:-8px 0 18px">Карта, фильтры, фото и документы торгов, Рентген каждого лота — на платформе {{ cfg.SITE_NAME }}. Бесплатно, без регистрации.</p>
+    <div class="cta"><a class="btn" href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=home&amp;utm_campaign=hero">Найти лот на карте</a><a class="btn ghost" href="/torgi/vygodnye/">Лоты дешевле рынка</a></div>
+    <p class="mute small" style="margin:-8px 0 18px">Карта, фильтры, фото и документы торгов, Рентген каждого лота — на платформе {{ cfg.SITE_NAME }}. Бесплатно, без регистрации. Нужна помощь? <a class="alt-link" href="#zayavka">Подберём объект с экспертом</a>.</p>
     <div class="facts">
       <div><b>{{ st.count }}</b><span>{{ "лотов на торгах сейчас" if wide else "активных лотов жилья" }}</span></div>
       <div><b>{{ st.week_new }}</b><span>новых за 7 дней</span></div>
@@ -36,6 +36,7 @@
     </a>
     {% else %}<p style="padding:12px">Лоты загружаются. Загляните через несколько минут.</p>{% endfor %}
     {% if board_deals %}<a class="more" href="/torgi/vygodnye/">Все {{ deals_count }} выгодных лотов</a>{% else %}<a class="more" href="/torgi/">Все лоты</a>{% endif %}
+    <p class="trust">Данные ГИС Торги и площадок банкротства, обновлено {{ today }}.</p>
     <a class="more more-app" href="{{ cfg.APP_URL }}/?category=flat&amp;category=house&amp;discount_min=10&amp;utm_source=torggid&amp;utm_medium=home&amp;utm_campaign=board">Подобрать на карте с фильтрами →</a>
   </div>
 </div></div>

@@ -13,7 +13,7 @@
 <p class="crumbs"><a href="/">Главная</a> / <a href="/torgi/">Лоты</a>{% for n, u in place %} / <a href="{{ u }}">{{ n }}</a>{% endfor %} / {{ d.caddr[:60] }}</p>
 <div class="article" style="padding-top:8px">
 <div class="body">
-  <h1 style="font-size:clamp(24px,3vw,34px)">{{ d.label }} с торгов: {{ d.caddr }}</h1>
+  <h1 class="h1-lot">{{ d.label }} с торгов: {{ d.caddr }}</h1>
   <p class="mute small">{% if active %}Последняя проверка источника: {{ d.last_seen }}.{% else %}Последний раз в источнике: {{ d.last_seen }}.{% endif %}</p>
   {% if d.photo %}<img class="lotphoto" src="{{ d.photo }}" alt="{{ d.label }}: {{ d.caddr[:80] }}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
   {% if active and d.app_id %}<div class="appbar"><p><b>Полная карточка лота на платформе {{ cfg.SITE_NAME }}:</b> все фото и документы торгов, объект на карте, похожие объявления рядом, калькулятор ставки и уведомление, когда цена снизится.</p><a class="btn" href="{{ cfg.APP_URL }}/lot/{{ d.app_id|urlencode }}?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=full_card" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_app_lot')">Открыть полную карточку</a></div>{% endif %}

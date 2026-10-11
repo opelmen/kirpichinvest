@@ -24,7 +24,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/static/brand/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
-<link rel="stylesheet" href="/static/site.css?v=6">
+<link rel="stylesheet" href="/static/site.css?v=7">
 {% set org_id = cfg.SITE_URL ~ "/#org" %}{% set person_id = cfg.SITE_URL ~ author.path ~ "#person" %}
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
@@ -83,6 +83,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
 <!-- /Yandex.Metrika counter -->{% endif %}
 </head>
 <body>
+<a class="skip" href="#main">К содержанию</a>
 <header class="top"><div class="wrap">
   <a class="logo" href="/"><img src="/static/brand/logo-light.svg" alt="{{ cfg.SITE_NAME }}" width="141" height="36"></a>
   <button class="burger" aria-label="Меню" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰ Меню</button>
@@ -102,7 +103,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   {% if cfg.TG_CHANNEL %}<a class="head-tg" href="{{ cfg.TG_CHANNEL }}" title="Telegram-канал: лот дня" aria-label="Telegram-канал"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13.1l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 2.8c.9-.3 1.7.2 1.4 1.5z"/></svg></a>{% endif %}
   <a class="btn head-cta" href="/#zayavka">Оставить заявку</a>
 </div></header>
-<main>{% block main %}{% endblock %}
+<main id="main">{% block main %}{% endblock %}
 {% from "_form.html" import tg_block %}{% block tgglobal %}<section style="padding:0 0 48px"><div class="wrap">{{ tg_block() }}</div></section>{% endblock %}</main>
 <footer><div class="wrap">
   <div class="cols">
