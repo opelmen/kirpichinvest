@@ -126,22 +126,35 @@ def verdict(d):
                 f"Похожие объявления рядом ещё подбираем, подборка появится в приложении. {tail}")
     if not market or disc is None or not price:
         tail = f"Из извещения видно: {', '.join(high + other)}." if found else NO_RISKS
-        return ("none", "Нужна оценка рынка", f"Рыночной цены пока нет, поэтому выгоду не посчитать. {tail}")
-    if high:
-        risk = f"но есть серьёзный риск ({', '.join(high)}): до полного владения {own}"
-    elif other:
-        risk = f"риски устранимые ({', '.join(other)}), до владения {own}"
-    else:
-        risk = "серьёзных рисков в извещении не указано"
+        return ("none", "Нужна оценка рынка", f"Рыночной цены пока нет, поэтому разницу с рынком не посчитать. {tail}")
+    # «Выгодно» не пишем: цена — факт, а чистоту объекта (жильцы, аресты, оспаривание) по извещению не проверить.
+    # чего в извещении нет, страница лота показывает отдельной строкой «Не раскрыто», в вывод не дублируем
+    said = f"В извещении указано: {', '.join(high + other)}; до полного владения {own}." if found else ""
     if disc >= 10 and d.get("suspect"):
-        return ("mid", "Похоже на выгоду — проверьте оценку",
-                f"Цена заметно ниже нашей оценки, но такая скидка встречается редко, и оценка может ошибаться: сверьте цену с объявлениями рядом; {risk}.")
+        return ("mid", "Цена сильно ниже оценки — сверьте с объявлениями",
+                f"Цена заметно ниже нашей оценки, но такая разница встречается редко, и оценка может ошибаться: сверьте цену с объявлениями рядом. {said}".strip())
     if disc >= 10:
-        badge = "Выгодно, но с рисками" if high else ("Выгодно, риски устранимы" if other else "Выгодно — стоит участвовать")
-        return ("mid" if high else "good", badge, f"Дешевле рынка на {round(disc)}% (≈{mln(market - price)} ₽), {risk}.")
+        badge = ("Цена ниже рынка, но серьёзный риск" if high else
+                 "Цена ниже рынка, риски устранимые" if other else "Цена ниже рынка, чистота не проверена")
+        return ("bad" if high else "mid" if other else "none", badge,
+                f"Цена на {round(disc)}% ниже нашей оценки рынка (≈{mln(market - price)} ₽). {said}".strip())
     if disc > -5:
-        return ("mid", "Цена около рынка", "Цена почти рыночная: выгоды против рынка почти нет. Имеет смысл, если торги пройдут ниже старта или нужен именно этот объект.")
-    return ("bad", "Дороже рынка — мимо", f"Стартовая цена выше рынка на {round(-disc)}%. Ждите повторных торгов со снижением цены.")
+        return ("mid", "Цена около рынка", "Цена почти рыночная: разницы с рынком почти нет. Имеет смысл, если торги пройдут ниже старта или нужен именно этот объект.")
+    return ("bad", "Цена выше рынка", f"Стартовая цена выше рынка на {round(-disc)}%. Если торги не состоятся, на повторных цена будет ниже.")
+
+
+def next_step(schedule, now=None):
+    """Публичное предложение: следующий шаг снижения цены (дата, цена) по графику из извещения."""
+    from datetime import datetime, timezone
+    now = now or datetime.now(timezone.utc)
+    for st in schedule or []:
+        try:
+            t = datetime.fromisoformat(str(st.get("start")).replace("Z", "+00:00"))
+        except (ValueError, AttributeError):
+            continue
+        if (t if t.tzinfo else t.replace(tzinfo=timezone.utc)) > now and st.get("price"):
+            return [t.strftime("%d.%m.%Y"), st["price"]]
+    return None
 
 
 def from_market(rows):
@@ -154,8 +167,6 @@ def from_market(rows):
             flags.insert(0, "доля")
         if cat == "room":
             flags.insert(0, "комната")
-        if r.get("stage") == "repeat" or "repeat" in keys:
-            flags.append("повторные торги")
         if "residents" in keys:
             flags.append("зарегистрированы жильцы")
         # оценка по аналогам-квартирам: у нежилого её не показываем, даже если пришла из старой выгрузки
@@ -175,7 +186,12 @@ def from_market(rows):
             "eff_market": None if rough else r.get("market_price"),
             "eff_discount": None if rough or cat == "share" else r.get("discount_pct"),
             "liq": None if rough else r.get("liq_price"),
-            "flags": ", ".join(dict.fromkeys(flags)), "risks": r.get("risks") or [], "own_time": r.get("own_time"),
+            "flags": ", ".join(dict.fromkeys(flags)), "own_time": r.get("own_time"),
+            # повторные торги — плюс (цена уже снижена), не риск: показываем отдельной зелёной меткой
+            "risks": [x for x in r.get("risks") or [] if x.get("key") != "repeat"],
+            "repeat": r.get("stage") == "repeat" or "repeat" in keys,
+            "market_basis": r.get("market_basis"), "next_step": next_step(r.get("price_schedule")),
+            "price_drops": r.get("price_drops") or 0, "price_was": r.get("price_was"),
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
             "comps": r.get("comps") if cat in NONRES and ppm2 else None,
         }

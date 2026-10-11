@@ -19,7 +19,7 @@
 {% if cfg.SITE_OGRNIP %}<tr><th>ОГРНИП</th><td>{{ cfg.SITE_OGRNIP }}</td></tr>{% endif %}
 <tr><th>Регистрация</th><td>{{ cfg.SITE_ADDRESS }}</td></tr>
 <tr><th>Регион работы</th><td>{% if wide %}Вся Россия, работаем дистанционно{% else %}Россия: {{ cities|map(attribute=1)|join(", ") }} и 100 км вокруг{% endif %}</td></tr>
-<tr><th>Телефон</th><td><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></td></tr>
+{% if cfg.SITE_PHONE %}<tr><th>Телефон</th><td><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></td></tr>{% endif %}
 <tr><th>Почта</th><td><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></td></tr>
 {% if cfg.SITE_TELEGRAM %}<tr><th>Telegram</th><td><a href="{{ cfg.SITE_TELEGRAM }}">написать</a></td></tr>{% endif %}
 <tr><th>Часы работы</th><td>{{ hours[0] }}</td></tr>

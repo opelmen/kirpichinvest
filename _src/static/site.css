@@ -99,7 +99,7 @@ table.t th,table.t td{border-bottom:1px solid var(--line);padding:10px 12px;text
 .form .consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mute);font-weight:400}.form .consent input{width:auto;margin-top:3px}
 .form .hp{position:absolute;left:-9999px}.form .ok{background:#E4F3EC;color:#135B39;padding:14px;border-radius:9px;display:none}
 .form .err{color:var(--red);font-size:14px;display:none}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}@media (max-width:560px){.row2{grid-template-columns:1fr}}aside .row2{grid-template-columns:1fr}
 
 /* калькулятор */
 .calc{display:grid;grid-template-columns:1fr 1fr;gap:32px}@media (max-width:860px){.calc{grid-template-columns:1fr}}
@@ -147,3 +147,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 .board .trust{font-size:12px;color:#9FB0C3;margin:10px 4px 0;text-align:center}
 .hero .alt-link{font-weight:500}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+.xray li.plus{color:#1F7A6D}.xray .gaps{color:#5B6676;background:#F5F7FA;border-radius:8px;padding:8px 10px;font-size:14px}
+.xray-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.xray-cta .btn{flex:1 1 220px;text-align:center}
+.kindtag{display:inline-block;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.2px;color:#1F4E79}.kindtag.k-arrest{color:#8A4B12}
+.lot .plus{color:#1F7A6D;font-weight:600}
+aside .box .form{border:0;padding:0;background:none;border-radius:0}aside .box .form h3{font-size:18px}

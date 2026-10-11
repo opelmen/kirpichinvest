@@ -115,7 +115,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('FAQPage', region)  # у региона свои вопросы с цифрами каталога, как у города
             self.assertIn('ItemList', region)
             deal = dict(row, id='mets:20', city='kazan', address='г. Казань, ул. Баумана, д. 5', risks=[], discount_pct=25.0, market_price=2_700_000)
-            rows2 = rows + [dict(deal, id=f'mets:2{i}') for i in range(3)] + [dict(deal, id='mets:30', category='share')] + [
+            rows2 = rows + [dict(deal, id=f'mets:2{i}', price_drops=2, price_was=2_500_000) for i in range(3)] + [dict(deal, id='mets:30', category='share')] + [
                 dict(deal, id='mets:31', city='moskva', region='77', address='г. Москва, ул. Профсоюзная, д. 12', discount_pct=20.0)]
             (data/'market.json').write_text(json.dumps({'lots': rows2}, ensure_ascii=False))
             subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
@@ -126,7 +126,18 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn('/torgi/lot/mets-0/', board)  # серьёзный риск (несовершеннолетние) — тоже
             self.assertLess(board.index('/torgi/lot/mets-31/'), board.index('/torgi/lot/mets-22/'))  # третий лот Казани — после других городов
             self.assertTrue((site/'torgi/vygodnye/index.html').exists())
-            self.assertIn('Открыть полную карточку', (site/'torgi/lot/mets-20/index.html').read_text())
+            deal_card = (site/'torgi/lot/mets-20/index.html').read_text()
+            self.assertIn('Полная карточка: фото, документы, аналоги', deal_card)
+            self.assertIn('Цена ниже рынка, чистота не проверена', deal_card)  # без проверки жильцов и арестов «выгодно» не пишем
+            self.assertIn('Извещение не раскрывает: кто зарегистрирован и живёт, аресты и залоги', deal_card)
+            self.assertIn('?start=ask_mets-20', deal_card)
+            kazan = (site/'torgi/kazan/index.html').read_text()
+            self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
+            self.assertIn('Банкротное имущество</span>', kazan)
+            self.assertNotIn('995', deal_card)  # личного телефона на сайте нет
+            self.assertIn('Повторные торги — <span class="st">данные площадки</span>', deal_card)  # повторные — плюс, не риск
+            similar = deal_card.split('<h2>Похожие лоты</h2>')[1]
+            self.assertNotIn('/torgi/lot/mets-30/', similar)  # доля к квартире в похожие не попадает
             ym = __import__('datetime').date.today().strftime('%Y-%m')
             idx = (site/'analitika'/ym/'index.html').read_text()
             self.assertIn('Индекс торгов ТоргГид', idx)
@@ -156,15 +167,19 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn('16 городах-миллионниках', (site/'index.html').read_text().split('<footer>')[1])
             self.assertIn('<a href="/torgi/tatarstan/">Татарстан</a>', (site/'torgi/lot/mets-0/index.html').read_text())
             card = (site/'torgi/lot/mets-0/index.html').read_text()
-            self.assertIn('Выгодно, но с рисками', card)
+            self.assertIn('Цена ниже рынка, но серьёзный риск', card)
+            self.assertNotIn('Выгодно', card)
             self.assertIn('Извещение и документы на МЭТС', card)
             self.assertIn('/lot/mets%3A0', card)
             self.assertIn('RealEstateListing', card)
             sus = (site/'torgi/lot/mets-9/index.html').read_text()
-            self.assertIn('проверьте оценку', sus)
+            self.assertIn('сверьте с объявлениями', sus)
             self.assertNotIn('дисконт 55%', sus)  # громкий процент при подозрительной скидке не выносим
             self.assertIn('Цена сейчас', card)  # публичное предложение
-            self.assertIn('Аресты и залоги — <span class="st">нет данных', card)
+            self.assertIn('Извещение не раскрывает:', card)
+            self.assertIn('Банкротное имущество', card)
+            self.assertNotIn('повторные торги</', card.split('На что обратить')[-1][:200])
+            self.assertIn('/torgi/lot/mets-0/', (site/'torgi/tatarstan/povtornye-torgi/index.html').read_text())  # фасет по-прежнему собирается
             home = (site/'index.html').read_text()
             self.assertIn('Все торги недвижимостью в России', home)
             self.assertNotIn('Земельный участок', home.split('class="board"')[1].split('</div>')[0])
