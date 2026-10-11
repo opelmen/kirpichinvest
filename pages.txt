@@ -1,5 +1,6 @@
 /
 /analitika/
+/avtor/ilya-smirnov/
 /byudzhet/
 /check/
 /investoram/
@@ -18,6 +19,8 @@
 /stati/kak-kupit-kvartiru-na-torgah-po-bankrotstvu/
 /stati/kak-rasschitat-stavku-na-torgah/
 /stati/kvartira-s-torgov-s-dolgami/
+/stati/osmotr-kvartiry-pered-torgami/
+/stati/povtornye-torgi/
 /stati/proverka-kvartiry-s-torgov/
 /stati/publichnoe-predlozhenie/
 /stati/torgi-po-bankrotstvu-i-torgi-arestovannogo-imushchestva/
@@ -157,7 +160,6 @@
 /torgi/arestovannoe/page/173/
 /torgi/arestovannoe/page/174/
 /torgi/arestovannoe/page/175/
-/torgi/arestovannoe/page/176/
 /torgi/arestovannoe/page/18/
 /torgi/arestovannoe/page/19/
 /torgi/arestovannoe/page/2/
@@ -382,6 +384,7 @@
 /torgi/bankrotstvo/page/93/
 /torgi/bankrotstvo/page/94/
 /torgi/bankrotstvo/page/95/
+/torgi/bankrotstvo/page/96/
 /torgi/bashkortostan/
 /torgi/bashkortostan/arestovannoe/
 /torgi/bashkortostan/arestovannoe/page/2/
@@ -421,6 +424,7 @@
 /torgi/bashkortostan/page/9/
 /torgi/bashkortostan/povtornye-torgi/
 /torgi/bashkortostan/trehkomnatnye/
+/torgi/bashkortostan/vygodnye/
 /torgi/bashkortostan/zemlya/
 /torgi/bashkortostan/zemlya/page/2/
 /torgi/bashkortostan/zemlya/page/3/
@@ -529,6 +533,7 @@
 /torgi/chelyabinsk/troick/
 /torgi/chelyabinsk/varnenskiy-rayon/
 /torgi/chelyabinsk/verhneuralskiy-rayon/
+/torgi/chelyabinsk/vygodnye/
 /torgi/chelyabinsk/yuzhnouralsk/
 /torgi/chelyabinsk/yuzhnouralskiy-rayon/
 /torgi/chelyabinsk/zemlya/
@@ -577,6 +582,7 @@
 /torgi/chelyabinskaya-oblast/page/7/
 /torgi/chelyabinskaya-oblast/page/8/
 /torgi/chelyabinskaya-oblast/page/9/
+/torgi/chelyabinskaya-oblast/vygodnye/
 /torgi/chelyabinskaya-oblast/zemlya/
 /torgi/chelyabinskaya-oblast/zemlya/page/2/
 /torgi/chelyabinskaya-oblast/zemlya/page/3/
@@ -598,6 +604,7 @@
 /torgi/chuvashiya/page/3/
 /torgi/chuvashiya/povtornye-torgi/
 /torgi/chuvashiya/zemlya/
+/torgi/chuvashiya/zemlya/page/2/
 /torgi/dagestan/
 /torgi/dagestan/arestovannoe/
 /torgi/dagestan/bankrotstvo/
@@ -1948,6 +1955,7 @@
 /torgi/krasnodar/temryukskiy-rayon/
 /torgi/krasnodar/trehkomnatnye/
 /torgi/krasnodar/tuapsinskiy-rayon/
+/torgi/krasnodar/vygodnye/
 /torgi/krasnodar/vyselkovskiy-rayon/
 /torgi/krasnodar/zemlya/
 /torgi/krasnodar/zemlya/page/2/
@@ -1983,8 +1991,10 @@
 /torgi/krasnodarskiy-kray/page/7/
 /torgi/krasnodarskiy-kray/page/8/
 /torgi/krasnodarskiy-kray/trehkomnatnye/
+/torgi/krasnodarskiy-kray/vygodnye/
 /torgi/krasnodarskiy-kray/zemlya/
 /torgi/krasnodarskiy-kray/zemlya/page/2/
+/torgi/krasnodarskiy-kray/zemlya/page/3/
 /torgi/krasnoyarsk/
 /torgi/krasnoyarsk/achinsk/
 /torgi/krasnoyarsk/achinskiy-rayon/
@@ -1999,6 +2009,7 @@
 /torgi/krasnoyarsk/do-5-mln/
 /torgi/krasnoyarsk/do-5-mln/page/2/
 /torgi/krasnoyarsk/do-5-mln/page/3/
+/torgi/krasnoyarsk/do-5-mln/page/4/
 /torgi/krasnoyarsk/doli/
 /torgi/krasnoyarsk/doma/
 /torgi/krasnoyarsk/dudinka/
@@ -2007,6 +2018,7 @@
 /torgi/krasnoyarsk/emelyanovskiy-rayon/
 /torgi/krasnoyarsk/garazhi/
 /torgi/krasnoyarsk/igarka/
+/torgi/krasnoyarsk/karatuzskiy-rayon/
 /torgi/krasnoyarsk/kommercheskaya/
 /torgi/krasnoyarsk/komnaty/
 /torgi/krasnoyarsk/krasnoturanskiy-rayon/
@@ -2021,6 +2033,7 @@
 /torgi/krasnoyarsk/povtornye-torgi/
 /torgi/krasnoyarsk/sharypovskiy-rayon/
 /torgi/krasnoyarsk/trehkomnatnye/
+/torgi/krasnoyarsk/vygodnye/
 /torgi/krasnoyarsk/zemlya/
 /torgi/krasnoyarsk/zemlya/page/2/
 /torgi/krasnoyarsk/zheleznogorsk/
@@ -2051,6 +2064,7 @@
 /torgi/krasnoyarskiy-kray/page/6/
 /torgi/krasnoyarskiy-kray/povtornye-torgi/
 /torgi/krasnoyarskiy-kray/trehkomnatnye/
+/torgi/krasnoyarskiy-kray/vygodnye/
 /torgi/krasnoyarskiy-kray/zemlya/
 /torgi/krasnoyarskiy-kray/zemlya/page/2/
 /torgi/krym/
@@ -2118,6 +2132,7 @@
 /torgi/leningradskaya-oblast/page/2/
 /torgi/leningradskaya-oblast/page/3/
 /torgi/leningradskaya-oblast/page/4/
+/torgi/leningradskaya-oblast/vygodnye/
 /torgi/leningradskaya-oblast/zemlya/
 /torgi/leningradskaya-oblast/zemlya/page/2/
 /torgi/lipetskaya-oblast/
@@ -13077,6 +13092,15 @@
 /torgi/lot/cdt-385100/
 /torgi/lot/cdt-385101/
 /torgi/lot/cdt-385102/
+/torgi/lot/cdt-385108/
+/torgi/lot/cdt-385112/
+/torgi/lot/cdt-385113/
+/torgi/lot/cdt-385114/
+/torgi/lot/cdt-385115/
+/torgi/lot/cdt-385117/
+/torgi/lot/cdt-385118/
+/torgi/lot/cdt-385124/
+/torgi/lot/cdt-385125/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -18629,11 +18653,45 @@
 /torgi/lot/mets-239265-1/
 /torgi/lot/mets-239271-1/
 /torgi/lot/mets-239272-1/
+/torgi/lot/mets-239279-1/
+/torgi/lot/mets-239284-1/
+/torgi/lot/mets-239285-1/
+/torgi/lot/mets-239286-1/
+/torgi/lot/mets-239287-1/
+/torgi/lot/mets-239288-1/
+/torgi/lot/mets-239289-1/
 /torgi/lot/mets-239294-1/
+/torgi/lot/mets-239294-2/
+/torgi/lot/mets-239294-3/
+/torgi/lot/mets-239294-4/
+/torgi/lot/mets-239294-5/
+/torgi/lot/mets-239294-6/
+/torgi/lot/mets-239294-7/
+/torgi/lot/mets-239294-8/
+/torgi/lot/mets-239296-1/
+/torgi/lot/mets-239298-1/
+/torgi/lot/mets-239301-1/
 /torgi/lot/mets-239304-1/
+/torgi/lot/mets-239305-1/
+/torgi/lot/mets-239306-1/
+/torgi/lot/mets-239307-1/
+/torgi/lot/mets-239308-1/
+/torgi/lot/mets-239313-1/
 /torgi/lot/mets-239327-1/
+/torgi/lot/mets-239336-1/
 /torgi/lot/mets-239353-1/
+/torgi/lot/mets-239370-1/
+/torgi/lot/mets-239373-1/
 /torgi/lot/mets-239386-1/
+/torgi/lot/mets-239386-10/
+/torgi/lot/mets-239386-11/
+/torgi/lot/mets-239386-12/
+/torgi/lot/mets-239386-13/
+/torgi/lot/mets-239386-14/
+/torgi/lot/mets-239386-15/
+/torgi/lot/mets-239386-16/
+/torgi/lot/mets-239386-17/
+/torgi/lot/mets-239386-18/
 /torgi/lot/mets-239386-19/
 /torgi/lot/mets-239386-2/
 /torgi/lot/mets-239386-20/
@@ -19012,6 +19070,7 @@
 /torgi/moskovskaya-oblast/page/9/
 /torgi/moskovskaya-oblast/povtornye-torgi/
 /torgi/moskovskaya-oblast/trehkomnatnye/
+/torgi/moskovskaya-oblast/vygodnye/
 /torgi/moskovskaya-oblast/zemlya/
 /torgi/moskovskaya-oblast/zemlya/page/2/
 /torgi/moskovskaya-oblast/zemlya/page/3/
@@ -19036,6 +19095,7 @@
 /torgi/moskva/balashiha/
 /torgi/moskva/bankrotstvo/
 /torgi/moskva/bankrotstvo/page/10/
+/torgi/moskva/bankrotstvo/page/11/
 /torgi/moskva/bankrotstvo/page/2/
 /torgi/moskva/bankrotstvo/page/3/
 /torgi/moskva/bankrotstvo/page/4/
@@ -19121,6 +19181,7 @@
 /torgi/moskva/page/21/
 /torgi/moskva/page/22/
 /torgi/moskva/page/23/
+/torgi/moskva/page/24/
 /torgi/moskva/page/3/
 /torgi/moskva/page/4/
 /torgi/moskva/page/5/
@@ -19147,6 +19208,8 @@
 /torgi/moskva/vidnoe/
 /torgi/moskva/vnukovskiy-rayon/
 /torgi/moskva/volokolamskiy-rayon/
+/torgi/moskva/vygodnye/
+/torgi/moskva/vygodnye/page/2/
 /torgi/moskva/yahroma/
 /torgi/moskva/zemlya/
 /torgi/moskva/zemlya/page/2/
@@ -19227,7 +19290,6 @@
 /torgi/nizhniy-novgorod/page/2/
 /torgi/nizhniy-novgorod/page/3/
 /torgi/nizhniy-novgorod/page/4/
-/torgi/nizhniy-novgorod/page/5/
 /torgi/nizhniy-novgorod/pavlovo/
 /torgi/nizhniy-novgorod/pavlovskiy-rayon/
 /torgi/nizhniy-novgorod/pestyakovskiy-rayon/
@@ -19735,6 +19797,7 @@
 /torgi/perm/solikamsk/
 /torgi/perm/trehkomnatnye/
 /torgi/perm/vereschagino/
+/torgi/perm/vygodnye/
 /torgi/perm/zemlya/
 /torgi/perm/zemlya/page/2/
 /torgi/permskiy-kray/
@@ -19763,6 +19826,7 @@
 /torgi/permskiy-kray/page/5/
 /torgi/permskiy-kray/page/6/
 /torgi/permskiy-kray/trehkomnatnye/
+/torgi/permskiy-kray/vygodnye/
 /torgi/permskiy-kray/zemlya/
 /torgi/permskiy-kray/zemlya/page/2/
 /torgi/povtornye-torgi/
@@ -19826,6 +19890,7 @@
 /torgi/rostov-na-donu/bankrotstvo/
 /torgi/rostov-na-donu/bankrotstvo/page/2/
 /torgi/rostov-na-donu/bankrotstvo/page/3/
+/torgi/rostov-na-donu/bankrotstvo/page/4/
 /torgi/rostov-na-donu/do-5-mln/
 /torgi/rostov-na-donu/do-5-mln/page/2/
 /torgi/rostov-na-donu/do-5-mln/page/3/
@@ -19861,6 +19926,7 @@
 /torgi/rostov-na-donu/taganrog/
 /torgi/rostov-na-donu/volgodonsk/
 /torgi/rostov-na-donu/voroshilovskiy-rayon/
+/torgi/rostov-na-donu/vygodnye/
 /torgi/rostov-na-donu/zemlya/
 /torgi/rostov-na-donu/zemlya/page/2/
 /torgi/rostov-na-donu/zemlya/page/3/
@@ -19890,6 +19956,7 @@
 /torgi/rostovskaya-oblast/page/6/
 /torgi/rostovskaya-oblast/page/7/
 /torgi/rostovskaya-oblast/povtornye-torgi/
+/torgi/rostovskaya-oblast/vygodnye/
 /torgi/rostovskaya-oblast/zemlya/
 /torgi/rostovskaya-oblast/zemlya/page/2/
 /torgi/rostovskaya-oblast/zemlya/page/3/
@@ -19960,6 +20027,7 @@
 /torgi/samara/tolyatti/
 /torgi/samara/trehkomnatnye/
 /torgi/samara/volzhskiy-rayon/
+/torgi/samara/vygodnye/
 /torgi/samara/zemlya/
 /torgi/samara/zhigulevsk/
 /torgi/samarskaya-oblast/
@@ -19986,6 +20054,7 @@
 /torgi/samarskaya-oblast/page/5/
 /torgi/samarskaya-oblast/povtornye-torgi/
 /torgi/samarskaya-oblast/trehkomnatnye/
+/torgi/samarskaya-oblast/vygodnye/
 /torgi/samarskaya-oblast/zemlya/
 /torgi/sankt-peterburg/
 /torgi/sankt-peterburg/arestovannoe/
@@ -20052,6 +20121,7 @@
 /torgi/sankt-peterburg/vsevolozhskiy-rayon/
 /torgi/sankt-peterburg/vyborg/
 /torgi/sankt-peterburg/vyborgskiy-rayon/
+/torgi/sankt-peterburg/vygodnye/
 /torgi/sankt-peterburg/zemlya/
 /torgi/sankt-peterburg/zemlya/page/2/
 /torgi/saratovskaya-oblast/
@@ -20378,6 +20448,7 @@
 /torgi/ufa/trehkomnatnye/
 /torgi/ufa/uchalinskiy-rayon/
 /torgi/ufa/ufimskiy-rayon/
+/torgi/ufa/vygodnye/
 /torgi/ufa/zemlya/
 /torgi/ufa/zemlya/page/2/
 /torgi/ufa/zemlya/page/3/
@@ -20448,6 +20519,7 @@
 /torgi/volgograd/svetloyarskiy-rayon/
 /torgi/volgograd/volzhskiy-volgogradskoy/
 /torgi/volgograd/volzhskiy/
+/torgi/volgograd/vygodnye/
 /torgi/volgograd/zemlya/
 /torgi/volgograd/zemlya/page/2/
 /torgi/volgogradskaya-oblast/
@@ -20467,6 +20539,7 @@
 /torgi/volgogradskaya-oblast/page/2/
 /torgi/volgogradskaya-oblast/page/3/
 /torgi/volgogradskaya-oblast/page/4/
+/torgi/volgogradskaya-oblast/vygodnye/
 /torgi/volgogradskaya-oblast/zemlya/
 /torgi/volgogradskaya-oblast/zemlya/page/2/
 /torgi/vologodskaya-oblast/
@@ -20543,6 +20616,9 @@
 /torgi/voronezhskaya-oblast/page/3/
 /torgi/voronezhskaya-oblast/povtornye-torgi/
 /torgi/voronezhskaya-oblast/zemlya/
+/torgi/vygodnye/
+/torgi/vygodnye/page/2/
+/torgi/vygodnye/page/3/
 /torgi/yakutiya/
 /torgi/yakutiya/arestovannoe/
 /torgi/yakutiya/arestovannoe/page/2/
