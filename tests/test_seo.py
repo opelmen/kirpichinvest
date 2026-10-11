@@ -114,6 +114,19 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Недвижимость с торгов в Татарстане', region)
             self.assertIn('FAQPage', region)  # у региона свои вопросы с цифрами каталога, как у города
             self.assertIn('ItemList', region)
+            deal = dict(row, id='mets:20', city='kazan', address='г. Казань, ул. Баумана, д. 5', risks=[], discount_pct=25.0, market_price=2_700_000)
+            rows2 = rows + [dict(deal, id=f'mets:2{i}') for i in range(3)] + [dict(deal, id='mets:30', category='share')] + [
+                dict(deal, id='mets:31', city='moskva', region='77', address='г. Москва, ул. Профсоюзная, д. 12', discount_pct=20.0)]
+            (data/'market.json').write_text(json.dumps({'lots': rows2}, ensure_ascii=False))
+            subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
+            board = (site/'index.html').read_text().split('class="board"')[1].split('class="more"')[0]
+            self.assertIn('Дешевле рынка', board)
+            self.assertIn('/torgi/lot/mets-20/', board)
+            self.assertNotIn('/torgi/lot/mets-30/', board)  # доля на витрину не попадает
+            self.assertNotIn('/torgi/lot/mets-0/', board)  # серьёзный риск (несовершеннолетние) — тоже
+            self.assertLess(board.index('/torgi/lot/mets-31/'), board.index('/torgi/lot/mets-22/'))  # третий лот Казани — после других городов
+            self.assertTrue((site/'torgi/vygodnye/index.html').exists())
+            self.assertIn('Открыть полную карточку', (site/'torgi/lot/mets-20/index.html').read_text())
             llms = (site/'llms.txt').read_text()
             self.assertIn('Все регионы России', llms)
             self.assertIn('## Услуги и цены', llms)

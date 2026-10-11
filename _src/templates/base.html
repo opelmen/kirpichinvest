@@ -24,7 +24,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/static/brand/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
-<link rel="stylesheet" href="/static/site.css?v=5">
+<link rel="stylesheet" href="/static/site.css?v=6">
 {% set org_id = cfg.SITE_URL ~ "/#org" %}{% set person_id = cfg.SITE_URL ~ author.path ~ "#person" %}
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
@@ -88,7 +88,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <button class="burger" aria-label="Меню" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰ Меню</button>
   <nav class="nav">
     <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Каталог</a>
-    <a href="{{ cfg.APP_URL }}/">Карта</a>
+    <a href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=nav">Поиск на карте</a>
     {% if cfg.AUTO_URL %}<a href="{{ cfg.AUTO_URL }}">Авто</a>{% endif %}
     <a href="/kupit-kvartiru-s-torgov/" {% if path.startswith('/kupit') %}aria-current="page"{% endif %}>Под ключ</a>
     <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>

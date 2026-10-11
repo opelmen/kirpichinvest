@@ -130,3 +130,10 @@ footer h3{color:#fff;font-size:15px}footer ul{list-style:none;padding:0;margin:0
 .xray .badge{font-weight:700;font-size:18px;margin:0 0 6px}.xray p{margin:0 0 8px}.xray ul{margin:6px 0 10px;padding-left:20px}
 .lot-photo{width:100%;max-height:360px;object-fit:cover;border-radius:12px;margin:8px 0 12px}
 .xray .st{font-size:12px;font-weight:600;padding:1px 7px;border-radius:999px;background:#EEF1F5;color:#5B6676;white-space:nowrap}.xray li.nodata{color:#5B6676}
+.board .board-note{font-size:13px;color:#9FB0C3;margin:-6px 4px 10px;line-height:1.4}
+.lotrow .disc{display:block;font-size:13px;font-weight:600;color:#7FE0B5}
+.board .more-app{padding-top:4px;color:#9FB0C3;font-weight:400;font-size:14px}
+.appbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 20px}
+.appbar p{margin:0;flex:1 1 260px;font-size:15px}.appbar .btn{white-space:nowrap}
+.lotphoto{width:100%;max-height:360px;object-fit:cover;border-radius:12px;margin:0 0 16px;background:var(--line)}
+details.places{margin:0 0 16px}details.places summary{cursor:pointer;font-weight:500;padding:6px 0}details.places .filters{margin:10px 0 0}

@@ -181,7 +181,30 @@ def lo_town(d):
     return None if (t and t in CITY_NAME.values()) else t
 
 
+def good_deal(d):
+    """«Нормальный» выгодный лот для витрины: квартира или дом целиком, понятный адрес, оценка рынка по аналогам,
+    скидка 10–50% (больше — чаще ошибка оценки), без серьёзных рисков в извещении и не в последний день приёма заявок."""
+    cat, area, disc, flags = d.get("category") or "flat", d.get("area"), d.get("eff_discount"), d.get("flags") or ""
+    return (cat in ("flat", "house") and bool(d.get("eff_market")) and disc is not None and 10 <= disc <= 50
+            and "доля" not in flags and "комната" not in flags
+            and not any(r.get("level") == "high" for r in d.get("risks") or [])
+            and bool(area) and (20 <= area <= 250 if cat == "flat" else 30 <= area <= 600)
+            and (d.get("price") or 0) >= 300_000
+            and len(d.get("caddr") or "") >= 15 and d.get("caddr") not in CITY_NAME.values()
+            and (d.get("days_left") is None or d["days_left"] >= 2))
+
+
+def facet_lots(f, lots):
+    sel = [d for d in lots if f[2](d)]
+    return by_discount(sel) if f[0] == "vygodnye" else sel
+
+
+def by_discount(lots):
+    return sorted(lots, key=lambda d: (-(d.get("eff_discount") or 0), d["id"]))
+
+
 FACETS = [  # slug, название, фильтр, заголовок-формулировка
+    ("vygodnye", "Дешевле рынка", good_deal, "Квартиры и дома с торгов дешевле рынка"),
     ("odnokomnatnye", "Однокомнатные", lambda d: d.get("rooms") == 1, "Однокомнатные квартиры с торгов"),
     ("dvuhkomnatnye", "Двухкомнатные", lambda d: d.get("rooms") == 2, "Двухкомнатные квартиры с торгов"),
     ("trehkomnatnye", "Трёхкомнатные и больше", lambda d: (d.get("rooms") or 0) >= 3, "Трёх- и многокомнатные квартиры с торгов"),
@@ -312,11 +335,24 @@ def build():
     env.globals["region_paths"] = {f"/torgi/{r[0]}/" for r in REGIONS.values()}
     env.globals["cities"] = [(c[0], c[1], c[2], city_counts[c[0]]) for c in CITIES]
     st = stats(LOTS)
-    # на главной только жильё с правдоподобной ценой, свежие сверху: земля и цены-«кадастровые номера» не попадают
-    sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)]
-    board = sorted([d for d in sane if d.get("category", "flat") in ("flat", "room", "house")] if WIDE else sane,
-                   key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
-    write("/", "home.html", priority="1.0", lots=board, st=st, articles=ARTICLES[:6],
+    # на главной — самые выгодные понятные объекты: квартиры и дома целиком с оценкой рынка, не больше двух из одного города,
+    # чтобы витрина не состояла из одной Москвы; если таких мало, показываем свежее жильё с правдоподобной ценой
+    deals = by_discount([d for d in LOTS if good_deal(d)])
+    board, per_place = [], {}
+    for d in deals:
+        place = d.get("city") or d.get("region")
+        if per_place.get(place, 0) < 2:
+            board.append(d)
+            per_place[place] = per_place.get(place, 0) + 1
+        if len(board) == 6:
+            break
+    board += [d for d in deals if d not in board][:6 - len(board)]  # городов с выгодными лотами мало — добираем без ограничения
+    board_deals = len(board) >= 3
+    if not board_deals:
+        sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)
+                and d.get("category", "flat") in ("flat", "house") and "доля" not in (d.get("flags") or "")]
+        board = sorted(sane, key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
+    write("/", "home.html", priority="1.0", lots=board, board_deals=board_deals, deals_count=len(deals), st=st, articles=ARTICLES[:6],
           title=(f"Недвижимость с торгов по всей России — {cfg.SITE_NAME}" if WIDE else f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}"),
           description=("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России: квартиры, дома, земля, коммерция. Цена к рынку, риски, сроки заявок и расчёт максимальной ставки."
                        if WIDE else "Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки."))
@@ -358,11 +394,12 @@ def build():
         if d.get("region") in REGIONS and d["region"] not in ("77", "78"):  # Москва и Петербург — страницы городов
             by_region.setdefault(d["region"], []).append(d)
     region_links = sorted(((f"/torgi/{REGIONS[c][0]}/", f"{REGIONS[c][1]} ({len(v)})") for c, v in by_region.items()), key=lambda x: x[1])
+    # на общей странице каталога наверху только подборки; города и регионы — в свёрнутом списке, чтобы лоты были видны сразу
     listing("/torgi/", LOTS, f"{OBJ} с торгов {GEO}", [("Лоты", "/torgi/")],
-            city_links + [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], region_links, priority="0.9")
+            [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], city_links[1:] + region_links, priority="0.9")
     for code, rl in by_region.items():
         rslug, rname, rwhere = REGIONS[code]
-        rfacets = [(f, [d for d in rl if f[2](d)]) for f in FACETS]
+        rfacets = [(f, facet_lots(f, rl)) for f in FACETS]
         rfacets = [(f, v) for f, v in rfacets if len(v) >= 3]
         rlinks = [(f"/torgi/{rslug}/", "Все")] + [(f"/torgi/{rslug}/{f[0]}/", f[1]) for f, v in rfacets]
         rcrumbs = [("Лоты", "/torgi/"), (rname, f"/torgi/{rslug}/")]
@@ -372,7 +409,7 @@ def build():
         for f, v in rfacets:
             listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
-        fl = [d for d in LOTS if flt(d)]
+        fl = facet_lots((slug, name, flt, h1), LOTS)
         if fl or slug == "doli":
             listing(f"/torgi/{slug}/", fl, f"{h1} {GEO}", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], city_links)
     for cslug, cname, where in CITIES:
@@ -384,7 +421,7 @@ def build():
                     subs.setdefault(t, []).append(d)
         subs = {t: v for t, v in subs.items() if len(v) >= 2 or ("район" in t or "округ" in t)}
         sub_links = [(f"/torgi/{cslug}/{translit(t)}/", f"{t} ({len(v)})") for t, v in subs.items()]
-        facets_here = [(f, [d for d in cl if f[2](d)]) for f in FACETS]
+        facets_here = [(f, facet_lots(f, cl)) for f in FACETS]
         facets_here = [(f, v) for f, v in facets_here if len(v) >= 3]
         links = [(f"/torgi/{cslug}/", "Все")] + [(f"/torgi/{cslug}/{f[0]}/", f[1]) for f, v in facets_here]
         base_crumbs = [("Лоты", "/torgi/"), (cname, f"/torgi/{cslug}/")]
