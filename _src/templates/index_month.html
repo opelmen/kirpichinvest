@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% set as_of = ix.as_of[8:10] ~ "." ~ ix.as_of[5:7] ~ "." ~ ix.as_of[:4] %}
+{% set csv = cfg.SITE_URL ~ path ~ "indeks.csv" %}
+{% block ld %}{{ ld({"@context":"https://schema.org","@type":"Dataset",
+ "@id": cfg.SITE_URL ~ path ~ "#dataset",
+ "name":"Индекс торгов ТоргГид: " ~ ix.month ~ " " ~ ix.year,
+ "description":"Недвижимость на торгах по банкротству и арестованному имуществу в России " ~ ix.month_prep ~ " " ~ ix.year ~ ": число лотов по категориям, процедурам, площадкам и регионам, медианы начальных цен, скидка квартир к оценке рынка, доля публичного предложения и повторных торгов.",
+ "url": cfg.SITE_URL ~ path, "temporalCoverage": ix.start ~ "/" ~ ix.end, "spatialCoverage":{"@type":"Place","name":"Россия"},
+ "dateModified": ix.as_of, "creator":{"@id": cfg.SITE_URL ~ "/#org"}, "publisher":{"@id": cfg.SITE_URL ~ "/#org"},
+ "license":"https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree":true,
+ "keywords":["торги по банкротству","арестованное имущество","недвижимость с торгов","статистика торгов","ГИС Торги"],
+ "variableMeasured":["число лотов","медиана начальной цены","медиана цены за м²","скидка к рынку","доля публичного предложения","доля повторных торгов"],
+ "distribution":[{"@type":"DataDownload","encodingFormat":"text/csv","contentUrl": csv}]}) }}{{ crumbs_ld([("Главная","/"),("Статистика торгов","/analitika/"),("Индекс торгов: " ~ ix.month ~ " " ~ ix.year, path)]) }}{% endblock %}
+{% block main %}<div class="wrap" style="padding-bottom:64px">
+<p class="crumbs"><a href="/">Главная</a> / <a href="/analitika/">Статистика торгов</a> / Индекс: {{ ix.month }} {{ ix.year }}</p>
+<h1>Индекс торгов ТоргГид: {{ ix.month }} {{ ix.year }}</h1>
+<p class="lead"><b>{{ ix.month_prep|capitalize }} {{ ix.year }} в каталоге ТоргГида {{ ix.count }} лотов недвижимости с торгов в {{ ix.regions }} регионах России.</b>
+{% if ix.flat_median_price %}Квартир {{ ix.flats }}, медиана начальной цены квартиры {{ ix.flat_median_price|rub }}{% if ix.flat_median_ppm2 %}, {{ ix.flat_median_ppm2|rub }} за м²{% endif %}.{% endif %}
+{% if ix.flat_median_discount is not none %}Медианная квартира выставлена {% if ix.flat_median_discount > 0 %}на {{ ix.flat_median_discount }}% дешевле{% elif ix.flat_median_discount < 0 %}на {{ -ix.flat_median_discount }}% дороже{% else %}по цене{% endif %} нашей оценки рынка, {{ ix.flats_below10 }}% квартир с оценкой дешевле рынка на 10% и больше.{% endif %}
+На публичном предложении {{ ix.public_share }}% лотов, на повторных торгах {{ ix.repeat_share }}%. {% if ix.closed %}Итог за месяц{% else %}Месяц не закончился, данные на {{ as_of }}{% endif %}.</p>
+<p class="small mute">Скачать данные: <a href="indeks.csv">indeks.csv</a> (UTF-8, разделитель «;»). Лицензия CC BY 4.0: можно использовать со ссылкой на «Индекс торгов ТоргГид (torggid.ru)» и месяц.</p>
+
+<h2 style="margin-top:36px">Что продаётся</h2>
+<div class="scroll"><table class="t">
+<tr><th>Категория</th><th>Лотов</th><th>Доля</th><th>Медиана начальной цены</th><th>Медиана за м²</th></tr>
+{% for c in ix.by_cat %}<tr><td>{{ c.name }}</td><td>{{ c.count }}</td><td>{{ c.share }}%</td><td>{{ c.median_price|rub }}</td><td>{% if c.median_ppm2 %}{{ c.median_ppm2|rub }}{% else %}—{% endif %}</td></tr>{% endfor %}
+</table></div>
+<p class="small mute">Цена за м² приведена только для жилья: у земли и коммерции площадь в извещениях часто указана неточно.</p>
+
+<h2 style="margin-top:36px">Квартиры к рынку</h2>
+{% if ix.flats_valued %}
+<p>Оценка рынка есть у {{ ix.flats_valued }} квартир из {{ ix.flats }}: её считаем по объявлениям о продаже похожих квартир рядом. {% if ix.flat_median_discount is not none %}Медиана скидки к оценке {{ ix.flat_median_discount }}%{% endif %}{% if ix.flats_below10 is not none %}, дешевле рынка на 10% и больше {{ ix.flats_below10 }}% квартир{% endif %}.
+Скидку больше 50% не учитываем: так чаще ошибается оценка, чем бывает выгода.</p>
+<p>Это стартовые цены. На аукционе цена растёт, на публичном предложении падает по графику, поэтому скидка к рынку у купленной квартиры будет другой. Самые дешёвые к рынку квартиры и дома собраны в подборке <a href="/torgi/vygodnye/">«Дешевле рынка»</a>.</p>
+{% else %}<p>Оценок рынка по квартирам за этот месяц пока мало, чтобы считать медиану.</p>{% endif %}
+
+<h2 style="margin-top:36px">Процедуры и площадки</h2>
+<div class="grid2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+<div class="scroll"><table class="t"><tr><th>Процедура</th><th>Лотов</th></tr>
+{% for k, v in ix.by_kind %}<tr><td>{{ k }}</td><td>{{ v }}</td></tr>{% endfor %}
+<tr><td>из них публичное предложение</td><td>{{ ix.public }}</td></tr><tr><td>повторные торги</td><td>{{ ix.repeat }}</td></tr></table></div>
+<div class="scroll"><table class="t"><tr><th>Площадка</th><th>Лотов</th></tr>
+{% for k, v in ix.by_source %}<tr><td>{{ k }}</td><td>{{ v }}</td></tr>{% endfor %}</table></div>
+</div>
+<p class="small mute">Публичное предложение: цена снижается по графику, побеждает первая заявка не ниже цены периода. Повторные торги: начальная цена ниже на 10% в банкротстве и на 15% при продаже арестованного имущества. Подробнее в статьях о <a href="/stati/publichnoe-predlozhenie/">публичном предложении</a> и <a href="/stati/povtornye-torgi/">повторных торгах</a>.</p>
+
+<h2 style="margin-top:36px">Регионы с наибольшим числом лотов</h2>
+<div class="scroll"><table class="t">
+<tr><th>Регион</th><th>Лотов</th><th>Квартир</th><th>Медиана цены квартиры</th><th>Медиана за м²</th></tr>
+{% for r in ix.by_region %}<tr><td><a href="/torgi/{{ r.slug }}/">{{ r.name }}</a></td><td>{{ r.count }}</td><td>{{ r.flats }}</td><td>{{ r.median_flat_price|rub }}</td><td>{{ r.median_flat_ppm2|rub }}</td></tr>{% endfor %}
+</table></div>
+
+<h2 style="margin-top:36px">Как считаем</h2>
+<p>В индекс входят лоты недвижимости, которые были в продаже хотя бы день месяца: появились в каталоге до конца месяца и не сняты с торгов до его начала. Источники: ГИС Торги (torgi.gov.ru) и электронные площадки банкротства{% for k, v in ix.by_source if k != "ГИС Торги" %}{% if loop.first %}: {% endif %}{{ k }}{% if not loop.last %}, {% endif %}{% endfor %}. Каталог обновляется несколько раз в день.</p>
+<p>Медиана: половина лотов дешевле, половина дороже. Цены начальные, из извещений. Один лот считается один раз, даже если в нём несколько объектов. Адреса, кадастровые номера и сведения о должниках в индекс не входят.</p>
+{% if ix.new is none %}<p class="small mute">В {{ ix.month_prep[2:] }} {{ ix.year }} каталог расширился до всей страны, поэтому число новых лотов за этот месяц не считаем: в него попали бы лоты, опубликованные раньше.</p>{% endif %}
+<p>При цитировании: «Индекс торгов ТоргГид, {{ ix.month }} {{ ix.year }}, torggid.ru/analitika/{{ ix.ym }}/».</p>
+
+{% if months|length > 1 %}<h2 style="margin-top:36px">Другие месяцы</h2>
+<p>{% for m in months|reverse %}{% if m.ym == ix.ym %}<b>{{ m.month }} {{ m.year }}</b>{% else %}<a href="/analitika/{{ m.ym }}/">{{ m.month }} {{ m.year }}</a>{% endif %}{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+<p style="margin-top:28px"><a class="btn" href="/torgi/">Смотреть лоты</a> <a class="btn ghost" href="/analitika/">Статистика по городам</a></p>
+</div>{% endblock %}

@@ -1,12 +1,13 @@
 {% extends "base.html" %}
-{% block ld %}{{ ld({"@context":"https://schema.org","@type":"Dataset","name":"Статистика торгов жилой недвижимостью по городам-миллионникам России",
- "description":"Число активных лотов жилья на торгах (ГИС Торги), медианные начальные цены и цены за м², доля долей и повторных торгов в радиусе 100 км от 16 городов-миллионников.",
+{% block ld %}{{ ld({"@context":"https://schema.org","@type":"Dataset","name":"Статистика торгов недвижимостью по городам-миллионникам России",
+ "description":"Число активных лотов на торгах (ГИС Торги и площадки банкротства), медианные начальные цены и цены за м², доля долей и повторных торгов в радиусе 100 км от городов-миллионников.",
  "creator":{"@type":"Organization","name":cfg.SITE_NAME},"dateModified":today,"spatialCoverage":"Россия","license":"https://creativecommons.org/licenses/by/4.0/",
  "isAccessibleForFree":true}) }}{{ crumbs_ld([("Главная","/"),("Статистика торгов", path)]) }}{% endblock %}
 {% block main %}<div class="wrap" style="padding-bottom:64px">
 <p class="crumbs"><a href="/">Главная</a> / Статистика торгов</p>
 <h1>Статистика торгов недвижимостью по городам</h1>
-<p class="lead">Сколько жилья сейчас продаётся с торгов в каждом городе-миллионнике и в 100 км от него, по какой стартовой цене и что это за лоты. Считаем по открытому реестру ГИС Торги, данные на {{ today }}.</p>
+<p class="lead">Сколько {% if wide %}недвижимости{% else %}жилья{% endif %} сейчас продаётся с торгов в каждом городе-миллионнике и в 100 км от него, по какой стартовой цене и что это за лоты. Считаем по {% if wide %}ГИС Торги и площадкам банкротства{% else %}открытому реестру ГИС Торги{% endif %}, данные на {{ today }}.</p>
+{% if latest_index %}<p class="appbar" style="margin-top:16px"><b>Индекс торгов ТоргГид: {{ latest_index.month }} {{ latest_index.year }}.</b> Вся страна: {{ latest_index.count }} лотов в {{ latest_index.regions }} регионах, цены по категориям, скидка квартир к рынку, площадки, CSV. <a href="/analitika/{{ latest_index.ym }}/">Открыть индекс</a></p>{% endif %}
 <div class="scroll" style="margin-top:24px"><table class="t">
 <tr><th>Город</th><th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные</th><th>С жильцами*</th></tr>
 {% for slug, name, where, c in rows|sort(attribute='3.count', reverse=true) %}<tr>

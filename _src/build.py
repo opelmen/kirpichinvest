@@ -271,6 +271,125 @@ def city_stats(lots):
             "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= (now - timedelta(days=7)).isoformat())}
 
 
+INDEX_START = "2026-10"  # с этого месяца история каталога полная по всей стране: раньше индекс не считаем
+MONTHS_RU = ("январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь")
+MONTHS_PREP = ("в январе", "в феврале", "в марте", "в апреле", "в мае", "в июне", "в июле", "в августе", "в сентябре",
+               "в октябре", "в ноябре", "в декабре")
+MONTHS_GEN = ("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
+
+
+def month_bounds(ym):
+    y, m = map(int, ym.split("-"))
+    start = date(y, m, 1)
+    end = date(y + (m == 12), m % 12 + 1, 1) - timedelta(days=1)
+    return start, end
+
+
+def index_months(cards, today=None):
+    """Месяцы индекса: от INDEX_START до текущего, только те, где в каталоге были лоты."""
+    today = today or date.today()
+    out, ym = [], INDEX_START
+    while ym <= today.strftime("%Y-%m"):
+        if month_lots(cards, ym, today):
+            out.append(ym)
+        y, m = map(int, ym.split("-"))
+        ym = f"{y + (m == 12)}-{m % 12 + 1:02d}"
+    return out
+
+
+def month_lots(cards, ym, today=None):
+    """Лоты, которые были в продаже в месяце: появились до его конца и не ушли до начала (по истории карточек)."""
+    today = today or date.today()
+    start, end = month_bounds(ym)
+    end = min(end, today)
+    s, e = start.isoformat(), end.isoformat()
+    res = []
+    for d in cards:
+        if (d.get("first_seen") or "")[:10] > e:
+            continue
+        if d.get("status") != "active" and (d.get("last_seen") or "") < s:
+            continue
+        if (d.get("bidd_end") or "9999")[:10] < s:
+            continue
+        res.append(d)
+    return res
+
+
+def month_index(cards, ym, today=None):
+    """Индекс торгов ТоргГид за месяц: открытые данные каталога, только агрегаты (без адресов и сведений о должниках)."""
+    today = today or date.today()
+    start, end = month_bounds(ym)
+    lots = month_lots(cards, ym, today)
+    n = len(lots)
+    if not n:
+        return None
+    pct = lambda k: round(100 * k / n)  # noqa: E731
+    med = lambda xs: (lambda v: round(v) if v is not None else None)(median(xs))  # noqa: E731
+    flats = [d for d in lots if d.get("category") == "flat"]
+    valued = [d["eff_discount"] for d in flats if d.get("eff_discount") is not None]
+    by_cat = []
+    for key, (one, many) in CATEGORY.items():
+        xs = [d for d in lots if d.get("category") == key]
+        if xs:
+            by_cat.append({"key": key, "name": many, "count": len(xs), "share": pct(len(xs)),
+                           "median_price": med([d.get("price") for d in xs]),
+                           "median_ppm2": med([d.get("ppm2") for d in xs]) if key in ("flat", "house", "room") else None})
+    by_cat.sort(key=lambda r: -r["count"])
+    kinds = {}
+    for d in lots:
+        kinds[d.get("kind_name") or "Другое"] = kinds.get(d.get("kind_name") or "Другое", 0) + 1
+    srcs = {}
+    for d in lots:
+        srcs[d.get("source_name") or "Другое"] = srcs.get(d.get("source_name") or "Другое", 0) + 1
+    regs = {}
+    for d in lots:
+        if d.get("region") in REGIONS:
+            regs.setdefault(d["region"], []).append(d)
+    by_region = []
+    for code, xs in sorted(regs.items(), key=lambda kv: -len(kv[1]))[:15]:
+        fl = [x for x in xs if x.get("category") == "flat"]
+        by_region.append({"slug": REGIONS[code][0], "name": REGIONS[code][1], "count": len(xs), "flats": len(fl),
+                          "median_flat_price": med([x.get("price") for x in fl]),
+                          "median_flat_ppm2": med([x.get("ppm2") for x in fl])})
+    public = sum(1 for d in lots if "публичн" in (d.get("bidd_type") or "").lower())
+    repeat = sum(1 for d in lots if "повторные" in (d.get("flags") or ""))
+    closed = end < today
+    return {
+        "ym": ym, "month": MONTHS_RU[start.month - 1], "month_gen": MONTHS_GEN[start.month - 1], "month_prep": MONTHS_PREP[start.month - 1], "year": start.year,
+        "start": start.isoformat(), "end": end.isoformat(), "closed": closed,
+        "as_of": end.isoformat() if closed else today.isoformat(),
+        "count": n, "regions": len(regs),
+        "new": sum(1 for d in lots if start.isoformat() <= (d.get("first_seen") or "")[:10] <= end.isoformat()) if ym > INDEX_START else None,
+        "by_cat": by_cat,
+        "by_kind": sorted(kinds.items(), key=lambda kv: -kv[1]),
+        "by_source": sorted(srcs.items(), key=lambda kv: -kv[1]),
+        "by_region": by_region,
+        "public": public, "public_share": pct(public), "repeat": repeat, "repeat_share": pct(repeat),
+        "flats": len(flats), "flat_median_price": med([d.get("price") for d in flats]),
+        "flat_median_ppm2": med([d.get("ppm2") for d in flats]),
+        "flats_valued": len(valued), "flat_median_discount": round(statistics.median(valued)) if valued else None,
+        "flats_below10": round(100 * sum(1 for v in valued if v >= 10) / len(valued)) if valued else None,
+    }
+
+
+def index_csv(ix):
+    rows = [("показатель", "значение")]
+    rows += [("месяц", ix["ym"]), ("данные на", ix["as_of"]), ("лотов в продаже", ix["count"]), ("регионов", ix["regions"])]
+    if ix["new"] is not None:
+        rows.append(("новых лотов за месяц", ix["new"]))
+    rows += [("доля публичного предложения, %", ix["public_share"]), ("доля повторных торгов, %", ix["repeat_share"]),
+             ("квартир", ix["flats"]), ("медиана начальной цены квартиры, руб", ix["flat_median_price"] or ""),
+             ("медиана цены м² квартиры, руб", ix["flat_median_ppm2"] or ""),
+             ("квартир с оценкой рынка", ix["flats_valued"]),
+             ("медиана скидки квартиры к рынку, %", "" if ix["flat_median_discount"] is None else ix["flat_median_discount"]),
+             ("доля квартир дешевле рынка на 10% и больше, %", "" if ix["flats_below10"] is None else ix["flats_below10"])]
+    rows += [(f"категория: {c['name']}", c["count"]) for c in ix["by_cat"]]
+    rows += [(f"процедура: {k}", v) for k, v in ix["by_kind"]]
+    rows += [(f"площадка: {k}", v) for k, v in ix["by_source"]]
+    rows += [(f"регион: {r['name']}", r["count"]) for r in ix["by_region"]]
+    return "\n".join(";".join(str(x).replace(";", ",") for x in r) for r in rows) + "\n"
+
+
 def city_faq(cname, where, cs, region=False):
     """Вопросы и ответы для страницы города или региона: цифры из каталога, обновляются с каждой сборкой."""
     if not cs["count"]:
@@ -478,6 +597,17 @@ def build():
         ok = [x for x in r if x.get("result_status") == "SUCCEED"]
         ratios = [x["result_price"] / x["price"] for x in ok if x.get("result_price") and x.get("price")]
         res_rows.append((cslug, cname, len(r), round(100 * len(ok) / len(r)), median(ratios)))
+    indexes = [ix for ix in (month_index(CARDS, ym) for ym in index_months(CARDS)) if ix]
+    for i, ix in enumerate(indexes):
+        prev = indexes[i - 1] if i else None
+        write(f"/analitika/{ix['ym']}/", "index_month.html", priority="0.8", lastmod=ix["as_of"], ix=ix, prev=prev,
+              months=indexes,
+              title=f"Индекс торгов ТоргГид: {ix['month']} {ix['year']} — недвижимость с торгов в России",
+              description=f"{ix['count']} лотов недвижимости с торгов в {ix['regions']} регионах России {ix['month_prep']} {ix['year']}: "
+                          f"медианы цен, скидка квартир к рынку, доля публичного предложения и повторных торгов. "
+                          f"Данные на {date.fromisoformat(ix['as_of']).strftime('%d.%m.%Y')}, CSV для скачивания.")
+        (OUT / "analitika" / ix["ym"] / "indeks.csv").write_text(index_csv(ix), encoding="utf-8-sig")
+    env.globals["latest_index"] = indexes[-1] if indexes else None
     tot = city_stats(LOTS)
     write("/analitika/", "analytics.html", priority="0.8", rows=CITY_STATS, tot=tot, res_rows=res_rows,
           title=f"Статистика торгов недвижимостью по городам-миллионникам — {date.today().strftime('%m.%Y')}",
@@ -519,6 +649,12 @@ def build():
     facts = [f"- Активных лотов в каталоге: {st['count']} (данные на {TODAY}), новых за 7 дней: {st['week_new']}, приём заявок закрывается в ближайшие 3 дня: {st['closing']}."]
     if tot.get("median_ppm2"):
         facts.append(f"- Медиана начальной цены за м² по всему каталогу: {rub(tot['median_ppm2'])}; доля лотов-долей: {tot['share_doli']}%, повторных торгов: {tot['share_povt']}%.")
+    if indexes:
+        ix = indexes[-1]
+        facts.append(f"- Индекс торгов ТоргГид, {ix['month']} {ix['year']}: {ix['count']} лотов недвижимости в {ix['regions']} регионах"
+                     + (f", медиана начальной цены квартиры {rub(ix['flat_median_price'])}" if ix['flat_median_price'] else "")
+                     + (f", медиана скидки квартир к рынку {ix['flat_median_discount']}%" if ix['flat_median_discount'] is not None else "")
+                     + f", публичное предложение {ix['public_share']}% лотов ({cfg.SITE_URL}/analitika/{ix['ym']}/).")
     facts += ["- Источники: ГИС Торги (torgi.gov.ru) для арестованного и государственного имущества; электронные площадки банкротства по 127-ФЗ. Данные в карточке лота сверяйте с извещением организатора.",
               "- Задаток на торгах по банкротству не больше 20% начальной цены (ст. 110 127-ФЗ); оплата в течение 30 дней после подписания договора.",
               "- Повторные торги: начальная цена ниже на 10% (банкротство) или на 15% (арестованное имущество, 229-ФЗ)."]
@@ -543,7 +679,7 @@ def build():
 - [Калькулятор максимальной ставки]({cfg.SITE_URL}/kalkulyator-stavki/)
 - [Словарь терминов торгов]({cfg.SITE_URL}/slovar/)
 - [Статистика торгов по городам]({cfg.SITE_URL}/analitika/)
-- [Карта и фильтры каталога]({cfg.APP_URL}/)
+{f"- [Индекс торгов ТоргГид: {indexes[-1]['month']} {indexes[-1]['year']}]({cfg.SITE_URL}/analitika/{indexes[-1]['ym']}/): ежемесячные открытые данные по всей России, CSV" + chr(10) if indexes else ""}- [Карта и фильтры каталога]({cfg.APP_URL}/)
 
 ## Услуги и цены
 - Отчёт по лоту (Рентген): {cfg.REPORT_PRICE} ₽, в приложении {cfg.APP_URL}/
