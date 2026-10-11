@@ -1,5 +1,6 @@
 /
 /analitika/
+/analitika/2026-10/
 /avtor/ilya-smirnov/
 /byudzhet/
 /check/
@@ -15,8 +16,10 @@
 /slovar/
 /stati/
 /stati/ecp-dlya-torgov/
+/stati/edinstvennoe-zhile-bankrota/
 /stati/ipoteka-na-kvartiru-s-torgov/
 /stati/kak-kupit-kvartiru-na-torgah-po-bankrotstvu/
+/stati/kak-najti-kvartiry-pristavov/
 /stati/kak-rasschitat-stavku-na-torgah/
 /stati/kvartira-s-torgov-s-dolgami/
 /stati/osmotr-kvartiry-pered-torgami/
@@ -272,6 +275,7 @@
 /torgi/arhiv/page/3/
 /torgi/arhiv/page/4/
 /torgi/arhiv/page/5/
+/torgi/arhiv/page/6/
 /torgi/astrahanskaya-oblast/
 /torgi/astrahanskaya-oblast/arestovannoe/
 /torgi/astrahanskaya-oblast/arestovannoe/page/2/
@@ -1331,7 +1335,6 @@
 /torgi/do-5-mln/page/231/
 /torgi/do-5-mln/page/232/
 /torgi/do-5-mln/page/233/
-/torgi/do-5-mln/page/234/
 /torgi/do-5-mln/page/24/
 /torgi/do-5-mln/page/25/
 /torgi/do-5-mln/page/26/
@@ -13101,6 +13104,8 @@
 /torgi/lot/cdt-385118/
 /torgi/lot/cdt-385124/
 /torgi/lot/cdt-385125/
+/torgi/lot/cdt-385129/
+/torgi/lot/cdt-385131/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -20341,7 +20346,6 @@
 /torgi/tyumenskaya-oblast/do-5-mln/page/3/
 /torgi/tyumenskaya-oblast/do-5-mln/page/4/
 /torgi/tyumenskaya-oblast/do-5-mln/page/5/
-/torgi/tyumenskaya-oblast/do-5-mln/page/6/
 /torgi/tyumenskaya-oblast/doli/
 /torgi/tyumenskaya-oblast/doma/
 /torgi/tyumenskaya-oblast/garazhi/
