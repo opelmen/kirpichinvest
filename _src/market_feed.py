@@ -99,7 +99,7 @@ def verdict(d):
     disc, market, price = d.get("eff_discount"), d.get("eff_market"), d.get("price")
     if d.get("category") == "share":
         return ("mid", "Доля — только для опытных",
-                "Продаётся доля, а не целый объект: с рыночной ценой не сравнить, пользоваться и продать можно только договорившись с сособственниками.")
+                "Продаётся доля, а не целый объект: с рыночной ценой не сравнить, пользоваться объектом и распоряжаться долей можно только договорившись с сособственниками.")
     if (not market or disc is None or not price) and d.get("category") in NONRES:
         tail = f"Из извещения видно: {', '.join(high + other)}." if found else NO_RISKS
         name, cp, lp = NONRES[d["category"]], d.get("comps"), d.get("ppm2")
