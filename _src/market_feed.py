@@ -79,6 +79,10 @@ def mln(v):
     return f"{v / 1e6:.1f}".replace(".", ",") + " млн"
 
 
+def rub(v):
+    return f"{round(v):,}".replace(",", "\u00a0") + "\u00a0₽"
+
+
 # «Рисков не видно» звучит как чистая проверка, а мы видим только извещение: обременения и оспаривание не проверены.
 NO_RISKS = ("В извещении рисков не указано, но обременения и оспаривание сделок это не исключает: "
             "их покажут свежая выписка ЕГРН и картотека арбитражных дел.")
@@ -98,9 +102,28 @@ def verdict(d):
                 "Продаётся доля, а не целый объект: с рыночной ценой не сравнить, пользоваться и продать можно только договорившись с сособственниками.")
     if (not market or disc is None or not price) and d.get("category") in NONRES:
         tail = f"Из извещения видно: {', '.join(high + other)}." if found else NO_RISKS
-        return ("none", f"{NONRES[d['category']]}: оценка вручную",
-                "Для помещений, земли и гаражей автоматической оценки нет: аналогов мало и они слишком разные. "
-                f"Сравните цену за м² с объявлениями рядом или закажите проверку эксперта. {tail}")
+        name, cp, lp = NONRES[d["category"]], d.get("comps"), d.get("ppm2")
+        if not lp:
+            return ("none", f"{name}: оценка вручную",
+                    "Площадь в извещении не указана или указана неточно, поэтому цену за м² не сравнить с объявлениями: "
+                    f"такой объект оценивают по документам и осмотру. {tail}")
+        if cp and cp.get("n", 0) >= 5 and cp.get("ppm") and lp:
+            r = lp / cp["ppm"]
+            rel = ("заметно ниже" if r < 0.7 else "ниже" if r < 0.9 else "около" if r <= 1.1
+                   else "выше" if r <= 1.4 else "заметно выше")
+            return ("none", f"{name}: сравнили с объявлениями",
+                    f"Цена м² лота {rub(lp)} — {rel} середины {cp['n']} похожих объявлений рядом "
+                    f"({rub(cp['ppm'])} за м², {cp.get('radius') or 'рядом'}). Это ориентир, а не оценка: объекты разные, "
+                    f"сверьте назначение, состояние и коммуникации. {tail}")
+        if cp and cp.get("n") and cp.get("ppm") and lp:
+            return ("none", f"{name}: аналогов мало",
+                    f"Рядом нашлось только {cp['n']} похожих объявлений ({cp.get('radius') or 'рядом'}), сравнение грубое: "
+                    f"у них около {rub(cp['ppm'])} за м², у лота {rub(lp)}. {tail}")
+        if cp:
+            return ("none", f"{name}: аналогов рядом нет",
+                    f"Похожих объявлений рядом нет, сравнить не с чем: такой объект оценивают по документам и осмотру. {tail}")
+        return ("none", f"{name}: ищем объявления",
+                f"Похожие объявления рядом ещё подбираем, подборка появится в приложении. {tail}")
     if not market or disc is None or not price:
         tail = f"Из извещения видно: {', '.join(high + other)}." if found else NO_RISKS
         return ("none", "Нужна оценка рынка", f"Рыночной цены пока нет, поэтому выгоду не посчитать. {tail}")
@@ -154,6 +177,7 @@ def from_market(rows):
             "liq": None if rough else r.get("liq_price"),
             "flags": ", ".join(dict.fromkeys(flags)), "risks": r.get("risks") or [], "own_time": r.get("own_time"),
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
+            "comps": r.get("comps") if cat in NONRES and ppm2 else None,
         }
         if r.get("market_conf") == "low" and cat not in NONRES and cat != "share" and r.get("market_price"):
             d["city_market"] = r["market_price"]  # грубый ориентир по городу: показываем суммой, без процента
