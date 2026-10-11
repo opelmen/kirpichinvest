@@ -7,21 +7,26 @@
 {% if budget %}<p class="lead">{{ budget.count }} предложений с указанной ценой до {{ budget.cap|rub }}. Сортировка от меньшей цены. Это цена лота в источнике, а не полный бюджет покупки; ставка может вырасти.</p>
 <p class="note">В подборке: {{ budget.shares }} с отметкой «доля», {{ budget.rooms }} с отметкой комнаты без отметки доли, {{ budget.other }} — без этих отметок. Отсутствие отметки не подтверждает продажу квартиры целиком. Все сведения нужно сверить с документами организатора.</p>
 <p><a href="/byudzhet/">Сравнить бюджеты и города</a> · <a href="/kalkulyator-stavki/">Рассчитать максимальную ставку</a> · <a href="/stati/kvartira-s-torgov-s-dolgami/">Какие долги учитывать</a></p>
-{% elif archive %}<p class="lead">Завершённые или отсутствующие в текущем источнике предложения: {{ st.count }} карточек. Истечение срока заявки не подтверждает продажу объекта. Актуальные предложения — в <a href="/torgi/">каталоге</a>.</p>{% else %}<p class="lead">{% if wide %}Недвижимость, которая сейчас продаётся на торгах по банкротству и арестованному имуществу{% else %}Жилые помещения, которые сейчас продаются на торгах{% endif %}: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным {{ "ГИС Торги и площадок банкротства" if wide else "ГИС Торги" }}. <a href="{{ cfg.APP_URL }}/">Открыть на карте с фильтрами</a>.</p>{% endif %}
+{% elif archive %}<p class="lead">Завершённые или отсутствующие в текущем источнике предложения: {{ st.count }} карточек. Истечение срока заявки не подтверждает продажу объекта. Актуальные предложения — в <a href="/torgi/">каталоге</a>.</p>{% else %}<p class="lead">{% if wide %}Недвижимость, которая сейчас продаётся на торгах по банкротству и арестованному имуществу{% else %}Жилые помещения, которые сейчас продаются на торгах{% endif %}: {{ st.count }} лотов{% if st.median_ppm2 %}, медиана начальной цены — {{ st.median_ppm2|rub }} за м²{% endif %}. Список обновляется несколько раз в день по данным {{ "ГИС Торги и площадок банкротства" if wide else "ГИС Торги" }}.</p>{% endif %}
 {% if has_archive and not archive %}<p><a href="/torgi/arhiv/">Архив предложений</a></p>{% endif %}
 {% if not budget and not archive %}<p><a href="/byudzhet/">Что можно найти до 1, 2 и 3 млн рублей</a></p>{% endif %}
-<nav class="filters" aria-label="Подборки">{% for u, n in facet_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>
-{% if town_links %}<nav class="filters" aria-label="Районы и города"><span class="mute small" style="align-self:center">{{ "Регионы:" if town_links[0][0] in region_paths else "Районы и города:" }}</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}
+{% macro chips(links, label) %}<nav class="filters" aria-label="{{ label }}">{% for u, n in links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endmacro %}
+{% if facet_links|length > 12 %}<details class="places"><summary>{{ "Города" if facet_links[1][0][7:-1] in (cities|map(attribute=0)|list) else "Подборки" }} ({{ facet_links|length - 1 }})</summary>{{ chips(facet_links, "Подборки") }}</details>{% else %}{{ chips(facet_links, "Подборки") }}{% endif %}
+{% if town_links %}{% set tl_label = ("Город или регион" if path == "/torgi/" else ("Регионы" if town_links[0][0] in region_paths else "Районы и города")) %}
+{% if town_links|length > 12 %}<details class="places"><summary>{{ tl_label }} ({{ town_links|length }})</summary>{{ chips(town_links, tl_label) }}</details>{% else %}<nav class="filters" aria-label="{{ tl_label }}"><span class="mute small" style="align-self:center">{{ tl_label }}:</span>{% for u, n in town_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}{% endif %}
+{% if not archive %}<div class="appbar"><p><b>Удобнее искать на платформе:</b> карта, фильтры по цене, площади и дисконту, фото и документы торгов, уведомления о снижении цены.</p><a class="btn" href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=catalog">Открыть поиск на карте</a></div>{% endif %}
+{% set cslug = (path.split('/')[2] if path.count('/') >= 3 else '') %}
+{% set other_cities = cities|rejectattr(0, "equalto", cslug)|selectattr(3)|list %}
+{% if path == '/torgi/' ~ cslug ~ '/' and cslug in (cities|map(attribute=0)|list) and other_cities %}<nav class="filters" aria-label="Другие города"><span class="mute small" style="align-self:center">Другие города:</span>{% for slug, name, where, n in other_cities %}<a href="/torgi/{{ slug }}/">{{ name }}</a>{% endfor %}</nav>{% endif %}
 {% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
 <th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
 <tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
-<p class="mute small">Данные на {{ today }} по открытому реестру ГИС Торги. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
-{% set cslug = (path.split('/')[2] if path.count('/') >= 3 else '') %}
-<div style="margin:0 0 20px">{{ tg_block(cslug if cslug in (cities|map(attribute=0)|list) else "", "") }}</div>
+<p class="mute small">Данные на {{ today }} по {{ "ГИС Торги и площадкам банкротства" if wide else "открытому реестру ГИС Торги" }}. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
 {% if path == '/torgi/doli/' %}{% include "_share_guide.html" %}{% elif '/doli/' in path and current_page == 1 %}<p><a href="/torgi/doli/#kak-proverit">Доля или комната: что проверить до ставки</a></p>{% endif %}
 <div class="lots">
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
+    {% if d.photo %}<img class="thumb" src="{{ d.photo }}" alt="" width="320" height="200" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
     <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{% if d.category %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>{% if budget %}<span class="small">{{ object_group(d) }}</span>{% endif %}
     {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}
@@ -33,6 +38,7 @@
   </a>
 {% else %}<p>Сейчас в этой подборке нет активных лотов. Оставьте заявку — пришлём, как только появятся.</p>{% endfor %}
 </div>
+<div style="margin:20px 0">{{ tg_block(cslug if cslug in (cities|map(attribute=0)|list) else "", "") }}</div>
 {% if pagination|length > 1 %}<nav class="filters" aria-label="Страницы каталога">{% for url, number in pagination %}<a href="{{ url }}" {% if number == current_page %}aria-current="page"{% endif %}>{{ number }}</a>{% endfor %}</nav>{% endif %}
 {% if faq %}<section style="padding-bottom:0"><div class="faq"><h2>Коротко о торгах в этом городе</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>{% endif %}
 <section><div class="split">

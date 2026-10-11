@@ -10,3 +10,4 @@ kirpichinvest.ru — сайт о покупке жилья с торгов (СП
 - check/ — редирект в сервис проверки заявок.
 - _src/semantics.py / semantics.csv — семантическое ядро (частотность снять в Вордстате).
 - _src/config.json (необязательно) — реквизиты, цены, счётчик Метрики: SITE_INN, SITE_OGRNIP, PRICE_BUY, PRICE_CHECK, METRIKA_ID.
+  Профили бренда вне сайта (попадают в подвал, «О нас», sameAs и llms.txt): YANDEX_MAPS_URL, VK_URL, DZEN_URL, SAME_AS (список прочих, например 2ГИС).

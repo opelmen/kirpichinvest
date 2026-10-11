@@ -24,24 +24,52 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/static/brand/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
-<link rel="stylesheet" href="/static/site.css?v=5">
+<link rel="stylesheet" href="/static/site.css?v=7">
+{% set org_id = cfg.SITE_URL ~ "/#org" %}{% set person_id = cfg.SITE_URL ~ author.path ~ "#person" %}
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
-  "name": cfg.SITE_NAME,
-  "legalName": cfg.SITE_OWNER,
-  "url": cfg.SITE_URL,
-  "logo": cfg.SITE_URL + "/static/brand/icon-512.png",
-  "image": cfg.SITE_URL + "/static/brand/og-image.png",
-  "telephone": cfg.SITE_PHONE,
-  "email": cfg.SITE_EMAIL,
-  "description": "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в городах-миллионниках России и в 100 км от них. Не является организатором торгов.",
-  "areaServed": cities|map(attribute=1)|list,
-  "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
-  "founder": {"@type": "Person", "name": author.name, "jobTitle": author.role, "sameAs": [cfg.SITE_TELEGRAM] if cfg.SITE_TELEGRAM else []},
-  "sameAs": [cfg.TG_CHANNEL, cfg.TG_BOT, cfg.APP_URL]|select|list,
-  "knowsAbout": ["торги по банкротству", "арестованное имущество", "публичное предложение", "проверка лота перед торгами"],
-  "taxID": cfg.SITE_INN or None
+  "@graph": [{
+    "@type": "RealEstateAgent",
+    "@id": org_id,
+    "name": cfg.SITE_NAME,
+    "alternateName": ["Торггид", "TorgGid", "torggid.ru"],
+    "legalName": cfg.SITE_OWNER,
+    "url": cfg.SITE_URL,
+    "logo": cfg.SITE_URL + "/static/brand/icon-512.png",
+    "image": cfg.SITE_URL + "/static/brand/og-image.png",
+    "telephone": cfg.SITE_PHONE,
+    "email": cfg.SITE_EMAIL,
+    "description": ("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России, проверка лотов и сопровождение покупки. Не является организатором торгов." if wide
+                    else "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в городах-миллионниках России и в 100 км от них. Не является организатором торгов."),
+    "areaServed": ({"@type": "Country", "name": "Россия"} if wide else cities|map(attribute=1)|list),
+    "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
+    "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": hours[1], "opens": hours[2], "closes": hours[3]},
+    "contactPoint": {"@type": "ContactPoint", "telephone": cfg.SITE_PHONE, "email": cfg.SITE_EMAIL, "contactType": "customer service", "areaServed": "RU", "availableLanguage": "ru"},
+    "founder": {"@id": person_id},
+    "sameAs": same_as(),
+    "knowsAbout": ["торги по банкротству", "арестованное имущество", "публичное предложение", "повторные торги", "проверка лота перед торгами", "недвижимость с торгов"],
+    "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Услуги на торгах", "itemListElement": ([
+      {"@type": "Offer", "price": cfg.REPORT_PRICE, "priceCurrency": "RUB", "url": cfg.APP_URL ~ "/", "itemOffered": {"@type": "Service", "name": "Отчёт по лоту (Рентген)"}}]
+      + ([{"@type": "Offer", "price": cfg.PRICE_CHECK|digits, "priceCurrency": "RUB", "url": cfg.SITE_URL ~ "/proverka-lota/", "itemOffered": {"@type": "Service", "name": "Полная проверка лота перед торгами"}}] if cfg.PRICE_CHECK else [])
+      + [{"@type": "Offer", "price": 10000, "priceCurrency": "RUB", "url": cfg.SITE_URL ~ "/kupit-kvartiru-s-torgov/", "description": "10 000 ₽ при заказе + 2% от цены покупки при победе", "itemOffered": {"@type": "Service", "name": "Покупка квартиры с торгов под ключ"}}])},
+    "taxID": cfg.SITE_INN or None
+  }, {
+    "@type": "WebSite",
+    "@id": cfg.SITE_URL ~ "/#website",
+    "name": cfg.SITE_NAME,
+    "alternateName": ["Торггид", "torggid.ru"],
+    "url": cfg.SITE_URL,
+    "inLanguage": "ru-RU",
+    "publisher": {"@id": org_id}
+  }, {
+    "@type": "Person",
+    "@id": person_id,
+    "name": author.name,
+    "jobTitle": author.role,
+    "url": cfg.SITE_URL ~ author.path,
+    "worksFor": {"@id": org_id},
+    "sameAs": [cfg.SITE_TELEGRAM] if cfg.SITE_TELEGRAM else []
+  }]
 } | tojson }}</script>
 {% block ld %}{% endblock %}
 {% if cfg.METRIKA_ID %}<!-- Yandex.Metrika counter -->
@@ -55,12 +83,13 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
 <!-- /Yandex.Metrika counter -->{% endif %}
 </head>
 <body>
+<a class="skip" href="#main">К содержанию</a>
 <header class="top"><div class="wrap">
   <a class="logo" href="/"><img src="/static/brand/logo-light.svg" alt="{{ cfg.SITE_NAME }}" width="141" height="36"></a>
   <button class="burger" aria-label="Меню" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰ Меню</button>
   <nav class="nav">
     <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Каталог</a>
-    <a href="{{ cfg.APP_URL }}/">Карта</a>
+    <a href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=nav">Поиск на карте</a>
     {% if cfg.AUTO_URL %}<a href="{{ cfg.AUTO_URL }}">Авто</a>{% endif %}
     <a href="/kupit-kvartiru-s-torgov/" {% if path.startswith('/kupit') %}aria-current="page"{% endif %}>Под ключ</a>
     <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>
@@ -74,13 +103,13 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   {% if cfg.TG_CHANNEL %}<a class="head-tg" href="{{ cfg.TG_CHANNEL }}" title="Telegram-канал: лот дня" aria-label="Telegram-канал"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13.1l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 2.8c.9-.3 1.7.2 1.4 1.5z"/></svg></a>{% endif %}
   <a class="btn head-cta" href="/#zayavka">Оставить заявку</a>
 </div></header>
-<main>{% block main %}{% endblock %}
+<main id="main">{% block main %}{% endblock %}
 {% from "_form.html" import tg_block %}{% block tgglobal %}<section style="padding:0 0 48px"><div class="wrap">{{ tg_block() }}</div></section>{% endblock %}</main>
 <footer><div class="wrap">
   <div class="cols">
     <div>
-      <p><b style="color:#fff">{{ cfg.SITE_NAME }}</b> — подбор, проверка и сопровождение покупки жилья с торгов в 16 городах-миллионниках России и в 100 км от них.</p>
-      <p>Мы не организатор торгов и не продавец лотов. Информация о лотах взята из открытых источников (ГИС Торги) и носит справочный характер. Сайт не является публичной офертой.</p>
+      <p><b style="color:#fff">{{ cfg.SITE_NAME }}</b> — {% if wide %}каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России, проверка лотов и сопровождение покупки.{% else %}подбор, проверка и сопровождение покупки жилья с торгов в 16 городах-миллионниках России и в 100 км от них.{% endif %}</p>
+      <p>Мы не организатор торгов и не продавец лотов. Информация о лотах взята из открытых источников ({{ "ГИС Торги и электронные площадки банкротства" if wide else "ГИС Торги" }}) и носит справочный характер. Сайт не является публичной офертой.</p>
       <p>{{ cfg.SITE_OWNER }}{% if cfg.SITE_INN %} · ИНН {{ cfg.SITE_INN }}{% endif %}{% if cfg.SITE_OGRNIP %} · ОГРНИП {{ cfg.SITE_OGRNIP }}{% endif %}<br>{{ cfg.SITE_ADDRESS }}</p>
     </div>
     <div><h3>Разделы</h3><ul>
@@ -93,7 +122,11 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
       <li><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></li>
       {% if cfg.TG_CHANNEL %}<li><a href="{{ cfg.TG_CHANNEL }}">Telegram-канал: лот дня</a></li>{% endif %}
       {% if cfg.TG_BOT %}<li><a href="{{ cfg.TG_BOT }}">Бот: подборка лотов</a></li>{% endif %}
-      <li><a href="/o-nas/">О нас и реквизиты</a></li><li><a href="/politika/">Политика обработки ПД</a></li></ul></div>
+      <li>{{ hours[0] }}</li>
+      {% if cfg.YANDEX_MAPS_URL %}<li><a href="{{ cfg.YANDEX_MAPS_URL }}">Мы на Яндекс Картах: отзывы</a></li>{% endif %}
+      {% if cfg.VK_URL %}<li><a href="{{ cfg.VK_URL }}">ВКонтакте</a></li>{% endif %}
+      {% if cfg.DZEN_URL %}<li><a href="{{ cfg.DZEN_URL }}">Дзен</a></li>{% endif %}
+      <li><a href="/o-nas/">О нас и реквизиты</a></li><li><a href="{{ author.path }}">Об авторе статей</a></li><li><a href="/politika/">Политика обработки ПД</a></li></ul></div>
   </div>
   <p style="margin-top:24px">© {{ year }} {{ cfg.SITE_NAME }}</p>
 </div></footer>

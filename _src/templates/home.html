@@ -14,7 +14,8 @@
     <p class="lead">Что продаётся на самом деле, сколько это будет стоить вам, что может пойти не так и сколько ставить. И напишем, когда цена дойдёт до вашей.</p>
     {% else %}<h1>Квартиры с торгов в 16 городах-миллионниках России</h1>
     <p class="lead">Находим лоты, проверяем риски до подачи заявки и считаем максимальную ставку. Покупаете на своё имя, деньги идут напрямую на площадку и продавцу.</p>{% endif %}
-    <div class="cta"><a class="btn" href="/torgi/">Смотреть лоты</a><a class="btn ghost" href="#zayavka">{{ "Подобрать объект" if wide else "Подобрать квартиру" }}</a></div>
+    <div class="cta"><a class="btn" href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=home&amp;utm_campaign=hero">Найти лот на карте</a><a class="btn ghost" href="/torgi/vygodnye/">Лоты дешевле рынка</a></div>
+    <p class="mute small" style="margin:-8px 0 18px">Карта, фильтры, фото и документы торгов, Рентген каждого лота — на платформе {{ cfg.SITE_NAME }}. Бесплатно, без регистрации. Нужна помощь? <a class="alt-link" href="#zayavka">Подберём объект с экспертом</a>.</p>
     <div class="facts">
       <div><b>{{ st.count }}</b><span>{{ "лотов на торгах сейчас" if wide else "активных лотов жилья" }}</span></div>
       <div><b>{{ st.week_new }}</b><span>новых за 7 дней</span></div>
@@ -23,15 +24,20 @@
     </div>
   </div>
   <div class="board">
-    <h2>Свежие лоты с торгов</h2>
+    {% if board_deals %}<h2>Дешевле рынка: квартиры и дома целиком</h2>
+    <p class="board-note">Без долей, комнат и серьёзных рисков в извещении. Рынок — наша оценка по похожим объявлениям рядом, ориентир, а не отчёт оценщика.</p>
+    {% else %}<h2>Новые квартиры и дома с торгов</h2>{% endif %}
     {% for d in lots %}
     <a class="lotrow" href="/torgi/lot/{{ d.id }}/">
-      <span class="addr">{% if wide %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:90] }}</span><span class="price">{{ d.price|rub }}</span>
-      <span class="meta">{% if d.area %}{{ d.area|round(1) }} м² · {% endif %}{% if d.eff_market %}рынок ≈ {{ d.eff_market|rub }}{% elif d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
-      <span>{% if d.eff_discount and d.eff_discount > 0 %}<span class="tag">−{{ d.eff_discount|round|int }}% к рынку</span>{% elif d.city_market %}<span class="tag">ниже средней по городу</span>{% elif d.days_left is not none and d.days_left >= 0 %}<span class="tag">заявки ещё {{ d.days_left|round|int }} дн.</span>{% endif %}</span>
+      <span class="addr"><b>{{ d.label }}</b><br>{{ d.caddr[:90] }}</span>
+      <span class="price">{{ d.price|rub }}{% if d.eff_discount and d.eff_discount > 0 %}<span class="disc">−{{ d.eff_discount|round|int }}%</span>{% endif %}</span>
+      <span class="meta">{% if d.eff_market %}рынок ≈ {{ d.eff_market|rub }}{% if d.eff_market > d.price %} · выгода ≈ {{ (d.eff_market - d.price)|rub }}{% endif %}{% elif d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
+      <span class="meta" style="text-align:right">{% if d.days_left is not none and d.days_left >= 0 %}заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
     </a>
     {% else %}<p style="padding:12px">Лоты загружаются. Загляните через несколько минут.</p>{% endfor %}
-    <a class="more" href="/torgi/">Все лоты</a>
+    {% if board_deals %}<a class="more" href="/torgi/vygodnye/">Все {{ deals_count }} выгодных лотов</a>{% else %}<a class="more" href="/torgi/">Все лоты</a>{% endif %}
+    <p class="trust">Данные ГИС Торги и площадок банкротства, обновлено {{ today }}.</p>
+    <a class="more more-app" href="{{ cfg.APP_URL }}/?category=flat&amp;category=house&amp;discount_min=10&amp;utm_source=torggid&amp;utm_medium=home&amp;utm_campaign=board">Подобрать на карте с фильтрами →</a>
   </div>
 </div></div>
 

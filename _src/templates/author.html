@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% from "_form.html" import lead_form %}{% block og_type %}profile{% endblock %}
+{% block ld %}{{ ld({"@context":"https://schema.org","@type":"ProfilePage","url":canonical,"inLanguage":"ru-RU","dateModified":updated,
+ "mainEntity":{"@id":cfg.SITE_URL ~ author.path ~ "#person"},
+ "hasPart":parts}) }}{{ crumbs_ld([("Главная","/"),("О нас","/o-nas/"),(author.name, path)]) }}{% endblock %}
+{% block main %}<div class="wrap">
+<p class="crumbs"><a href="/">Главная</a> / <a href="/o-nas/">О нас</a> / {{ author.name }}</p>
+<div class="split" style="padding-bottom:64px">
+<div>
+<h1>{{ author.name }}</h1>
+<p class="lead">{{ author.name }} — {{ author.role }}, основатель {{ cfg.SITE_NAME }}. Работает с проблемными и залоговыми активами: подбирает, проверяет и сопровождает покупку недвижимости с торгов по банкротству и реализации арестованного имущества.</p>
+<h2>Чем занимается в {{ cfg.SITE_NAME }}</h2>
+<ul>
+<li>Пишет и обновляет статьи о торгах: процедура, задаток, повторные торги, проверка лота, долги и жильцы.</li>
+<li>Отвечает за методику проверки лота и расчёта максимальной ставки, которую используют <a href="/proverka-lota/">проверка лота</a> и <a href="/kalkulyator-stavki/">калькулятор</a>.</li>
+<li>Ведёт сделки клиентов: проверка документов, участие в торгах, сопровождение до регистрации права. Условия — на странице <a href="/uslugi/">услуг</a>.</li>
+</ul>
+<h2>Как готовятся материалы</h2>
+<p>В статьях указываются статьи законов с номерами и дата обновления. Цифры по рынку берутся из каталога {{ cfg.SITE_NAME }} и привязаны к дате сборки. Если факт нельзя подтвердить документом, он так и помечен. Материалы справочные и не заменяют юридическую консультацию по конкретному лоту.</p>
+<h2>Статьи автора</h2>
+<ul>{% for a in articles %}<li><a href="/stati/{{ a.slug }}/">{{ a.title }}</a> <span class="mute small">обновлено {{ a.updated or a.date }}</span></li>{% endfor %}</ul>
+<h2>Связаться</h2>
+<table class="t">
+{% if cfg.SITE_TELEGRAM %}<tr><th>Telegram</th><td><a href="{{ cfg.SITE_TELEGRAM }}">написать</a></td></tr>{% endif %}
+<tr><th>Телефон</th><td><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></td></tr>
+<tr><th>Почта</th><td><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></td></tr></table>
+</div>
+{{ lead_form("buy", "Задать вопрос", "", "Отправить", [{"name":"q","label":"Вопрос","area":true}]) }}
+</div></div>{% endblock %}

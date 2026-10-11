@@ -27,13 +27,15 @@ cfg = SimpleNamespace(
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
     YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
-    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490)
+    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
+    YANDEX_MAPS_URL="", VK_URL="", DZEN_URL="", SAME_AS=[])  # карточка в Яндекс Бизнесе и соцсети: попадают в sameAs и подвал
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
     for k, v in json.loads(cfg_file.read_text(encoding="utf-8")).items():
         setattr(cfg, k, v)
 
-AUTHOR = {"name": "Илья Смирнов", "role": "брокер по недвижимости и залоговым сделкам, Санкт-Петербург"}
+AUTHOR = {"name": "Илья Смирнов", "role": "брокер по недвижимости и залоговым сделкам, Санкт-Петербург", "path": "/avtor/ilya-smirnov/"}
+HOURS = ("Пн–Пт, 10:00–19:00", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "10:00", "19:00")
 TODAY = date.today().isoformat()
 
 
@@ -66,12 +68,18 @@ def list_ld(name, url, total, lots, offset=0):
 env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]))
 env.globals["list_ld"] = list_ld
 env.filters["rub"] = rub
+env.filters["digits"] = lambda v: int(re.sub(r"\D", "", str(v)) or 0)
 env.globals["object_group"] = object_group
 def terms_list(terms):
     return [{"@type": "DefinedTerm", "name": t, "description": d, "url": f"{cfg.SITE_URL}/slovar/#{s}"} for t, s, d in terms]
 
 
-env.globals.update(terms_list=terms_list, cfg=cfg, year=date.today().year, today=date.today().strftime("%d.%m.%Y"), author=AUTHOR, ld=ld, faq_ld=faq_ld, crumbs_ld=crumbs_ld)
+def same_as():
+    """Профили бренда вне сайта: нейросети и Яндекс сверяют по ним, что ТоргГид — одна и та же организация."""
+    return list(dict.fromkeys(u for u in [cfg.YANDEX_MAPS_URL, cfg.TG_CHANNEL, cfg.VK_URL, cfg.DZEN_URL, cfg.TG_BOT, *cfg.SAME_AS] if u))
+
+
+env.globals.update(terms_list=terms_list, cfg=cfg, same_as=same_as, hours=HOURS, year=date.today().year, today=date.today().strftime("%d.%m.%Y"), author=AUTHOR, ld=ld, faq_ld=faq_ld, crumbs_ld=crumbs_ld)
 
 # ---------- статьи ----------
 ARTICLES = []
@@ -173,7 +181,30 @@ def lo_town(d):
     return None if (t and t in CITY_NAME.values()) else t
 
 
+def good_deal(d):
+    """«Нормальный» выгодный лот для витрины: квартира или дом целиком, понятный адрес, оценка рынка по аналогам,
+    скидка 10–50% (больше — чаще ошибка оценки), без серьёзных рисков в извещении и не в последний день приёма заявок."""
+    cat, area, disc, flags = d.get("category") or "flat", d.get("area"), d.get("eff_discount"), d.get("flags") or ""
+    return (cat in ("flat", "house") and bool(d.get("eff_market")) and disc is not None and 10 <= disc <= 50
+            and "доля" not in flags and "комната" not in flags
+            and not any(r.get("level") == "high" for r in d.get("risks") or [])
+            and bool(area) and (20 <= area <= 250 if cat == "flat" else 30 <= area <= 600)
+            and (d.get("price") or 0) >= 300_000
+            and len(d.get("caddr") or "") >= 15 and d.get("caddr") not in CITY_NAME.values()
+            and (d.get("days_left") is None or d["days_left"] >= 2))
+
+
+def facet_lots(f, lots):
+    sel = [d for d in lots if f[2](d)]
+    return by_discount(sel) if f[0] == "vygodnye" else sel
+
+
+def by_discount(lots):
+    return sorted(lots, key=lambda d: (-(d.get("eff_discount") or 0), d["id"]))
+
+
 FACETS = [  # slug, название, фильтр, заголовок-формулировка
+    ("vygodnye", "Дешевле рынка", good_deal, "Квартиры и дома с торгов дешевле рынка"),
     ("odnokomnatnye", "Однокомнатные", lambda d: d.get("rooms") == 1, "Однокомнатные квартиры с торгов"),
     ("dvuhkomnatnye", "Двухкомнатные", lambda d: d.get("rooms") == 2, "Двухкомнатные квартиры с торгов"),
     ("trehkomnatnye", "Трёхкомнатные и больше", lambda d: (d.get("rooms") or 0) >= 3, "Трёх- и многокомнатные квартиры с торгов"),
@@ -304,11 +335,24 @@ def build():
     env.globals["region_paths"] = {f"/torgi/{r[0]}/" for r in REGIONS.values()}
     env.globals["cities"] = [(c[0], c[1], c[2], city_counts[c[0]]) for c in CITIES]
     st = stats(LOTS)
-    # на главной только жильё с правдоподобной ценой, свежие сверху: земля и цены-«кадастровые номера» не попадают
-    sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)]
-    board = sorted([d for d in sane if d.get("category", "flat") in ("flat", "room", "house")] if WIDE else sane,
-                   key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
-    write("/", "home.html", priority="1.0", lots=board, st=st, articles=ARTICLES[:6],
+    # на главной — самые выгодные понятные объекты: квартиры и дома целиком с оценкой рынка, не больше двух из одного города,
+    # чтобы витрина не состояла из одной Москвы; если таких мало, показываем свежее жильё с правдоподобной ценой
+    deals = by_discount([d for d in LOTS if good_deal(d)])
+    board, per_place = [], {}
+    for d in deals:
+        place = d.get("city") or d.get("region")
+        if per_place.get(place, 0) < 2:
+            board.append(d)
+            per_place[place] = per_place.get(place, 0) + 1
+        if len(board) == 6:
+            break
+    board += [d for d in deals if d not in board][:6 - len(board)]  # городов с выгодными лотами мало — добираем без ограничения
+    board_deals = len(board) >= 3
+    if not board_deals:
+        sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)
+                and d.get("category", "flat") in ("flat", "house") and "доля" not in (d.get("flags") or "")]
+        board = sorted(sane, key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
+    write("/", "home.html", priority="1.0", lots=board, board_deals=board_deals, deals_count=len(deals), st=st, articles=ARTICLES[:6],
           title=(f"Недвижимость с торгов по всей России — {cfg.SITE_NAME}" if WIDE else f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}"),
           description=("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России: квартиры, дома, земля, коммерция. Цена к рынку, риски, сроки заявок и расчёт максимальной ставки."
                        if WIDE else "Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки."))
@@ -318,12 +362,15 @@ def build():
         page_size = 60
         count = max(1, (len(lots) + page_size - 1) // page_size)
         pages = [(path if n == 1 else f"{path}page/{n}/", n) for n in range(1, count + 1)]
+        # дата изменения списка — последнее изменение его лотов, а не дата сборки: иначе lastmod меняется
+        # у всех страниц несколько раз в день и поисковики перестают ему доверять
+        lastmod = max((d.get("lastmod") or "" for d in lots), default="") or TODAY
         for url, n in pages:
             suffix = f" — страница {n}" if n > 1 else ""
             page_crumbs = crumbs + ([(f"Страница {n}", url)] if n > 1 else [])
             description = (f"{h1}: {len(lots)} карточек. История предложений, сроки и ссылки на источники. Результат продажи не подтверждён."
                            if archive else f"{h1}: {len(lots)} актуальных лотов — цены, сроки заявок и сведения об объектах.")
-            write(url, "torgi.html", priority=priority, lots=lots[(n-1)*page_size:n*page_size],
+            write(url, "torgi.html", priority=priority, lastmod=lastmod, lots=lots[(n-1)*page_size:n*page_size],
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots, faq=(faq or []) if n == 1 else [],
                   cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget,
@@ -347,11 +394,12 @@ def build():
         if d.get("region") in REGIONS and d["region"] not in ("77", "78"):  # Москва и Петербург — страницы городов
             by_region.setdefault(d["region"], []).append(d)
     region_links = sorted(((f"/torgi/{REGIONS[c][0]}/", f"{REGIONS[c][1]} ({len(v)})") for c, v in by_region.items()), key=lambda x: x[1])
+    # на общей странице каталога наверху только подборки; города и регионы — в свёрнутом списке, чтобы лоты были видны сразу
     listing("/torgi/", LOTS, f"{OBJ} с торгов {GEO}", [("Лоты", "/torgi/")],
-            city_links + [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], region_links, priority="0.9")
+            [(f"/torgi/{f[0]}/", f[1]) for f in FACETS if any(f[2](d) for d in LOTS)], city_links[1:] + region_links, priority="0.9")
     for code, rl in by_region.items():
         rslug, rname, rwhere = REGIONS[code]
-        rfacets = [(f, [d for d in rl if f[2](d)]) for f in FACETS]
+        rfacets = [(f, facet_lots(f, rl)) for f in FACETS]
         rfacets = [(f, v) for f, v in rfacets if len(v) >= 3]
         rlinks = [(f"/torgi/{rslug}/", "Все")] + [(f"/torgi/{rslug}/{f[0]}/", f[1]) for f, v in rfacets]
         rcrumbs = [("Лоты", "/torgi/"), (rname, f"/torgi/{rslug}/")]
@@ -361,7 +409,7 @@ def build():
         for f, v in rfacets:
             listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
-        fl = [d for d in LOTS if flt(d)]
+        fl = facet_lots((slug, name, flt, h1), LOTS)
         if fl or slug == "doli":
             listing(f"/torgi/{slug}/", fl, f"{h1} {GEO}", [("Лоты", "/torgi/"), (name, f"/torgi/{slug}/")], city_links)
     for cslug, cname, where in CITIES:
@@ -373,7 +421,7 @@ def build():
                     subs.setdefault(t, []).append(d)
         subs = {t: v for t, v in subs.items() if len(v) >= 2 or ("район" in t or "округ" in t)}
         sub_links = [(f"/torgi/{cslug}/{translit(t)}/", f"{t} ({len(v)})") for t, v in subs.items()]
-        facets_here = [(f, [d for d in cl if f[2](d)]) for f in FACETS]
+        facets_here = [(f, facet_lots(f, cl)) for f in FACETS]
         facets_here = [(f, v) for f, v in facets_here if len(v) >= 3]
         links = [(f"/torgi/{cslug}/", "Все")] + [(f"/torgi/{cslug}/{f[0]}/", f[1]) for f, v in facets_here]
         base_crumbs = [("Лоты", "/torgi/"), (cname, f"/torgi/{cslug}/")]
@@ -447,6 +495,12 @@ def build():
         related.extend(candidates.values())
         write(f"/stati/{a['slug']}/", "article.html", priority="0.7", lastmod=a.get("updated") or a.get("date") or TODAY,
               a=a, related=related[:4], title=a["title"], description=a["description"])
+    write(AUTHOR["path"], "author.html", priority="0.5", articles=ARTICLES,
+          parts=[{"@type": "Article", "headline": a["title"], "url": f"{cfg.SITE_URL}/stati/{a['slug']}/"} for a in ARTICLES],
+          updated=max((a.get("updated") or a.get("date") or TODAY for a in ARTICLES), default=TODAY),
+          lastmod=max((a.get("updated") or a.get("date") or TODAY for a in ARTICLES), default=TODAY),
+          title=f"{AUTHOR['name']} — автор статей о торгах недвижимостью",
+          description=f"{AUTHOR['name']}, {AUTHOR['role']}. Статьи о торгах по банкротству и арестованному имуществу, проверке лотов и расчёте ставки.")
     write("/404.html", "404.html", sitemap=False, noindex=True, title="Страница не найдена", description="")
 
     write_sitemaps()
@@ -491,6 +545,16 @@ def build():
 - [Статистика торгов по городам]({cfg.SITE_URL}/analitika/)
 - [Карта и фильтры каталога]({cfg.APP_URL}/)
 
+## Услуги и цены
+- Отчёт по лоту (Рентген): {cfg.REPORT_PRICE} ₽, в приложении {cfg.APP_URL}/
+{f"- Полная проверка лота перед торгами: {cfg.PRICE_CHECK}, {cfg.SITE_URL}/proverka-lota/" + chr(10) if cfg.PRICE_CHECK else ""}- Покупка квартиры с торгов под ключ: 10 000 ₽ при заказе + 2% от цены покупки при победе, {cfg.SITE_URL}/kupit-kvartiru-s-torgov/
+- Работаем дистанционно по всей России: торги проходят на электронных площадках.
+
+## Контакты
+- Телефон: {cfg.SITE_PHONE}, почта: {cfg.SITE_EMAIL}, часы работы: {HOURS[0]} по Москве
+- {cfg.SITE_OWNER}{f", ИНН {cfg.SITE_INN}" if cfg.SITE_INN else ""}, {cfg.SITE_ADDRESS}
+- Автор статей: [{AUTHOR['name']}]({cfg.SITE_URL}{AUTHOR['path']}), {AUTHOR['role']}
+{"".join(f"- Профиль: {u}" + chr(10) for u in same_as())}
 ## Статьи
 {arts}
 """, encoding="utf-8")

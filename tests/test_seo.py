@@ -75,6 +75,10 @@ class BuildTests(unittest.TestCase):
             self.assertIn('rel="canonical" href="https://torggid.ru/torgi/page/2/"', page2)
             self.assertEqual(page2.count('class="lot"'), 5)
             self.assertIn('/torgi/page/2/', (site/'torgi/index.html').read_text())
+            moskva = (site/'torgi/moskva/index.html').read_text()
+            self.assertIn('aria-label="Другие города"', moskva)
+            self.assertIn('href="/torgi/sankt-peterburg/"', moskva.split('aria-label="Другие города"')[1].split('</nav>')[0])
+            self.assertIn('<a href="/torgi/moskva/">Москва</a>', (site/'torgi/lot/test_5/index.html').read_text())  # город в крошках карточки
             rows[1]['status'] = 'ignored'  # Build derives lifecycle from source/deadline.
             rows[1]['bidd_type'] = 'Аренда'
             (data/'lots.json').write_text(json.dumps(rows[1:]))
@@ -110,7 +114,35 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Недвижимость с торгов в Татарстане', region)
             self.assertIn('FAQPage', region)  # у региона свои вопросы с цифрами каталога, как у города
             self.assertIn('ItemList', region)
-            self.assertIn('Все регионы России', (site/'llms.txt').read_text())
+            deal = dict(row, id='mets:20', city='kazan', address='г. Казань, ул. Баумана, д. 5', risks=[], discount_pct=25.0, market_price=2_700_000)
+            rows2 = rows + [dict(deal, id=f'mets:2{i}') for i in range(3)] + [dict(deal, id='mets:30', category='share')] + [
+                dict(deal, id='mets:31', city='moskva', region='77', address='г. Москва, ул. Профсоюзная, д. 12', discount_pct=20.0)]
+            (data/'market.json').write_text(json.dumps({'lots': rows2}, ensure_ascii=False))
+            subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
+            board = (site/'index.html').read_text().split('class="board"')[1].split('class="more"')[0]
+            self.assertIn('Дешевле рынка', board)
+            self.assertIn('/torgi/lot/mets-20/', board)
+            self.assertNotIn('/torgi/lot/mets-30/', board)  # доля на витрину не попадает
+            self.assertNotIn('/torgi/lot/mets-0/', board)  # серьёзный риск (несовершеннолетние) — тоже
+            self.assertLess(board.index('/torgi/lot/mets-31/'), board.index('/torgi/lot/mets-22/'))  # третий лот Казани — после других городов
+            self.assertTrue((site/'torgi/vygodnye/index.html').exists())
+            self.assertIn('Открыть полную карточку', (site/'torgi/lot/mets-20/index.html').read_text())
+            llms = (site/'llms.txt').read_text()
+            self.assertIn('Все регионы России', llms)
+            self.assertIn('## Услуги и цены', llms)
+            self.assertIn('Пн–Пт', llms)
+            graph = json.loads((site/'index.html').read_text().split('<script type="application/ld+json">')[1].split('</script>')[0])['@graph']
+            org = next(x for x in graph if x['@type'] == 'RealEstateAgent')
+            self.assertEqual(org['areaServed'], {'@type': 'Country', 'name': 'Россия'})
+            self.assertIn('Торггид', org['alternateName'])
+            self.assertTrue(any(x['@type'] == 'WebSite' for x in graph))
+            self.assertEqual(org['founder']['@id'], 'https://torggid.ru/avtor/ilya-smirnov/#person')
+            author = (site/'avtor/ilya-smirnov/index.html').read_text()
+            self.assertIn('ProfilePage', author)
+            self.assertIn('https://torggid.ru/avtor/ilya-smirnov/', (site/'sitemap-pages.xml').read_text())
+            self.assertIn('/avtor/ilya-smirnov/', (site/'stati/zadatok-na-torgah/index.html').read_text())
+            self.assertNotIn('16 городах-миллионниках', (site/'index.html').read_text().split('<footer>')[1])
+            self.assertIn('<a href="/torgi/tatarstan/">Татарстан</a>', (site/'torgi/lot/mets-0/index.html').read_text())
             card = (site/'torgi/lot/mets-0/index.html').read_text()
             self.assertIn('Выгодно, но с рисками', card)
             self.assertIn('Извещение и документы на МЭТС', card)
