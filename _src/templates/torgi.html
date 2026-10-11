@@ -1,5 +1,6 @@
 {% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}{% block tgglobal %}{% endblock %}
-{% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% if faq %}{{ faq_ld(faq) }}{% endif %}{% endblock %}
+{% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% if faq %}{{ faq_ld(faq) }}{% endif %}
+{% if lots and not archive %}{{ list_ld(h1, canonical, st.count, lots, (current_page-1)*60) }}{% endif %}{% endblock %}
 {% block main %}<div class="wrap">
 <p class="crumbs"><a href="/">Главная</a>{% for n, u in crumbs %} / {% if loop.last %}{{ n }}{% else %}<a href="{{ u }}">{{ n }}</a>{% endif %}{% endfor %}</p>
 <h1>{{ h1 }}</h1>

@@ -1,7 +1,13 @@
 {% extends "base.html" %}{% from "_form.html" import lead_form %}
 {% block ld %}{{ crumbs_ld([("Главная","/"),("Лоты","/torgi/"),(d.caddr[:60], path)]) }}{% if active and d.price %}{{ ld({"@context": "https://schema.org", "@type": "RealEstateListing", "name": d.label ~ " с торгов: " ~ d.caddr, "url": cfg.SITE_URL ~ path,
-  "datePosted": (d.first_seen or "")[:10] or none, "offers": {"@type": "Offer", "price": d.price|round|int, "priceCurrency": "RUB", "availability": "https://schema.org/InStock", "availabilityEnds": d.bidd_end or none},
-  "about": {"@type": "Place", "address": d.caddr}}) }}{% endif %}{% endblock %}
+  "datePosted": (d.first_seen or "")[:10] or none, "dateModified": d.lastmod or none, "description": (d.verdict[2] if d.verdict else none),
+  "offers": {"@type": "Offer", "price": d.price|round|int, "priceCurrency": "RUB", "availability": "https://schema.org/InStock", "availabilityEnds": d.bidd_end or none,
+             "seller": {"@type": "Organization", "name": d.source_name or "ГИС Торги"}, "url": d.source_url or none},
+  "about": {"@type": "Accommodation" if d.category in ("flat", "room", "share", "house") else "Place",
+            "address": {"@type": "PostalAddress", "streetAddress": d.caddr, "addressLocality": d.city_name or none, "addressRegion": d.region_name or none, "addressCountry": "RU"},
+            "floorSize": ({"@type": "QuantitativeValue", "value": d.area|round(1), "unitCode": "MTK"} if d.area else none),
+            "numberOfRooms": d.rooms or none, "floorLevel": d.floor or none,
+            "identifier": ({"@type": "PropertyValue", "name": "Кадастровый номер", "value": d.cadastral} if d.cadastral else none)}}) }}{% endif %}{% endblock %}
 {% block main %}<div class="wrap">
 <p class="crumbs"><a href="/">Главная</a> / <a href="/torgi/">Лоты</a> / {{ d.caddr[:60] }}</p>
 <div class="article" style="padding-top:8px">

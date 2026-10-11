@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}{% block og_type %}article{% endblock %}
 {% block ld %}{{ ld({"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,
  "datePublished":a.date,"dateModified":a.updated or a.date,"inLanguage":"ru-RU","mainEntityOfPage":canonical,
- "author":{"@type":"Person","name":author.name,"jobTitle":author.role},
+ "author":{"@type":"Person","name":author.name,"jobTitle":author.role,"url":cfg.SITE_URL ~ "/o-nas/","sameAs":([cfg.SITE_TELEGRAM] if cfg.SITE_TELEGRAM else [])},
  "publisher":{"@type":"Organization","name":cfg.SITE_NAME}}) }}
 {% if a.faq %}{{ faq_ld(a.faq) }}{% endif %}{{ crumbs_ld([("Главная","/"),("Статьи","/stati/"),(a.title, path)]) }}{% endblock %}
 {% block main %}<div class="wrap">
