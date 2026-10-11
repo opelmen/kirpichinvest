@@ -692,7 +692,6 @@
 /torgi/do-1-mln/page/161/
 /torgi/do-1-mln/page/162/
 /torgi/do-1-mln/page/163/
-/torgi/do-1-mln/page/164/
 /torgi/do-1-mln/page/17/
 /torgi/do-1-mln/page/18/
 /torgi/do-1-mln/page/19/
@@ -1955,6 +1954,7 @@
 /torgi/krasnodar/severskiy-rayon/
 /torgi/krasnodar/slavyanskiy-rayon/
 /torgi/krasnodar/sochi/
+/torgi/krasnodar/tahtamukayskiy-rayon/
 /torgi/krasnodar/temryukskiy-rayon/
 /torgi/krasnodar/trehkomnatnye/
 /torgi/krasnodar/tuapsinskiy-rayon/
@@ -13105,7 +13105,11 @@
 /torgi/lot/cdt-385124/
 /torgi/lot/cdt-385125/
 /torgi/lot/cdt-385129/
+/torgi/lot/cdt-385130/
 /torgi/lot/cdt-385131/
+/torgi/lot/cdt-385154/
+/torgi/lot/cdt-385155/
+/torgi/lot/cdt-385161/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -13230,6 +13234,8 @@
 /torgi/lot/centerr-1170144/
 /torgi/lot/centerr-1170145/
 /torgi/lot/centerr-1170149/
+/torgi/lot/centerr-1170150/
+/torgi/lot/centerr-1170151/
 /torgi/lot/centerr-1170152/
 /torgi/lot/centerr-1170154/
 /torgi/lot/centerr-1170161/
@@ -13350,6 +13356,7 @@
 /torgi/lot/centerr-1170704/
 /torgi/lot/centerr-1170716/
 /torgi/lot/fabrikant-50d-Tvedq4aJnjEjOpDftw-1/
+/torgi/lot/fabrikant-5JU6AKgTBkJ-cvlAiiHRpQ-1/
 /torgi/lot/fabrikant-DLY0fcbhIaEP9Uj2n1fw3A-1/
 /torgi/lot/fabrikant-ERSdNBitRY0JiYl-tDrLIA-1/
 /torgi/lot/fabrikant-Fo4iBEtfGy6UJVM3e_8q7Q-1/
@@ -13369,6 +13376,7 @@
 /torgi/lot/fabrikant-bpy_tpoX2Ew17VuVtJh_8w-1/
 /torgi/lot/fabrikant-dThLJqtfUX4zyMYUP14jpQ-1/
 /torgi/lot/fabrikant-kxBZXAjDK8UiF4m9CE_ccg-1/
+/torgi/lot/fabrikant-zwhYTQdxQOU6Zv3PR0NMig-1/
 /torgi/lot/gpb-1240618/
 /torgi/lot/gpb-1240619/
 /torgi/lot/gpb-1242804/
@@ -18963,6 +18971,7 @@
 /torgi/lot/rad-1777399/
 /torgi/lot/rad-1777401/
 /torgi/lot/rad-1777402/
+/torgi/lot/rad-1777403/
 /torgi/lot/utpl-127396/
 /torgi/lot/utpl-127397/
 /torgi/lot/utpl-127518/
@@ -19042,6 +19051,7 @@
 /torgi/moskovskaya-oblast/bankrotstvo/page/6/
 /torgi/moskovskaya-oblast/bankrotstvo/page/7/
 /torgi/moskovskaya-oblast/bankrotstvo/page/8/
+/torgi/moskovskaya-oblast/bankrotstvo/page/9/
 /torgi/moskovskaya-oblast/do-5-mln/
 /torgi/moskovskaya-oblast/do-5-mln/page/2/
 /torgi/moskovskaya-oblast/do-5-mln/page/3/
@@ -19943,6 +19953,7 @@
 /torgi/rostovskaya-oblast/bankrotstvo/
 /torgi/rostovskaya-oblast/bankrotstvo/page/2/
 /torgi/rostovskaya-oblast/bankrotstvo/page/3/
+/torgi/rostovskaya-oblast/bankrotstvo/page/4/
 /torgi/rostovskaya-oblast/do-5-mln/
 /torgi/rostovskaya-oblast/do-5-mln/page/2/
 /torgi/rostovskaya-oblast/do-5-mln/page/3/
