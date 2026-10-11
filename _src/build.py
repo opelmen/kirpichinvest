@@ -11,7 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from lot_history import merge_history
 from budget_collections import budget_lots, budget_summary, object_group
-from market_feed import CATEGORY, REGIONS, from_market
+from market_feed import CATEGORY, REGIONS, from_market, mln
 
 import markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -22,7 +22,8 @@ ROOT = SRC.parent
 OUT = ROOT / "_site"
 
 cfg = SimpleNamespace(
-    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="+7 995 595-54-00",
+    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="",  # личный телефон с сайта убран (John, 11.10.2026): связь через форму и бота
+   
     SITE_EMAIL="fond178@gmail.com", SITE_OWNER="ИП Смирнов Илья Александрович", SITE_INN="", SITE_OGRNIP="",
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
@@ -68,6 +69,7 @@ def list_ld(name, url, total, lots, offset=0):
 env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]))
 env.globals["list_ld"] = list_ld
 env.filters["rub"] = rub
+env.filters["mln"] = lambda v: mln(v) + "\u00a0₽"
 env.filters["digits"] = lambda v: int(re.sub(r"\D", "", str(v)) or 0)
 env.globals["object_group"] = object_group
 def terms_list(terms):
@@ -555,13 +557,24 @@ def build():
 
     if ARCHIVED:
         listing("/torgi/arhiv/", ARCHIVED, "Архив предложений с торгов", [("Лоты", "/torgi/"), ("Архив", "/torgi/arhiv/")], city_links, archive=True)
-    near = {}
+    # похожие — того же типа (квартира к квартире, доля к доле, участок к участку): сначала в городе, потом в регионе,
+    # ближе по цене; если такого типа рядом нет, блок не показываем, чем подсовывать другое
+    sim_place, sim_region = {}, {}
     for x in LOTS:
-        key = x.get("city") or x.get("region")
-        if len(near.setdefault(key, [])) < 5:
-            near[key].append(x)
+        sim_place.setdefault((x.get("city") or x.get("region"), x.get("category")), []).append(x)
+        sim_region.setdefault((x.get("region"), x.get("category")), []).append(x)
+
+    def similar_to(d):
+        def closest(pool):
+            p = d.get("price") or 0
+            return sorted((x for x in pool if x["id"] != d["id"]), key=lambda x: abs((x.get("price") or 0) - p))
+        out = closest(sim_place.get((d.get("city") or d.get("region"), d.get("category")), []))[:4]
+        if len(out) < 4 and d.get("region"):
+            out += [x for x in closest(sim_region.get((d.get("region"), d.get("category")), [])) if x not in out][:4 - len(out)]
+        return out
+
     for d in CARDS:
-        similar = [x for x in near.get(d.get("city") or d.get("region"), []) if x["id"] != d["id"]][:4]
+        similar = similar_to(d)
         active = d["status"] == "active"
         write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'],
               d=d, active=active, similar=similar,
@@ -687,7 +700,7 @@ def build():
 - Работаем дистанционно по всей России: торги проходят на электронных площадках.
 
 ## Контакты
-- Телефон: {cfg.SITE_PHONE}, почта: {cfg.SITE_EMAIL}, часы работы: {HOURS[0]} по Москве
+- {f"Телефон: {cfg.SITE_PHONE}, " if cfg.SITE_PHONE else ""}{f"Telegram-бот: {cfg.TG_BOT}, " if cfg.TG_BOT else ""}почта: {cfg.SITE_EMAIL}, часы работы: {HOURS[0]} по Москве
 - {cfg.SITE_OWNER}{f", ИНН {cfg.SITE_INN}" if cfg.SITE_INN else ""}, {cfg.SITE_ADDRESS}
 - Автор статей: [{AUTHOR['name']}]({cfg.SITE_URL}{AUTHOR['path']}), {AUTHOR['role']}
 {"".join(f"- Профиль: {u}" + chr(10) for u in same_as())}

@@ -1,4 +1,4 @@
-{% macro lead_form(scenario, title, sub, button, fields=[]) %}
+{% macro lead_form(scenario, title, sub, button, fields=[], ask="") %}
 <form class="form" data-lead novalidate>
   <h3>{{ title }}</h3>{% if sub %}<p class="mute small">{{ sub }}</p>{% endif %}
   <div class="fields">
@@ -13,14 +13,14 @@
     {% endfor %}
     <div class="row2">
       <div><label for="{{ scenario }}-name">Имя</label><input id="{{ scenario }}-name" name="name" autocomplete="given-name"></div>
-      <div><label for="{{ scenario }}-contact">Телефон или Telegram *</label><input id="{{ scenario }}-contact" name="contact" required autocomplete="tel" placeholder="+7 ... или @ник"></div>
+      <div><label for="{{ scenario }}-contact">Телефон, Telegram или почта *</label><input id="{{ scenario }}-contact" name="contact" required placeholder="+7…, @ник или почта"></div>
     </div>
     <label class="consent"><input type="checkbox" name="consent" value="1" required> Согласен на обработку персональных данных по <a href="/politika/" target="_blank">политике</a></label>
     <p class="err" role="alert"></p>
     <button class="btn" type="submit" style="margin-top:12px;width:100%">{{ button }}</button>
   </div>
   <div class="ok" role="status">Заявка отправлена. Свяжемся в рабочее время в течение дня.</div>
-  <p class="small mute">Можно оставить только контакт и согласие. Если удобнее обсудить сразу: <a href="{{ cfg.SITE_TELEGRAM }}">написать Илье в Telegram</a> или <a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a>.</p>
+  <p class="small mute">Достаточно контакта и согласия.{% if cfg.TG_BOT %} Удобнее переписываться? <a href="{{ cfg.TG_BOT }}?start=ask{{ '_' ~ ask if ask }}">Напишите нашему боту в Telegram</a>: вопрос увидит специалист, ответ придёт туда же.{% endif %} Нет Telegram — оставьте телефон или почту, свяжемся сами.</p>
 </form>
 {% endmacro %}
 

@@ -37,14 +37,14 @@
     "url": cfg.SITE_URL,
     "logo": cfg.SITE_URL + "/static/brand/icon-512.png",
     "image": cfg.SITE_URL + "/static/brand/og-image.png",
-    "telephone": cfg.SITE_PHONE,
+    "telephone": cfg.SITE_PHONE or none,
     "email": cfg.SITE_EMAIL,
     "description": ("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России, проверка лотов и сопровождение покупки. Не является организатором торгов." if wide
                     else "Подбор, проверка и сопровождение покупки жилья с торгов по банкротству и реализации арестованного имущества в городах-миллионниках России и в 100 км от них. Не является организатором торгов."),
     "areaServed": ({"@type": "Country", "name": "Россия"} if wide else cities|map(attribute=1)|list),
     "address": {"@type": "PostalAddress", "addressLocality": cfg.SITE_ADDRESS, "addressCountry": "RU"},
     "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": hours[1], "opens": hours[2], "closes": hours[3]},
-    "contactPoint": {"@type": "ContactPoint", "telephone": cfg.SITE_PHONE, "email": cfg.SITE_EMAIL, "contactType": "customer service", "areaServed": "RU", "availableLanguage": "ru"},
+    "contactPoint": {"@type": "ContactPoint", "telephone": cfg.SITE_PHONE or none, "email": cfg.SITE_EMAIL, "contactType": "customer service", "areaServed": "RU", "availableLanguage": "ru"},
     "founder": {"@id": person_id},
     "sameAs": same_as(),
     "knowsAbout": ["торги по банкротству", "арестованное имущество", "публичное предложение", "повторные торги", "проверка лота перед торгами", "недвижимость с торгов"],
@@ -118,7 +118,8 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
       <li><a href="/investoram/">Инвесторам</a></li><li><a href="/stati/">Статьи</a></li><li><a href="/slovar/">Словарь терминов</a></li><li><a href="/analitika/">Статистика торгов</a></li>
       <li><a href="/podpiska/">Подборка лотов в Telegram</a></li><li><a href="/partneram/">Управляющим и кредиторам</a></li></ul></div>
     <div><h3>Контакты</h3><ul>
-      <li><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></li>
+      {% if cfg.SITE_PHONE %}<li><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></li>{% endif %}
+      {% if cfg.TG_BOT %}<li><a href="{{ cfg.TG_BOT }}?start=ask">Вопрос специалисту в Telegram</a></li>{% endif %}
       <li><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></li>
       {% if cfg.TG_CHANNEL %}<li><a href="{{ cfg.TG_CHANNEL }}">Telegram-канал: лот дня</a></li>{% endif %}
       {% if cfg.TG_BOT %}<li><a href="{{ cfg.TG_BOT }}">Бот: подборка лотов</a></li>{% endif %}
@@ -139,7 +140,7 @@ var d=new FormData(f);d.append("page",location.pathname);try{d.append("utm",sess
 var b=f.querySelector("button");b.disabled=true;var er=f.querySelector(".err");er.style.display="none";
 fetch("{{ cfg.LEAD_URL }}",{method:"POST",body:d}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(j){
 if(j.ok){f.querySelector(".fields").style.display="none";var ok=f.querySelector(".ok");ok.style.display="block";{% if cfg.TG_CHANNEL %}ok.innerHTML+=' Пока ждёте — <a href="{{ cfg.TG_CHANNEL }}">лоты дня с предоценкой в нашем Telegram-канале</a>.';{% endif %}try{if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}catch(e){}}
-else{er.textContent=j.error||"Не отправилось. Позвоните нам.";er.style.display="block";b.disabled=false}})
-.catch(function(){er.textContent="Нет связи. Позвоните: {{ cfg.SITE_PHONE }}";er.style.display="block";b.disabled=false})})})})();
+else{er.textContent=j.error||"Не отправилось. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";b.disabled=false}})
+.catch(function(){er.textContent="Нет связи. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";b.disabled=false})})})})();
 </script>
 </body></html>

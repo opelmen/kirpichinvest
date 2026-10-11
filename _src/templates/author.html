@@ -21,7 +21,7 @@
 <h2>Связаться</h2>
 <table class="t">
 {% if cfg.SITE_TELEGRAM %}<tr><th>Telegram</th><td><a href="{{ cfg.SITE_TELEGRAM }}">написать</a></td></tr>{% endif %}
-<tr><th>Телефон</th><td><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></td></tr>
+{% if cfg.SITE_PHONE %}<tr><th>Телефон</th><td><a href="tel:{{ cfg.SITE_PHONE|replace(' ','')|replace('-','') }}">{{ cfg.SITE_PHONE }}</a></td></tr>{% endif %}
 <tr><th>Почта</th><td><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></td></tr></table>
 </div>
 {{ lead_form("buy", "Задать вопрос", "", "Отправить", [{"name":"q","label":"Вопрос","area":true}]) }}
