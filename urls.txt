@@ -565,7 +565,6 @@ https://torggid.ru/torgi/do-3-mln/page/205/
 https://torggid.ru/torgi/do-3-mln/page/206/
 https://torggid.ru/torgi/do-3-mln/page/207/
 https://torggid.ru/torgi/do-3-mln/page/208/
-https://torggid.ru/torgi/do-3-mln/page/209/
 https://torggid.ru/torgi/
 https://torggid.ru/torgi/page/2/
 https://torggid.ru/torgi/page/3/
@@ -842,7 +841,6 @@ https://torggid.ru/torgi/page/273/
 https://torggid.ru/torgi/page/274/
 https://torggid.ru/torgi/page/275/
 https://torggid.ru/torgi/page/276/
-https://torggid.ru/torgi/page/277/
 https://torggid.ru/torgi/zabaykalskiy-kray/
 https://torggid.ru/torgi/zabaykalskiy-kray/page/2/
 https://torggid.ru/torgi/zabaykalskiy-kray/page/3/
@@ -926,7 +924,6 @@ https://torggid.ru/torgi/krasnodarskiy-kray/zemlya/page/2/
 https://torggid.ru/torgi/krasnodarskiy-kray/kommercheskaya/
 https://torggid.ru/torgi/krasnodarskiy-kray/kommercheskaya/page/2/
 https://torggid.ru/torgi/krasnodarskiy-kray/garazhi/
-https://torggid.ru/torgi/krasnodarskiy-kray/garazhi/page/2/
 https://torggid.ru/torgi/krasnodarskiy-kray/bankrotstvo/
 https://torggid.ru/torgi/krasnodarskiy-kray/bankrotstvo/page/2/
 https://torggid.ru/torgi/krasnodarskiy-kray/bankrotstvo/page/3/
@@ -2852,7 +2849,6 @@ https://torggid.ru/torgi/bankrotstvo/page/92/
 https://torggid.ru/torgi/bankrotstvo/page/93/
 https://torggid.ru/torgi/bankrotstvo/page/94/
 https://torggid.ru/torgi/bankrotstvo/page/95/
-https://torggid.ru/torgi/bankrotstvo/page/96/
 https://torggid.ru/torgi/arestovannoe/
 https://torggid.ru/torgi/arestovannoe/page/2/
 https://torggid.ru/torgi/arestovannoe/page/3/
@@ -3613,7 +3609,6 @@ https://torggid.ru/torgi/krasnodar/do-5-mln/page/2/
 https://torggid.ru/torgi/krasnodar/do-5-mln/page/3/
 https://torggid.ru/torgi/krasnodar/do-5-mln/page/4/
 https://torggid.ru/torgi/krasnodar/do-5-mln/page/5/
-https://torggid.ru/torgi/krasnodar/do-5-mln/page/6/
 https://torggid.ru/torgi/krasnodar/doma/
 https://torggid.ru/torgi/krasnodar/zemlya/
 https://torggid.ru/torgi/krasnodar/zemlya/page/2/
@@ -3625,7 +3620,6 @@ https://torggid.ru/torgi/krasnodar/bankrotstvo/page/2/
 https://torggid.ru/torgi/krasnodar/bankrotstvo/page/3/
 https://torggid.ru/torgi/krasnodar/bankrotstvo/page/4/
 https://torggid.ru/torgi/krasnodar/bankrotstvo/page/5/
-https://torggid.ru/torgi/krasnodar/bankrotstvo/page/6/
 https://torggid.ru/torgi/krasnodar/arestovannoe/
 https://torggid.ru/torgi/krasnodar/arestovannoe/page/2/
 https://torggid.ru/torgi/krasnodar/severskiy-rayon/
@@ -3639,8 +3633,8 @@ https://torggid.ru/torgi/krasnodar/armavir/
 https://torggid.ru/torgi/krasnodar/bryuhoveckiy-rayon/
 https://torggid.ru/torgi/krasnodar/tuapsinskiy-rayon/
 https://torggid.ru/torgi/krasnodar/novorossiysk/
-https://torggid.ru/torgi/krasnodar/sochi/
 https://torggid.ru/torgi/krasnodar/krymskiy-rayon/
+https://torggid.ru/torgi/krasnodar/sochi/
 https://torggid.ru/torgi/krasnodar/slavyanskiy-rayon/
 https://torggid.ru/torgi/krasnodar/adlerskiy-rayon/
 https://torggid.ru/torgi/krasnodar/abinskiy-rayon/
@@ -3771,7 +3765,6 @@ https://torggid.ru/torgi/voronezh/zemlya/
 https://torggid.ru/torgi/voronezh/kommercheskaya/
 https://torggid.ru/torgi/voronezh/garazhi/
 https://torggid.ru/torgi/voronezh/bankrotstvo/
-https://torggid.ru/torgi/voronezh/bankrotstvo/page/2/
 https://torggid.ru/torgi/voronezh/arestovannoe/
 https://torggid.ru/torgi/voronezh/arestovannoe/page/2/
 https://torggid.ru/torgi/voronezh/talovskiy-rayon/
@@ -3875,6 +3868,7 @@ https://torggid.ru/torgi/arhiv/
 https://torggid.ru/torgi/arhiv/page/2/
 https://torggid.ru/torgi/arhiv/page/3/
 https://torggid.ru/torgi/arhiv/page/4/
+https://torggid.ru/torgi/arhiv/page/5/
 https://torggid.ru/torgi/lot/21000000140000000005_1/
 https://torggid.ru/torgi/lot/21000000160000000388_1/
 https://torggid.ru/torgi/lot/21000000220000000111_1/

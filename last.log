@@ -1,11 +1,11 @@
-== Sun Oct 11 09:59:31 UTC 2026 87fa240 push
-OK: страниц 20697 в sitemap, лотов 16584, статей 10
-Published release 38129582249-1
-Live verification: 4327 files (400 of 16798 lot pages), 0 errors
+== Sun Oct 11 10:13:33 UTC 2026 87fa240 schedule
+OK: страниц 20691 в sitemap, лотов 16541, статей 10
+Published release 38130501750-1
+Live verification: 4321 files (400 of 16798 lot pages), 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 38
+новых URL для IndexNow: 1
 IndexNow https://yandex.com/indexnow ошибка: Remote end closed connection without response
 IndexNow https://api.indexnow.org/indexnow 200
 result: success
