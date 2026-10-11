@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 $Branch = "claude/seo-geo-research-rdazms"
-$Stamp = "2026-10-11"
+${Stamp} = "2026-10-11"
 
 $Root = (git rev-parse --show-toplevel 2>$null)
 if (-not $Root) { throw "Запустите скрипт из папки репозитория D:\Кирпичи (там, где .git)." }
@@ -15,9 +15,9 @@ if (-not (Test-Path $Project)) { throw "Нет папки _project в $Root" }
 Write-Host "Репозиторий: $Root"
 
 # 1. Файлы исследования из ветки
-Write-Host "1/4 Забираю ветку $Branch..."
-git fetch origin $Branch | Out-Null
-$Dest = Join-Path $Project "seo\$Stamp"
+Write-Host "1/4 Беру файлы из ветки $Branch..."
+# ветку уже забрала команда запуска (git fetch)
+$Dest = Join-Path $Project "seo\${Stamp}"
 New-Item -ItemType Directory -Force -Path $Dest | Out-Null
 $Files = (git ls-tree --name-only "origin/$Branch" docs/seo/) | Where-Object { $_ -notlike "*.ps1" }
 $Utf8 = New-Object System.Text.UTF8Encoding($false)
@@ -58,9 +58,9 @@ Write-Host "   $Bak"
 Write-Host "4/4 Дописываю журнал..."
 $LogEntry = @"
 
-## $Stamp · SEO и GEO: исследование, ядро, первый PR
+## ${Stamp} · SEO и GEO: исследование, ядро, первый PR
 
-- Тред «SEO и GEO продвижение» (облако). Файлы: ``_project/seo/$Stamp/`` (README.md, 00_yadro.md … 06_plan-deystviy.md, semantika-torggid.csv: 1085 запросов, 195 кластеров, вся Россия + авто; CHTO_SDELAT_JOHN.md: шаги для John; wordstat-snyat.txt: 36 запросов на съём).
+- Тред «SEO и GEO продвижение» (облако). Файлы: ``_project/seo/${Stamp}/`` (README.md, 00_yadro.md … 06_plan-deystviy.md, semantika-torggid.csv: 1085 запросов, 195 кластеров, вся Россия + авто; CHTO_SDELAT_JOHN.md: шаги для John; wordstat-snyat.txt: 36 запросов на съём).
 - Учтён прежний план от 03.10.2026 (``_project/seo/SEO_GEO_MASTER_PLAN.md``, ``research/``): 35 замеров Вордстата перенесены в ядро, панели 48 GEO-вопросов и 80 запросов для позиций учтены в файлах 04 и 06. Главная цифра: «квартиры с торгов» по России ≈ 8 100 показов в месяц, с Москвой 600, другие города 18–107.
 - kirpichinvest, ветка ``claude/seo-geo-research-rdazms``, PR #10 (черновик, ждёт пачку): индекс карт сайта, llms.txt с блоком «Факты для цитирования», ItemList и полный RealEstateListing, FAQ и статистика регионов, Clean-param, ``_src/semantics.py`` с частотностью WS. 12 тестов проходят. Не деплоить отдельно.
 - Очеловечивание: 10 статей сайта и все документы seo/ проходят stop-slop-ru («ЧИСТО»).
@@ -69,9 +69,9 @@ $LogEntry = @"
 "@
 $StateEntry = @"
 
-## SEO и GEO (обновлено $Stamp)
+## SEO и GEO (обновлено ${Stamp})
 
-Исследование от $Stamp: ``_project/seo/$Stamp/`` (копия в проекте Claude, папка seo/). Первая пачка правок в PR #10 kirpichinvest (ветка ``claude/seo-geo-research-rdazms``), ждёт деплой пачкой. Ядро: ``_src/semantics.py`` в репозитории, 35 запросов с частотностью Вордстата от 03.10.2026, остальное без частотности. Следующие шаги по неделям: ``06_plan-deystviy.md``; что нужно от John: ``CHTO_SDELAT_JOHN.md``. Открытые решения: раздел /auto/ следующим; цены на услуги; Bing Webmaster.
+Исследование от ${Stamp}: ``_project/seo/${Stamp}/`` (копия в проекте Claude, папка seo/). Первая пачка правок в PR #10 kirpichinvest (ветка ``claude/seo-geo-research-rdazms``), ждёт деплой пачкой. Ядро: ``_src/semantics.py`` в репозитории, 35 запросов с частотностью Вордстата от 03.10.2026, остальное без частотности. Следующие шаги по неделям: ``06_plan-deystviy.md``; что нужно от John: ``CHTO_SDELAT_JOHN.md``. Открытые решения: раздел /auto/ следующим; цены на услуги; Bing Webmaster.
 "@
 [System.IO.File]::AppendAllText($Log, $LogEntry, $Utf8)
 [System.IO.File]::AppendAllText($State, $StateEntry, $Utf8)
