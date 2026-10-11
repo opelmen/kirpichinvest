@@ -20305,6 +20305,7 @@
 /torgi/udmurtiya/doma/
 /torgi/udmurtiya/garazhi/
 /torgi/udmurtiya/kommercheskaya/
+/torgi/udmurtiya/komnaty/
 /torgi/udmurtiya/page/2/
 /torgi/udmurtiya/page/3/
 /torgi/udmurtiya/page/4/
