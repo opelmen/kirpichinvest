@@ -280,6 +280,8 @@ def build():
     if (SRC / "root").exists():  # файлы подтверждения и прочее в корень сайта
         for f in (SRC / "root").iterdir():
             shutil.copy(f, OUT / f.name)
+    if (SRC / "svc").exists():  # служебное: запасной прокси ГИС Торги для сервера (только на новом домене)
+        shutil.copytree(SRC / "svc", OUT / "svc")
     if (ROOT / "check").exists():
         shutil.copytree(ROOT / "check", OUT / "check")
     city_counts = {c[0]: sum(1 for d in LOTS if d.get("city") == c[0]) for c in CITIES}
