@@ -129,13 +129,13 @@ class BuildTests(unittest.TestCase):
             deal_card = (site/'torgi/lot/mets-20/index.html').read_text()
             self.assertIn('Полная карточка: фото, документы, аналоги', deal_card)
             self.assertIn('Цена ниже рынка, чистота не проверена', deal_card)  # без проверки жильцов и арестов «выгодно» не пишем
-            self.assertIn('Извещение не раскрывает: кто зарегистрирован и живёт, аресты и залоги', deal_card)
+            self.assertIn('<b>Жильцы и дети</b> <span class="st">нет данных</span>', deal_card)  # о чём молчит извещение — отдельной строкой со статусом
             self.assertIn('?start=ask_mets-20', deal_card)
             kazan = (site/'torgi/kazan/index.html').read_text()
             self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
             self.assertIn('Банкротное имущество</span>', kazan)
             self.assertNotIn('995', deal_card)  # личного телефона на сайте нет
-            self.assertIn('Повторные торги — <span class="st">данные площадки</span>', deal_card)  # повторные — плюс, не риск
+            self.assertIn('повторные торги: цена уже снижена', deal_card)  # повторные — плюс, не риск
             similar = deal_card.split('<h2>Похожие лоты</h2>')[1]
             self.assertNotIn('/torgi/lot/mets-30/', similar)  # доля к квартире в похожие не попадает
             ym = __import__('datetime').date.today().strftime('%Y-%m')
@@ -176,7 +176,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('сверьте с объявлениями', sus)
             self.assertNotIn('дисконт 55%', sus)  # громкий процент при подозрительной скидке не выносим
             self.assertIn('Цена сейчас', card)  # публичное предложение
-            self.assertIn('Извещение не раскрывает:', card)
+            self.assertIn('<b>Аресты и залоги</b> <span class="st">нет данных</span>', card)  # о чём молчит извещение — строкой со статусом
             self.assertIn('Банкротное имущество', card)
             self.assertNotIn('повторные торги</', card.split('На что обратить')[-1][:200])
             self.assertIn('/torgi/lot/mets-0/', (site/'torgi/tatarstan/povtornye-torgi/index.html').read_text())  # фасет по-прежнему собирается
