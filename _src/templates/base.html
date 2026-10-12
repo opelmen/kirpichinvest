@@ -135,12 +135,14 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
 (function(){var p=new URLSearchParams(location.search),u=[];["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){if(p.get(k))u.push(k+"="+p.get(k))});
 try{if(u.length)sessionStorage.setItem("utm",u.join("&"))}catch(e){}
 document.querySelectorAll("form[data-lead]").forEach(function(f){f.addEventListener("submit",function(ev){ev.preventDefault();
-if(!f.reportValidity())return;
+if(f.dataset.busy)return;if(!f.reportValidity())return;
 var d=new FormData(f);d.append("page",location.pathname);try{d.append("utm",sessionStorage.getItem("utm")||"")}catch(e){}
-var b=f.querySelector("button");b.disabled=true;var er=f.querySelector(".err");er.style.display="none";
+var b=f.querySelector("button"),bt=b.innerHTML,er=f.querySelector(".err");er.style.display="none";
+var done=function(){delete f.dataset.busy;b.disabled=false;b.removeAttribute("aria-busy");b.innerHTML=bt};
+f.dataset.busy="1";b.disabled=true;b.setAttribute("aria-busy","true");b.innerHTML='<span class="spin"></span>Отправляем…';
 fetch("{{ cfg.LEAD_URL }}",{method:"POST",body:d}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(j){
 if(j.ok){f.querySelector(".fields").style.display="none";var ok=f.querySelector(".ok");ok.style.display="block";{% if cfg.TG_CHANNEL %}ok.innerHTML+=' Пока ждёте — <a href="{{ cfg.TG_CHANNEL }}">лоты дня с предоценкой в нашем Telegram-канале</a>.';{% endif %}try{if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}catch(e){}}
-else{er.textContent=j.error||"Не отправилось. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";b.disabled=false}})
-.catch(function(){er.textContent="Нет связи. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";b.disabled=false})})})})();
+else{er.textContent=j.error||"Не отправилось. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";done()}})
+.catch(function(){er.textContent="Нет связи. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";done()})})})})();
 </script>
 </body></html>
