@@ -1122,7 +1122,6 @@
 /torgi/do-3-mln/page/206/
 /torgi/do-3-mln/page/207/
 /torgi/do-3-mln/page/208/
-/torgi/do-3-mln/page/209/
 /torgi/do-3-mln/page/21/
 /torgi/do-3-mln/page/22/
 /torgi/do-3-mln/page/23/
@@ -1471,7 +1470,6 @@
 /torgi/doma/page/12/
 /torgi/doma/page/13/
 /torgi/doma/page/14/
-/torgi/doma/page/15/
 /torgi/doma/page/2/
 /torgi/doma/page/3/
 /torgi/doma/page/4/
@@ -13464,6 +13462,7 @@
 /torgi/lot/26000002160000000164_7/
 /torgi/lot/26000002160000000164_8/
 /torgi/lot/26000002160000000164_9/
+/torgi/lot/26000002160000000165_2/
 /torgi/lot/26000002220000000020_1/
 /torgi/lot/26000002290000000020_1/
 /torgi/lot/26000002380000000001_1/
@@ -14363,6 +14362,13 @@
 /torgi/lot/cdt-385822/
 /torgi/lot/cdt-385824/
 /torgi/lot/cdt-385828/
+/torgi/lot/cdt-385829/
+/torgi/lot/cdt-385830/
+/torgi/lot/cdt-385833/
+/torgi/lot/cdt-385835/
+/torgi/lot/cdt-385837/
+/torgi/lot/cdt-385838/
+/torgi/lot/cdt-385840/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -20604,6 +20610,7 @@
 /torgi/lot/rad-1777778/
 /torgi/lot/rad-1777809/
 /torgi/lot/rad-1777810/
+/torgi/lot/rad-1777819/
 /torgi/lot/utpl-127396/
 /torgi/lot/utpl-127397/
 /torgi/lot/utpl-127518/
@@ -21742,7 +21749,6 @@
 /torgi/sankt-peterburg/novaya-ladoga/
 /torgi/sankt-peterburg/odnokomnatnye/
 /torgi/sankt-peterburg/otradnoe/
-/torgi/sankt-peterburg/page/10/
 /torgi/sankt-peterburg/page/2/
 /torgi/sankt-peterburg/page/3/
 /torgi/sankt-peterburg/page/4/
