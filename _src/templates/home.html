@@ -31,7 +31,7 @@
     <a class="lotrow" href="/torgi/lot/{{ d.id }}/">
       <span class="addr"><b>{{ d.label }}</b><br>{{ d.caddr[:90] }}</span>
       <span class="price">{{ d.price|rub }}{% if d.eff_discount and d.eff_discount > 0 %}<span class="disc">−{{ d.eff_discount|round|int }}%</span>{% endif %}</span>
-      <span class="meta">{% if d.eff_market %}рынок ≈ {{ d.eff_market|rub }}{% if d.eff_market > d.price %} · выгода ≈ {{ (d.eff_market - d.price)|rub }}{% endif %}{% elif d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
+      <span class="meta">{% if d.eff_market %}рынок ≈ {{ d.eff_market|rub }}{% if d.eff_market > d.price %} · ниже рынка на ≈ {{ (d.eff_market - d.price)|rub }}{% endif %}{% elif d.ppm2 %}{{ d.ppm2|rub }}/м²{% endif %}</span>
       <span class="meta" style="text-align:right">{% if d.days_left is not none and d.days_left >= 0 %}заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
     </a>
     {% else %}<p style="padding:12px">Лоты загружаются. Загляните через несколько минут.</p>{% endfor %}
@@ -83,7 +83,7 @@
     <tr><td>Долг по взносам на капремонт</td><td>Переходит к новому собственнику (ст. 158 ЖК РФ)</td><td>Запрос в фонд капремонта / УК</td></tr>
     <tr><td>Оспаривание торгов</td><td>Сделку могут признать недействительной</td><td>Дело о банкротстве, жалобы, соблюдение порядка торгов</td></tr>
     <tr><td>Продаётся доля, а не квартира</td><td>Сложно пользоваться и распоряжаться</td><td>Предмет лота по документам торгов и ЕГРН</td></tr>
-    <tr><td>Цена выше, чем кажется</td><td>Нет выгоды после ремонта и налогов</td><td>Сделки и объявления рядом, расчёт максимальной ставки</td></tr>
+    <tr><td>Цена выше, чем кажется</td><td>Покупка не окупается после ремонта и налогов</td><td>Сделки и объявления рядом, расчёт максимальной ставки</td></tr>
   </table></div>
 </div></section>
 
