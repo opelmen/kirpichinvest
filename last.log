@@ -1,11 +1,11 @@
-== Wed Oct 14 14:45:39 UTC 2026 dafb639 schedule
-OK: страниц 23302 в sitemap, лотов 17023, статей 14
-Published release 38581289922-1
-Live verification: 4448 files (400 of 19282 lot pages), 0 errors
+== Wed Oct 14 19:40:06 UTC 2026 dafb639 schedule
+OK: страниц 23384 в sitemap, лотов 17012, статей 14
+Published release 38623555634-1
+Live verification: 4457 files (400 of 19355 lot pages), 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 417
-IndexNow https://yandex.com/indexnow 202
+новых URL для IndexNow: 91
+IndexNow https://yandex.com/indexnow 200
 IndexNow https://api.indexnow.org/indexnow 200
 result: success
