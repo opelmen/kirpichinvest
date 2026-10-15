@@ -61,7 +61,6 @@
     {% if d.comps and d.comps.n %}<tr><th>Похожие объявления рядом</th><td>{{ d.comps.n }} шт. ({{ d.comps.radius }}), середина {{ d.comps.ppm|rub }} за м²{% if d.comps.low and d.comps.high and d.comps.low != d.comps.high %}, обычно от {{ d.comps.low|rub }} до {{ d.comps.high|rub }}{% endif %}<div class="mute small">{% if d.comps.n < 5 %}Похожих мало, сравнение грубое. {% endif %}Цены предложений, не сделок; это ориентир, а не оценка.</div></td></tr>{% endif %}
     {% if d.city_market %}<tr><th>Ориентир по городу</th><td>≈ {{ d.city_market|rub }}<div class="mute small">Оценка грубая: похожих объявлений рядом мало, поэтому скидку в процентах не показываем.</div></td></tr>{% endif %}
     {% if d.eff_market %}<tr><th>Рыночная цена (оценка)</th><td><b>{{ d.eff_market|rub }}</b>{% if d.eff_discount and d.eff_discount > 0 %} · ниже рынка на {{ d.eff_discount|round|int }}%{% endif %}<div class="mute small">Ориентир по объявлениям рядом, не отчёт об оценке</div></td></tr>{% endif %}
-    {% if d.liq %}<tr><th>Быстрая продажа (2–3 мес)</th><td>≈ {{ d.liq|rub }}</td></tr>{% endif %}
     </table></div>
     {% if app_lot %}<p class="mute small">Список объявлений, по которым считали, и шкала цены — в <a href="{{ app_lot }}?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=full_card#market">полной карточке</a>.</p>{% endif %}
   </div></details>{% endif %}
