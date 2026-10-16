@@ -1,0 +1,6 @@
+<table class="t"><tr><th>Исполнитель</th><td>{{ cfg.SITE_OWNER }}</td></tr>
+{% if cfg.SITE_INN %}<tr><th>ИНН</th><td>{{ cfg.SITE_INN }}</td></tr>{% endif %}
+{% if cfg.SITE_OGRNIP %}<tr><th>ОГРНИП</th><td>{{ cfg.SITE_OGRNIP }}</td></tr>{% endif %}
+<tr><th>Город</th><td>{{ cfg.SITE_ADDRESS }}</td></tr>
+<tr><th>Почта</th><td><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></td></tr>
+{% if cfg.SITE_TELEGRAM %}<tr><th>Telegram</th><td><a href="{{ cfg.SITE_TELEGRAM }}">{{ cfg.SITE_TELEGRAM|replace("https://t.me/","@") }}</a></td></tr>{% endif %}</table>

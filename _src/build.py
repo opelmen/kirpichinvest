@@ -599,9 +599,15 @@ def build():
              ("proverka-lota/primer", "sample.html", "Пример отчёта по проверке лота перед торгами",
               "Как выглядит полная проверка квартиры с торгов: процедура, дело о банкротстве, история квартиры, жильцы, долги, цена и стратегия ставки."),
              ("o-nas", "about.html", "О нас и контакты", "Кто мы, как работаем, реквизиты и контакты."),
+             ("kontakty", "kontakty.html", "Контакты ТоргГида: почта, Telegram, сотрудничество",
+              "Как связаться с ТоргГидом: почта и Telegram для вопросов по лотам и отчётам, сотрудничество для управляющих, кредиторов и партнёров."),
+             ("oplata", "oplata.html", "Оплата, получение и возврат",
+              "Как оплатить отчёт ТоргГида картой или через СБП, как его получить и как вернуть деньги."),
+             ("oferta", "oferta.html", "Публичная оферта на оказание информационных услуг",
+              "Условия платных услуг ТоргГида: отчёты по лотам торгов, оплата, сроки, возврат, реквизиты."),
              ("politika", "privacy.html", "Политика обработки персональных данных", "Политика обработки персональных данных.")]
     for slug, tpl, title, desc in pages:
-        write(f"/{slug}/", tpl, sitemap=slug != "politika", priority="0.8", title=title, description=desc, st=st)
+        write(f"/{slug}/", tpl, sitemap=slug not in ("politika", "oferta"), priority="0.8", title=title, description=desc, st=st)
     rp = SRC / "data" / "results.json"
     RES = json.loads(rp.read_text(encoding="utf-8")) if rp.exists() else []
     res_rows = []
