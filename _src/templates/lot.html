@@ -68,6 +68,7 @@
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
     {% if d.rooms %}<tr><th>Комнат</th><td>{{ d.rooms }}</td></tr>{% endif %}
     {% if d.floor %}<tr><th>Этаж</th><td>{{ d.floor }}</td></tr>{% endif %}
+    {% if d.land_text %}<tr><th>Земельный участок</th><td>{{ d.land_text }}</td></tr>{% endif %}
     {% if d.cadastral %}<tr><th>Кадастровый номер</th><td>{{ d.cadastral }}</td></tr>{% endif %}
     <tr><th>Адрес</th><td>{{ d.caddr }}</td></tr>
     {% if d.flags %}<tr><th>На что обратить внимание</th><td style="color:var(--red)">{{ d.flags }}</td></tr>{% endif %}
