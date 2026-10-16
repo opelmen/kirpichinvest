@@ -6,8 +6,11 @@
 /check/
 /investoram/
 /kalkulyator-stavki/
+/kontakty/
 /kupit-kvartiru-s-torgov/
 /o-nas/
+/oferta/
+/oplata/
 /partneram/
 /podpiska/
 /politika/
@@ -178,7 +181,6 @@
 /torgi/arestovannoe/page/183/
 /torgi/arestovannoe/page/184/
 /torgi/arestovannoe/page/185/
-/torgi/arestovannoe/page/186/
 /torgi/arestovannoe/page/19/
 /torgi/arestovannoe/page/2/
 /torgi/arestovannoe/page/20/
@@ -1810,6 +1812,7 @@
 /torgi/kabardino-balkariya/bankrotstvo/
 /torgi/kabardino-balkariya/do-5-mln/
 /torgi/kabardino-balkariya/kommercheskaya/
+/torgi/kabardino-balkariya/page/2/
 /torgi/kabardino-balkariya/zemlya/
 /torgi/kaliningradskaya-oblast/
 /torgi/kaliningradskaya-oblast/arestovannoe/
@@ -1887,6 +1890,7 @@
 /torgi/kazan/do-5-mln/page/6/
 /torgi/kazan/doli/
 /torgi/kazan/doma/
+/torgi/kazan/doma/page/2/
 /torgi/kazan/garazhi/
 /torgi/kazan/kilemarskiy-rayon/
 /torgi/kazan/kommercheskaya/
@@ -2358,6 +2362,7 @@
 /torgi/lipetskaya-oblast/arestovannoe/page/2/
 /torgi/lipetskaya-oblast/arestovannoe/page/3/
 /torgi/lipetskaya-oblast/bankrotstvo/
+/torgi/lipetskaya-oblast/bankrotstvo/page/2/
 /torgi/lipetskaya-oblast/do-5-mln/
 /torgi/lipetskaya-oblast/do-5-mln/page/2/
 /torgi/lipetskaya-oblast/do-5-mln/page/3/
@@ -15569,6 +15574,8 @@
 /torgi/lot/26000021780000000009_1/
 /torgi/lot/26000021780000000010_1/
 /torgi/lot/26000021780000000011_1/
+/torgi/lot/26000021780000000012_1/
+/torgi/lot/26000021780000000013_1/
 /torgi/lot/26000021900000000003_1/
 /torgi/lot/26000022160000000001_1/
 /torgi/lot/26000022340000000001_1/
@@ -16734,6 +16741,9 @@
 /torgi/lot/cdt-387045/
 /torgi/lot/cdt-387046/
 /torgi/lot/cdt-387047/
+/torgi/lot/cdt-387049/
+/torgi/lot/cdt-387051/
+/torgi/lot/cdt-387052/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -17113,6 +17123,7 @@
 /torgi/lot/fabrikant-mu6XiFVbPmEPiOyEOCeS8w-1/
 /torgi/lot/fabrikant-nIe_Z7CqIjqLK8vYJLRnlg-1/
 /torgi/lot/fabrikant-rZrVVOhFouqQANYWwgd1CA-1/
+/torgi/lot/fabrikant-sBddBW7UgQOQY-j8GIl4kA-1/
 /torgi/lot/fabrikant-tQs1LvTO415tthNzGmepfg-1/
 /torgi/lot/fabrikant-tQs1LvTO415tthNzGmepfg-2/
 /torgi/lot/fabrikant-uT2Jt7BR-V6hrgdfoUlC4A-1/
@@ -23348,11 +23359,20 @@
 /torgi/lot/nis-499557-4/
 /torgi/lot/nis-499567-1/
 /torgi/lot/nis-499579-1/
+/torgi/lot/nis-499588-1/
 /torgi/lot/nis-499592-1/
 /torgi/lot/nis-499619-1/
 /torgi/lot/nis-499621-1/
 /torgi/lot/nis-499621-2/
 /torgi/lot/nis-499626-1/
+/torgi/lot/nis-499633-1/
+/torgi/lot/nis-499636-1/
+/torgi/lot/nis-499636-2/
+/torgi/lot/nis-499636-3/
+/torgi/lot/nis-499636-4/
+/torgi/lot/nis-499636-5/
+/torgi/lot/nis-499643-1/
+/torgi/lot/nis-499661-1/
 /torgi/lot/rad-1587994/
 /torgi/lot/rad-1596027/
 /torgi/lot/rad-1758271/
