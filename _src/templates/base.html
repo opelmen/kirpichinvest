@@ -109,7 +109,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <div class="cols">
     <div>
       <p><b style="color:#fff">{{ cfg.SITE_NAME }}</b> — {% if wide %}каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России, проверка лотов и сопровождение покупки.{% else %}подбор, проверка и сопровождение покупки жилья с торгов в 16 городах-миллионниках России и в 100 км от них.{% endif %}</p>
-      <p>Мы не организатор торгов и не продавец лотов. Информация о лотах взята из открытых источников ({{ "ГИС Торги и электронные площадки банкротства" if wide else "ГИС Торги" }}) и носит справочный характер. Сайт не является публичной офертой.</p>
+      <p>Мы не организатор торгов и не продавец лотов. Информация о лотах взята из открытых источников ({{ "ГИС Торги и электронные площадки банкротства" if wide else "ГИС Торги" }}) и носит справочный характер и не является предложением продать лот. Условия платных услуг — в <a href="/oferta/">оферте</a>.</p>
       <p>{{ cfg.SITE_OWNER }}{% if cfg.SITE_INN %} · ИНН {{ cfg.SITE_INN }}{% endif %}{% if cfg.SITE_OGRNIP %} · ОГРНИП {{ cfg.SITE_OGRNIP }}{% endif %}<br>{{ cfg.SITE_ADDRESS }}</p>
     </div>
     <div><h3>Разделы</h3><ul>
@@ -127,7 +127,8 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
       {% if cfg.YANDEX_MAPS_URL %}<li><a href="{{ cfg.YANDEX_MAPS_URL }}">Мы на Яндекс Картах: отзывы</a></li>{% endif %}
       {% if cfg.VK_URL %}<li><a href="{{ cfg.VK_URL }}">ВКонтакте</a></li>{% endif %}
       {% if cfg.DZEN_URL %}<li><a href="{{ cfg.DZEN_URL }}">Дзен</a></li>{% endif %}
-      <li><a href="/o-nas/">О нас и реквизиты</a></li><li><a href="{{ author.path }}">Об авторе статей</a></li><li><a href="/politika/">Политика обработки ПД</a></li></ul></div>
+      <li><a href="/kontakty/">Все контакты и сотрудничество</a></li><li><a href="/o-nas/">О нас и реквизиты</a></li><li><a href="{{ author.path }}">Об авторе статей</a></li>
+      <li><a href="/oferta/">Оферта</a></li><li><a href="/oplata/">Оплата, получение и возврат</a></li><li><a href="/politika/">Политика обработки ПД</a></li></ul></div>
   </div>
   <p style="margin-top:24px">© {{ year }} {{ cfg.SITE_NAME }}</p>
 </div></footer>

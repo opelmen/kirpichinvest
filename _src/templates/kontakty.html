@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% from "_form.html" import lead_form %}
+{% block main %}<div class="wrap" style="padding-bottom:64px">
+<p class="crumbs"><a href="/">Главная</a> / Контакты</p>
+<h1>Контакты</h1>
+<p class="lead">Пишите туда, где вам удобнее. Отвечаем {{ hours[0]|lower }}, обычно в тот же день.</p>
+<div class="paths" style="margin:24px 0 40px">
+  <a href="mailto:{{ cfg.SITE_EMAIL }}"><h3>Почта</h3><p>{{ cfg.SITE_EMAIL }}</p><p>Вопросы по отчётам, оплате и возвратам. Приложите ссылку на лот или номер заказа.</p></a>
+  <a href="{{ (cfg.TG_BOT ~ '?start=ask') if cfg.TG_BOT else cfg.SITE_TELEGRAM }}"><h3>Telegram</h3><p>{{ (cfg.TG_BOT or cfg.SITE_TELEGRAM)|replace("https://t.me/","@") }}</p><p>Быстрый вопрос специалисту по лоту, проверке или подаче заявки.</p></a>
+  <a href="mailto:{{ cfg.SITE_EMAIL }}?subject=%D0%A1%D0%BE%D1%82%D1%80%D1%83%D0%B4%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE"><h3>Сотрудничество</h3><p>{{ cfg.SITE_EMAIL }}, тема «Сотрудничество»</p><p>Арбитражным управляющим, банкам и кредиторам, площадкам, сервисам данных, агентствам и СМИ.</p></a>
+</div>
+<div class="split">
+<div>
+<h2>Кому мы будем полезны</h2>
+<ul>
+<li><b>Покупателям</b>: проверка лота, расчёт ставки, помощь с заявкой и сопровождение покупки. <a href="/uslugi/">Услуги и цены</a>.</li>
+<li><b>Управляющим и кредиторам</b>: показ лотов покупателям по всей России. <a href="/partneram/">Подробнее</a>.</li>
+<li><b>Партнёрам</b>: обмен данными, интеграции, совместные материалы. Опишите задачу в письме, ответим с предложением.</li>
+</ul>
+<h2>Реквизиты</h2>
+{% include "_requisites.html" %}
+<p class="small" style="margin-top:12px"><a href="/oferta/">Оферта</a> · <a href="/oplata/">Оплата, получение и возврат</a> · <a href="/politika/">Политика обработки ПД</a></p>
+</div>
+{{ lead_form("buy", "Написать нам", "", "Отправить", [{"name":"q","label":"Вопрос","area":true}]) }}
+</div></div>{% endblock %}
