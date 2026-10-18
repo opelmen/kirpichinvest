@@ -158,6 +158,25 @@ def next_step(schedule, now=None):
     return None
 
 
+def land_text(x):
+    """Продают ли участок под зданием (поле land выгрузки) — одна строка для страницы лота."""
+    if not x:
+        return None
+    p = ", ".join(v for v in (f"КН {x['cad']}" if x.get("cad") else None,
+                              f"{x['area']:,.0f} м²".replace(",", " ") if x.get("area") else None) if v)
+    p = f" ({p})" if p else ""
+    return {
+        "with": f"продают вместе со зданием{p}",
+        "with_extra": f"переходит вместе со зданием, цену платят отдельно{p}",
+        "lease": f"не продают, участок в аренде{p}: аренда переходит к покупателю здания",
+        "not_sold": f"в лот не входит{p}: выкуп или аренду земли оформлять отдельно",
+        "public": f"государственный, собственность не разграничена{p}: выкуп или аренда без торгов",
+        "mkd": "помещение в многоквартирном доме: участок общий, доля переходит вместе с помещением",
+        "premise": "продаётся помещение: участок отдельно не продают, земля общая у собственников помещений",
+        "on_plot": f"здание стоит на участке{p}, продают ли его, в извещении не сказано: смотрите проект договора",
+    }.get(x.get("status"), "о земле под зданием в извещении ни слова: смотрите проект договора")
+
+
 def from_market(rows):
     out = []
     for r in rows:
@@ -195,7 +214,10 @@ def from_market(rows):
             "price_drops": r.get("price_drops") or 0, "price_was": r.get("price_was"),
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
             "comps": r.get("comps") if cat in NONRES and ppm2 else None,
+            "land_text": land_text(r.get("land")),
         }
+        if (r.get("land") or {}).get("status") == "not_sold":
+            d["flags"] = ", ".join(x for x in (d["flags"], "участок в лот не входит") if x)
         if r.get("market_conf") == "low" and cat not in NONRES and cat != "share" and r.get("market_price"):
             d["city_market"] = r["market_price"]  # грубый ориентир по городу: показываем суммой, без процента
         tone, badge, text = verdict(d)
