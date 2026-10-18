@@ -116,7 +116,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('ItemList', region)
             deal = dict(row, id='mets:20', city='kazan', address='г. Казань, ул. Баумана, д. 5', risks=[], discount_pct=25.0, market_price=2_700_000)
             rows2 = rows + [dict(deal, id=f'mets:2{i}', price_drops=2, price_was=2_500_000) for i in range(3)] + [dict(deal, id='mets:30', category='share')] + [
-                dict(deal, id='mets:31', city='moskva', region='77', address='г. Москва, ул. Профсоюзная, д. 12', discount_pct=20.0)]
+                dict(deal, id='mets:31', city='moskva', region='77', address='г. Москва, ул. Профсоюзная, д. 12', discount_pct=20.0)] + [
+                dict(deal, id='mets:32', category='commercial', title='Нежилое здание', land=dict(kind='building', status='lease', cad='16:50:1:2', area=900.0))]
             (data/'market.json').write_text(json.dumps({'lots': rows2}, ensure_ascii=False))
             subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
             board = (site/'index.html').read_text().split('class="board"')[1].split('class="more"')[0]
@@ -136,6 +137,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Банкротное имущество</span>', kazan)
             self.assertNotIn('995', deal_card)  # личного телефона на сайте нет
             self.assertIn('повторные торги: цена уже снижена', deal_card)  # повторные — плюс, не риск
+            bld = (site/'torgi/lot/mets-32/index.html').read_text()
+            self.assertIn('<th>Земельный участок</th><td>не продают, участок в аренде (КН 16:50:1:2, 900 м²)', bld)  # участок под зданием
             similar = deal_card.split('<h2>Похожие лоты</h2>')[1]
             self.assertNotIn('/torgi/lot/mets-30/', similar)  # доля к квартире в похожие не попадает
             ym = __import__('datetime').date.today().strftime('%Y-%m')
