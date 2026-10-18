@@ -27,7 +27,7 @@
 {% for d in lots %}
   <a class="lot" href="/torgi/lot/{{ d.id }}/">
     {% if d.photo %}<img class="thumb" src="{{ d.photo }}" alt="" width="320" height="200" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
-    {% set ktag = {"bankruptcy": "Банкротное", "arrest": "Арестованное", "pledge": "Залоговое"}.get(d.kind) %}{% if ktag and not archive %}<span class="kindtag k-{{ d.kind }}">{{ ktag }} имущество</span>{% endif %}
+    {% set ktag = {"bankruptcy": "Банкротное имущество", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество", "state": "Госимущество"}.get(d.kind) %}{% if ktag and not archive %}<span class="kindtag k-{{ d.kind }}">{{ ktag }}</span>{% endif %}
     <span>{% if d.city_name %}<span class="tag" style="margin-right:6px">{{ d.city_name }}</span>{% endif %}{% if d.category %}<b>{{ d.label }}</b> · {% endif %}{{ d.caddr[:120] }}</span>
     <span class="p">{{ d.price|rub }}</span>{% if not archive and d.price_drops and d.price_was %}<span class="small plus">↓ Цена снижалась {{ d.price_drops }} {{ "раз" if d.price_drops == 1 or d.price_drops > 4 else "раза" }}: {{ d.price_was|mln }} → {{ d.price|mln }}</span>{% elif not archive and d.repeat %}<span class="small plus">Повторные торги: цена уже снижена</span>{% endif %}{% if budget %}<span class="small">{{ object_group(d) }}</span>{% endif %}
     {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}
