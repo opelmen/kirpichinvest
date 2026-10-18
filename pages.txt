@@ -203,6 +203,7 @@
 /torgi/arhiv/page/56/
 /torgi/arhiv/page/57/
 /torgi/arhiv/page/58/
+/torgi/arhiv/page/59/
 /torgi/arhiv/page/6/
 /torgi/arhiv/page/7/
 /torgi/arhiv/page/8/
@@ -239,6 +240,7 @@
 /torgi/bankrotstvo/page/111/
 /torgi/bankrotstvo/page/112/
 /torgi/bankrotstvo/page/113/
+/torgi/bankrotstvo/page/114/
 /torgi/bankrotstvo/page/12/
 /torgi/bankrotstvo/page/13/
 /torgi/bankrotstvo/page/14/
@@ -1225,7 +1227,6 @@
 /torgi/do-5-mln/page/253/
 /torgi/do-5-mln/page/254/
 /torgi/do-5-mln/page/255/
-/torgi/do-5-mln/page/256/
 /torgi/do-5-mln/page/26/
 /torgi/do-5-mln/page/27/
 /torgi/do-5-mln/page/28/
@@ -1433,7 +1434,6 @@
 /torgi/habarovskiy-kray/do-5-mln/
 /torgi/habarovskiy-kray/do-5-mln/page/2/
 /torgi/habarovskiy-kray/do-5-mln/page/3/
-/torgi/habarovskiy-kray/do-5-mln/page/4/
 /torgi/habarovskiy-kray/doli/
 /torgi/habarovskiy-kray/doma/
 /torgi/habarovskiy-kray/garazhi/
@@ -1672,7 +1672,6 @@
 /torgi/kemerovskaya-oblast/page/3/
 /torgi/kemerovskaya-oblast/page/4/
 /torgi/kemerovskaya-oblast/page/5/
-/torgi/kemerovskaya-oblast/page/6/
 /torgi/kemerovskaya-oblast/vygodnye/
 /torgi/kemerovskaya-oblast/zemlya/
 /torgi/kirovskaya-oblast/
@@ -11686,6 +11685,12 @@
 /torgi/lot/22000159530000000026_1/
 /torgi/lot/22000159530000000028_1/
 /torgi/lot/22000159620000000154_1/
+/torgi/lot/22000159970000000831_1/
+/torgi/lot/22000159970000000831_2/
+/torgi/lot/22000159970000000831_3/
+/torgi/lot/22000159970000000831_4/
+/torgi/lot/22000159970000000831_5/
+/torgi/lot/22000159970000000831_6/
 /torgi/lot/22000159990000000013_1/
 /torgi/lot/22000160180000000018_1/
 /torgi/lot/22000160180000000018_2/
@@ -11769,6 +11774,9 @@
 /torgi/lot/22000166520000000085_1/
 /torgi/lot/22000166520000000085_2/
 /torgi/lot/22000166520000000085_3/
+/torgi/lot/22000166840000000046_1/
+/torgi/lot/22000166840000000047_1/
+/torgi/lot/22000166840000000047_2/
 /torgi/lot/22000167790000000001_1/
 /torgi/lot/22000168070000000008_1/
 /torgi/lot/22000168650000000008_1/
@@ -15308,6 +15316,10 @@
 /torgi/lot/26000021780000000011_1/
 /torgi/lot/26000021780000000012_1/
 /torgi/lot/26000021780000000013_1/
+/torgi/lot/26000021780000000014_1/
+/torgi/lot/26000021780000000015_1/
+/torgi/lot/26000021780000000016_1/
+/torgi/lot/26000021780000000017_1/
 /torgi/lot/26000021900000000003_1/
 /torgi/lot/26000022160000000001_1/
 /torgi/lot/26000022340000000001_1/
@@ -16513,6 +16525,13 @@
 /torgi/lot/cdt-387143/
 /torgi/lot/cdt-387146/
 /torgi/lot/cdt-387147/
+/torgi/lot/cdt-387157/
+/torgi/lot/cdt-387161/
+/torgi/lot/cdt-387163/
+/torgi/lot/cdt-387165/
+/torgi/lot/cdt-387169/
+/torgi/lot/cdt-387171/
+/torgi/lot/cdt-387173/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -23689,6 +23708,8 @@
 /torgi/lot/rad-1778243/
 /torgi/lot/rad-1778255/
 /torgi/lot/rad-1778279/
+/torgi/lot/rad-1778346/
+/torgi/lot/rad-1778347/
 /torgi/lot/utpl-127396/
 /torgi/lot/utpl-127397/
 /torgi/lot/utpl-127518/
@@ -24442,7 +24463,6 @@
 /torgi/page/301/
 /torgi/page/302/
 /torgi/page/303/
-/torgi/page/304/
 /torgi/page/31/
 /torgi/page/32/
 /torgi/page/33/
@@ -24867,6 +24887,7 @@
 /torgi/sankt-peterburg/pikalevo/
 /torgi/sankt-peterburg/podporozhskiy-rayon/
 /torgi/sankt-peterburg/priozerskiy-rayon/
+/torgi/sankt-peterburg/sertolovo/
 /torgi/sankt-peterburg/slancy/
 /torgi/sankt-peterburg/sosnovyy-bor/
 /torgi/sankt-peterburg/tosnenskiy-rayon/
@@ -25037,7 +25058,6 @@
 /torgi/tomskaya-oblast/dvuhkomnatnye/
 /torgi/tomskaya-oblast/garazhi/
 /torgi/tomskaya-oblast/kommercheskaya/
-/torgi/tomskaya-oblast/kommercheskaya/page/2/
 /torgi/tomskaya-oblast/page/2/
 /torgi/tomskaya-oblast/page/3/
 /torgi/tomskaya-oblast/vygodnye/
@@ -25451,7 +25471,6 @@
 /torgi/zabaykalskiy-kray/doma/
 /torgi/zabaykalskiy-kray/garazhi/
 /torgi/zabaykalskiy-kray/kommercheskaya/
-/torgi/zabaykalskiy-kray/kommercheskaya/page/2/
 /torgi/zabaykalskiy-kray/page/2/
 /torgi/zabaykalskiy-kray/page/3/
 /torgi/zabaykalskiy-kray/vygodnye/
