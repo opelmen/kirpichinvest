@@ -725,7 +725,7 @@ def build():
 
 ## Услуги и цены
 - Отчёт по лоту (Рентген): {cfg.REPORT_PRICE} ₽, в приложении {cfg.APP_URL}/
-{f"- Полная проверка лота перед торгами: {cfg.PRICE_CHECK}, {cfg.SITE_URL}/proverka-lota/" + chr(10) if cfg.PRICE_CHECK else ""}- Покупка квартиры с торгов под ключ: 10 000 ₽ при заказе + 2% от цены покупки при победе, {cfg.SITE_URL}/kupit-kvartiru-s-torgov/
+{f"- Полная проверка лота перед торгами: {cfg.PRICE_CHECK}, {cfg.SITE_URL}/proverka-lota/" + chr(10) if cfg.PRICE_CHECK else ""}- Покупка квартиры с торгов под ключ: 10 000 ₽ при заказе + 2% от цены покупки при победе, но не меньше 45 000 ₽, {cfg.SITE_URL}/kupit-kvartiru-s-torgov/
 - Работаем дистанционно по всей России: торги проходят на электронных площадках.
 
 ## Контакты

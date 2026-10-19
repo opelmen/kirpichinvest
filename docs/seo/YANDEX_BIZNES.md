@@ -38,7 +38,7 @@
 |---|---|---|
 | Отчёт по лоту (Рентген) | 490 ₽ | https://app.torggid.ru/ |
 | Полная проверка лота перед торгами | 6 900 ₽ | https://torggid.ru/proverka-lota/ |
-| Покупка квартиры с торгов под ключ | от 10 000 ₽ + 2% от цены покупки при победе | https://torggid.ru/kupit-kvartiru-s-torgov/ |
+| Покупка квартиры с торгов под ключ | от 10 000 ₽ + 2% от цены покупки при победе (не меньше 45 000 ₽) | https://torggid.ru/kupit-kvartiru-s-torgov/ |
 | Подборка лотов в Telegram | бесплатно | https://torggid.ru/podpiska/ |
 
 ## 5. Фото

@@ -51,7 +51,7 @@
     "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Услуги на торгах", "itemListElement": ([
       {"@type": "Offer", "price": cfg.REPORT_PRICE, "priceCurrency": "RUB", "url": cfg.APP_URL ~ "/", "itemOffered": {"@type": "Service", "name": "Отчёт по лоту (Рентген)"}}]
       + ([{"@type": "Offer", "price": cfg.PRICE_CHECK|digits, "priceCurrency": "RUB", "url": cfg.SITE_URL ~ "/proverka-lota/", "itemOffered": {"@type": "Service", "name": "Полная проверка лота перед торгами"}}] if cfg.PRICE_CHECK else [])
-      + [{"@type": "Offer", "price": 10000, "priceCurrency": "RUB", "url": cfg.SITE_URL ~ "/kupit-kvartiru-s-torgov/", "description": "10 000 ₽ при заказе + 2% от цены покупки при победе", "itemOffered": {"@type": "Service", "name": "Покупка квартиры с торгов под ключ"}}])},
+      + [{"@type": "Offer", "price": 10000, "priceCurrency": "RUB", "url": cfg.SITE_URL ~ "/kupit-kvartiru-s-torgov/", "description": "10 000 ₽ при заказе + 2% от цены покупки при победе, но не меньше 45 000 ₽", "itemOffered": {"@type": "Service", "name": "Покупка квартиры с торгов под ключ"}}])},
     "taxID": cfg.SITE_INN or None
   }, {
     "@type": "WebSite",
