@@ -83,6 +83,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('/?category=flat&amp;category=room&amp;category=share&amp;category=house&amp;price_max=1&amp;follow=1', (site/'torgi/do-1-mln/index.html').read_text())
             self.assertNotIn('utm_', moskva.replace('utm_source","utm_medium', '').split('<script>')[0])
             self.assertIn('tg_acq=', moskva)
+            self.assertNotIn('Канал в Max', moskva)  # пока ссылки нет в настройках — кнопок Max не показываем
             self.assertIn('<a href="/torgi/moskva/">Москва</a>', (site/'torgi/lot/test_5/index.html').read_text())  # город в крошках карточки
             rows[1]['status'] = 'ignored'  # Build derives lifecycle from source/deadline.
             rows[1]['bidd_type'] = 'Аренда'

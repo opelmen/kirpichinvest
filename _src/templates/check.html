@@ -82,7 +82,7 @@ h+='<h3>Риски из извещения</h3>'+((j.flags||[]).length?'<ul>'+j.
 h+='<h3>Что не видно в открытых данных</h3><ul class="no"><li>Жалобы и споры в деле о банкротстве — риск отмены торгов</li><li>История квартиры и прежние собственники, отказники от приватизации</li><li>Кто реально живёт, есть ли дети, срок выселения</li><li>Ловушки в проекте договора</li><li>За сколько похожие объекты реально продали на торгах</li></ul>';
 h+='<p><a class="btn" href="#full">Полная проверка · {{ cfg.PRICE_CHECK }}</a> <a class="btn ghost" href="'+E(j.link)+'" target="_blank" rel="nofollow noopener">Лот на ГИС Торги</a></p>';
 h+='<p class="mute small">Оценка по объявлениям — ориентир, не отчёт об оценке. Информация не является офертой.</p>';
-{% if cfg.TG_CHANNEL %}h+='<p style="margin-top:12px">📣 Такие разборы — каждый день в <a href="{{ cfg.TG_CHANNEL }}">нашем Telegram-канале</a>. Подборка новых лотов под ваш город — в <a href="{{ cfg.TG_BOT }}">боте</a>.</p>';{% endif %}
+{% if cfg.TG_CHANNEL %}h+='<p style="margin-top:12px">📣 Такие разборы — каждый день в <a href="{{ cfg.TG_CHANNEL }}">нашем Telegram-канале</a>{% if cfg.MAX_CHANNEL %} и <a href="{{ cfg.MAX_CHANNEL }}">в Max</a>{% endif %}. Подборка новых лотов под ваш город — в <a href="{{ cfg.TG_BOT }}">боте</a>.</p>';{% endif %}
 h+='</div>';out.innerHTML=h;
 }).catch(function(){b.disabled=false;out.innerHTML="";er.textContent="Нет связи с сервером. Попробуйте ещё раз.";er.style.display="block"})})})();
 </script>{% endblock %}
