@@ -137,6 +137,7 @@ footer h3{color:#fff;font-size:15px}footer ul{list-style:none;padding:0;margin:0
 .board .more-app{padding-top:4px;color:#9FB0C3;font-weight:400;font-size:14px}
 .appbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 20px}
 .appbar p{margin:0;flex:1 1 260px;font-size:15px}.appbar .btn{white-space:nowrap}
+.appbar.follow{border-color:var(--petrol);box-shadow:0 0 0 1px var(--petrol) inset}.appbar.follow .btn.ghost{padding-left:14px;padding-right:14px}
 .lotphoto{width:100%;max-height:360px;object-fit:cover;border-radius:12px;margin:0 0 16px;background:var(--line)}
 details.places{margin:0 0 16px}details.places summary{cursor:pointer;font-weight:500;padding:6px 0}details.places .filters{margin:10px 0 0}
 h1,h2{text-wrap:balance}
