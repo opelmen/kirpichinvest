@@ -28,7 +28,8 @@ cfg = SimpleNamespace(
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
     YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
-    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
+    TG_CHANNEL="", TG_BOT="", MAX_CHANNEL="",  # канал в Max (https://max.ru/…): дубль Telegram, John 21.10.2026
+    APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
     YANDEX_MAPS_URL="", VK_URL="", DZEN_URL="", SAME_AS=[])  # карточка в Яндекс Бизнесе и соцсети: попадают в sameAs и подвал
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
@@ -78,7 +79,7 @@ def terms_list(terms):
 
 def same_as():
     """Профили бренда вне сайта: нейросети и Яндекс сверяют по ним, что ТоргГид — одна и та же организация."""
-    return list(dict.fromkeys(u for u in [cfg.YANDEX_MAPS_URL, cfg.TG_CHANNEL, cfg.VK_URL, cfg.DZEN_URL, cfg.TG_BOT, *cfg.SAME_AS] if u))
+    return list(dict.fromkeys(u for u in [cfg.YANDEX_MAPS_URL, cfg.TG_CHANNEL, cfg.MAX_CHANNEL, cfg.VK_URL, cfg.DZEN_URL, cfg.TG_BOT, *cfg.SAME_AS] if u))
 
 
 env.globals.update(terms_list=terms_list, cfg=cfg, same_as=same_as, hours=HOURS, year=date.today().year, today=date.today().strftime("%d.%m.%Y"), author=AUTHOR, ld=ld, faq_ld=faq_ld, crumbs_ld=crumbs_ld)
@@ -241,6 +242,32 @@ FACETS = [  # slug, название, фильтр, заголовок-форм�
     ("bankrotstvo", "Банкротство", lambda d: d.get("kind") == "bankruptcy", "Недвижимость с торгов по банкротству"),
     ("arestovannoe", "Арестованное", lambda d: d.get("kind") == "arrest", "Арестованная недвижимость с торгов"),
 ]
+# подборка сайта → те же условия в поиске платформы: кнопка «Следить за подборкой» создаёт там «Охотника»
+# (посадочные под рекламу, John 21.10.2026). Ключи — параметры адресной строки каталога app.torggid.ru
+APP_FACET = {
+    "vygodnye": [("category", "flat"), ("category", "house"), ("discount_min", "10")],
+    "odnokomnatnye": [("category", "flat"), ("rooms", "1")], "dvuhkomnatnye": [("category", "flat"), ("rooms", "2")],
+    "trehkomnatnye": [("category", "flat"), ("rooms", "3"), ("rooms", "4")],
+    "komnaty": [("category", "room")], "doli": [("category", "share")], "do-5-mln": [("category", "flat"), ("price_max", "5")],
+    "povtornye-torgi": [("repeat", "1")], "doma": [("category", "house")], "zemlya": [("category", "land")],
+    "kommercheskaya": [("category", "commercial")], "garazhi": [("category", "garage")],
+    "bankrotstvo": [("kind", "bankruptcy")], "arestovannoe": [("kind", "arrest")],
+}
+
+
+def app_query(path):
+    """/torgi/kazan/doli/ → city=kazan&category=share. Регион и район платформа пока не фильтрует: берём только подборку."""
+    parts = [x for x in path.strip("/").split("/") if x][1:]
+    q = []
+    if parts and parts[0] in CITY_NAME:
+        q.append(("city", parts.pop(0)))
+    elif parts and parts[0] not in APP_FACET:
+        parts.pop(0)
+    if parts and parts[0] in APP_FACET:
+        q += APP_FACET[parts[0]]
+    return "&".join(f"{k}={v}" for k, v in q)
+
+
 CITIES = [  # slug, название, «где», субъекты
     ("moskva", "Москва", "в Москве и Подмосковье"), ("sankt-peterburg", "Санкт-Петербург", "в Санкт-Петербурге и Ленобласти"),
     ("novosibirsk", "Новосибирск", "в Новосибирске и области"), ("ekaterinburg", "Екатеринбург", "в Екатеринбурге и области"),
@@ -506,6 +533,8 @@ def build():
         # дата изменения списка — последнее изменение его лотов, а не дата сборки: иначе lastmod меняется
         # у всех страниц несколько раз в день и поисковики перестают ему доверять
         lastmod = max((d.get("lastmod") or "" for d in lots), default="") or TODAY
+        app_q = ("&".join(f"category={c}" for c in ("flat", "room", "share", "house")) + f"&price_max={budget['million']}"
+                 if budget else app_query(path))
         for url, n in pages:
             suffix = f" — страница {n}" if n > 1 else ""
             page_crumbs = crumbs + ([(f"Страница {n}", url)] if n > 1 else [])
@@ -514,7 +543,7 @@ def build():
             write(url, "torgi.html", priority=priority, lastmod=lastmod, lots=lots[(n-1)*page_size:n*page_size],
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots, faq=(faq or []) if n == 1 else [],
-                  cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget,
+                  cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget, app_q=app_q,
                   title=f"{h1}{suffix} — {'архив' if archive else 'актуальные лоты ' + TODAY[:4]}",
                   description=description + suffix)
 

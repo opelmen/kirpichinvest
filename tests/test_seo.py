@@ -78,6 +78,12 @@ class BuildTests(unittest.TestCase):
             moskva = (site/'torgi/moskva/index.html').read_text()
             self.assertIn('aria-label="Другие города"', moskva)
             self.assertIn('href="/torgi/sankt-peterburg/"', moskva.split('aria-label="Другие города"')[1].split('</nav>')[0])
+            # посадочные под рекламу: подборка сохраняется «Охотником» в платформе, ссылки в платформу без utm (Метрика не рвёт визит)
+            self.assertIn('/?city=moskva&amp;follow=1&amp;from=catalog_follow', moskva)
+            self.assertIn('/?category=flat&amp;category=room&amp;category=share&amp;category=house&amp;price_max=1&amp;follow=1', (site/'torgi/do-1-mln/index.html').read_text())
+            self.assertNotIn('utm_', moskva.replace('utm_source","utm_medium', '').split('<script>')[0])
+            self.assertIn('tg_acq=', moskva)
+            self.assertIn('https://max.ru/id780108433761_biz', moskva)  # канал в Max рядом с Telegram
             self.assertIn('<a href="/torgi/moskva/">Москва</a>', (site/'torgi/lot/test_5/index.html').read_text())  # город в крошках карточки
             rows[1]['status'] = 'ignored'  # Build derives lifecycle from source/deadline.
             rows[1]['bidd_type'] = 'Аренда'
@@ -114,6 +120,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Недвижимость с торгов в Татарстане', region)
             self.assertIn('FAQPage', region)  # у региона свои вопросы с цифрами каталога, как у города
             self.assertIn('ItemList', region)
+            self.assertNotIn('follow=1', region)  # регион платформа не фильтрует: без «Следить», только поиск на карте
+            self.assertIn('/?category=land&amp;follow=1', (site/'torgi/zemlya/index.html').read_text())
             deal = dict(row, id='mets:20', city='kazan', address='г. Казань, ул. Баумана, д. 5', risks=[], discount_pct=25.0, market_price=2_700_000)
             rows2 = rows + [dict(deal, id=f'mets:2{i}', price_drops=2, price_was=2_500_000) for i in range(3)] + [dict(deal, id='mets:30', category='share')] + [
                 dict(deal, id='mets:31', city='moskva', region='77', address='г. Москва, ул. Профсоюзная, д. 12', discount_pct=20.0)] + [

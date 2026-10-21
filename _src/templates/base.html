@@ -24,7 +24,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/static/brand/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
-<link rel="stylesheet" href="/static/site.css?v=8">
+<link rel="stylesheet" href="/static/site.css?v=10">
 {% set org_id = cfg.SITE_URL ~ "/#org" %}{% set person_id = cfg.SITE_URL ~ author.path ~ "#person" %}
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
@@ -89,7 +89,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <button class="burger" aria-label="Меню" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰ Меню</button>
   <nav class="nav">
     <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Каталог</a>
-    <a href="{{ cfg.APP_URL }}/?utm_source=torggid&amp;utm_medium=nav">Поиск на карте</a>
+    <a href="{{ cfg.APP_URL }}/?from=nav">Поиск на карте</a>
     {% if cfg.AUTO_URL %}<a href="{{ cfg.AUTO_URL }}">Авто</a>{% endif %}
     <a href="/kupit-kvartiru-s-torgov/" {% if path.startswith('/kupit') %}aria-current="page"{% endif %}>Под ключ</a>
     <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>
@@ -97,10 +97,12 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
     <a href="/kalkulyator-stavki/" {% if path.startswith('/kalk') %}aria-current="page"{% endif %}>Калькулятор</a>
     <a href="/stati/" {% if path.startswith('/stati') %}aria-current="page"{% endif %}>Статьи</a>
     {% if cfg.TG_CHANNEL %}<a class="nav-tg" href="{{ cfg.TG_CHANNEL }}">Telegram-канал · лот дня</a>{% endif %}
+    {% if cfg.MAX_CHANNEL %}<a class="nav-tg nav-max" href="{{ cfg.MAX_CHANNEL }}">Канал в Max · лот дня</a>{% endif %}
     <a href="{{ cfg.APP_URL }}/my">Войти</a>
     <a class="btn nav-cta" href="/#zayavka">Оставить заявку</a>
   </nav>
   {% if cfg.TG_CHANNEL %}<a class="head-tg" href="{{ cfg.TG_CHANNEL }}" title="Telegram-канал: лот дня" aria-label="Telegram-канал"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13.1l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 2.8c.9-.3 1.7.2 1.4 1.5z"/></svg></a>{% endif %}
+  {% if cfg.MAX_CHANNEL %}<a class="head-tg head-max" href="{{ cfg.MAX_CHANNEL }}" title="Канал в Max: лот дня" aria-label="Канал в Max"><span class="maxmark" aria-hidden="true">MAX</span></a>{% endif %}
   <a class="btn head-cta" href="/#zayavka">Оставить заявку</a>
 </div></header>
 <main id="main">{% block main %}{% endblock %}
@@ -122,6 +124,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
       {% if cfg.TG_BOT %}<li><a href="{{ cfg.TG_BOT }}?start=ask">Вопрос специалисту в Telegram</a></li>{% endif %}
       <li><a href="mailto:{{ cfg.SITE_EMAIL }}">{{ cfg.SITE_EMAIL }}</a></li>
       {% if cfg.TG_CHANNEL %}<li><a href="{{ cfg.TG_CHANNEL }}">Telegram-канал: лот дня</a></li>{% endif %}
+      {% if cfg.MAX_CHANNEL %}<li><a href="{{ cfg.MAX_CHANNEL }}">Канал в Max: лот дня</a></li>{% endif %}
       {% if cfg.TG_BOT %}<li><a href="{{ cfg.TG_BOT }}">Бот: подборка лотов</a></li>{% endif %}
       <li>{{ hours[0] }}</li>
       {% if cfg.YANDEX_MAPS_URL %}<li><a href="{{ cfg.YANDEX_MAPS_URL }}">Мы на Яндекс Картах: отзывы</a></li>{% endif %}
@@ -135,6 +138,12 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
 <script>
 (function(){var p=new URLSearchParams(location.search),u=[];["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){if(p.get(k))u.push(k+"="+p.get(k))});
 try{if(u.length)sessionStorage.setItem("utm",u.join("&"))}catch(e){}
+/* откуда пришёл: кука tg_acq на весь torggid.ru, её читает кабинет app.torggid.ru при регистрации. Рекламный переход перезаписывает, обычный — только первый раз */
+try{if(/(^|\.)torggid\.ru$/.test(location.hostname)){var had=/(?:^|;\s*)tg_acq=/.test(document.cookie),paid=p.get("utm_source")||p.get("yclid");
+if(paid||!had){var a={},m={utm_source:"source",utm_medium:"medium",utm_campaign:"campaign",utm_term:"term",utm_content:"content",yclid:"yclid"};
+for(var k in m)if(p.get(k))a[m[k]]=p.get(k).slice(0,200);var r=document.referrer&&new URL(document.referrer).hostname;if(r&&!/(^|\.)torggid\.ru$/.test(r))a.ref=r;
+a.landing=location.pathname.slice(0,200);a.at=new Date().toISOString().slice(0,10);
+document.cookie="tg_acq="+encodeURIComponent(JSON.stringify(a))+";domain=.torggid.ru;path=/;max-age=7776000;SameSite=Lax;Secure"}}}catch(e){}
 document.querySelectorAll("form[data-lead]").forEach(function(f){f.addEventListener("submit",function(ev){ev.preventDefault();
 if(f.dataset.busy)return;if(!f.reportValidity())return;
 var d=new FormData(f);d.append("page",location.pathname);try{d.append("utm",sessionStorage.getItem("utm")||"")}catch(e){}
@@ -142,7 +151,7 @@ var b=f.querySelector("button"),bt=b.innerHTML,er=f.querySelector(".err");er.sty
 var done=function(){delete f.dataset.busy;b.disabled=false;b.removeAttribute("aria-busy");b.innerHTML=bt};
 f.dataset.busy="1";b.disabled=true;b.setAttribute("aria-busy","true");b.innerHTML='<span class="spin"></span>Отправляем…';
 fetch("{{ cfg.LEAD_URL }}",{method:"POST",body:d}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(j){
-if(j.ok){f.querySelector(".fields").style.display="none";var ok=f.querySelector(".ok");ok.style.display="block";{% if cfg.TG_CHANNEL %}ok.innerHTML+=' Пока ждёте — <a href="{{ cfg.TG_CHANNEL }}">лоты дня с предоценкой в нашем Telegram-канале</a>.';{% endif %}try{if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}catch(e){}}
+if(j.ok){f.querySelector(".fields").style.display="none";var ok=f.querySelector(".ok");ok.style.display="block";{% if cfg.TG_CHANNEL %}ok.innerHTML+=' Пока ждёте — <a href="{{ cfg.TG_CHANNEL }}">лоты дня с предоценкой в нашем Telegram-канале</a>{% if cfg.MAX_CHANNEL %} или <a href="{{ cfg.MAX_CHANNEL }}">в Max</a>{% endif %}.';{% endif %}try{if(window.ym&&{{ cfg.METRIKA_ID or 0 }})ym({{ cfg.METRIKA_ID or 0 }},"reachGoal","lead_"+d.get("scenario"))}catch(e){}}
 else{er.textContent=j.error||"Не отправилось. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";done()}})
 .catch(function(){er.textContent="Нет связи. Напишите нам на {{ cfg.SITE_EMAIL }}{% if cfg.TG_BOT %} или в Telegram-бот{% endif %}.";er.style.display="block";done()})})})})();
 </script>
