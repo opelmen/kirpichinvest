@@ -40,7 +40,7 @@
 | Полная проверка лота перед торгами | 6 900 ₽ | https://torggid.ru/proverka-lota/ |
 | Проверка авто по VIN: залог, ограничения, розыск | бесплатно | https://torggid.ru/proverka-avto-po-vin/ |
 | «История машины»: полный отчёт по VIN | 99 ₽; пакеты 5 за 399 ₽, 10 за 690 ₽, 30 за 1 590 ₽, 100 за 3 490 ₽ | https://torggid.ru/proverka-avto-po-vin/ |
-| Покупка квартиры с торгов под ключ | от 10 000 ₽ + 2% от цены покупки при победе | https://torggid.ru/kupit-kvartiru-s-torgov/ |
+| Покупка квартиры с торгов под ключ | от 10 000 ₽ + 2% от цены покупки при победе (не меньше 45 000 ₽) | https://torggid.ru/kupit-kvartiru-s-torgov/ |
 | Подборка лотов в Telegram | бесплатно | https://torggid.ru/podpiska/ |
 
 ## 5. Фото

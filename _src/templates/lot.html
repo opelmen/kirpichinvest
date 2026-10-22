@@ -13,7 +13,7 @@
 <p class="crumbs"><a href="/">Главная</a> / <a href="/torgi/">Лоты</a>{% for n, u in place %} / <a href="{{ u }}">{{ n }}</a>{% endfor %} / {{ d.caddr[:60] }}</p>
 <div class="article" style="padding-top:8px">
 <div class="body">
-  {% set ktag = {"bankruptcy": "Банкротное имущество", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество"}.get(d.kind) %}
+  {% set ktag = {"bankruptcy": "Банкротное имущество", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество", "state": "Государственное и муниципальное имущество"}.get(d.kind) %}
   {% set residential = d.category in ("flat", "room", "share", "house") %}
   {% set pub = d.bidd_type and "убличн" in d.bidd_type %}
   {% set app_lot = (cfg.APP_URL ~ "/lot/" ~ d.app_id|urlencode) if d.app_id else none %}
@@ -48,10 +48,10 @@
     {% if d.kind == "bankruptcy" and "dispute" not in rk %}<li class="nodata"><b>Оспаривание продажи</b> <span class="st">нет данных</span> Как узнать: дело должника в картотеке арбитражных дел: дата начала банкротства и открытые споры.</li>{% endif %}
     {% if d.bidd_end %}<li class="plus"><b>Сроки</b> <span class="st">данные площадки</span> заявки до {{ d.bidd_end[:10].split("-")|reverse|join(".") }}{% if d.days_left is not none and d.days_left > 0 %}, ещё {{ d.days_left|round(0, 'floor')|int }} дн.{% endif %}; задаток нужно внести до окончания приёма.</li>{% endif %}
     </ul>
-    <div class="xray-cta">{% if app_lot %}<a class="btn" href="{{ app_lot }}?buy=1&amp;utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=report" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_report')">Проверим за вас · {{ cfg.REPORT_PRICE }} ₽<small>разбор документов торгов, выписка ЕГРН, дело должника, правовая оценка рисков, заполненная заявка и подача по шагам</small></a><a class="btn ghost" href="{{ app_lot }}/zayavka?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=zayavka" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_zayavka')">Собрать пакет подачи<small>сроки, задаток с назначением платежа, документы</small></a>{% endif %}</div>
-    <p class="mute small xray-ask">{% if cfg.TG_BOT %}Сомневаетесь? <a href="{{ cfg.TG_BOT }}?start=ask_{{ d.id }}" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','ask_bot')">Спросить специалиста в Telegram</a> · {% endif %}{% if app_lot %}<a href="{{ app_lot }}?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=full_card" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_app_lot')">Полная карточка: фото, документы, аналоги, расходы</a> · {% endif %}вывод автоматический, по извещению и объявлениям рядом, это не юридическое заключение.</p>
+    <div class="xray-cta">{% if app_lot %}<a class="btn" href="{{ app_lot }}?buy=1&amp;from=lot_report" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_report')">Проверим за вас · {{ cfg.REPORT_PRICE }} ₽<small>разбор документов торгов, выписка ЕГРН, дело должника, правовая оценка рисков, заполненная заявка и подача по шагам</small></a><a class="btn ghost" href="{{ app_lot }}/zayavka?from=lot_zayavka" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_zayavka')">Собрать пакет подачи<small>сроки, задаток с назначением платежа, документы</small></a>{% endif %}</div>
+    <p class="mute small xray-ask">{% if cfg.TG_BOT %}Сомневаетесь? <a href="{{ cfg.TG_BOT }}?start=ask_{{ d.id }}" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','ask_bot')">Спросить специалиста в Telegram</a> · {% endif %}{% if app_lot %}<a href="{{ app_lot }}?from=lot_full_card" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_app_lot')">Полная карточка: фото, документы, аналоги, расходы</a> · {% endif %}вывод автоматический, по извещению и объявлениям рядом, это не юридическое заключение.</p>
     {% if residential %}<nav aria-label="Инструкции для покупателя" class="mute small"><a href="/stati/proverka-kvartiry-s-torgov/">12 проверок до заявки</a> · <a href="/stati/ipoteka-na-kvartiru-s-torgov/">Проверить возможность ипотеки</a>{% if 'доля' in (d.flags or '') %} · <a href="/torgi/doli/#kak-proverit">Особенности покупки доли</a>{% endif %}</nav>{% endif %}
-  </div>{% elif active and app_lot %}<div class="appbar"><p><b>Полная карточка лота на платформе {{ cfg.SITE_NAME }}:</b> все фото и документы торгов, объект на карте, похожие объявления рядом, расходы и уведомление, когда цена снизится.</p><a class="btn" href="{{ app_lot }}?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=full_card" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_app_lot')">Открыть полную карточку</a></div>{% endif %}
+  </div>{% elif active and app_lot %}<div class="appbar"><p><b>Полная карточка лота на платформе {{ cfg.SITE_NAME }}:</b> все фото и документы торгов, объект на карте, похожие объявления рядом, расходы и уведомление, когда цена снизится.</p><a class="btn" href="{{ app_lot }}?from=lot_full_card" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_app_lot')">Открыть полную карточку</a></div>{% endif %}
   {% if not active %}<p class="note">{{ "Приём заявок по этому лоту завершён." if d.status == "ended" else "Лот отсутствует в текущей выгрузке. Актуальный статус уточняйте у организатора." }} Результат торгов и факт продажи не подтверждены. Посмотрите <a href="/torgi/">актуальные лоты</a>.</p>{% endif %}
 
   <div class="folds">
@@ -60,14 +60,15 @@
     {% if d.ppm2 %}<tr><th>Цена за м² по цене лота</th><td>{{ d.ppm2|rub }}</td></tr>{% endif %}
     {% if d.comps and d.comps.n %}<tr><th>Похожие объявления рядом</th><td>{{ d.comps.n }} шт. ({{ d.comps.radius }}), середина {{ d.comps.ppm|rub }} за м²{% if d.comps.low and d.comps.high and d.comps.low != d.comps.high %}, обычно от {{ d.comps.low|rub }} до {{ d.comps.high|rub }}{% endif %}<div class="mute small">{% if d.comps.n < 5 %}Похожих мало, сравнение грубое. {% endif %}Цены предложений, не сделок; это ориентир, а не оценка.</div></td></tr>{% endif %}
     {% if d.city_market %}<tr><th>Ориентир по городу</th><td>≈ {{ d.city_market|rub }}<div class="mute small">Оценка грубая: похожих объявлений рядом мало, поэтому скидку в процентах не показываем.</div></td></tr>{% endif %}
-    {% if d.eff_market %}<tr><th>Рыночная цена (оценка)</th><td><b>{{ d.eff_market|rub }}</b>{% if d.eff_discount and d.eff_discount > 0 %} · ниже рынка на {{ d.eff_discount|round|int }}%{% endif %}<div class="mute small">Ориентир по объявлениям рядом, не отчёт об оценке</div></td></tr>{% endif %}
+    {% if d.eff_market %}<tr><th>Рыночная цена (оценка)</th><td><b>{{ d.eff_market|rub }}</b>{% if d.eff_discount and d.eff_discount > 0 %} · ниже рынка на {{ d.eff_discount|round|int }}%{% endif %}<div class="mute small">Ориентир по объявлениям рядом, не отчёт об оценке. Оценка автоматическая и может ошибаться: сверьте сами с объявлениями в этом доме и соседних</div></td></tr>{% endif %}
     </table></div>
-    {% if app_lot %}<p class="mute small">Список объявлений, по которым считали, и шкала цены — в <a href="{{ app_lot }}?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=full_card#market">полной карточке</a>.</p>{% endif %}
+    {% if app_lot %}<p class="mute small">Список объявлений, по которым считали, и шкала цены — в <a href="{{ app_lot }}?from=lot_full_card#market">полной карточке</a>.</p>{% endif %}
   </div></details>{% endif %}
   <details class="fold"><summary>Характеристики и кадастр</summary><div class="fold-body"><div class="scroll"><table class="t">
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
     {% if d.rooms %}<tr><th>Комнат</th><td>{{ d.rooms }}</td></tr>{% endif %}
     {% if d.floor %}<tr><th>Этаж</th><td>{{ d.floor }}</td></tr>{% endif %}
+    {% if d.land_text %}<tr><th>Земельный участок</th><td>{{ d.land_text }}</td></tr>{% endif %}
     {% if d.cadastral %}<tr><th>Кадастровый номер</th><td>{{ d.cadastral }}</td></tr>{% endif %}
     <tr><th>Адрес</th><td>{{ d.caddr }}</td></tr>
     {% if d.flags %}<tr><th>На что обратить внимание</th><td style="color:var(--red)">{{ d.flags }}</td></tr>{% endif %}
@@ -79,7 +80,7 @@
     {% if d.source_name %}<tr><th>Площадка</th><td>{{ d.source_name }}</td></tr>{% endif %}
     {% if d.bidd_end %}<tr><th>Приём заявок до</th><td>{{ d.bidd_end[:16]|replace('T',' ') }}</td></tr>{% endif %}
   </table></div>
-    <p><a href="{{ d.source_url }}" rel="nofollow noopener" target="_blank">Извещение и документы на {{ d.source_name or "ГИС Торги" }}</a>{% if app_lot %} · <a href="{{ app_lot }}?utm_source=torggid&amp;utm_medium=lot&amp;utm_campaign=full_card">документы и фото в полной карточке</a>{% endif %}</p>
+    <p><a href="{{ d.source_url }}" rel="nofollow noopener" target="_blank">Извещение и документы на {{ d.source_name or "ГИС Торги" }}</a>{% if app_lot %} · <a href="{{ app_lot }}?from=lot_full_card">документы и фото в полной карточке</a>{% endif %}</p>
   </div></details>
   </div>
 

@@ -6,6 +6,8 @@
 <div class="paths" style="margin:24px 0 40px">
   <a href="mailto:{{ cfg.SITE_EMAIL }}"><h3>Почта</h3><p>{{ cfg.SITE_EMAIL }}</p><p>Вопросы по отчётам, оплате и возвратам. Приложите ссылку на лот или номер заказа.</p></a>
   <a href="{{ (cfg.TG_BOT ~ '?start=ask') if cfg.TG_BOT else cfg.SITE_TELEGRAM }}"><h3>Telegram</h3><p>{{ (cfg.TG_BOT or cfg.SITE_TELEGRAM)|replace("https://t.me/","@") }}</p><p>Быстрый вопрос специалисту по лоту, проверке или подаче заявки.</p></a>
+  {% if cfg.TG_CHANNEL %}<a href="{{ cfg.TG_CHANNEL }}"><h3>Канал в Telegram</h3><p>{{ cfg.TG_CHANNEL|replace("https://t.me/","@") }}</p><p>Лот дня с разбором, снижения цены и итоги торгов.</p></a>{% endif %}
+  {% if cfg.MAX_CHANNEL %}<a href="{{ cfg.MAX_CHANNEL }}"><h3>Канал в Max</h3><p>{{ cfg.MAX_CHANNEL|replace("https://","") }}</p><p>То же, что в Telegram: лот дня, снижения цены, итоги торгов.</p></a>{% endif %}
   <a href="mailto:{{ cfg.SITE_EMAIL }}?subject=%D0%A1%D0%BE%D1%82%D1%80%D1%83%D0%B4%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE"><h3>Сотрудничество</h3><p>{{ cfg.SITE_EMAIL }}, тема «Сотрудничество»</p><p>Арбитражным управляющим, банкам и кредиторам, площадкам, сервисам данных, агентствам и СМИ.</p></a>
 </div>
 <div class="split">

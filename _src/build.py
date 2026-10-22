@@ -28,7 +28,8 @@ cfg = SimpleNamespace(
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
     YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
-    TG_CHANNEL="", TG_BOT="", APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
+    TG_CHANNEL="", TG_BOT="", MAX_CHANNEL="",  # канал в Max (https://max.ru/…): дубль Telegram, John 21.10.2026
+    APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
     YANDEX_MAPS_URL="", VK_URL="", DZEN_URL="", SAME_AS=[])  # карточка в Яндекс Бизнесе и соцсети: попадают в sameAs и подвал
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
@@ -78,7 +79,7 @@ def terms_list(terms):
 
 def same_as():
     """Профили бренда вне сайта: нейросети и Яндекс сверяют по ним, что ТоргГид — одна и та же организация."""
-    return list(dict.fromkeys(u for u in [cfg.YANDEX_MAPS_URL, cfg.TG_CHANNEL, cfg.VK_URL, cfg.DZEN_URL, cfg.TG_BOT, *cfg.SAME_AS] if u))
+    return list(dict.fromkeys(u for u in [cfg.YANDEX_MAPS_URL, cfg.TG_CHANNEL, cfg.MAX_CHANNEL, cfg.VK_URL, cfg.DZEN_URL, cfg.TG_BOT, *cfg.SAME_AS] if u))
 
 
 env.globals.update(terms_list=terms_list, cfg=cfg, same_as=same_as, hours=HOURS, year=date.today().year, today=date.today().strftime("%d.%m.%Y"), author=AUTHOR, ld=ld, faq_ld=faq_ld, crumbs_ld=crumbs_ld)
@@ -127,6 +128,21 @@ def translit(s):
 FIO = re.compile(r"[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)?\s+(?:[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+(?:вич|вна|ична|инична|оглы|кызы)\b|[А-ЯЁ]\.\s?[А-ЯЁ]\.)\s*,?")
 
 
+# Хвост извещения после адреса (как в платформе, kirpich/domain/text.py): обременения, цена, этаж, кадастр.
+ADDR_NOTE = re.compile(
+    r"[,;(]\s*(?:обремен|ограничен|(?:наход\w*\s+)?в\s+залоге|залог|ипотек|арест|запрет|в\s+пользу|начальн|н/ц|цена\b"
+    r"|задат|собственник|должник|назначени|кадастр|к/н|к\.н\.|площад|общ\w*\s+пл|этаж|эт\.|подвал|цокол|мансард"
+    r"|права?\s+аренд|аренд|срок|состоит|расположен|имеет|вид\s+права|доля\s+в\s+праве|общая\s+долевая)",
+    re.I,
+)
+ROOM_NO = re.compile(
+    r",?\s*(?<![а-яё])(?:кв\.?|квартира|комн(?:ата|\.)?|ком\.|пом(?:ещение|ещ\.|\.)?|№)\s*№?\s*"
+    r"(?:\d+(?:-?[а-яa-z]{1,2}\b)?|[IVXLC]+\b)(?:\s*[-–,/]\s*(?:\d+(?:-?[а-яa-z]{1,2}\b)?|[IVXLC]+\b))*"
+    r"(?![\d.,]*\s*(?:м|кв\.?\s*м))",
+    re.I,
+)
+
+
 def clean_address(d):
     """Адрес без персональных данных должника и служебного текста извещения."""
     a = str(d.get("address") or d.get("name") or "")
@@ -144,8 +160,13 @@ def clean_address(d):
     a = re.sub(r"муниципальный округ [^,]+,\s*", "", a)
     a = re.split(r"\.\s*(?:Обремен|н/ц|Начальн|Собственник|Должник)", a, flags=re.I)[0]
     a = re.split(r",?\s*(?:общей\s+площадью|общ\.?\s*пл|площадью|кадастров|кад\.\s*№|к\.н\.|общая\s+долевая|\(?доля\s+в\s+праве|н/ц\b)", a, flags=re.I)[0]
-    a = re.sub(r",?\s*\b(кв\.?|квартира|комн\.?|пом\.?)\s*\d+[а-яА-Я]?\b", "", a)  # номер квартиры не публикуем
+    towns = list(re.finditer(r"(?<![а-яё])(?:г\.|город)\s*[А-ЯЁ]", a))
+    m = ADDR_NOTE.search(a, towns[-1].start() if towns else 0)  # «…, обременено залогом в пользу банка» — не адрес
+    if m:
+        a = a[: m.start()]
+    a = ROOM_NO.sub("", a)  # номер квартиры/помещения не публикуем
     a = re.sub(FIO, "", a)  # ФИО должника иногда стоит прямо в строке адреса
+    a = re.sub(r"(?<![а-яё])(д|корп|стр|ул|пр-т|пер)\.(?=[\dА-ЯЁ])", r"\1. ", a, flags=re.I)
     a = re.sub(r"\s+", " ", a).strip(" ,.")
     if len(a) < 12 or a in ("Ленинградская область", "Санкт-Петербург"):
         a = CITY_NAME.get(d.get("city"), "Адрес уточняется")
@@ -221,6 +242,32 @@ FACETS = [  # slug, название, фильтр, заголовок-форм�
     ("bankrotstvo", "Банкротство", lambda d: d.get("kind") == "bankruptcy", "Недвижимость с торгов по банкротству"),
     ("arestovannoe", "Арестованное", lambda d: d.get("kind") == "arrest", "Арестованная недвижимость с торгов"),
 ]
+# подборка сайта → те же условия в поиске платформы: кнопка «Следить за подборкой» создаёт там «Охотника»
+# (посадочные под рекламу, John 21.10.2026). Ключи — параметры адресной строки каталога app.torggid.ru
+APP_FACET = {
+    "vygodnye": [("category", "flat"), ("category", "house"), ("discount_min", "10")],
+    "odnokomnatnye": [("category", "flat"), ("rooms", "1")], "dvuhkomnatnye": [("category", "flat"), ("rooms", "2")],
+    "trehkomnatnye": [("category", "flat"), ("rooms", "3"), ("rooms", "4")],
+    "komnaty": [("category", "room")], "doli": [("category", "share")], "do-5-mln": [("category", "flat"), ("price_max", "5")],
+    "povtornye-torgi": [("repeat", "1")], "doma": [("category", "house")], "zemlya": [("category", "land")],
+    "kommercheskaya": [("category", "commercial")], "garazhi": [("category", "garage")],
+    "bankrotstvo": [("kind", "bankruptcy")], "arestovannoe": [("kind", "arrest")],
+}
+
+
+def app_query(path):
+    """/torgi/kazan/doli/ → city=kazan&category=share. Регион и район платформа пока не фильтрует: берём только подборку."""
+    parts = [x for x in path.strip("/").split("/") if x][1:]
+    q = []
+    if parts and parts[0] in CITY_NAME:
+        q.append(("city", parts.pop(0)))
+    elif parts and parts[0] not in APP_FACET:
+        parts.pop(0)
+    if parts and parts[0] in APP_FACET:
+        q += APP_FACET[parts[0]]
+    return "&".join(f"{k}={v}" for k, v in q)
+
+
 CITIES = [  # slug, название, «где», субъекты
     ("moskva", "Москва", "в Москве и Подмосковье"), ("sankt-peterburg", "Санкт-Петербург", "в Санкт-Петербурге и Ленобласти"),
     ("novosibirsk", "Новосибирск", "в Новосибирске и области"), ("ekaterinburg", "Екатеринбург", "в Екатеринбурге и области"),
@@ -486,6 +533,8 @@ def build():
         # дата изменения списка — последнее изменение его лотов, а не дата сборки: иначе lastmod меняется
         # у всех страниц несколько раз в день и поисковики перестают ему доверять
         lastmod = max((d.get("lastmod") or "" for d in lots), default="") or TODAY
+        app_q = ("&".join(f"category={c}" for c in ("flat", "room", "share", "house")) + f"&price_max={budget['million']}"
+                 if budget else app_query(path))
         for url, n in pages:
             suffix = f" — страница {n}" if n > 1 else ""
             page_crumbs = crumbs + ([(f"Страница {n}", url)] if n > 1 else [])
@@ -498,7 +547,7 @@ def build():
             write(url, "torgi.html", priority=priority, lastmod=lastmod, lots=lots[(n-1)*page_size:n*page_size], sitemap=n == 1,
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots or deep_dup, faq=(faq or []) if n == 1 else [],
-                  cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget,
+                  cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget, app_q=app_q,
                   title=f"{h1}{suffix} — {'архив' if archive else 'актуальные лоты ' + TODAY[:4]}",
                   description=description + suffix)
 
@@ -713,7 +762,7 @@ def build():
 
 ## Услуги и цены
 - Отчёт по лоту (Рентген): {cfg.REPORT_PRICE} ₽, в приложении {cfg.APP_URL}/
-{f"- Полная проверка лота перед торгами: {cfg.PRICE_CHECK}, {cfg.SITE_URL}/proverka-lota/" + chr(10) if cfg.PRICE_CHECK else ""}- Покупка квартиры с торгов под ключ: 10 000 ₽ при заказе + 2% от цены покупки при победе, {cfg.SITE_URL}/kupit-kvartiru-s-torgov/
+{f"- Полная проверка лота перед торгами: {cfg.PRICE_CHECK}, {cfg.SITE_URL}/proverka-lota/" + chr(10) if cfg.PRICE_CHECK else ""}- Покупка квартиры с торгов под ключ: 10 000 ₽ при заказе + 2% от цены покупки при победе, но не меньше 45 000 ₽, {cfg.SITE_URL}/kupit-kvartiru-s-torgov/
 - Работаем дистанционно по всей России: торги проходят на электронных площадках.
 
 ## Контакты
