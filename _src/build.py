@@ -584,7 +584,9 @@ def build():
         # было около трети карты сайта, и Google тратил обход на них вместо актуальных лотов
         write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active,
               d=d, active=active, similar=similar,
-              title=f"{d['label']} с торгов: {d['caddr'][:70]}" + (" — архив" if not active else ""),
+              # цена в заголовке различает лоты одного торга по одному адресу (машиноместа, кладовые меньше 8 м²):
+              # без неё у таких карточек одинаковые title и description, и Google склеивает их как копии
+              title=f"{d['label']} с торгов" + (f" за {rub(d['price'])}" if d.get("price") else "") + f": {d['caddr'][:60]}" + (" — архив" if not active else ""),
               description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
     history_path.write_text(json.dumps(CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
