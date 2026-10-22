@@ -61,7 +61,10 @@ class BuildTests(unittest.TestCase):
                 self.assertIn(f'https://torggid.ru/{part}', index)
             catalog = (site/'sitemap-catalog.xml').read_text()
             self.assertNotIn('https://torggid.ru/torgi/doli/', catalog)
-            self.assertIn('https://torggid.ru/torgi/page/2/', catalog)
+            self.assertNotIn('/page/2/', catalog)  # страницы 2+ только по ссылкам, не из карты
+            self.assertNotIn('noindex', (site/'torgi/page/2/index.html').read_text())
+            if (site/'torgi/do-3-mln/page/2/index.html').exists():
+                self.assertIn('noindex', (site/'torgi/do-3-mln/page/2/index.html').read_text())
             self.assertNotIn('/torgi/lot/', catalog)
             self.assertIn('https://torggid.ru/torgi/lot/test_0/', (site/'sitemap-lots-1.xml').read_text())
             self.assertIn('https://torggid.ru/stati/', (site/'sitemap-pages.xml').read_text())
