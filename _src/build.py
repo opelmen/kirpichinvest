@@ -491,9 +491,13 @@ def build():
             page_crumbs = crumbs + ([(f"Страница {n}", url)] if n > 1 else [])
             description = (f"{h1}: {len(lots)} карточек. История предложений, сроки и ссылки на источники. Результат продажи не подтверждён."
                            if archive else f"{h1}: {len(lots)} актуальных лотов — цены, сроки заявок и сведения об объектах.")
-            write(url, "torgi.html", priority=priority, lastmod=lastmod, lots=lots[(n-1)*page_size:n*page_size],
+            # страницы 2+ не кладём в sitemap: Google и так находит их по ссылкам, а 600 таких адресов в карте
+            # раздували «обнаружена, не проиндексирована». Подборки по бюджету и архив повторяют общий каталог,
+            # поэтому их глубокие страницы закрыты noindex, follow (ссылки на лоты по ним передаются).
+            deep_dup = n > 1 and (budget is not None or archive)
+            write(url, "torgi.html", priority=priority, lastmod=lastmod, lots=lots[(n-1)*page_size:n*page_size], sitemap=n == 1,
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
-                  town_links=sorted(sub_links), noindex=not lots, faq=(faq or []) if n == 1 else [],
+                  town_links=sorted(sub_links), noindex=not lots or deep_dup, faq=(faq or []) if n == 1 else [],
                   cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget,
                   title=f"{h1}{suffix} — {'архив' if archive else 'актуальные лоты ' + TODAY[:4]}",
                   description=description + suffix)
@@ -576,7 +580,9 @@ def build():
     for d in CARDS:
         similar = similar_to(d)
         active = d["status"] == "active"
-        write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'],
+        # карточка снятого лота остаётся для людей и ссылок, но из индекса и sitemap уходит: таких карточек
+        # было около трети карты сайта, и Google тратил обход на них вместо актуальных лотов
+        write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active,
               d=d, active=active, similar=similar,
               title=f"{d['label']} с торгов: {d['caddr'][:70]}" + (" — архив" if not active else ""),
               description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
