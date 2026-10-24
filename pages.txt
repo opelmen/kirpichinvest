@@ -18616,6 +18616,7 @@
 /torgi/lot/25000006190000000273_1/
 /torgi/lot/25000006300000000007_1/
 /torgi/lot/25000007940000000004_1/
+/torgi/lot/25000008850000000002_1/
 /torgi/lot/25000008930000000065_1/
 /torgi/lot/25000008930000000066_1/
 /torgi/lot/25000008930000000066_10/
@@ -21655,6 +21656,9 @@
 /torgi/lot/cdt-389202/
 /torgi/lot/cdt-389203/
 /torgi/lot/cdt-389204/
+/torgi/lot/cdt-389213/
+/torgi/lot/cdt-389214/
+/torgi/lot/cdt-389218/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
