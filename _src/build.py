@@ -183,10 +183,10 @@ def notice_excerpt(text, limit=500):
     if not t:
         return ""
     keep, total = [], 0
-    for part in re.split(r"(?<=[.;!?])\s+", t):
-        if NOTICE_PD.search(part):
+    for part in re.split(r"(?<=[.;!?])\s+(?=[А-ЯЁA-Z«(])", t):  # «кв. м» и «д. 5» не конец предложения
+        if NOTICE_PD.search(part) or FIO.search(part):
             continue
-        part = re.sub(r"\b\d{10,}\b", "", FIO.sub("", part)).strip(" ,;")
+        part = re.sub(r"\b\d{10,}\b", "", part).strip(" ,;")
         if len(part) < 20:
             continue
         keep.append(part)
