@@ -16,20 +16,25 @@
 <meta property="og:url" content="{{ canonical }}">
 <meta property="og:site_name" content="{{ cfg.SITE_NAME }}">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="{{ cfg.SITE_URL }}/static/brand/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+{% set ogimg = og_image or (cfg.SITE_URL ~ "/static/brand/og-image.png") %}<meta property="og:image" content="{{ ogimg }}">
+{% if not og_image %}<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">{% endif %}
+{% if lastmod %}<meta property="og:updated_time" content="{{ lastmod }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ title }}">
+<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:image" content="{{ ogimg }}">
 <link rel="preload" href="/static/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/static/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/static/brand/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
-<link rel="stylesheet" href="/static/site.css?v=10">
+<link rel="stylesheet" href="/static/site.css?v=11">
 {% set org_id = cfg.SITE_URL ~ "/#org" %}{% set person_id = cfg.SITE_URL ~ author.path ~ "#person" %}
 <script type="application/ld+json">{{ {
   "@context": "https://schema.org",
   "@graph": [{
-    "@type": "RealEstateAgent",
+    "@type": ["RealEstateAgent", "Organization"],
     "@id": org_id,
     "name": cfg.SITE_NAME,
     "alternateName": ["Торггид", "TorgGid", "torggid.ru"],
@@ -90,7 +95,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <nav class="nav">
     <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Каталог</a>
     <a href="{{ cfg.APP_URL }}/?from=nav">Поиск на карте</a>
-    {% if cfg.AUTO_URL %}<a href="{{ cfg.AUTO_URL }}">Авто</a>{% endif %}
+    {% if has_auto %}<a href="/auto/" {% if path.startswith('/auto') %}aria-current="page"{% endif %}>Авто</a>{% elif cfg.AUTO_URL %}<a href="{{ cfg.AUTO_URL }}">Авто</a>{% endif %}
     <a href="/kupit-kvartiru-s-torgov/" {% if path.startswith('/kupit') %}aria-current="page"{% endif %}>Под ключ</a>
     <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>
     <a href="/uslugi/" {% if path.startswith('/uslugi') %}aria-current="page"{% endif %}>Услуги</a>
@@ -115,7 +120,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
       <p>{{ cfg.SITE_OWNER }}{% if cfg.SITE_INN %} · ИНН {{ cfg.SITE_INN }}{% endif %}{% if cfg.SITE_OGRNIP %} · ОГРНИП {{ cfg.SITE_OGRNIP }}{% endif %}<br>{{ cfg.SITE_ADDRESS }}</p>
     </div>
     <div><h3>Разделы</h3><ul>
-      <li><a href="/torgi/moskva/">Лоты в Москве</a></li><li><a href="/torgi/sankt-peterburg/">Лоты в Петербурге</a></li><li><a href="/torgi/">Все города</a></li>
+      <li><a href="/torgi/moskva/">Лоты в Москве</a></li><li><a href="/torgi/sankt-peterburg/">Лоты в Петербурге</a></li><li><a href="/torgi/">Все города</a></li>{% if has_auto %}<li><a href="/auto/">Авто и техника с торгов</a></li>{% endif %}
       <li><a href="/kupit-kvartiru-s-torgov/">Покупка под ключ</a></li><li><a href="/proverka-lota/">Проверка лота</a></li>
       <li><a href="/investoram/">Инвесторам</a></li><li><a href="/stati/">Статьи</a></li><li><a href="/slovar/">Словарь терминов</a></li><li><a href="/analitika/">Статистика торгов</a></li>
       <li><a href="/podpiska/">Подборка лотов в Telegram</a></li><li><a href="/partneram/">Управляющим и кредиторам</a></li></ul></div>

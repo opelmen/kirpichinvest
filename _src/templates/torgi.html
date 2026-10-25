@@ -22,7 +22,7 @@
 {% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
 <th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
 <tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
-<p class="mute small">Данные на {{ today }} по {{ "ГИС Торги и площадкам банкротства" if wide else "открытому реестру ГИС Торги" }}. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
+<p class="mute small">Данные на <time datetime="{{ lastmod }}">{{ today }}</time> по {{ "ГИС Торги и площадкам банкротства" if wide else "открытому реестру ГИС Торги" }}. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
 {% if path == '/torgi/doli/' %}{% include "_share_guide.html" %}{% elif '/doli/' in path and current_page == 1 %}<p><a href="/torgi/doli/#kak-proverit">Доля или комната: что проверить до ставки</a></p>{% endif %}
 <div class="lots">
 {% for d in lots %}

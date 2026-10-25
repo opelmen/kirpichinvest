@@ -19,7 +19,7 @@
   {% set app_lot = (cfg.APP_URL ~ "/lot/" ~ d.app_id|urlencode) if d.app_id else none %}
   {% set rk = d.risks|map(attribute="key")|list %}
   <h1 class="h1-lot">{{ d.label }} с торгов: {{ d.caddr }}</h1>
-  <p class="mute small lot-meta">{% if ktag %}<span class="kindtag k-{{ d.kind }}">{{ ktag }}</span> · {% endif %}{% if d.bidd_type %}{{ d.bidd_type|lower }}{% if d.source_name %} на {{ d.source_name }}{% endif %} · {% endif %}{% if d.repeat %}<span class="plus">повторные торги: цена уже снижена</span> · {% endif %}{% if active %}проверено {{ d.last_seen }}{% else %}последний раз в источнике {{ d.last_seen }}{% endif %}</p>
+  <p class="mute small lot-meta">{% if ktag %}<span class="kindtag k-{{ d.kind }}">{{ ktag }}</span> · {% endif %}{% if d.bidd_type %}{{ d.bidd_type|lower }}{% if d.source_name %} на {{ d.source_name }}{% endif %} · {% endif %}{% if d.repeat %}<span class="plus">повторные торги: цена уже снижена</span> · {% endif %}{% if active %}проверено <time datetime="{{ d.last_seen }}">{{ d.last_seen }}</time>{% else %}последний раз в источнике <time datetime="{{ d.last_seen }}">{{ d.last_seen }}</time>{% endif %}</p>
   {% if d.photo %}<img class="lotphoto" src="{{ d.photo }}" alt="{{ d.label }}: {{ d.caddr[:80] }}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
 
   {% if active %}<div class="spec4">
@@ -64,6 +64,7 @@
     </table></div>
     {% if app_lot %}<p class="mute small">Список объявлений, по которым считали, и шкала цены — в <a href="{{ app_lot }}?from=lot_full_card#market">полной карточке</a>.</p>{% endif %}
   </div></details>{% endif %}
+  {% if d.excerpt %}<details class="fold" open><summary>Что сказано в извещении</summary><div class="fold-body"><p>{{ d.excerpt }}</p><p class="mute small">Пересказ описания лота с площадки без персональных данных. Полный текст и документы — по ссылке на извещение ниже.</p></div></details>{% endif %}
   <details class="fold"><summary>Характеристики и кадастр</summary><div class="fold-body"><div class="scroll"><table class="t">
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
     {% if d.rooms %}<tr><th>Комнат</th><td>{{ d.rooms }}</td></tr>{% endif %}

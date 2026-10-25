@@ -35,6 +35,9 @@ jobs:
           ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
           ssh fond178@fond178.beget.tech 'if test -f ~/kirpichinvest-seo/lot_history.json; then cat ~/kirpichinvest-seo/lot_history.json; else printf "[]"; fi' > _src/data/lot_history.json
           python -c "import json; assert isinstance(json.load(open('_src/data/lot_history.json')), list)"
+          # история карточек техники (раздел /auto/): lastmod и архив, как у недвижимости
+          ssh fond178@fond178.beget.tech 'if test -f ~/kirpichinvest-seo/auto_history.json; then cat ~/kirpichinvest-seo/auto_history.json; else printf "[]"; fi' > _src/data/auto_history.json
+          python -c "import json; assert isinstance(json.load(open('_src/data/auto_history.json')), list)"
 
       - name: Build and test site (fail closed on missing feed)
         run: |
@@ -69,6 +72,25 @@ jobs:
               print(f'feed: zalog-desk, {len(data)} lots')
           PYCODE
           curl -fsS --max-time 60 https://check.kirpichinvest.ru/public/results.json -o _src/data/results.json || echo '[]' > _src/data/results.json
+          # Техника с торгов для раздела /auto/: без выгрузки раздел не собирается, но сайт выкладывается.
+          # Выгрузка меньше половины прошлой активной — подозрительна: оставляем прошлую историю без новых лотов.
+          curl -fsS --retry 2 --max-time 180 "${VEHICLES_FEED_URL:-https://api.torggid.ru/api/v1/public/vehicles}" -o /tmp/vehicles.json || echo 'vehicles feed unavailable'
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          prev = sum(d.get('status') == 'active' for d in json.load(open('_src/data/auto_history.json')))
+          try:
+              feed = json.load(open('/tmp/vehicles.json'))
+          except (OSError, ValueError):
+              feed = None
+          rows = feed.get('lots') if isinstance(feed, dict) else None
+          if (isinstance(rows, list) and rows and all(isinstance(d, dict) and d.get('id') for d in rows)
+                  and len({str(d['id']) for d in rows}) == len(rows) and len(rows) >= prev * .5):
+              Path('_src/data/vehicles.json').write_text(json.dumps(feed, ensure_ascii=False))
+              print(f'vehicles: {len(rows)} lots')
+          else:
+              print(f'vehicles feed skipped: rows={len(rows) if isinstance(rows, list) else None}, previous active={prev}')
+          PYCODE
           python -m unittest discover -s tests -v
           python _src/build.py | tee /tmp/build.log
           node tests/check_forms.cjs _site/index.html
@@ -101,6 +123,9 @@ jobs:
           if test -f "$HOME/kirpichinvest-seo/lot_history.json"; then
             cp "$HOME/kirpichinvest-seo/lot_history.json" "$backup/lot_history.json"
           fi
+          if test -f "$HOME/kirpichinvest-seo/auto_history.json"; then
+            cp "$HOME/kirpichinvest-seo/auto_history.json" "$backup/auto_history.json"
+          fi
           sha256sum "$backup/site.tar.gz" "$backup/old-domain.tar.gz" > "$backup/SHA256SUMS"
           printf 'release=%s\nverified_tar=true\n' "$release" > "$backup/manifest.txt"
           cat "$backup/SHA256SUMS"
@@ -109,6 +134,10 @@ jobs:
           # Persist history first: a interrupted rsync cannot lose newly known IDs on the next run.
           scp _src/data/lot_history.json fond178@fond178.beget.tech:kirpichinvest-seo/lot_history.next.json
           ssh fond178@fond178.beget.tech 'chmod 600 ~/kirpichinvest-seo/lot_history.next.json && mv ~/kirpichinvest-seo/lot_history.next.json ~/kirpichinvest-seo/lot_history.json'
+          if test -s _src/data/auto_history.json; then
+            scp _src/data/auto_history.json fond178@fond178.beget.tech:kirpichinvest-seo/auto_history.next.json
+            ssh fond178@fond178.beget.tech 'chmod 600 ~/kirpichinvest-seo/auto_history.next.json && mv ~/kirpichinvest-seo/auto_history.next.json ~/kirpichinvest-seo/auto_history.json'
+          fi
           rsync -az --delay-updates --delete-delay --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/torggid.ru/public_html/
           echo "Published release $release" | tee -a /tmp/build.log
 
