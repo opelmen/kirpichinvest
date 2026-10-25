@@ -1,6 +1,11 @@
-== Sun Oct 25 19:12:39 UTC 2026 101f65a push
-OK: страниц 36047 в sitemap, лотов 21103, техники 12774, статей 16
-Published release 40223030602-1
-Live verification: 7559 files (400 of 40922 lot pages), 1 errors
-{'path': '/auto/marka/kögel/', 'error': "'ascii' codec can't encode character '\\xf6' in position 17: ordinal not in range(128)"}
-result: failure
+== Sun Oct 25 19:46:23 UTC 2026 19377da push
+OK: страниц 36035 в sitemap, лотов 21092, техники 12774, статей 16
+Published release 40225291837-1
+Live verification: 7554 files (400 of 40923 lot pages), 0 errors
+kirpichinvest.ru/ -> 301 https://torggid.ru/
+kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
+kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
+новых URL для IndexNow: 9000
+IndexNow https://yandex.com/indexnow 202
+IndexNow https://api.indexnow.org/indexnow 200
+result: success
