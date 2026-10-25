@@ -122,6 +122,12 @@ class BuildTests(unittest.TestCase):
             region = (site/'torgi/tatarstan/index.html').read_text()
             self.assertIn('Недвижимость с торгов в Татарстане', region)
             self.assertIn('FAQPage', region)  # у региона свои вопросы с цифрами каталога, как у города
+            # запрос «торги по банкротству <регион> официальный сайт» (GSC 25.10): площадки региона с числом лотов и ссылками
+            self.assertIn('Какой официальный сайт торгов по банкротству в Татарстане?', region)
+            self.assertIn('Где проходят торги по банкротству и аресту в Татарстане', region)
+            self.assertIn('<a href="https://m-ets.ru/" rel="nofollow noopener" target="_blank">МЭТС</a>', region)
+            self.assertIn('все площадки, актуальные лоты', region.split('<title>')[1].split('</title>')[0])
+            self.assertNotIn('Где проходят торги', (site/'torgi/tatarstan/povtornye-torgi/index.html').read_text())  # только на главной странице региона
             self.assertIn('ItemList', region)
             self.assertNotIn('follow=1', region)  # регион платформа не фильтрует: без «Следить», только поиск на карте
             self.assertIn('/?category=land&amp;follow=1', (site/'torgi/zemlya/index.html').read_text())

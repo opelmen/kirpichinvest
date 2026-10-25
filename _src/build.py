@@ -11,7 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from lot_history import merge_history
 from budget_collections import budget_lots, budget_summary, object_group
-from market_feed import CATEGORY, REGIONS, from_market, mln
+from market_feed import CATEGORY, REGIONS, SOURCE, SOURCE_SITE, from_market, mln
 from auto_feed import FIELDS as AUTO_FIELDS, VTYPES, from_vehicles
 
 import markdown
@@ -357,7 +357,20 @@ def city_stats(lots):
             "share_povt": round(100 * sum(1 for d in lots if d.get("repeat")) / n) if n else None,
             "share_reg": round(100 * sum(1 for d in lots if "зарегистрированы" in (d.get("flags") or "")) / n) if n else None,
             "min_price": min((d["price"] for d in lots if d.get("price")), default=None),
-            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= (now - timedelta(days=7)).isoformat())}
+            "week_new": sum(1 for d in lots if (d.get("first_seen") or "") >= (now - timedelta(days=7)).isoformat()),
+            "sources": source_counts(lots)}
+
+
+def source_counts(lots):
+    """Площадки, где идут торги по этим лотам: (название, официальный сайт, число лотов), по убыванию."""
+    # в истории карточек хранится только source_name (lot_history.FIELDS), сайт площадки берём по названию
+    site_by_name = {name: SOURCE_SITE.get(code) for code, name in SOURCE.items()}
+    cnt = {}
+    for d in lots:
+        s = d.get("source_name") or SOURCE.get(d.get("source") or "", "") or "Другие источники"
+        cnt[s] = cnt.get(s, 0) + 1
+    rows = [(s, site_by_name.get(s), n) for s, n in cnt.items()]
+    return sorted(rows, key=lambda r: (-r[2], r[0]))
 
 
 INDEX_START = "2026-10"  # с этого месяца история каталога полная по всей стране: раньше индекс не считаем
@@ -486,8 +499,16 @@ def city_faq(cname, where, cs, region=False):
     obj = "объектов недвижимости" if WIDE else "квартир"
     src = "ГИС Торги и площадок банкротства" if WIDE else "ГИС Торги"
     scope = "" if region else " (в радиусе 100 км от города)"
-    f = [(f"Сколько {obj} продаётся с торгов {where}?",
-          f"На {date.today().strftime('%d.%m.%Y')} в каталоге по данным {src} {cs['count']} активных лотов {where}{scope}, за последние 7 дней появилось {cs['week_new']}.")]
+    f = []
+    if cs.get("sources"):
+        # самый массовый запрос по данным Search Console (25.10.2026): «торги по банкротству <регион> официальный сайт»
+        plat = ", ".join(f"{name} ({n})" for name, _, n in cs["sources"][:6])
+        f.append((f"Какой официальный сайт торгов по банкротству {where}?",
+                  f"Единого официального сайта нет. Извещения о торгах по банкротству публикуются на ЕФРСБ (bankrot.fedresurs.ru) "
+                  f"и в ГИС Торги (torgi.gov.ru), а сами торги идут на электронных площадках, у каждой свой сайт. Лоты {where} "
+                  f"сейчас выставлены на площадках: {plat}. Здесь они собраны в один список с ссылкой на извещение на площадке."))
+    f.append((f"Сколько {obj} продаётся с торгов {where}?",
+              f"На {date.today().strftime('%d.%m.%Y')} в каталоге по данным {src} {cs['count']} активных лотов {where}{scope}, за последние 7 дней появилось {cs['week_new']}."))
     if cs["median_price"]:
         f.append((f"Сколько стоит {'недвижимость' if WIDE else 'квартира'} с торгов {where}?",
                   f"Медианная начальная цена лота — {rub(cs['median_price'])}" + (f", медиана за квадратный метр — {rub(cs['median_ppm2'])}." if cs["median_ppm2"] else ".") +
@@ -610,7 +631,7 @@ def build():
                        if WIDE else "Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки."))
 
 
-    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False, budget=None):
+    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False, budget=None, where=""):
         page_size = 60
         count = max(1, (len(lots) + page_size - 1) // page_size)
         pages = [(path if n == 1 else f"{path}page/{n}/", n) for n in range(1, count + 1)]
@@ -622,8 +643,14 @@ def build():
         for url, n in pages:
             suffix = f" — страница {n}" if n > 1 else ""
             page_crumbs = crumbs + ([(f"Страница {n}", url)] if n > 1 else [])
-            description = (f"{h1}: {len(lots)} карточек. История предложений, сроки и ссылки на источники. Результат продажи не подтверждён."
-                           if archive else f"{h1}: {len(lots)} актуальных лотов — цены, сроки заявок и сведения об объектах.")
+            if archive:
+                description = f"{h1}: {len(lots)} карточек. История предложений, сроки и ссылки на источники. Результат продажи не подтверждён."
+            elif cs and cs.get("sources"):
+                plat = ", ".join(name for name, _, _ in cs["sources"][:4])
+                description = f"{h1}: {len(lots)} актуальных лотов со всех площадок ({plat}) — банкротство и арест, цены, сроки заявок, ссылки на извещения."
+            else:
+                description = f"{h1}: {len(lots)} актуальных лотов — цены, сроки заявок и сведения об объектах."
+            tail = "архив" if archive else ("все площадки, " if cs and n == 1 else "") + "актуальные лоты " + TODAY[:4]
             # страницы 2+ не кладём в sitemap: Google и так находит их по ссылкам, а 600 таких адресов в карте
             # раздували «обнаружена, не проиндексирована». Подборки по бюджету и архив повторяют общий каталог,
             # поэтому их глубокие страницы закрыты noindex, follow (ссылки на лоты по ним передаются).
@@ -632,10 +659,10 @@ def build():
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots or deep_dup, faq=(faq or []) if n == 1 else [],
                   cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget, app_q=app_q,
-                  title=f"{h1}{suffix} — {'архив' if archive else 'актуальные лоты ' + TODAY[:4]}",
+                  title=f"{h1}{suffix} — {tail}", where=where,
                   description=description + suffix)
 
-    budgets = [dict(budget_summary(LOTS, n*1_000_000), url=f"/torgi/do-{n}-mln/", million=n) for n in (1, 2, 3)]
+    budgets =[dict(budget_summary(LOTS, n*1_000_000), url=f"/torgi/do-{n}-mln/", million=n) for n in (1, 2, 3)]
     budget_links = [("/byudzhet/", "Выбрать бюджет")] + [(b["url"], f"До {b['million']} млн ₽ ({b['count']})") for b in budgets if b["count"]]
     env.globals["budget_links"] = budget_links
     write("/byudzhet/", "budget.html", budgets=budgets,
@@ -663,7 +690,7 @@ def build():
         rcrumbs = [("Лоты", "/torgi/"), (rname, f"/torgi/{rslug}/")]
         rcs = city_stats(rl)
         listing(f"/torgi/{rslug}/", rl, f"Недвижимость с торгов {rwhere}", rcrumbs, rlinks, region_links, "0.8",
-                faq=city_faq(rname, rwhere, rcs, region=True), cs=rcs)
+                faq=city_faq(rname, rwhere, rcs, region=True), cs=rcs, where=rwhere)
         for f, v in rfacets:
             listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
@@ -686,7 +713,7 @@ def build():
         cs = city_stats(cl)
         CITY_STATS.append((cslug, cname, where, cs))
         listing(f"/torgi/{cslug}/", cl, f"{OBJ} с торгов {where}", base_crumbs, links, sub_links, "0.9",
-                faq=city_faq(cname, where, cs), cs=cs)
+                faq=city_faq(cname, where, cs), cs=cs, where=where)
         for f, v in facets_here:
             listing(f"/torgi/{cslug}/{f[0]}/", v, f"{f[3]}: {cname}", base_crumbs + [(f[1], f"/torgi/{cslug}/{f[0]}/")], links, sub_links)
         for t, v in subs.items():
