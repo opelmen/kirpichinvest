@@ -29,7 +29,7 @@ cfg = SimpleNamespace(
     PRICE_BUY="", PRICE_CHECK="", LEAD_URL="https://check.kirpichinvest.ru/public/lead",
     YANDEX_VERIFICATION="", GOOGLE_VERIFICATION="", BING_VERIFICATION="", INDEXNOW_KEY="",
     TG_CHANNEL="", TG_BOT="", MAX_CHANNEL="",  # канал в Max (https://max.ru/…): дубль Telegram, John 21.10.2026
-    APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=490,
+    APP_URL="https://app.torggid.ru", AUTO_URL="https://app.torggid.ru/auto", REPORT_PRICE=290,
     YANDEX_MAPS_URL="", VK_URL="", DZEN_URL="", SAME_AS=[])  # карточка в Яндекс Бизнесе и соцсети: попадают в sameAs и подвал
 cfg_file = SRC / "config.json"
 if cfg_file.exists():
