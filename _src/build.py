@@ -173,6 +173,32 @@ def clean_address(d):
     return a[:160]
 
 
+NOTICE_PD = re.compile(r"должник|взыскател|принадлежащ|\bИНН\b|паспорт|СНИЛС|\bтел\.?|\+7|@|\bФИО\b|дата рождения|зарегистрирован\w* по адресу", re.I)
+
+
+def notice_excerpt(text, limit=500):
+    """Короткий пересказ извещения своими словами площадки: только описание объекта, без персональных данных.
+    Предложения с должником, ИНН, телефонами и ФИО выбрасываем целиком; это и есть уникальный текст карточки."""
+    t = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not t:
+        return ""
+    keep, total = [], 0
+    for part in re.split(r"(?<=[.;!?])\s+", t):
+        if NOTICE_PD.search(part):
+            continue
+        part = re.sub(r"\b\d{10,}\b", "", FIO.sub("", part)).strip(" ,;")
+        if len(part) < 20:
+            continue
+        keep.append(part)
+        total += len(part) + 1
+        if total >= limit:
+            break
+    out = " ".join(keep)
+    if len(out) > limit:
+        out = out[:limit].rsplit(" ", 1)[0].rstrip(" ,;:") + "…"
+    return out
+
+
 def object_label(d):
     if d.get("category") in CATEGORY:
         area = f" {d['area']:g} м²".replace(".", ",") if d.get("area") and 8 <= d["area"] <= 100_000 else ""
@@ -281,6 +307,7 @@ CITIES = [  # slug, название, «где», субъекты
 CITY_NAME = {c[0]: c[1] for c in CITIES}
 
 for _d in LOTS:
+    _d["excerpt"] = notice_excerpt(_d.get("descr"))
     _d["caddr"] = clean_address(_d)
     _d["label"] = object_label(_d)
     _d["city"] = _d.get("city") or ("sankt-peterburg" if str(_d.get("region")) in ("78", "47") else None)
@@ -477,6 +504,7 @@ CITY_STATS = []
 def write(path, tpl, sitemap=True, priority="0.6", lastmod=TODAY, **ctx):
     ctx.setdefault("canonical", cfg.SITE_URL + path)
     ctx.setdefault("noindex", False)
+    ctx.setdefault("lastmod", lastmod)  # дата изменения страницы: в <time>, og:updated_time и разметке
     html = env.get_template(tpl).render(path=path, **ctx)
     target = OUT / path.strip("/") / "index.html" if path.endswith("/") else OUT / path.strip("/")
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -636,7 +664,8 @@ def build():
               # цена в заголовке различает лоты одного торга по одному адресу (машиноместа, кладовые меньше 8 м²):
               # без неё у таких карточек одинаковые title и description, и Google склеивает их как копии
               title=f"{d['label']} с торгов" + (f" за {rub(d['price'])}" if d.get("price") else "") + f": {d['caddr'][:60]}" + (" — архив" if not active else ""),
-              description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
+              # пересказ извещения в описании: у 20 тысяч карточек сниппет перестаёт быть одинаковым
+              description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. " + (d['excerpt'][:140].rsplit(' ', 1)[0].rstrip(' .,;:') + "… " if d.get('excerpt') else "") + "Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
     history_path.write_text(json.dumps(CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
     pages = [("uslugi", "services.html", "Услуги на торгах недвижимостью — покупателям и кредиторам",
@@ -688,11 +717,11 @@ def build():
     env.globals["latest_index"] = indexes[-1] if indexes else None
     tot = city_stats(LOTS)
     write("/analitika/", "analytics.html", priority="0.8", rows=CITY_STATS, tot=tot, res_rows=res_rows,
-          title=f"Статистика торгов недвижимостью по городам-миллионникам — {date.today().strftime('%m.%Y')}",
+          title=f"Статистика торгов недвижимостью по городам России, {date.today().strftime('%m.%Y')}",
           description="Сколько квартир продаётся с торгов в Москве, Петербурге и других миллионниках, медианные цены за м², доля долей и повторных торгов. Обновляется несколько раз в день.")
     write("/podpiska/", "subscribe.html", priority="0.6", title="Подборка лотов с торгов в Telegram",
           description="Пришлём новые лоты с торгов по вашему городу, бюджету и типу жилья в Telegram.")
-    write("/partneram/", "partners.html", priority="0.6", title="Арбитражным управляющим и залоговым кредиторам: продвижение лотов",
+    write("/partneram/", "partners.html", priority="0.6", title="Продвижение лотов: управляющим и залоговым кредиторам",
           description="Покажем ваш лот покупателям и инвесторам: карточка на сайте, Telegram, подготовка лота к продаже — фото, документы, проверка.")
     write("/stati/", "articles.html", priority="0.7", articles=ARTICLES, title="Статьи о покупке недвижимости с торгов",
           description="Как устроены торги по банкротству и арестованному имуществу, риски, проверка лота, расчёт ставки.")
@@ -713,7 +742,9 @@ def build():
 
     write_sitemaps()
     (OUT / "robots.txt").write_text("\n".join([
-        "User-agent: *", "Allow: /", "Disallow: /check/", "",
+        "User-agent: *", "Allow: /", "Disallow: /check/",
+        # contentsignals.org: нейропоиску и ответам ИИ цитировать можно (нам нужны переходы), обучать модели — нет
+        "Content-Signal: search=yes, ai-input=yes, ai-train=no", "",
         "User-agent: Yandex", "Allow: /", "Disallow: /check/",
         "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /", "",
         "User-agent: YandexAdditional", "Allow: /", "", "User-agent: YandexAdditionalBot", "Allow: /", "",

@@ -215,6 +215,7 @@ def from_market(rows):
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
             "comps": r.get("comps") if cat in NONRES and ppm2 else None,
             "land_text": land_text(r.get("land")),
+            "descr": r.get("descr"),  # текст извещения: на сайт попадает только очищенный пересказ (notice_excerpt)
         }
         if (r.get("land") or {}).get("status") == "not_sold":
             d["flags"] = ", ".join(x for x in (d["flags"], "участок в лот не входит") if x)

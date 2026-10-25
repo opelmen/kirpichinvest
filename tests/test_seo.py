@@ -169,7 +169,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('## Услуги и цены', llms)
             self.assertIn('Пн–Пт', llms)
             graph = json.loads((site/'index.html').read_text().split('<script type="application/ld+json">')[1].split('</script>')[0])['@graph']
-            org = next(x for x in graph if x['@type'] == 'RealEstateAgent')
+            org = next(x for x in graph if 'RealEstateAgent' in x['@type'])
             self.assertEqual(org['areaServed'], {'@type': 'Country', 'name': 'Россия'})
             self.assertIn('Торггид', org['alternateName'])
             self.assertTrue(any(x['@type'] == 'WebSite' for x in graph))
@@ -209,3 +209,19 @@ class BuildTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class NoticeExcerptTests(unittest.TestCase):
+    def test_excerpt_drops_personal_data(self):
+        import importlib, sys
+        sys.path.insert(0, str(ROOT / '_src'))
+        build = importlib.import_module('build')
+        text = ("Квартира, назначение жилое, общая площадь 45,2 кв. м, этаж 3. Должник Иванов Иван Иванович, ИНН 7701234567. "
+                "Обременение: ипотека в пользу банка. Осмотр по согласованию, тел. +7 999 123-45-67. Петров П.П. является собственником помещения.")
+        out = build.notice_excerpt(text)
+        self.assertIn('общая площадь 45,2', out)
+        self.assertIn('ипотека', out)
+        for bad in ('Иванов', 'ИНН', '+7', 'Петров'):
+            self.assertNotIn(bad, out)
+        self.assertLessEqual(len(build.notice_excerpt(text * 20)), 502)
+        self.assertEqual(build.notice_excerpt(None), '')
