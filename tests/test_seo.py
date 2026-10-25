@@ -218,6 +218,7 @@ class AutoSectionTests(unittest.TestCase):
             shutil.copytree(ROOT / '_src', base / '_src')
             data = base / '_src/data'
             (data/'lot_history.json').write_text('[]')
+            (data/'auto_history.json').write_text('[]')  # на сервере лежит живая история техники
             (data/'market.json').unlink(missing_ok=True)
             (data/'lots.json').write_text('[]')
             row = dict(source='gistorgi_auto', source_url='https://torgi.gov.ru/new/public/lots/lot/1', kind='arrest', procedure='Аукцион',
