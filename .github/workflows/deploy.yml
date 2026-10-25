@@ -113,6 +113,16 @@ jobs:
           set -euo pipefail
           umask 077
           release="$1"
+          # Disk quota is shared with the site: keep only the 5 newest release backups
+          # (25.10.2026 ~140 backups filled the quota and rsync failed with «Disk quota exceeded»),
+          # and drop staging dirs left by an interrupted rsync --delay-updates.
+          mkdir -p "$HOME/kirpichinvest-backups" "$HOME/torggid.ru/public_html"
+          ls -1 "$HOME/kirpichinvest-backups" | sort -t- -k1,1n | head -n -5 | while read -r old; do
+            rm -rf "$HOME/kirpichinvest-backups/$old"
+          done
+          find "$HOME/torggid.ru/public_html" -type d -name '.~tmp~' -prune -exec rm -rf {} + 2>/dev/null || true
+          printf 'DISK before backup: site %s, backups %s\n' "$(du -sh "$HOME/torggid.ru/public_html" | cut -f1)" "$(du -sh "$HOME/kirpichinvest-backups" | cut -f1)"
+          quota -s 2>/dev/null | tail -n 2 || true
           mkdir -p "$HOME/kirpichinvest-backups/$release" "$HOME/kirpichinvest-seo"
           backup="$HOME/kirpichinvest-backups/$release"
           mkdir -p "$HOME/torggid.ru/public_html"
