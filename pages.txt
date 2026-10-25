@@ -140,6 +140,7 @@
 /torgi/arestovannoe/page/59/
 /torgi/arestovannoe/page/6/
 /torgi/arestovannoe/page/60/
+/torgi/arestovannoe/page/61/
 /torgi/arestovannoe/page/7/
 /torgi/arestovannoe/page/8/
 /torgi/arestovannoe/page/9/
@@ -184,6 +185,7 @@
 /torgi/arhiv/page/115/
 /torgi/arhiv/page/116/
 /torgi/arhiv/page/117/
+/torgi/arhiv/page/118/
 /torgi/arhiv/page/12/
 /torgi/arhiv/page/13/
 /torgi/arhiv/page/14/
@@ -1627,7 +1629,6 @@
 /torgi/ekaterinburg/kamensk/
 /torgi/ekaterinburg/kaslinskiy-rayon/
 /torgi/ekaterinburg/kirovgrad/
-/torgi/ekaterinburg/kirovgradskiy-rayon/
 /torgi/ekaterinburg/kommercheskaya/
 /torgi/ekaterinburg/kommercheskaya/page/2/
 /torgi/ekaterinburg/kommercheskaya/page/3/
@@ -1730,7 +1731,6 @@
 /torgi/hakasiya/bankrotstvo/page/2/
 /torgi/hakasiya/do-5-mln/
 /torgi/hakasiya/do-5-mln/page/2/
-/torgi/hakasiya/do-5-mln/page/3/
 /torgi/hakasiya/doli/
 /torgi/hakasiya/doma/
 /torgi/hakasiya/garazhi/
@@ -1886,6 +1886,7 @@
 /torgi/kazan/bankrotstvo/page/4/
 /torgi/kazan/bankrotstvo/page/5/
 /torgi/kazan/buinsk/
+/torgi/kazan/chistopol/
 /torgi/kazan/do-5-mln/
 /torgi/kazan/do-5-mln/page/2/
 /torgi/kazan/do-5-mln/page/3/
@@ -1915,6 +1916,7 @@
 /torgi/kazan/nizhnekamsk/
 /torgi/kazan/novosheshminskiy-rayon/
 /torgi/kazan/nurlatskiy-rayon/
+/torgi/kazan/odnokomnatnye/
 /torgi/kazan/page/2/
 /torgi/kazan/page/3/
 /torgi/kazan/page/4/
@@ -2766,6 +2768,7 @@
 /torgi/lot/21000001250000001908_5/
 /torgi/lot/21000001250000001908_7/
 /torgi/lot/21000001250000001908_8/
+/torgi/lot/21000001250000001915_1/
 /torgi/lot/21000001270000000116_1/
 /torgi/lot/21000001270000000116_2/
 /torgi/lot/21000001270000000116_3/
@@ -16501,6 +16504,12 @@
 /torgi/lot/23000042610000000183_13/
 /torgi/lot/23000042610000000183_4/
 /torgi/lot/23000042610000000183_9/
+/torgi/lot/23000042610000000184_1/
+/torgi/lot/23000042610000000184_10/
+/torgi/lot/23000042610000000184_11/
+/torgi/lot/23000042610000000184_12/
+/torgi/lot/23000042610000000184_9/
+/torgi/lot/23000042610000000185_3/
 /torgi/lot/23000042710000000081_1/
 /torgi/lot/23000043500000000049_1/
 /torgi/lot/23000043500000000050_1/
@@ -21676,6 +21685,8 @@
 /torgi/lot/cdt-389229/
 /torgi/lot/cdt-389231/
 /torgi/lot/cdt-389235/
+/torgi/lot/cdt-389237/
+/torgi/lot/cdt-389238/
 /torgi/lot/cdt-389239/
 /torgi/lot/cdt-389240/
 /torgi/lot/cdt-389241/
@@ -21684,8 +21695,19 @@
 /torgi/lot/cdt-389245/
 /torgi/lot/cdt-389249/
 /torgi/lot/cdt-389252/
+/torgi/lot/cdt-389254/
 /torgi/lot/cdt-389256/
 /torgi/lot/cdt-389258/
+/torgi/lot/cdt-389262/
+/torgi/lot/cdt-389263/
+/torgi/lot/cdt-389264/
+/torgi/lot/cdt-389265/
+/torgi/lot/cdt-389269/
+/torgi/lot/cdt-389270/
+/torgi/lot/cdt-389273/
+/torgi/lot/cdt-389274/
+/torgi/lot/cdt-389277/
+/torgi/lot/cdt-389281/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -30216,6 +30238,7 @@
 /torgi/lot/rad-1779451/
 /torgi/lot/rad-1779452/
 /torgi/lot/rad-1779456/
+/torgi/lot/rad-1779458/
 /torgi/lot/sberast-21435/
 /torgi/lot/sberast-21662/
 /torgi/lot/sberast-21664/
@@ -31417,7 +31440,6 @@
 /torgi/page/350/
 /torgi/page/351/
 /torgi/page/352/
-/torgi/page/353/
 /torgi/page/36/
 /torgi/page/37/
 /torgi/page/38/
@@ -32069,6 +32091,7 @@
 /torgi/tatarstan/kommercheskaya/page/2/
 /torgi/tatarstan/kommercheskaya/page/3/
 /torgi/tatarstan/komnaty/
+/torgi/tatarstan/odnokomnatnye/
 /torgi/tatarstan/page/2/
 /torgi/tatarstan/page/3/
 /torgi/tatarstan/page/4/
@@ -32130,7 +32153,6 @@
 /torgi/tverskaya-oblast/doma/
 /torgi/tverskaya-oblast/garazhi/
 /torgi/tverskaya-oblast/kommercheskaya/
-/torgi/tverskaya-oblast/kommercheskaya/page/2/
 /torgi/tverskaya-oblast/page/2/
 /torgi/tverskaya-oblast/page/3/
 /torgi/tverskaya-oblast/page/4/
