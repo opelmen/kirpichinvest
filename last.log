@@ -1,3 +1,6 @@
-== Sun Oct 25 18:18:46 UTC 2026 a054748 push
-OK: страниц 36048 в sitemap, лотов 21104, техники 12774, статей 16
+== Sun Oct 25 19:12:39 UTC 2026 101f65a push
+OK: страниц 36047 в sitemap, лотов 21103, техники 12774, статей 16
+Published release 40223030602-1
+Live verification: 7559 files (400 of 40922 lot pages), 1 errors
+{'path': '/auto/marka/kögel/', 'error': "'ascii' codec can't encode character '\\xf6' in position 17: ordinal not in range(128)"}
 result: failure
