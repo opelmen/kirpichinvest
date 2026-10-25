@@ -1,11 +1,3 @@
-== Sun Oct 25 18:12:22 UTC 2026 9f645a8 push
-OK: страниц 22682 в sitemap, лотов 21104, статей 16
-Published release 40219076292-1
-Live verification: 4919 files (400 of 28148 lot pages), 0 errors
-kirpichinvest.ru/ -> 301 https://torggid.ru/
-kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
-kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 24
-IndexNow https://yandex.com/indexnow 200
-IndexNow https://api.indexnow.org/indexnow 200
-result: success
+== Sun Oct 25 18:18:46 UTC 2026 a054748 push
+OK: страниц 36048 в sitemap, лотов 21104, техники 12774, статей 16
+result: failure
