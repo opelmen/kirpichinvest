@@ -1,11 +1,11 @@
-== Sun Oct 25 08:44:09 UTC 2026 67cd803 schedule
-OK: страниц 22777 в sitemap, лотов 21199, статей 16
-Published release 40176662775-1
-Live verification: 4925 files (400 of 28109 lot pages), 0 errors
+== Sun Oct 25 13:56:16 UTC 2026 67cd803 schedule
+OK: страниц 22721 в sitemap, лотов 21145, статей 16
+Published release 40198907089-1
+Live verification: 4918 files (400 of 28127 lot pages), 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 33
+новых URL для IndexNow: 19
 IndexNow https://yandex.com/indexnow 200
 IndexNow https://api.indexnow.org/indexnow 200
 result: success
