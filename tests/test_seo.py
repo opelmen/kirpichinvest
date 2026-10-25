@@ -211,6 +211,74 @@ if __name__ == '__main__':
     unittest.main()
 
 
+class AutoSectionTests(unittest.TestCase):
+    def test_auto_pages_from_vehicles_feed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            shutil.copytree(ROOT / '_src', base / '_src')
+            data = base / '_src/data'
+            (data/'lot_history.json').write_text('[]')
+            (data/'market.json').unlink(missing_ok=True)
+            (data/'lots.json').write_text('[]')
+            row = dict(source='gistorgi_auto', source_url='https://torgi.gov.ru/new/public/lots/lot/1', kind='arrest', procedure='Аукцион',
+                       stage=None, title='Renault Logan 2020, VIN •••', descr='Легковой автомобиль Renault Logan, 2020 года, цвет серый. Хранится по адресу организатора.',
+                       region='35', vtype='car', make='Renault', model='Logan', year=2020, has_vin=True, mileage_km=85000, hours=None,
+                       purpose=None, pledge_mentioned=False, price=227000, price_start=227000, price_was=None, price_drops=0,
+                       bidd_end='2099-01-01T00:00:00+00:00', first_seen='2026-10-20T00:00:00+00:00',
+                       photo='https://torgi.gov.ru/new/image/1.jpg', photos=['https://torgi.gov.ru/new/image/1.jpg', 'https://torgi.gov.ru/new/image/2.jpg'], photos_count=9)
+            rows = [dict(row, id=f'gistorgi_auto:{i}_1') for i in range(5)]
+            rows += [dict(row, id=f'mets:{i}', source='mets', kind='bankruptcy', region='16', vtype='truck', make='КАМАЗ', model='65115', year=2012,
+                          has_vin=False, mileage_km=None, pledge_mentioned=True, price=900000, price_was=1200000, price_drops=2) for i in range(4)]
+            rows.append(dict(row, id='gistorgi_auto:9_1', vtype='special', make=None, model=None, year=None, region='2', price=None, photo=None, photos=[], photos_count=0,
+                             descr='Экскаватор. Должник Иванов Иван Иванович, ИНН 1234567890.'))
+            (data/'vehicles.json').write_text(json.dumps({'lots': rows}, ensure_ascii=False))
+            subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
+            site = base/'_site'
+            index = (site/'auto/index.html').read_text()
+            self.assertIn('<h1>Автомобили и техника с торгов по всей России</h1>', index)
+            self.assertIn('href="/auto/legkovye/"', index)
+            self.assertIn('href="/auto/marka/renault/"', index)
+            self.assertIn('href="/auto/vologodskaya-oblast/"', index)
+            self.assertIn('href="/auto/snizhennaya-cena/"', index)
+            self.assertIn('aria-current="page"', index.split('<nav class="nav">')[1].split('</nav>')[0])  # «Авто» в меню ведёт на раздел
+            self.assertTrue((site/'auto/tatarstan/gruzovye/index.html').exists())
+            self.assertTrue((site/'auto/marka/kamaz/index.html').exists())
+            self.assertFalse((site/'auto/marka/index.html').exists())
+            car = (site/'auto/lot/gistorgi_auto-0_1/index.html').read_text()
+            self.assertIn('Renault Logan, 2020 с торгов в Вологодской области', car)
+            self.assertIn('"@type": "Car"', car)
+            self.assertIn('85 000 км', car)
+            self.assertIn('VIN есть', car)
+            self.assertIn('<meta property="og:image" content="https://torgi.gov.ru/new/image/1.jpg">', car)
+            self.assertIn('https://app.torggid.ru/auto/gistorgi_auto%3A0_1?from=site_auto_check', car)
+            self.assertIn('Похожие машины с торгов', car)
+            truck = (site/'auto/lot/mets-0/index.html').read_text()
+            self.assertIn('Грузовой автомобиль КАМАЗ 65115, 2012', truck)
+            self.assertIn('упомянут залог', truck.lower())
+            self.assertIn('1 200 000 ₽ → 900 000 ₽', truck)
+            self.assertIn('"@type": "Vehicle"', truck)
+            spec = (site/'auto/lot/gistorgi_auto-9_1/index.html').read_text()
+            self.assertNotIn('Иванов', spec)  # ПДн из пересказа не выводим даже если выгрузка их пропустила
+            self.assertIn('Спецтехника с торгов в Башкортостане', spec)
+            self.assertIn('https://torggid.ru/sitemap-auto.xml', (site/'sitemap.xml').read_text())
+            self.assertIn('https://torggid.ru/auto/legkovye/', (site/'sitemap-auto.xml').read_text())
+            self.assertIn('https://torggid.ru/auto/lot/mets-0/', (site/'sitemap-auto-lots-1.xml').read_text())
+            self.assertNotIn('/auto/lot/', (site/'sitemap-auto.xml').read_text())
+            self.assertIn('https://torggid.ru/auto/', (site/'llms.txt').read_text())
+            self.assertIn('Техника с торгов: 10 лотов', (site/'llms.txt').read_text())
+            hist = json.loads((data/'auto_history.json').read_text())
+            self.assertEqual(len(hist), 10)
+            self.assertNotIn('excerpt_raw', hist[0])
+            # лот ушёл из выгрузки: карточка остаётся, но noindex и в архиве
+            (data/'vehicles.json').write_text(json.dumps({'lots': rows[1:]}, ensure_ascii=False))
+            subprocess.run([sys.executable, str(base/'_src/build.py')], check=True, capture_output=True)
+            gone = (site/'auto/lot/gistorgi_auto-0_1/index.html').read_text()
+            self.assertIn('noindex', gone)
+            self.assertIn('Результат торгов и факт продажи не подтверждены', gone)
+            self.assertTrue((site/'auto/arhiv/index.html').exists())
+            self.assertNotIn('https://torggid.ru/auto/lot/gistorgi_auto-0_1/', (site/'sitemap-auto-lots-1.xml').read_text())
+
+
 class NoticeExcerptTests(unittest.TestCase):
     def test_excerpt_drops_personal_data(self):
         import importlib, sys

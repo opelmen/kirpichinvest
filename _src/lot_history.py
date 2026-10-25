@@ -12,8 +12,9 @@ FIELDS = ('id', 'city', 'city_name', 'region', 'caddr', 'label', 'price', 'area'
           'repeat', 'market_basis', 'next_step', 'price_drops', 'price_was', 'suspect', 'excerpt')
 
 
-def merge_history(current, previous, now):
-    """Missing from a successful feed is not proof of a sale or completed auction."""
+def merge_history(current, previous, now, fields=FIELDS):
+    """Missing from a successful feed is not proof of a sale or completed auction.
+    fields — какие поля карточки хранить (у техники свой набор, см. auto_feed.FIELDS)."""
     today = now.date().isoformat()
     old = {str(d['id']): d for d in previous}
     incoming = {str(d['id']): d for d in current}
@@ -21,7 +22,7 @@ def merge_history(current, previous, now):
     for lot_id in sorted(old.keys() | incoming.keys()):
         if not re.fullmatch(r'[A-Za-z0-9_-]+', lot_id):
             raise ValueError('Invalid public lot ID')
-        d = {k: (incoming.get(lot_id) or old[lot_id]).get(k) for k in FIELDS}
+        d = {k: (incoming.get(lot_id) or old[lot_id]).get(k) for k in fields}
         deadline = d.get('bidd_end')
         end = None
         if deadline:

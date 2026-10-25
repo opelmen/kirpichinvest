@@ -1,0 +1,82 @@
+{% extends "base.html" %}{% from "_form.html" import lead_form %}
+{% set place = ([(d.region_name, "/auto/" ~ d.region_slug ~ "/")] if d.region_slug else []) %}
+{% set app_lot = cfg.APP_URL ~ "/auto/" ~ d.app_id|urlencode %}
+{% set ktag = {"bankruptcy": "Банкротное имущество", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество", "state": "Государственное и муниципальное имущество"}.get(d.kind) %}
+{% block og_type %}product{% endblock %}
+{% block ld %}{{ crumbs_ld([("Главная","/"),("Авто с торгов","/auto/"),(d.vtype_name, "/auto/" ~ d.vtype_slug ~ "/")] + place + [(d.label, path)]) }}{% if active and d.price %}{{ ld({"@context": "https://schema.org", "@type": "Car" if d.vtype == "car" else "Vehicle", "name": d.label ~ " с торгов" ~ (" " ~ d.region_where if d.region_where else ""), "url": cfg.SITE_URL ~ path, "image": d.photos or none,
+  "brand": ({"@type": "Brand", "name": d.make} if d.make else none), "model": d.model or none, "vehicleModelDate": d.year|string if d.year else none,
+  "mileageFromOdometer": ({"@type": "QuantitativeValue", "value": d.mileage, "unitCode": "KMT"} if d.mileage else none),
+  "description": (d.excerpt[:300] if d.excerpt else none),
+  "offers": {"@type": "Offer", "price": d.price|round|int, "priceCurrency": "RUB", "availability": "https://schema.org/InStock", "availabilityEnds": d.bidd_end or none,
+             "seller": {"@type": "Organization", "name": d.source_name or "ГИС Торги"}, "url": d.source_url or none,
+             "areaServed": ({"@type": "AdministrativeArea", "name": d.region_name} if d.region_name else none)}}) }}{% endif %}{% endblock %}
+{% block main %}<div class="wrap">
+<p class="crumbs"><a href="/">Главная</a> / <a href="/auto/">Авто с торгов</a> / <a href="/auto/{{ d.vtype_slug }}/">{{ d.vtype_name }}</a>{% for n, u in place %} / <a href="{{ u }}">{{ n }}</a>{% endfor %} / {{ d.label }}</p>
+<div class="article" style="padding-top:8px">
+<div class="body">
+  <h1 class="h1-lot">{{ d.label }} с торгов{% if d.region_where %} {{ d.region_where }}{% endif %}</h1>
+  <p class="mute small lot-meta">{% if ktag %}<span class="kindtag k-{{ d.kind }}">{{ ktag }}</span> · {% endif %}{% if d.bidd_type %}{{ d.bidd_type|lower }}{% if d.source_name %} на {{ d.source_name }}{% endif %} · {% endif %}{% if d.repeat %}<span class="plus">повторные торги: цена уже снижена</span> · {% endif %}{% if active %}проверено <time datetime="{{ d.last_seen }}">{{ d.last_seen }}</time>{% else %}последний раз в источнике <time datetime="{{ d.last_seen }}">{{ d.last_seen }}</time>{% endif %}</p>
+  {% if d.photos %}<div class="gallery">{% for p in d.photos %}<img class="lotphoto" src="{{ p }}" alt="{{ d.label }}{% if loop.index > 1 %}, фото {{ loop.index }}{% endif %}" loading="{{ 'eager' if loop.first else 'lazy' }}" referrerpolicy="no-referrer" onerror="this.remove()">{% endfor %}</div>{% if d.photos_count > d.photos|length %}<p class="mute small">Всего фото в карточке платформы: {{ d.photos_count }}.</p>{% endif %}{% endif %}
+
+  {% if active %}<div class="spec4">
+    <div class="sp-main"><span>{{ "Цена сейчас" if d.bidd_type and "убличн" in d.bidd_type else "Цена на торгах" }}</span><b>{{ d.price|rub }}</b>
+      <small>{% if d.price_drops and d.price_was %}снижалась {{ d.price_drops }} {{ "раз" if d.price_drops == 1 or d.price_drops > 4 else "раза" }} с {{ d.price_was|rub }}{% elif d.price_start and d.price_start != d.price %}начальная {{ d.price_start|rub }}{% else %}начальная цена по извещению{% endif %}</small></div>
+    <div><span>Год и пробег</span><b>{% if d.year %}{{ d.year }}{% else %}—{% endif %}</b>
+      <small>{% if d.mileage %}{{ "{:,}".format(d.mileage).replace(",", " ") }} км по извещению{% elif d.hours %}{{ d.hours }} моточасов{% else %}пробег в извещении не указан{% endif %}</small></div>
+    <div><span>Тип и регион</span><b>{{ d.vtype_name }}</b>
+      <small>{{ d.region_name or "регион не указан" }}{% if d.purpose %} · {{ d.purpose|lower }}{% endif %}</small></div>
+    <div class="{{ 'sp-hot' if d.days_left is not none and d.days_left <= 3 }}"><span>Заявки до</span><b>{% if d.bidd_end %}{{ d.bidd_end[:10].split("-")|reverse|join(".") }}{% else %}—{% endif %}</b>
+      <small>{% if d.days_left is none %}срок в извещении{% elif d.days_left <= 0 %}последний день{% else %}осталось {{ d.days_left|round(0, 'floor')|int }} дн.{% endif %}</small></div>
+  </div>
+
+  <div class="xray t-none">
+    <p class="mute small xray-eyebrow">Что проверить до ставки</p>
+    <p class="badge v-none">{% if d.pledge %}В извещении упомянут залог{% elif d.has_vin %}VIN есть: машину можно проверить до торгов{% else %}VIN в извещении не указан{% endif %}</p>
+    <p>{% if d.purpose and "остатк" in d.purpose|lower %}Это годные остатки: машина после ДТП или на разбор, а не автомобиль на ходу. {% endif %}Карточка собрана по извещению: чистоту машины (залог, розыск, ограничения, лизинг, такси) она не подтверждает. Проверка по VIN занимает минуту и показывает, что скрыто за ценой.</p>
+    <ul class="xray-list">
+    {% if d.has_vin %}<li class="plus"><b>VIN</b> <span class="st">есть в извещении</span> возьмите его на площадке по ссылке ниже и проверьте залог (реестр ФНП), розыск и ограничения ГИБДД — бесплатно на <a href="/proverka-avto-po-vin/">странице проверки</a>.</li>{% else %}<li class="nodata"><b>VIN</b> <span class="st">нет данных</span> в извещении VIN не найден: запросите у организатора торгов или посмотрите в документах лота на площадке. Без VIN залог и розыск не проверить.</li>{% endif %}
+    {% if d.pledge %}<li class="mid"><b>Залог</b> <span class="st">заявлено в извещении</span> машина в залоге у банка или лизинговой компании: после покупки на торгах по банкротству залог снимается, но порядок и сроки уточните у организатора.</li>{% else %}<li class="nodata"><b>Залог</b> <span class="st">нет данных</span> в извещении о залоге не сказано. Как узнать: реестр уведомлений о залоге ФНП по VIN.</li>{% endif %}
+    <li class="nodata"><b>Ограничения и розыск</b> <span class="st">нет данных</span> аресты приставов и запрет регистрационных действий снимают после покупки, но это время и документы. Как узнать: проверка ГИБДД по VIN.</li>
+    <li class="nodata"><b>Пробег, такси, ДТП</b> <span class="st">нет данных</span>{% if d.mileage %} пробег {{ "{:,}".format(d.mileage).replace(",", " ") }} км указан организатором и не подтверждён.{% endif %} Как узнать: «История машины» по VIN — пробег по техосмотрам, ОСАГО, лизинг, такси и прошлые объявления.</li>
+    {% if d.price_drops and d.price_was %}<li class="plus"><b>Цена снижалась</b> <span class="st">данные площадки</span> {{ d.price_drops }} {{ "раз" if d.price_drops == 1 or d.price_drops > 4 else "раза" }}: {{ d.price_was|rub }} → {{ d.price|rub }}.</li>{% endif %}
+    {% if d.bidd_end %}<li class="plus"><b>Сроки</b> <span class="st">данные площадки</span> заявки до {{ d.bidd_end[:10].split("-")|reverse|join(".") }}{% if d.days_left is not none and d.days_left > 0 %}, ещё {{ d.days_left|round(0, 'floor')|int }} дн.{% endif %}; задаток вносят до окончания приёма заявок.</li>{% endif %}
+    </ul>
+    <div class="xray-cta"><a class="btn" href="{{ app_lot }}?from=site_auto_check" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_auto_check')">Проверить по VIN на платформе<small>залог, розыск и ограничения бесплатно; «История машины» за 99 ₽</small></a><a class="btn ghost" href="{{ app_lot }}?from=site_auto_card" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_app_lot')">Полная карточка: все фото и документы</a></div>
+    <p class="mute small xray-ask">{% if cfg.TG_BOT %}Сомневаетесь? <a href="{{ cfg.TG_BOT }}?start=ask_auto_{{ d.id }}" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','ask_bot')">Спросить специалиста в Telegram</a> · {% endif %}вывод автоматический, по извещению; документы торгов сверяйте на площадке.</p>
+  </div>{% else %}<p class="note">{{ "Приём заявок по этому лоту завершён." if d.status == "ended" else "Лот отсутствует в текущей выгрузке. Актуальный статус уточняйте у организатора." }} Результат торгов и факт продажи не подтверждены. Посмотрите <a href="/auto/{{ d.vtype_slug }}/">актуальные лоты: {{ d.vtype_name|lower }}</a>.</p>{% endif %}
+
+  <div class="folds">
+  {% if d.excerpt %}<details class="fold" open><summary>Что сказано в извещении</summary><div class="fold-body"><p>{{ d.excerpt }}</p><p class="mute small">Пересказ описания лота с площадки без персональных данных, VIN и госномера. Полный текст и документы — по ссылке на извещение ниже.</p></div></details>{% endif %}
+  <details class="fold"><summary>Характеристики по извещению</summary><div class="fold-body"><div class="scroll"><table class="t">
+    <tr><th>Тип техники</th><td>{{ d.vtype_name }}</td></tr>
+    {% if d.make %}<tr><th>Марка</th><td><a href="/auto/marka/{{ d.make_slug }}/">{{ d.make }}</a></td></tr>{% endif %}
+    {% if d.model %}<tr><th>Модель</th><td>{{ d.model }}</td></tr>{% endif %}
+    {% if d.year %}<tr><th>Год выпуска</th><td>{{ d.year }}</td></tr>{% endif %}
+    {% if d.mileage %}<tr><th>Пробег по извещению</th><td>{{ "{:,}".format(d.mileage).replace(",", " ") }} км</td></tr>{% endif %}
+    {% if d.hours %}<tr><th>Наработка</th><td>{{ d.hours }} моточасов</td></tr>{% endif %}
+    {% if d.region_name %}<tr><th>Регион</th><td><a href="/auto/{{ d.region_slug }}/">{{ d.region_name }}</a></td></tr>{% endif %}
+    {% if d.kind_name %}<tr><th>Вид торгов</th><td>{{ d.kind_name }}</td></tr>{% endif %}
+    {% if d.bidd_type %}<tr><th>Форма торгов</th><td>{{ d.bidd_type }}</td></tr>{% endif %}
+    {% if d.source_name %}<tr><th>Площадка</th><td>{{ d.source_name }}</td></tr>{% endif %}
+    {% if d.price_start %}<tr><th>Начальная цена</th><td>{{ d.price_start|rub }}</td></tr>{% endif %}
+    {% if d.first_seen %}<tr><th>В каталоге с</th><td>{{ d.first_seen[:10].split("-")|reverse|join(".") }}</td></tr>{% endif %}
+  </table></div></div></details>
+  <details class="fold"><summary>Как купить машину с торгов: 5 шагов</summary><div class="fold-body"><ol>
+    <li>Проверьте VIN: залог, розыск, ограничения, лизинг. Если VIN в извещении нет, запросите у организатора.</li>
+    <li>Осмотрите машину или закажите осмотр: место хранения указано в извещении, организатор обязан показать.</li>
+    <li>Получите электронную подпись и аккредитацию на площадке, внесите задаток по реквизитам из извещения.</li>
+    <li>Подайте заявку до срока и торгуйтесь в назначенное время. На повторных торгах и публичном предложении цена ниже.</li>
+    <li>После победы: договор, оплата в срок из извещения, снятие ограничений, постановка на учёт в ГИБДД.</li>
+  </ol><p class="mute small">Мы не организатор торгов: задаток и оплата идут по реквизитам из извещения. <a href="/uslugi/">Поможем с проверкой, ставкой и участием по договору</a>.</p></div></details>
+  </div>
+
+  {% if d.source_url %}<p><a href="{{ d.source_url }}" rel="nofollow noopener" target="_blank">Извещение на площадке{% if d.source_name %}: {{ d.source_name }}{% endif %}</a></p>{% endif %}
+
+  {% if similar %}<h2>Похожие машины с торгов</h2><div class="lots">
+  {% for x in similar %}<a class="lot" href="/auto/lot/{{ x.id }}/">{% if x.photo %}<img class="thumb" src="{{ x.photo }}" alt="" width="320" height="200" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}<span>{% if x.region_name %}<span class="tag" style="margin-right:6px">{{ x.region_name }}</span>{% endif %}<b>{{ x.label }}</b></span><span class="p">{{ x.price|rub }}</span><span class="mute small">{{ x.vtype_name }}{% if x.mileage %} · {{ "{:,}".format(x.mileage).replace(",", " ") }} км{% endif %}</span></a>{% endfor %}
+  </div>{% endif %}
+  <p class="mute small">Смотрите также: <a href="/auto/{{ d.vtype_slug }}/">{{ d.vtype_name|lower }} с торгов по России</a>{% if d.region_slug %} · <a href="/auto/{{ d.region_slug }}/">техника с торгов {{ d.region_where }}</a>{% endif %}{% if d.make %} · <a href="/auto/marka/{{ d.make_slug }}/">{{ d.make }} с торгов</a>{% endif %} · <a href="/auto/">все машины с торгов</a>.</p>
+</div>
+<aside>{% if active %}<div class="box">{{ lead_form("lot", "Купить эту машину с торгов", "Проверим документы и машину, рассчитаем ставку, подадим заявку и проторгуемся по договору.", "Хочу эту машину", [{"name":"lot","label":"Лот","value": d.label ~ " (" ~ cfg.SITE_URL ~ path ~ ")"}], "auto_" ~ d.id) }}</div>{% else %}<div class="box"><h3>Ищете похожую машину?</h3><p>Это архивная карточка. Доступность предложения и результат торгов уточняйте у организатора.</p><a class="btn" href="/auto/{{ d.vtype_slug }}/">Актуальные лоты</a></div>{% endif %}</aside>
+</div>
+</div>{% endblock %}
