@@ -3,6 +3,7 @@
 Строки выгрузки приводим к карточке сайта: без VIN и госномера (их нет и в выгрузке), описание — пересказ
 извещения без персональных данных. Страницы: все машины, по типу техники, по региону, по марке и подборки."""
 import re
+import unicodedata
 
 from market_feed import KIND, REGIONS, SOURCE, region_code, site_id
 
@@ -34,7 +35,11 @@ def slug(s):
     t = dict(zip("абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
                  ["a", "b", "v", "g", "d", "e", "e", "zh", "z", "i", "y", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u",
                   "f", "h", "c", "ch", "sh", "sch", "", "y", "", "e", "yu", "ya"]))
-    out = "".join(t.get(c, c if c.isalnum() else "-") for c in str(s or "").lower())
+    # Латиница с диакритикой (Kögel, Citroën, Škoda) → ASCII: адрес страницы должен быть ASCII,
+    # иначе проверка выкладки и часть роботов спотыкаются на /auto/marka/kögel/.
+    out = "".join(t.get(c, c) for c in str(s or "").lower())  # сначала кириллица, чтобы «й» и «ё» не распались
+    out = unicodedata.normalize("NFKD", out)
+    out = "".join(c if c.isascii() and c.isalnum() else ("" if unicodedata.combining(c) else "-") for c in out)
     return re.sub(r"-+", "-", out).strip("-")
 
 
