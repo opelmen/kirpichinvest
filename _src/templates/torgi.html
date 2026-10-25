@@ -44,7 +44,7 @@
 {% if pagination|length > 1 %}<nav class="filters" aria-label="Страницы каталога">{% for url, number in pagination %}<a href="{{ url }}" {% if number == current_page %}aria-current="page"{% endif %}>{{ number }}</a>{% endfor %}</nav>{% endif %}
 {% if faq %}<section style="padding-bottom:0"><div class="faq"><h2>Коротко о торгах в этом городе</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>{% endif %}
 <section><div class="split">
-  <div><h2>Нашли интересный лот?</h2><p>Проверим его до подачи заявки: выписка ЕГРН, жильцы, долги по капремонту, дело о банкротстве, рыночные аналоги. Назовём максимальную ставку.</p>
+  <div><h2>Нашли интересный лот?</h2><p>Готовый отчёт до заявки: до какой цены ставить, за сколько ушли похожие лоты, все документы прочитаны, права и аресты по Росреестру, проверка должника.</p>
   <p class="note small">Сведения о лотах взяты из открытого реестра ГИС Торги и могут отличаться от документов организатора. Перед подачей заявки сверяйтесь с извещением на площадке.</p></div>
   {{ lead_form("check", "Проверить лот", "", "Отправить на проверку", [{"name":"lot","label":"Ссылка на лот или адрес","ph":"https://torgi.gov.ru/..."}]) }}
 </div></section>
