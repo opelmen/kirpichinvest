@@ -212,6 +212,19 @@ if __name__ == '__main__':
 
 
 class AutoSectionTests(unittest.TestCase):
+    def test_make_slug_is_ascii(self):
+        import importlib
+        sys.path.insert(0, str(ROOT / '_src'))
+        af = importlib.import_module('auto_feed')
+        self.assertEqual(af.slug('Kögel'), 'kogel')  # выкладка 25.10 упала на /auto/marka/kögel/
+        self.assertEqual(af.slug('Citroën'), 'citroen')
+        self.assertEqual(af.slug('Škoda'), 'skoda')
+        self.assertEqual(af.slug('ГАЗ'), 'gaz')
+        self.assertEqual(af.slug('Тайга'), 'tayga')
+        self.assertEqual(af.slug('Mercedes-Benz'), 'mercedes-benz')
+        for m in ('Kögel', 'Hyundai Heavy', 'Chevrolet Niva'):
+            self.assertTrue(af.slug(m).isascii())
+
     def test_auto_pages_from_vehicles_feed(self):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
