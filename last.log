@@ -1,11 +1,11 @@
-== Wed Oct 28 10:13:27 UTC 2026 19377da schedule
-OK: страниц 35852 в sitemap, лотов 20832, техники 12856, статей 16
-Published release 40666248469-1
-Live verification: 7608 files (400 of 44401 lot pages), 0 errors
+== Wed Oct 28 20:41:35 UTC 2026 19377da schedule
+OK: страниц 36336 в sitemap, лотов 21096, техники 13071, статей 16
+Published release 40761780596-1
+Live verification: 7696 files (400 of 45352 lot pages), 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 1186
-IndexNow https://yandex.com/indexnow 202
+новых URL для IndexNow: 975
+IndexNow https://yandex.com/indexnow 200
 IndexNow https://api.indexnow.org/indexnow 200
 result: success
