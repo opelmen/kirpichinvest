@@ -3,8 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="index,follow">
 <title>Приватинвест</title>
+<meta name="description" content="Приватинвест: проверенные заявки на займ под залог недвижимости для инвесторов, брокеров и заёмщиков.">
+<link rel="canonical" href="https://privateinvest.pro/">
+<!-- Яндекс: номер счётчика Метрики и код подтверждения Вебмастера. Пусто — счётчик не грузится, meta не ставится. -->
+<script>
+window.PI_CFG={metrika:0, webmaster:''};
+(function(c){
+  if(c.webmaster){var m=document.createElement('meta');m.name='yandex-verification';m.content=c.webmaster;document.head.appendChild(m)}
+  // первое касание (страница входа, реферер, UTM) живёт 30 дней: заявка через неделю всё равно покажет, откуда человек пришёл
+  try{
+    var p=new URLSearchParams(location.search),u=[];
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){if(p.get(k))u.push(k+'='+p.get(k))});
+    var ft=JSON.parse(localStorage.getItem('pi_ft')||'null'),ext=document.referrer&&!/(^|\.)privateinvest\.pro$/.test(new URL(document.referrer).hostname);
+    if(!ft||Date.now()-ft.t>2592e6||u.length)ft={t:Date.now(),landing:location.href,referrer:ext?document.referrer:'',utm:u.join('&')};
+    localStorage.setItem('pi_ft',JSON.stringify(ft));
+  }catch(e){}
+  if(!c.metrika)return;
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
+  for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return}
+  k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id='+c.metrika,'ym');
+  ym(c.metrika,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true,trackHash:true});
+})(window.PI_CFG);
+function piGoal(g,params){try{if(window.ym&&PI_CFG.metrika)ym(PI_CFG.metrika,'reachGoal',g,params)}catch(e){}}
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 /* Макет: витрина проверенных залоговых заявок + три кабинета. Стиль «цифровой» по мотивам сайта партнёра:
@@ -643,7 +666,9 @@ section[id]{scroll-margin-top:80px}
     form.querySelectorAll('[data-for]').forEach(function(el){el.hidden=el.dataset.for.split(' ').indexOf(r)<0});
   }
   form.addEventListener('change',function(e){if(e.target.name==='role')syncRole()});
-  function openLead(role,project){
+  var cta='';
+  function openLead(role,project,label){
+    cta=(label||'')+(project?' · проект '+project:'');piGoal('form_open',{role:role});
     show('home');if(location.hash&&location.hash!=='#home')history.replaceState(null,'','#home');
     var radio=form.querySelector('input[name=role][value="'+role+'"]');if(radio)radio.checked=true;
     syncRole();
@@ -660,17 +685,19 @@ section[id]{scroll-margin-top:80px}
     var role=form.querySelector('input[name=role]:checked').value;
     fd.append('scenario',role);fd.append('name',document.getElementById('l-name').value.trim());fd.append('contact',contact);
     fd.append('consent','1');fd.append('website',document.getElementById('l-website').value);fd.append('page',location.href);
+    try{var ft=JSON.parse(localStorage.getItem('pi_ft')||'{}');fd.append('utm',ft.utm||'');fd.append('referrer',ft.referrer||'');fd.append('landing',ft.landing||'')}catch(e){}
+    fd.append('cta',cta||'форма внизу страницы');
     form.querySelectorAll('[data-for]').forEach(function(el){if(el.hidden)return;var i=el.querySelector('input');if(i&&i.value.trim())fd.append(i.name,i.value.trim())});
     var btn=document.getElementById('l-send');btn.disabled=true;msg.textContent='Отправляем…';
     fetch(API+'lead',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(j){
-      if(j&&j.ok){msg.textContent='Заявка принята. Мы свяжемся с вами по указанному контакту.';form.reset();syncRole()}
+      if(j&&j.ok){msg.textContent='Заявка принята. Мы свяжемся с вами по указанному контакту.';piGoal('lead_'+role);piGoal('lead');form.reset();syncRole();cta=''}
       else{msg.textContent=(j&&j.error)||'Не получилось отправить, попробуйте ещё раз'}
     }).catch(function(){msg.textContent='Нет связи с сервером, попробуйте ещё раз через минуту'}).then(function(){btn.disabled=false});
   });
 
   document.addEventListener('click',function(e){
     var ld=e.target.closest('[data-lead]');
-    if(ld){e.preventDefault();openLead(ld.dataset.lead,ld.dataset.project);return}
+    if(ld){e.preventDefault();openLead(ld.dataset.lead,ld.dataset.project,ld.textContent.trim());return}
     var go=e.target.closest('[data-go]');
     if(go){e.preventDefault();location.hash=go.dataset.go;return}
     var sc=e.target.closest('[data-scroll]');
