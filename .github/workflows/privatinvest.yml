@@ -39,6 +39,21 @@ jobs:
           rsync -az --delete --exclude='.well-known' privatinvest/ fond178@fond178.beget.tech:privateinvest.pro/public_html/
           echo "Deployed: https://privateinvest.pro/"
 
+      - name: Showcase feed from Zalog Desk (no personal data)
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 60 https://check.kirpichinvest.ru/public/showcase.json -o /tmp/sc.json
+          python3 - <<'PY'
+          import json, re
+          raw = open('/tmp/sc.json', encoding='utf-8').read()
+          d = json.loads(raw)
+          print('items:', len(d['items']), 'updated:', d.get('updated'))
+          for it in d['items']:
+              print(it['id'], '|', it['type'], '|', it['city'], '|', it['street'], '|', it['loan'], it['rate'], it['ltv'], '| checks:', len(it['checks']))
+          assert not re.search(r'\d{2}:\d{2}:\d{6,7}:\d+', raw), 'cadastral number in feed'
+          assert not re.search(r'\b\d{12}\b', raw), 'INN-like number in feed'
+          PY
+
       - name: Smoke check
         run: |
           set -euo pipefail

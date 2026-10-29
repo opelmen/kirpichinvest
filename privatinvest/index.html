@@ -36,6 +36,7 @@
   color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--paper);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--copper)}
@@ -243,11 +244,20 @@ td small{display:block;color:var(--muted);font-size:.76rem}
 .rv{opacity:1}
 @media (prefers-reduced-motion:no-preference){.view.on .hero-copy{animation:up .6s cubic-bezier(.2,.7,.2,1)}}
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.role-pick{display:flex;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--hair);background:var(--paper);border-radius:var(--r);cursor:pointer;min-height:44px}
+.role-pick:has(input:checked){border-color:var(--copper);box-shadow:inset 0 -2px 0 var(--copper)}
+.role-pick b{font-family:var(--f-display);font-weight:700;font-size:1.15rem;text-transform:uppercase}
+.role-pick input{accent-color:var(--copper)}
+#lead-form{gap:16px;max-width:900px}
+section[id]{scroll-margin-top:80px}
+.ledger b{white-space:nowrap}
+@media (max-width:640px){.top{position:static}.top-actions .btn-ghost{display:none}section[id]{scroll-margin-top:8px}}
+.sc-empty{grid-column:1/-1;border:1px dashed var(--hair);padding:22px;display:grid;gap:8px;color:var(--muted)}
 </style>
 
 </head>
 <body>
-<div class="demo-bar"><div class="wrap"><span>МАКЕТ · ВСЕ ОБЪЕКТЫ, СУММЫ И ЛЮДИ ВЫМЫШЛЕНЫ · ДАННЫЕ ПЛАТФОРМЫ ПОДКЛЮЧАТСЯ НА ЭТАПЕ ВЁРСТКИ</span><span>Смотреть: <button data-go="home">Сайт</button> <button data-go="investor">Инвестор</button> <button data-go="broker">Брокер</button> <button data-go="borrower">Заёмщик</button> <button data-go="concept">Концепция</button></span></div></div>
+<div class="demo-bar" id="demo-bar" hidden><div class="wrap"><span>ПРИМЕР КАБИНЕТА · ДАННЫЕ ВЫМЫШЛЕНЫ · ЛИЧНЫЕ КАБИНЕТЫ ОТКРОЮТСЯ НА СЛЕДУЮЩЕМ ЭТАПЕ</span><span><button data-go="investor">Инвестор</button> <button data-go="broker">Брокер</button> <button data-go="borrower">Заёмщик</button> <button data-go="home">На сайт</button></span></div></div>
 
 <header class="top"><div class="wrap">
   <a class="logo" href="#home"><b>Приватинвест</b><span>займы под залог · через платформы из реестра ЦБ</span></a>
@@ -258,7 +268,7 @@ td small{display:block;color:var(--muted);font-size:.76rem}
     <a href="#home" data-scroll="brk">Брокерам</a>
     <a href="#home" data-scroll="brw">Заёмщикам</a>
   </nav>
-  <div class="top-actions"><a class="btn btn-ghost btn-sm" href="#investor">Войти</a></div>
+  <div class="top-actions"><a class="btn btn-ghost btn-sm" href="#investor" title="Пример кабинета">Кабинет</a><a class="btn btn-sm" href="#home" data-lead="pi_invest">Оставить заявку</a></div>
 </div></header>
 
 <!-- ============ ГЛАВНАЯ ============ -->
@@ -267,7 +277,7 @@ td small{display:block;color:var(--muted);font-size:.76rem}
   <div class="hero-copy">
     <span class="eyebrow">Витрина проверенных залоговых заявок</span>
     <h1>Займы под залог недвижимости. <em>Проверено</em> до того, как вы это увидели.</h1>
-    <p class="lead">На витрину попадает одна заявка из десяти. По каждой уже проверены собственник, история объекта, долги, суды и банкротство. Договор займа прямой между инвестором и заёмщиком, деньги идут через номинальный счёт оператора из реестра Банка России.</p>
+    <p class="lead">На витрину попадают только заявки, которые прошли проверку: собственник, история объекта, долги, суды и банкротство. Договор займа прямой между инвестором и заёмщиком, деньги идут через номинальный счёт оператора из реестра Банка России.</p>
     <div class="roles">
       <a href="#home" data-scroll="inv"><b>Я инвестор</b><span>Ставка по договору 28–38% годовых, залог с запасом вдвое</span></a>
       <a href="#home" data-scroll="brk"><b>Я брокер</b><span>Ответ за два дня, клиент закреплён 90 дней, комиссия от 3%</span></a>
@@ -276,68 +286,12 @@ td small{display:block;color:var(--muted);font-size:.76rem}
     <div class="operator"><i>ЦБ</i><p>Услуги по привлечению инвестиций оказывает ООО «Залоготека» (ОГРН 1230200027221), оператор инвестиционной платформы из реестра Банка России. Мы отбираем заявки, проверяем, сопровождаем сделку и залог. Инвестиции через платформу высокорискованны и могут привести к потере вложенных средств полностью.</p></div>
   </div>
 
-  <article class="pcard">
-    <div class="pcard-head"><div><span class="mono">P-118 · Квартира · Москва</span><h3>2-комн. квартира, 58 м²</h3><p class="addr">р-н Сокол, ул. Алабяна (дом не показываем)</p></div><span class="pill pill-ok">Сбор · 62%</span></div>
-    <div class="facts">
-      <div><span>Сумма</span><b>4,2 млн</b></div>
-      <div><span>Ставка</span><b>3,5%</b><small>в месяц</small></div>
-      <div><span>Срок</span><b>12 мес</b></div>
-      <div><span>LTV</span><b>38%</b><small>оценка 11 млн</small></div>
-    </div>
-    <div class="checks">
-      <div class="ck-ok"><i>✓</i><span>Право собственности подтверждено, владеет с 2017 г.</span></div>
-      <div class="ck-ok"><i>✓</i><span>Ограничения и обременения не зарегистрированы</span></div>
-      <div class="ck-ok"><i>✓</i><span>Банкротство: не найдено (ЕФРСБ, 5 лет)</span></div>
-      <div class="ck-ok"><i>✓</i><span>Суды и исполнительные производства: не найдены</span></div>
-      <div class="ck-ok"><i>✓</i><span>Паспорт собственника действителен</span></div>
-      <div class="ck-warn"><i>!</i><span>Кредитная нагрузка: есть потребкредит, платежи без просрочек</span></div>
-    </div>
-    <div class="bar"><i style="width:62%"></i></div>
-    <div class="collect"><span>Собрано 2,6 млн ₽ из 4,2 млн ₽</span><span>Мин. доля 100 000 ₽</span></div>
-    <a class="btn btn-copper" href="#investor">Хочу участвовать</a>
-  </article>
+  <div id="hero-card"><article class="pcard"><div class="pcard-head"><div><span class="mono">Витрина</span><h3>Загружаем заявки…</h3></div></div><p class="addr">Свежие заявки со статусом «Можно выдать».</p></article></div>
 </div></section>
 
 <section class="sec" id="s-showcase"><div class="wrap">
-  <div class="sec-head"><div><span class="eyebrow">Витрина</span><h2>Заявки <em>в сборе</em></h2></div><p class="sub">Без фамилий, точных адресов и кадастровых номеров. Зато видно, что именно проверено и чем закончилась проверка.</p></div>
-  <div class="grid3">
-    <article class="pcard">
-      <div class="pcard-head"><div><span class="mono">P-121 · Дом · Казань</span><h3>Дом 142 м² с участком 9 сот.</h3><p class="addr">Приволжский р-н, пос. Салмачи</p></div><span class="pill pill-ok">Сбор · 30%</span></div>
-      <div class="facts"><div><span>Сумма</span><b>3 млн</b></div><div><span>Ставка</span><b>3,8%</b><small>в месяц</small></div><div><span>Срок</span><b>9 мес</b></div><div><span>LTV</span><b>36%</b></div></div>
-      <div class="checks">
-        <div class="ck-ok"><i>✓</i><span>Собственность, обременения, банкротство, суды</span></div>
-        <div class="ck-ok"><i>✓</i><span>Паспорт действителен · ИП действующий с 2019 г.</span></div>
-        <div class="ck-warn"><i>!</i><span>Долг ФССП 42 000 ₽ (штрафы ГИБДД), гасится до выдачи</span></div>
-      </div>
-      <div class="bar"><i style="width:30%"></i></div>
-      <div class="collect"><span>Собрано 0,9 млн ₽</span><span>Нужно ещё 2,1 млн ₽</span></div>
-      <a class="btn btn-ghost" href="#investor">Подробнее</a>
-    </article>
-    <article class="pcard">
-      <div class="pcard-head"><div><span class="mono">P-124 · Коммерция · Санкт-Петербург</span><h3>Помещение под стрит-ритейл 96 м²</h3><p class="addr">Московский пр., первая линия</p></div><span class="pill pill-ink">Собрано · регистрация залога</span></div>
-      <div class="facts"><div><span>Сумма</span><b>6,5 млн</b></div><div><span>Ставка</span><b>3,5%</b><small>в месяц</small></div><div><span>Срок</span><b>18 мес</b></div><div><span>LTV</span><b>33%</b></div></div>
-      <div class="checks">
-        <div class="ck-ok"><i>✓</i><span>Собственность, обременения, банкротство, суды</span></div>
-        <div class="ck-ok"><i>✓</i><span>Арендатор: сетевой, договор до 2028 г.</span></div>
-        <div class="ck-ok"><i>✓</i><span>Оценка: справочная 19,5 млн ₽, объявления района</span></div>
-      </div>
-      <div class="bar"><i style="width:100%"></i></div>
-      <div class="collect"><span>Собрано 6,5 млн ₽</span><span>Сбор закрыт</span></div>
-      <a class="btn btn-ghost" href="#investor">Подробнее</a>
-    </article>
-    <article class="pcard">
-      <div class="pcard-head"><div><span class="mono">P-127 · Квартира · Екатеринбург</span><h3>3-комн. квартира, 81 м²</h3><p class="addr">Ленинский р-н, ул. Шейнкмана</p></div><span class="pill pill-warn">Скоро</span></div>
-      <div class="facts"><div><span>Сумма</span><b>5 млн</b></div><div><span>Ставка</span><b>3,3%</b><small>в месяц</small></div><div><span>Срок</span><b>12 мес</b></div><div><span>LTV</span><b>41%</b></div></div>
-      <div class="checks">
-        <div class="ck-ok"><i>✓</i><span>Собственность, обременения, банкротство, суды</span></div>
-        <div class="ck-off"><i></i><span>Оценка и документы по ИП: проверяем</span></div>
-        <div class="ck-off"><i></i><span>Публикация после решения «Можно выдать»</span></div>
-      </div>
-      <div class="bar"><i style="width:0"></i></div>
-      <div class="collect"><span>Сбор ещё не открыт</span><span>Можно забронировать долю</span></div>
-      <a class="btn btn-ghost" href="#investor">Забронировать</a>
-    </article>
-  </div>
+  <div class="sec-head"><div><span class="eyebrow">Витрина</span><h2>Заявки, <em>готовые к выдаче</em></h2></div><p class="sub">Без фамилий, номеров домов и кадастровых номеров. Зато видно, что именно проверено и чем закончилась проверка. <span id="sc-updated"></span></p></div>
+  <div class="grid3" id="showcase"><p class="sub">Загружаем заявки…</p></div>
   <p class="note">Сведения о правах и ограничениях получены из открытых данных Росреестра: не являются выпиской ЕГРН, сведения о правообладателях не предоставляются. Оценка стоимости расчётная, справочная, по рыночным объявлениям, не является отчётом об оценке по 135-ФЗ. Проверки по банкротству, судам и ФССП сделаны на дату публикации и обновляются перед выдачей.</p>
 </div></section>
 
@@ -348,12 +302,12 @@ td small{display:block;color:var(--muted);font-size:.76rem}
     <div class="col"><h3>Что вы получаете</h3><div class="plus">
       <div><b>28–38% годовых по договору</b><span>Ставка фиксируется в договоре займа. Мы не пишем «гарантированная доходность», потому что её не бывает. Пишем ставку, которую заёмщик обязан платить.</span></div>
       <div><b>Залог с запасом вдвое</b><span>Заём не больше половины стоимости объекта. Если заёмщик перестанет платить, объект продаётся, и долг с процентами закрывается из этих денег.</span></div>
-      <div><b>Проверка сделана до вас</b><span>Собственник, история объекта, суды, долги, банкротство, паспорт. Что проверено, видно прямо в карточке. Девять заявок из десяти до витрины не доходят.</span></div>
+      <div><b>Проверка сделана до вас</b><span>Собственник, история объекта, суды, долги, банкротство, паспорт. Что проверено, видно прямо в карточке. Большинство заявок до витрины не доходят.</span></div>
       <div><b>Деньги идут через лицензированного оператора</b><span>Вы переводите на номинальный счёт платформы из реестра ЦБ, а не нам на карту. Платформа же удерживает НДФЛ, вам ничего декларировать не нужно.</span></div>
       <div><b>Залог сопровождаем мы</b><span>Регистрация в Росреестре, контроль платежей, переговоры при задержке и взыскание, если дойдёт. Вы не ходите по судам.</span></div>
     </div></div>
     <div class="col risk"><h3>Где риск</h3><div class="plus">
-      <div><b>Заёмщик может перестать платить</b><span>В нашей практике это случается примерно в одной сделке из двадцати. Тогда деньги возвращаются через продажу залога, и это долго: от 6 до 18 месяцев.</span></div>
+      <div><b>Заёмщик может перестать платить</b><span>Так бывает. Тогда деньги возвращаются через продажу залога, и это долго: от 6 до 18 месяцев.</span></div>
       <div><b>Объект может продаться дешевле оценки</b><span>Поэтому заём не больше половины стоимости. Запас покрывает падение цены, проценты за время взыскания и расходы.</span></div>
       <div><b>Проценты на время спора не приходят</b><span>Они начисляются и взыскиваются с заёмщика, но до продажи объекта вы их не получаете. Не вкладывайте деньги, которые нужны вам в ближайший год.</span></div>
       <div><b>Лимит для неквалифицированных инвесторов</b><span>600 000 ₽ в год на всех платформах страны. Инвестор-ИП и квалифицированный инвестор лимита не имеют. Кабинет считает лимит за вас.</span></div>
@@ -361,12 +315,13 @@ td small{display:block;color:var(--muted);font-size:.76rem}
     <div class="col faq"><h3>Вопросы, которые задают все</h3>
       <details><summary>Почему не банковский вклад?</summary><p>Вклад даёт 15–18% и застрахован на 1,4 млн. Здесь ставка вдвое выше, а защита не страховка, а недвижимость. Это разные инструменты, и разумно держать оба.</p></details>
       <details><summary>Это не пирамида?</summary><p>Ваши деньги уходят конкретному заёмщику по договору, который вы видите, под конкретный объект, залог на который регистрируется в Росреестре. Выплаты приходят от заёмщика через платформу, а не от новых инвесторов.</p></details>
-      <details><summary>А если заёмщик не заплатит?</summary><p>Сначала переговоры и реструктуризация, потом суд и продажа объекта. Взыскание ведём мы за свой счёт, возмещаем расходы из взысканного. За пять лет ни одна сделка не закончилась потерей основного долга, но мы не обещаем, что так будет всегда.</p></details>
+      <details><summary>А если заёмщик не заплатит?</summary><p>Сначала переговоры и реструктуризация, потом суд и продажа объекта. Взыскание ведём мы за свой счёт, возмещаем расходы из взысканного. Мы не обещаем, что всё закончится без потерь, поэтому и держим заём не больше половины стоимости.</p></details>
       <details><summary>Зачем вы нужны, если есть платформа?</summary><p>Платформа оформляет документы и проводит деньги. Отбор заёмщиков, проверка объекта, регистрация залога, контроль платежей и взыскание остаются на нас. Платформа этого не делает.</p></details>
       <details><summary>Что с налогами?</summary><p>С физлица платформа удерживает НДФЛ 13% при каждой выплате и отчитывается сама. Если инвестируете как ИП на УСН, налог 6% и нет лимита 600 тысяч. Калькулятор в кабинете считает оба варианта.</p></details>
       <details><summary>Сколько минимум?</summary><p>От 100 000 ₽ в один проект. Один заём можно собрать из нескольких инвесторов, доля каждого видна в кабинете.</p></details>
     </div>
   </div>
+  <div style="margin-top:22px"><a class="btn btn-copper" href="#home" data-lead="pi_invest">Хочу участвовать</a></div>
 </div></section>
 
 <!-- БРОКЕРАМ -->
@@ -394,6 +349,7 @@ td small{display:block;color:var(--muted);font-size:.76rem}
       <details><summary>Что передавать на первом шаге?</summary><p>Адрес или кадастровый номер, ИНН заёмщика, сумму и срок. Паспорт и документы на объект понадобятся после предварительного «да».</p></details>
     </div>
   </div>
+  <div style="margin-top:22px"><a class="btn btn-copper" href="#home" data-lead="pi_broker">Передать клиента</a></div>
 </div></section>
 
 <!-- ЗАЁМЩИКАМ -->
@@ -421,6 +377,7 @@ td small{display:block;color:var(--muted);font-size:.76rem}
       <details><summary>Кто даёт деньги?</summary><p>Частные инвесторы, зарегистрированные на платформе. Один заём могут собрать несколько человек, для вас это один договор и один платёж в месяц.</p></details>
     </div>
   </div>
+  <div style="margin-top:22px"><a class="btn btn-copper" href="#home" data-lead="pi_borrow">Оставить заявку на заём</a></div>
 </div></section>
 
 <section class="sec"><div class="wrap">
@@ -448,9 +405,31 @@ td small{display:block;color:var(--muted);font-size:.76rem}
   </div>
 </div></section>
 
+<section class="sec role-sec" id="s-lead"><div class="wrap">
+  <div class="sec-head"><div><span class="eyebrow">Заявка</span><h2>Оставьте контакт, <em>мы перезвоним</em></h2></div><p class="sub">Ответим в рабочее время, обычно в тот же день. Данные нужны только для связи по вашей заявке.</p></div>
+  <form class="side-box" id="lead-form" novalidate>
+    <div class="roles" role="radiogroup" aria-label="Кто вы">
+      <label class="role-pick"><input type="radio" name="role" value="pi_invest" id="r-inv" checked> <b>Я инвестор</b></label>
+      <label class="role-pick"><input type="radio" name="role" value="pi_broker" id="r-brk"> <b>Я брокер</b></label>
+      <label class="role-pick"><input type="radio" name="role" value="pi_borrow" id="r-brw"> <b>Мне нужен заём</b></label>
+    </div>
+    <div class="form">
+      <label class="field"><span>Имя</span><input id="l-name" name="name" autocomplete="name" maxlength="100"></label>
+      <label class="field"><span>Телефон или Telegram</span><input id="l-contact" name="contact" autocomplete="tel" maxlength="100" required></label>
+      <label class="field" data-for="pi_invest"><span>Проект</span><input id="l-project" name="Проект" placeholder="любой подходящий" maxlength="40"></label>
+      <label class="field" data-for="pi_invest"><span>Сумма участия, ₽</span><input id="l-amount" name="Сумма участия" inputmode="numeric" placeholder="от 100 000" maxlength="20"></label>
+      <label class="field" data-for="pi_broker pi_borrow" hidden><span>Объект и город</span><input id="l-object" name="Объект" placeholder="квартира 60 м², Москва" maxlength="200"></label>
+      <label class="field" data-for="pi_broker pi_borrow" hidden><span>Сумма займа, ₽</span><input id="l-loan" name="Сумма займа" inputmode="numeric" placeholder="3 000 000" maxlength="20"></label>
+    </div>
+    <input type="text" name="website" id="l-website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label class="stopf" style="font-size:.86rem"><span style="display:flex;gap:10px"><input type="checkbox" name="consent" value="1" id="l-consent"> Согласен на обработку персональных данных для связи по заявке</span></label>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-copper" type="submit" id="l-send">Отправить</button><span id="l-msg" class="mono" style="text-transform:none;letter-spacing:0" role="status"></span></div>
+  </form>
+</div></section>
+
 <footer><div class="wrap">
   <p class="legal">Услуги по привлечению инвестиций оказывает ООО «Залоготека» (ОГРН 1230200027221), оператор инвестиционной платформы, включённый в реестр Банка России. Приватинвест отбирает, проверяет и сопровождает сделки, управляет залогом. Ставка указана по договору и не является гарантированной доходностью. Инвестиции через платформу высокорискованны и могут привести к потере вложенных средств полностью. Информация на сайте не является публичной офертой и индивидуальной инвестиционной рекомендацией.</p>
-  <p class="mono">Приватинвест · Telegram-канал с новыми проектами · Поддержка в Telegram · © 2026</p>
+  <p class="mono">Приватинвест · © 2026</p>
 </div></footer>
 </main>
 
@@ -606,72 +585,99 @@ td small{display:block;color:var(--muted);font-size:.76rem}
   </div>
 </div></div></main>
 
-<!-- ============ КОНЦЕПЦИЯ ============ -->
-<main class="view" id="view-concept"><div class="wrap"><div class="concept">
-  <div><span class="eyebrow">Концепция · 29 октября 2026</span><h2>Что это за сайт и почему он такой</h2></div>
-
-  <div><h3>Одна мысль</h3><p>«Проверено до того, как вы это увидели». Всё остальное на рынке залоговых займов и инвестплатформ обещает ставку. Мы показываем проверку. Поэтому главный визуальный объект сайта не калькулятор и не фотография квартиры, а карточка заявки со списком пройденных проверок. Она в первом экране, она же единица витрины, она же строка в каждом кабинете.</p></div>
-
-  <div><h3>Три роли, одна витрина</h3>
-    <div class="tbl-wrap"><table>
-      <tr><th>Роль</th><th>Что ему страшно</th><th>Что мы показываем в ответ</th><th>Что он делает на сайте</th></tr>
-      <tr><td><b>Инвестор</b></td><td>Потерять деньги, пирамида, суды, налоги</td><td>Залог с запасом вдвое, проверки в карточке, деньги через оператора ЦБ, честный блок «Где риск»</td><td>Бронирует долю, регистрируется на платформе по ссылке, следит за выплатами</td></tr>
-      <tr><td><b>Брокер</b></td><td>Уведут клиента, долго думают, не платят</td><td>Закрепление 90 дней на экране, ответ за 2 дня, комиссия по каждой заявке</td><td>Подаёт заявку через стоп-фильтр, смотрит статусы, получает комиссию</td></tr>
-      <tr><td><b>Заёмщик</b></td><td>Отберут квартиру, скрытые проценты, частник с картой</td><td>Ставка и комиссия до подписания, деньги с платформы, досрочно без штрафа, честное «дороже банка»</td><td>Видит статус, график, следующий платёж, документы, досрочку</td></tr>
-    </table></div>
-  </div>
-
-  <div><h3>Что видно на витрине и что нет</h3><ul>
-    <li>Видно: тип и площадь, город, район и улица без номера дома, сумма, ставка, срок, LTV, справочная оценка, список проверок с результатом, ход сбора.</li>
-    <li>Не видно: фамилии, номер дома, кадастровый номер, паспорт, отчёт по проверке, кто брокер. Это 152-ФЗ и правила партнёра.</li>
-    <li>Проверка с замечанием показывается жёлтым, а не прячется: «есть потребкредит, без просрочек», «долг ФССП гасится при выдаче». Так инвестор верит и зелёным.</li>
-    <li>Под витриной обязательные оговорки: данные Росреестра не выписка ЕГРН, сведения о правообладателях не предоставляются; оценка расчётная справочная, не отчёт по 135-ФЗ.</li>
-  </ul></div>
-
-  <div><h3>Кабинеты: что главное на первом экране</h3><ul>
-    <li><b>Инвестор.</b> Четыре цифры: в работе, получено, ближайшая выплата, просрочек. Ниже займы и брони. Справа лимит 600 тысяч с полоской: это то, о чём он не знает и за что платформа его остановит.</li>
-    <li><b>Брокер.</b> Таблица заявок со статусом, датой закрепления и комиссией в одной строке. Отказ всегда с причиной и датой, когда можно повторно. Результаты проверок не показываем. Подача через стоп-фильтр из пяти пунктов, без поля «цель».</li>
-    <li><b>Заёмщик.</b> Шкала этапов, тёмная плашка «следующий платёж» с суммой и датой, сумма досрочки на сегодня. Сам договор и выдача живут на платформе Залоготеки, наш кабинет показывает состояние и держит связь с менеджером.</li>
-  </ul></div>
-
-  <div><h3>Язык</h3><ul>
-    <li>Каждый блок пользы отвечает на конкретный страх, а не хвалит нас. Формула: что получаешь, почему это правда, что делать.</li>
-    <li>Риски написаны там же, где плюсы, и теми же словами. «Дороже банка», «объект продадут», «проценты на время спора не приходят».</li>
-    <li>Запрещено: «гарантированная доходность», «под ключ», «уникальный», «инновационный», поле «цель займа», подсказки цели в текстах.</li>
-    <li>Обязательно везде, где есть проекты: оператор ООО «Залоготека», реестр Банка России, предупреждение о риске потери средств.</li>
-  </ul></div>
-
-  <div><h3>Визуал</h3><p>Берём «цифровой» стиль сайта партнёра, согласованный 23.10: узкий гротеск заглавными в заголовках, моноширинные подписи и кнопки, прямые углы, тонкие линии, кремовая бумага и медь, тёмная лента для расчётов. Тёмная тема встроена. Единственный «громкий» элемент страницы: карточка заявки с проверками. Всё вокруг спокойное.</p></div>
-
-  <div><h3>Открытые вопросы к John</h3>
-    <div class="q">1. Название. В макете «Приватинвест» от домена приватинвест.про. Оставляем или будет другой бренд (SMIRNOFFOND у партнёра)?</div>
-    <div class="q">2. Адрес. Показываю район и улицу без номера дома. Партнёр просил без точных адресов; улица без дома кажется компромиссом. Подтвердить.</div>
-    <div class="q">3. Цифры в текстах: ставки 28–38% годовых, комиссия брокеру от 3%, выдача 7–10 дней, «одна сделка из двадцати» с просрочкой. Взяты из материалов и памяти проекта, нужна проверка перед вёрсткой.</div>
-    <div class="q">4. Кабинет заёмщика: делаем свой (как в макете) или ограничиваемся статусом и ссылкой в кабинет Залоготеки?</div>
-  </div>
-</div></div></main>
 
 <script>
 (function(){
-  var views=['home','investor','broker','borrower','concept'];
+  var API='https://check.kirpichinvest.ru/public/';
+  var views=['home','investor','broker','borrower'];
   function show(name){
     if(views.indexOf(name)<0)name='home';
     views.forEach(function(v){var el=document.getElementById('view-'+v);if(el)el.classList.toggle('on',v===name)});
+    document.getElementById('demo-bar').hidden=(name==='home');
     document.querySelectorAll('#mainnav a').forEach(function(a){a.classList.toggle('on',a.dataset.nav===name)});
     window.scrollTo(0,0);
   }
   function route(){show((location.hash||'#home').slice(1))}
   window.addEventListener('hashchange',route);
   route();
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function mln(v){if(!v)return '—';var m=v/1e6;return (m>=10?m.toFixed(0):m.toFixed(1)).replace('.',',').replace(/,0$/,'')+' млн'}
+  function pct(v){return String(v).replace('.',',')}
+  function card(it,big){
+    var place=[it.city,it.street].filter(Boolean).join(', ');
+    var checks=(it.checks||[]).map(function(c){return '<div class="'+(c.level==='ok'?'ck-ok':'ck-warn')+'"><i>'+(c.level==='ok'?'✓':'!')+'</i><span>'+esc(c.text)+'</span></div>'}).join('');
+    return '<article class="pcard">'+
+      '<div class="pcard-head"><div><span class="mono">'+esc([it.id,it.type,it.city].filter(Boolean).join(' · '))+'</span><h3>'+esc(it.title)+'</h3>'+
+      (place?'<p class="addr">'+esc(place)+(it.street?' (дом не показываем)':'')+'</p>':'')+'</div><span class="pill pill-ok">Можно выдать</span></div>'+
+      '<div class="facts">'+
+        '<div><span>Сумма</span><b>'+mln(it.loan)+'</b></div>'+
+        '<div><span>Ставка</span><b>'+(it.rate?pct(it.rate)+'%':'—')+'</b><small>в месяц</small></div>'+
+        '<div><span>Срок</span><b>'+(it.term?it.term+' мес':'—')+'</b></div>'+
+        '<div><span>LTV</span><b>'+(it.ltv?Math.round(it.ltv*100)+'%':'—')+'</b>'+(it.market?'<small>оценка ~'+mln(it.market)+'</small>':'')+'</div>'+
+      '</div>'+
+      (checks?'<div class="checks">'+checks+'</div>':'<p class="addr">Проверки обновляются</p>')+
+      '<a class="btn '+(big?'btn-copper':'btn-ghost')+'" href="#home" data-lead="pi_invest" data-project="'+esc(it.id)+'">Хочу участвовать</a>'+
+    '</article>';
+  }
+  function render(data){
+    var items=(data&&data.items)||[];
+    var grid=document.getElementById('showcase'), hero=document.getElementById('hero-card');
+    if(!items.length){
+      grid.innerHTML='<div class="sc-empty"><b>Сейчас все заявки в сборе или на проверке.</b><span>Оставьте контакт в форме ниже, и мы пришлём новую заявку, как только она пройдёт проверку.</span></div>';
+      hero.innerHTML='<article class="pcard"><div class="pcard-head"><div><span class="mono">Витрина</span><h3>Новые заявки скоро</h3></div></div><p class="addr">Проверяем следующие объекты. Оставьте контакт, чтобы узнать первым.</p><a class="btn btn-copper" href="#home" data-lead="pi_invest">Оставить контакт</a></article>';
+      return;
+    }
+    hero.innerHTML=card(items[0],true);
+    grid.innerHTML=items.map(function(it){return card(it,false)}).join('');
+    if(data.updated){var d=new Date(data.updated);if(!isNaN(d))document.getElementById('sc-updated').textContent='Обновлено '+d.toLocaleString('ru-RU',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'.'}
+  }
+  fetch(API+'showcase.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(render).catch(function(){
+    document.getElementById('showcase').innerHTML='<div class="sc-empty"><b>Витрина временно не загрузилась.</b><span>Обновите страницу через минуту или оставьте контакт ниже.</span></div>';
+    document.getElementById('hero-card').innerHTML='';
+  });
+
+  var form=document.getElementById('lead-form'), msg=document.getElementById('l-msg');
+  function syncRole(){
+    var r=form.querySelector('input[name=role]:checked').value;
+    form.querySelectorAll('[data-for]').forEach(function(el){el.hidden=el.dataset.for.split(' ').indexOf(r)<0});
+  }
+  form.addEventListener('change',function(e){if(e.target.name==='role')syncRole()});
+  function openLead(role,project){
+    show('home');if(location.hash&&location.hash!=='#home')history.replaceState(null,'','#home');
+    var radio=form.querySelector('input[name=role][value="'+role+'"]');if(radio)radio.checked=true;
+    syncRole();
+    if(project)document.getElementById('l-project').value=project;
+    document.getElementById('s-lead').scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){document.getElementById('l-name').focus({preventScroll:true})},400);
+  }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var contact=document.getElementById('l-contact').value.trim();
+    if(contact.replace(/\D/g,'').length<10&&contact.indexOf('@')<0){msg.textContent='Укажите телефон (10 цифр) или Telegram через @';return}
+    if(!document.getElementById('l-consent').checked){msg.textContent='Отметьте согласие на обработку данных';return}
+    var fd=new FormData();
+    var role=form.querySelector('input[name=role]:checked').value;
+    fd.append('scenario',role);fd.append('name',document.getElementById('l-name').value.trim());fd.append('contact',contact);
+    fd.append('consent','1');fd.append('website',document.getElementById('l-website').value);fd.append('page',location.href);
+    form.querySelectorAll('[data-for]').forEach(function(el){if(el.hidden)return;var i=el.querySelector('input');if(i&&i.value.trim())fd.append(i.name,i.value.trim())});
+    var btn=document.getElementById('l-send');btn.disabled=true;msg.textContent='Отправляем…';
+    fetch(API+'lead',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(j){
+      if(j&&j.ok){msg.textContent='Заявка принята. Мы свяжемся с вами по указанному контакту.';form.reset();syncRole()}
+      else{msg.textContent=(j&&j.error)||'Не получилось отправить, попробуйте ещё раз'}
+    }).catch(function(){msg.textContent='Нет связи с сервером, попробуйте ещё раз через минуту'}).then(function(){btn.disabled=false});
+  });
+
   document.addEventListener('click',function(e){
+    var ld=e.target.closest('[data-lead]');
+    if(ld){e.preventDefault();openLead(ld.dataset.lead,ld.dataset.project);return}
     var go=e.target.closest('[data-go]');
     if(go){e.preventDefault();location.hash=go.dataset.go;return}
     var sc=e.target.closest('[data-scroll]');
-    if(sc){e.preventDefault();if(location.hash!=='#home'){location.hash='home'}show('home');
+    if(sc){e.preventDefault();if(location.hash&&location.hash!=='#home'){location.hash='home'}show('home');
       var t=document.getElementById('s-'+sc.dataset.scroll);if(t){t.scrollIntoView({behavior:'smooth',block:'start'})}}
   });
 })();
 </script>
-
 </body>
 </html>
