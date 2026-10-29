@@ -29,20 +29,23 @@ jobs:
       - name: Check that the domain folder exists on Beget
         run: |
           set -euo pipefail
-          # приватинвест.про в punycode
-          ssh fond178@fond178.beget.tech 'd=~/xn--80adbmlc9aljrgf.xn--n1abd/public_html; if test -d "$d"; then echo "OK: $d"; ls -la "$d" | head -20; else echo "NO domain folder. Home listing:"; ls -1 ~; exit 1; fi'
+          # домен на Beget называется privateinvest.pro (латиницей)
+          ssh fond178@fond178.beget.tech 'd=~/privateinvest.pro/public_html; if test -d "$d"; then echo "OK: $d"; ls -la "$d" | head -20; else echo "NO domain folder. Home listing:"; ls -1 ~; exit 1; fi'
 
       - name: Backup current site and deploy
         run: |
           set -euo pipefail
-          ssh fond178@fond178.beget.tech 'set -e; d=~/xn--80adbmlc9aljrgf.xn--n1abd/public_html; mkdir -p ~/privatinvest-backups; tar -czf ~/privatinvest-backups/$(date +%Y%m%d-%H%M%S).tar.gz -C "$d" . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}'
-          rsync -az --delete --exclude='.well-known' privatinvest/ fond178@fond178.beget.tech:xn--80adbmlc9aljrgf.xn--n1abd/public_html/
-          echo "Deployed: https://приватинвест.про/"
+          ssh fond178@fond178.beget.tech 'set -e; d=~/privateinvest.pro/public_html; mkdir -p ~/privatinvest-backups; tar -czf ~/privatinvest-backups/$(date +%Y%m%d-%H%M%S).tar.gz -C "$d" . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}'
+          rsync -az --delete --exclude='.well-known' privatinvest/ fond178@fond178.beget.tech:privateinvest.pro/public_html/
+          echo "Deployed: https://privateinvest.pro/"
 
       - name: Smoke check
         run: |
           set -euo pipefail
           sleep 5
-          code=$(curl -s -o /tmp/p.html -w '%{http_code}' --max-time 30 -L https://xn--80adbmlc9aljrgf.xn--n1abd/ || true)
-          echo "HTTP $code"
-          grep -q 'Приватинвест' /tmp/p.html && echo 'page content OK' || (echo 'page content missing'; head -c 500 /tmp/p.html; exit 1)
+          for u in https://privateinvest.pro/ http://privateinvest.pro/; do
+            code=$(curl -s -o /tmp/p.html -w '%{http_code}' --max-time 30 -L "$u" || true)
+            echo "$u -> HTTP $code"
+            if grep -q 'Приватинвест' /tmp/p.html; then echo "page content OK at $u"; exit 0; fi
+          done
+          echo 'page content missing'; head -c 500 /tmp/p.html; exit 1

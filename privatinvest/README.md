@@ -5,5 +5,5 @@
 Дизайн — «цифровой» стиль сайта партнёра (см. `/mnt/project-files/partner-zaloginvest/` в проекте).
 
 Выкладка: workflow `.github/workflows/privatinvest.yml` копирует папку на Beget тем же SSH-ключом,
-что и торггид, в `~/xn--80adbmlc9aljrgf.xn--n1abd/public_html` (punycode домена приватинвест.про).
+что и торггид, в `~/privateinvest.pro/public_html` (на Beget домен заведён как privateinvest.pro).
 Запускается при изменении `privatinvest/**` и вручную (workflow_dispatch). Страница закрыта от индексации (`noindex`).
