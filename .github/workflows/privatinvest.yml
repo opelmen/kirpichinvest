@@ -61,6 +61,6 @@ jobs:
           for u in https://privateinvest.pro/ http://privateinvest.pro/; do
             code=$(curl -s -o /tmp/p.html -w '%{http_code}' --max-time 30 -L "$u" || true)
             echo "$u -> HTTP $code"
-            if grep -q 'Приватинвест' /tmp/p.html; then echo "page content OK at $u"; exit 0; fi
+            if grep -q 'Приватинвест' /tmp/p.html && grep -q 'showcase.json' /tmp/p.html; then echo "page content OK at $u"; exit 0; fi
           done
           echo 'page content missing'; head -c 500 /tmp/p.html; exit 1

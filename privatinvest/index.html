@@ -612,7 +612,7 @@ section[id]{scroll-margin-top:80px}
       (place?'<p class="addr">'+esc(place)+(it.street?' (дом не показываем)':'')+'</p>':'')+'</div><span class="pill pill-ok">Можно выдать</span></div>'+
       '<div class="facts">'+
         '<div><span>Сумма</span><b>'+mln(it.loan)+'</b></div>'+
-        '<div><span>Ставка</span><b>'+(it.rate?pct(it.rate)+'%':'—')+'</b><small>в месяц</small></div>'+
+        '<div><span>Ставка</span>'+(it.rate?'<b>'+pct(it.rate)+'%</b><small>в месяц</small>':'<b>—</b><small>по запросу</small>')+'</div>'+
         '<div><span>Срок</span><b>'+(it.term?it.term+' мес':'—')+'</b></div>'+
         '<div><span>LTV</span><b>'+(it.ltv?Math.round(it.ltv*100)+'%':'—')+'</b>'+(it.market?'<small>оценка ~'+mln(it.market)+'</small>':'')+'</div>'+
       '</div>'+
