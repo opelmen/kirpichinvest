@@ -1,0 +1,48 @@
+name: Deploy privatinvest prototype
+
+on:
+  push:
+    branches: [main, "claude/**"]
+    paths: ["privatinvest/**", ".github/workflows/privatinvest.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: privatinvest
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare SSH
+        env:
+          SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
+
+      - name: Check that the domain folder exists on Beget
+        run: |
+          set -euo pipefail
+          # приватинвест.про в punycode
+          ssh fond178@fond178.beget.tech 'd=~/xn--80adbmlc9aljrgf.xn--n1abd/public_html; if test -d "$d"; then echo "OK: $d"; ls -la "$d" | head -20; else echo "NO domain folder. Home listing:"; ls -1 ~; exit 1; fi'
+
+      - name: Backup current site and deploy
+        run: |
+          set -euo pipefail
+          ssh fond178@fond178.beget.tech 'set -e; d=~/xn--80adbmlc9aljrgf.xn--n1abd/public_html; mkdir -p ~/privatinvest-backups; tar -czf ~/privatinvest-backups/$(date +%Y%m%d-%H%M%S).tar.gz -C "$d" . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}'
+          rsync -az --delete --exclude='.well-known' privatinvest/ fond178@fond178.beget.tech:xn--80adbmlc9aljrgf.xn--n1abd/public_html/
+          echo "Deployed: https://приватинвест.про/"
+
+      - name: Smoke check
+        run: |
+          set -euo pipefail
+          sleep 5
+          code=$(curl -s -o /tmp/p.html -w '%{http_code}' --max-time 30 -L https://xn--80adbmlc9aljrgf.xn--n1abd/ || true)
+          echo "HTTP $code"
+          grep -q 'Приватинвест' /tmp/p.html && echo 'page content OK' || (echo 'page content missing'; head -c 500 /tmp/p.html; exit 1)
