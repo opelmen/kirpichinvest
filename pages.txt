@@ -145,7 +145,6 @@
 /auto/bankrotstvo/page/111/
 /auto/bankrotstvo/page/112/
 /auto/bankrotstvo/page/113/
-/auto/bankrotstvo/page/114/
 /auto/bankrotstvo/page/12/
 /auto/bankrotstvo/page/13/
 /auto/bankrotstvo/page/14/
@@ -385,7 +384,6 @@
 /auto/do-1-mln/page/164/
 /auto/do-1-mln/page/165/
 /auto/do-1-mln/page/166/
-/auto/do-1-mln/page/167/
 /auto/do-1-mln/page/17/
 /auto/do-1-mln/page/18/
 /auto/do-1-mln/page/19/
@@ -822,7 +820,6 @@
 /auto/kemerovskaya-oblast/page/6/
 /auto/kemerovskaya-oblast/pricepy/
 /auto/kemerovskaya-oblast/spectehnika/
-/auto/kemerovskaya-oblast/spectehnika/page/2/
 /auto/kirovskaya-oblast/
 /auto/kirovskaya-oblast/avtobusy/
 /auto/kirovskaya-oblast/gruzovye/
@@ -1071,7 +1068,6 @@
 /auto/legkovye/do-1-mln/page/13/
 /auto/legkovye/do-1-mln/page/130/
 /auto/legkovye/do-1-mln/page/131/
-/auto/legkovye/do-1-mln/page/132/
 /auto/legkovye/do-1-mln/page/14/
 /auto/legkovye/do-1-mln/page/15/
 /auto/legkovye/do-1-mln/page/16/
@@ -15704,6 +15700,8 @@
 /auto/lot/nis-501511-1/
 /auto/lot/nis-501525-1/
 /auto/lot/nis-501564-1/
+/auto/lot/nis-501597-1/
+/auto/lot/nis-501604-1/
 /auto/lot/rad-1760936/
 /auto/lot/rad-1770794/
 /auto/lot/rad-1770795/
@@ -16668,7 +16666,6 @@
 /auto/page/215/
 /auto/page/216/
 /auto/page/217/
-/auto/page/218/
 /auto/page/22/
 /auto/page/23/
 /auto/page/24/
@@ -17079,7 +17076,6 @@
 /auto/spectehnika/do-500-tys/page/4/
 /auto/spectehnika/do-500-tys/page/5/
 /auto/spectehnika/do-500-tys/page/6/
-/auto/spectehnika/do-500-tys/page/7/
 /auto/spectehnika/page/10/
 /auto/spectehnika/page/11/
 /auto/spectehnika/page/12/
@@ -17088,7 +17084,6 @@
 /auto/spectehnika/page/15/
 /auto/spectehnika/page/16/
 /auto/spectehnika/page/17/
-/auto/spectehnika/page/18/
 /auto/spectehnika/page/2/
 /auto/spectehnika/page/3/
 /auto/spectehnika/page/4/
@@ -17140,7 +17135,6 @@
 /auto/sverdlovskaya-oblast/page/6/
 /auto/sverdlovskaya-oblast/page/7/
 /auto/sverdlovskaya-oblast/page/8/
-/auto/sverdlovskaya-oblast/page/9/
 /auto/sverdlovskaya-oblast/pricepy/
 /auto/sverdlovskaya-oblast/spectehnika/
 /auto/tambovskaya-oblast/
@@ -17299,16 +17293,22 @@
 /slovar/
 /stati/
 /stati/avto-s-torgov-proverit-pered-stavkoy/
+/stati/dolya-v-kvartire-s-torgov/
 /stati/ecp-dlya-torgov/
 /stati/edinstvennoe-zhile-bankrota/
+/stati/efrsb-kak-chitat-soobshchenie-o-torgah/
 /stati/ipoteka-na-kvartiru-s-torgov/
 /stati/kak-kupit-kvartiru-na-torgah-po-bankrotstvu/
 /stati/kak-najti-kvartiry-pristavov/
 /stati/kak-rasschitat-stavku-na-torgah/
+/stati/kommercheskaya-nedvizhimost-s-torgov-chto-proverit/
 /stati/kvartira-s-torgov-s-dolgami/
 /stati/osmotr-kvartiry-pered-torgami/
+/stati/osparivanie-torgov-po-bankrotstvu/
+/stati/ploshchadki-torgov-po-bankrotstvu/
 /stati/povtornye-torgi/
 /stati/proverka-avto-po-vin-chto-pokazyvaet/
+/stati/proverka-doma-i-uchastka-s-torgov/
 /stati/proverka-kvartiry-s-torgov/
 /stati/publichnoe-predlozhenie/
 /stati/torgi-po-bankrotstvu-i-torgi-arestovannogo-imushchestva/
@@ -17516,6 +17516,7 @@
 /torgi/arhiv/page/168/
 /torgi/arhiv/page/169/
 /torgi/arhiv/page/17/
+/torgi/arhiv/page/170/
 /torgi/arhiv/page/18/
 /torgi/arhiv/page/19/
 /torgi/arhiv/page/2/
@@ -17668,7 +17669,6 @@
 /torgi/bankrotstvo/page/139/
 /torgi/bankrotstvo/page/14/
 /torgi/bankrotstvo/page/140/
-/torgi/bankrotstvo/page/141/
 /torgi/bankrotstvo/page/15/
 /torgi/bankrotstvo/page/16/
 /torgi/bankrotstvo/page/17/
@@ -18107,6 +18107,7 @@
 /torgi/do-1-mln/page/156/
 /torgi/do-1-mln/page/157/
 /torgi/do-1-mln/page/158/
+/torgi/do-1-mln/page/159/
 /torgi/do-1-mln/page/16/
 /torgi/do-1-mln/page/17/
 /torgi/do-1-mln/page/18/
@@ -18525,6 +18526,7 @@
 /torgi/do-3-mln/page/213/
 /torgi/do-3-mln/page/214/
 /torgi/do-3-mln/page/215/
+/torgi/do-3-mln/page/216/
 /torgi/do-3-mln/page/22/
 /torgi/do-3-mln/page/23/
 /torgi/do-3-mln/page/24/
@@ -21216,6 +21218,8 @@
 /torgi/lot/21000003730000000300_1/
 /torgi/lot/21000003730000000301_1/
 /torgi/lot/21000003730000000304_1/
+/torgi/lot/21000003800000000078_1/
+/torgi/lot/21000003800000000078_10/
 /torgi/lot/21000003800000000078_11/
 /torgi/lot/21000003800000000078_12/
 /torgi/lot/21000003800000000078_13/
@@ -21225,6 +21229,7 @@
 /torgi/lot/21000003800000000078_17/
 /torgi/lot/21000003800000000078_2/
 /torgi/lot/21000003800000000078_3/
+/torgi/lot/21000003800000000078_4/
 /torgi/lot/21000003800000000078_5/
 /torgi/lot/21000003800000000078_6/
 /torgi/lot/21000003800000000078_7/
@@ -23107,6 +23112,7 @@
 /torgi/lot/21000005000000034752_1/
 /torgi/lot/21000005000000034753_1/
 /torgi/lot/21000005000000034758_1/
+/torgi/lot/21000005000000034763_1/
 /torgi/lot/21000005040000000067_1/
 /torgi/lot/21000005080000000228_1/
 /torgi/lot/21000005090000000097_1/
@@ -23887,6 +23893,7 @@
 /torgi/lot/21000010730000000254_1/
 /torgi/lot/21000010730000000255_1/
 /torgi/lot/21000010730000000256_1/
+/torgi/lot/21000010730000000258_1/
 /torgi/lot/21000010760000000489_1/
 /torgi/lot/21000010760000000490_1/
 /torgi/lot/21000010760000000492_1/
@@ -24390,6 +24397,7 @@
 /torgi/lot/21000014090000000686_1/
 /torgi/lot/21000014090000000692_1/
 /torgi/lot/21000014090000000699_1/
+/torgi/lot/21000014090000000700_1/
 /torgi/lot/21000014140000000260_1/
 /torgi/lot/21000014140000000262_1/
 /torgi/lot/21000014250000000608_1/
@@ -25188,6 +25196,7 @@
 /torgi/lot/21000016080000004036_1/
 /torgi/lot/21000016080000004038_1/
 /torgi/lot/21000016080000004041_1/
+/torgi/lot/21000016080000004046_1/
 /torgi/lot/21000016170000000081_1/
 /torgi/lot/21000016170000000084_1/
 /torgi/lot/21000016170000000084_4/
@@ -25404,6 +25413,7 @@
 /torgi/lot/21000017310000001383_7/
 /torgi/lot/21000017310000001383_8/
 /torgi/lot/21000017310000001383_9/
+/torgi/lot/21000017310000001385_1/
 /torgi/lot/21000017370000000722_1/
 /torgi/lot/21000017370000000744_1/
 /torgi/lot/21000017390000000056_1/
@@ -26257,6 +26267,7 @@
 /torgi/lot/21000022330000000482_1/
 /torgi/lot/21000022330000000483_1/
 /torgi/lot/21000022450000000120_1/
+/torgi/lot/21000022450000000121_1/
 /torgi/lot/21000022460000000137_1/
 /torgi/lot/21000022460000000138_1/
 /torgi/lot/21000022460000000145_1/
@@ -26940,6 +26951,7 @@
 /torgi/lot/21000027990000000054_3/
 /torgi/lot/21000027990000000054_4/
 /torgi/lot/21000028050000000153_1/
+/torgi/lot/21000028070000000054_1/
 /torgi/lot/21000028130000000122_1/
 /torgi/lot/21000028130000000122_2/
 /torgi/lot/21000028130000000123_1/
@@ -29856,6 +29868,7 @@
 /torgi/lot/22000019720000000076_1/
 /torgi/lot/22000019720000000077_1/
 /torgi/lot/22000019720000000078_1/
+/torgi/lot/22000019720000000079_1/
 /torgi/lot/22000019740000000155_1/
 /torgi/lot/22000019740000000156_1/
 /torgi/lot/22000019740000000156_2/
@@ -34473,6 +34486,16 @@
 /torgi/lot/23000000130000000840_7/
 /torgi/lot/23000000130000000840_8/
 /torgi/lot/23000000130000000840_9/
+/torgi/lot/23000000130000000842_22/
+/torgi/lot/23000000130000000842_23/
+/torgi/lot/23000000130000000842_25/
+/torgi/lot/23000000130000000842_26/
+/torgi/lot/23000000130000000842_36/
+/torgi/lot/23000000130000000842_37/
+/torgi/lot/23000000130000000842_38/
+/torgi/lot/23000000130000000842_39/
+/torgi/lot/23000000130000000842_4/
+/torgi/lot/23000000130000000842_43/
 /torgi/lot/23000000200000000004_1/
 /torgi/lot/23000000260000000030_1/
 /torgi/lot/23000000290000000025_1/
@@ -36666,6 +36689,7 @@
 /torgi/lot/24000011750000000132_1/
 /torgi/lot/24000012010000000011_1/
 /torgi/lot/24000012210000000015_1/
+/torgi/lot/24000012210000000016_1/
 /torgi/lot/24000012410000000001_1/
 /torgi/lot/24000012610000000002_1/
 /torgi/lot/24000013200000000047_1/
@@ -37807,6 +37831,9 @@
 /torgi/lot/25000038790000000172_2/
 /torgi/lot/25000038790000000172_3/
 /torgi/lot/25000038790000000172_4/
+/torgi/lot/25000038790000000175_1/
+/torgi/lot/25000038790000000176_1/
+/torgi/lot/25000038790000000176_2/
 /torgi/lot/25000038840000000005_1/
 /torgi/lot/25000039350000000012_1/
 /torgi/lot/25000039350000000012_13/
@@ -38385,6 +38412,9 @@
 /torgi/lot/26000001390000000098_2/
 /torgi/lot/26000001390000000098_3/
 /torgi/lot/26000001500000000045_1/
+/torgi/lot/26000001500000000055_1/
+/torgi/lot/26000001500000000055_2/
+/torgi/lot/26000001500000000055_3/
 /torgi/lot/26000001510000000074_1/
 /torgi/lot/26000001510000000075_1/
 /torgi/lot/26000001510000000076_1/
@@ -51954,7 +51984,6 @@
 /torgi/page/351/
 /torgi/page/352/
 /torgi/page/353/
-/torgi/page/354/
 /torgi/page/36/
 /torgi/page/37/
 /torgi/page/38/
@@ -52049,6 +52078,7 @@
 /torgi/perm/bankrotstvo/page/3/
 /torgi/perm/bankrotstvo/page/4/
 /torgi/perm/berezniki/
+/torgi/perm/berezovskiy-rayon/
 /torgi/perm/bolshesosnovskiy-rayon/
 /torgi/perm/chaykovskiy/
 /torgi/perm/chernushinskiy-rayon/
@@ -52462,6 +52492,7 @@
 /torgi/saratovskaya-oblast/do-5-mln/page/3/
 /torgi/saratovskaya-oblast/do-5-mln/page/4/
 /torgi/saratovskaya-oblast/do-5-mln/page/5/
+/torgi/saratovskaya-oblast/do-5-mln/page/6/
 /torgi/saratovskaya-oblast/doli/
 /torgi/saratovskaya-oblast/doma/
 /torgi/saratovskaya-oblast/dvuhkomnatnye/
@@ -52727,6 +52758,7 @@
 /torgi/udmurtiya/page/2/
 /torgi/udmurtiya/page/3/
 /torgi/udmurtiya/page/4/
+/torgi/udmurtiya/page/5/
 /torgi/udmurtiya/vygodnye/
 /torgi/udmurtiya/zemlya/
 /torgi/ufa/
@@ -52754,7 +52786,6 @@
 /torgi/ufa/davlekanovskiy-rayon/
 /torgi/ufa/demskiy-rayon/
 /torgi/ufa/do-5-mln/
-/torgi/ufa/do-5-mln/page/10/
 /torgi/ufa/do-5-mln/page/2/
 /torgi/ufa/do-5-mln/page/3/
 /torgi/ufa/do-5-mln/page/4/
@@ -52895,6 +52926,7 @@
 /torgi/volgogradskaya-oblast/do-5-mln/page/2/
 /torgi/volgogradskaya-oblast/do-5-mln/page/3/
 /torgi/volgogradskaya-oblast/do-5-mln/page/4/
+/torgi/volgogradskaya-oblast/do-5-mln/page/5/
 /torgi/volgogradskaya-oblast/doli/
 /torgi/volgogradskaya-oblast/doma/
 /torgi/volgogradskaya-oblast/garazhi/
