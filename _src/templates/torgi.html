@@ -22,7 +22,11 @@
 {% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
 <th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>Медиана за м²</th><th>Доли</th><th>Повторные торги</th></tr>
 <tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.median_ppm2|rub }}</td><td>{{ cs.share_doli }}%</td><td>{{ cs.share_povt }}%</td></tr></table></div>
-<p class="mute small">Данные на <time datetime="{{ lastmod }}">{{ today }}</time> по {{ "ГИС Торги и площадкам банкротства" if wide else "открытому реестру ГИС Торги" }}. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>{% endif %}
+<p class="mute small">Данные на <time datetime="{{ lastmod }}">{{ today }}</time> по {{ "ГИС Торги и площадкам банкротства" if wide else "открытому реестру ГИС Торги" }}. Сравнение городов — в <a href="/analitika/">статистике торгов</a>.</p>
+{% if cs.sources and where %}<section class="platforms" style="padding:0 0 20px"><h2 style="margin:0 0 8px">Где проходят торги по банкротству и аресту {{ where }}</h2>
+<p>Единого «официального сайта торгов» нет: извещения публикуются на <a href="https://bankrot.fedresurs.ru/" rel="nofollow noopener" target="_blank">ЕФРСБ</a> и в <a href="https://torgi.gov.ru/" rel="nofollow noopener" target="_blank">ГИС Торги</a>, а сами торги идут на электронных площадках. Лоты {{ where }} сейчас выставлены на площадках:</p>
+<ul class="small">{% for name, url, n in cs.sources %}<li>{% if url %}<a href="{{ url }}" rel="nofollow noopener" target="_blank">{{ name }}</a>{% else %}{{ name }}{% endif %} — {{ n }} {{ "лот" if n % 10 == 1 and n % 100 != 11 else ("лота" if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14 else "лотов") }}</li>{% endfor %}</ul>
+<p class="small">В каждой карточке ниже есть ссылка на извещение на площадке: там заявка, задаток и документы.</p></section>{% endif %}{% endif %}
 {% if path == '/torgi/doli/' %}{% include "_share_guide.html" %}{% elif '/doli/' in path and current_page == 1 %}<p><a href="/torgi/doli/#kak-proverit">Доля или комната: что проверить до ставки</a></p>{% endif %}
 <div class="lots">
 {% for d in lots %}
@@ -44,7 +48,7 @@
 {% if pagination|length > 1 %}<nav class="filters" aria-label="Страницы каталога">{% for url, number in pagination %}<a href="{{ url }}" {% if number == current_page %}aria-current="page"{% endif %}>{{ number }}</a>{% endfor %}</nav>{% endif %}
 {% if faq %}<section style="padding-bottom:0"><div class="faq"><h2>Коротко о торгах в этом городе</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>{% endif %}
 <section><div class="split">
-  <div><h2>Нашли интересный лот?</h2><p>Проверим его до подачи заявки: выписка ЕГРН, жильцы, долги по капремонту, дело о банкротстве, рыночные аналоги. Назовём максимальную ставку.</p>
+  <div><h2>Нашли интересный лот?</h2><p>Готовый отчёт до заявки: до какой цены ставить, за сколько ушли похожие лоты, все документы прочитаны, права и аресты по Росреестру, проверка должника.</p>
   <p class="note small">Сведения о лотах взяты из открытого реестра ГИС Торги и могут отличаться от документов организатора. Перед подачей заявки сверяйтесь с извещением на площадке.</p></div>
   {{ lead_form("check", "Проверить лот", "", "Отправить на проверку", [{"name":"lot","label":"Ссылка на лот или адрес","ph":"https://torgi.gov.ru/..."}]) }}
 </div></section>
