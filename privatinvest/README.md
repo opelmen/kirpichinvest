@@ -6,4 +6,4 @@
 
 Выкладка: workflow `.github/workflows/privatinvest.yml` копирует папку на Beget тем же SSH-ключом,
 что и торггид, в `~/privateinvest.pro/public_html` (на Beget домен заведён как privateinvest.pro).
-Запускается при изменении `privatinvest/**` и вручную (workflow_dispatch). Страница открыта для поисковиков (решение John 29.10.2026). Есть robots.txt и sitemap.xml; номер Метрики и код Вебмастера — в `window.PI_CFG` в начале index.html.
+Запускается при изменении `privatinvest/**` и вручную (workflow_dispatch). Страница открыта для поисковиков (решение John 29.10.2026). Есть robots.txt и sitemap.xml; Метрика 113877734 (`window.PI_CFG`), Вебмастер подтверждается meta yandex-verification в <head>.
