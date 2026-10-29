@@ -60,6 +60,11 @@ CATEGORY = {  # категория приложения → (название в
 KIND = {"bankruptcy": "Банкротство", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество", "state": "Государственное и муниципальное имущество"}
 SOURCE = {"gistorgi": "ГИС Торги", "mets": "МЭТС", "nis": "НИС", "centerr": "ЦентрЕР", "utpl": "УТПЛ", "gpb": "ЭТП ГПБ",
           "fabrikant": "Фабрикант", "rad": "РАД", "cdt": "ЦДТ", "sberast": "Сбербанк-АСТ", "gistorgi_auto": "ГИС Торги"}
+# Официальные сайты площадок: на страницах регионов отвечаем на запрос «торги по банкротству <регион> официальный сайт»
+SOURCE_SITE = {"gistorgi": "https://torgi.gov.ru/", "gistorgi_auto": "https://torgi.gov.ru/", "mets": "https://m-ets.ru/",
+               "nis": "https://nistp.ru/", "centerr": "https://centerr.ru/", "utpl": "https://utpl.ru/", "gpb": "https://etp.gpb.ru/",
+               "fabrikant": "https://www.fabrikant.ru/", "rad": "https://lot-online.ru/", "cdt": "https://cdtrf.ru/",
+               "sberast": "https://www.sberbank-ast.ru/"}
 
 
 def region_code(v):
