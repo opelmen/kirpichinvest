@@ -1,11 +1,11 @@
-== Fri Oct 30 10:28:13 UTC 2026 aa62f7c schedule
-OK: страниц 37010 в sitemap, лотов 21512, техники 13279, статей 22
-Published release 41037887050-1
-Live verification: 7890 files (400 of 47522 lot pages), 0 errors
+== Fri Oct 30 20:25:42 UTC 2026 aa62f7c schedule
+OK: страниц 37162 в sitemap, лотов 21668, техники 13269, статей 22
+Published release 41119269880-1
+Live verification: 7919 files (400 of 48132 lot pages), 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 843
-IndexNow https://yandex.com/indexnow 202
+новых URL для IndexNow: 622
+IndexNow https://yandex.com/indexnow 200
 IndexNow https://api.indexnow.org/indexnow 200
 result: success
