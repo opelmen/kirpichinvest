@@ -159,7 +159,7 @@ def jsonld(obj):
 
 
 ORG = {"@type": "Organization", "@id": BASE + "/#org", "name": BRAND, "url": BASE + "/",
-       "logo": BASE + "/icon-512.png",
+       "logo": BASE + "/icon-512.png", "email": "Invest@smirnoffond.ru",
        "description": "Отбор, проверка и сопровождение займов под залог недвижимости через операторов инвестиционных платформ из реестра Банка России."}
 
 
@@ -180,7 +180,7 @@ def footer_nav():
     for title, slugs in GROUPS:
         links = "".join('<a href="%s">%s</a>' % (href(s), esc(PAGES[s]["menu"])) for s in slugs)
         cols.append("<div><b>%s</b>%s</div>" % (esc(title), links))
-    return '<nav class="foot-nav" aria-label="Карта сайта"><div><b>Приватинвест</b><a href="/">Витрина заявок</a><a href="/#s-lead">Оставить заявку</a></div>' + "".join(cols) + "</nav>"
+    return '<nav class="foot-nav" aria-label="Карта сайта"><div><b>Приватинвест</b><a href="/">Витрина заявок</a><a href="/#s-lead">Оставить заявку</a><a href="mailto:Invest@smirnoffond.ru">Invest@smirnoffond.ru</a></div>' + "".join(cols) + "</nav>"
 
 
 def footer():
@@ -284,7 +284,7 @@ def render(p, head_bits):
     for gt, slugs in GROUPS[:2]:
         aside_links.append('<div class="side-box"><h3>%s</h3><nav>%s</nav></div>' % (esc(gt), "".join(
             '<a href="%s"%s>%s</a>' % (href(s), ' aria-current="page"' if s == slug else "", esc(PAGES[s]["menu"])) for s in slugs)))
-    aside = ('<aside class="aside"><div class="side-box"><h3>Нужна консультация?</h3><p>Ответ за два рабочих дня, проверка бесплатно.</p>'
+    aside = ('<aside class="aside"><div class="side-box"><h3>Нужна консультация?</h3><p>Ответ за два рабочих дня, проверка бесплатно. Почта: <a href=\"mailto:Invest@smirnoffond.ru\">Invest@smirnoffond.ru</a></p>'
              '<a class="btn btn-copper btn-sm" href="#s-lead" data-lead="%s">%s</a></div>%s</aside>') % (role, cta, "".join(aside_links))
 
     og = "".join('<meta property="%s" content="%s">' % (k, esc(v)) for k, v in [
