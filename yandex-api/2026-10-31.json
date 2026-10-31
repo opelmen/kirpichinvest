@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-31T11:15:29+00:00",
+ "generated": "2026-10-31T13:32:52+00:00",
  "week": [
   "2026-10-24",
   "2026-10-30"
@@ -35,6 +35,1421 @@
   "Search engine traffic": 4,
   "Link traffic": 3
  },
+ "metrika_ads": {
+  "period": [
+   "2026-10-17",
+   "2026-10-31"
+  ],
+  "goals": [
+   "Заявка под ключ",
+   "Заявка на проверку",
+   "lead_sell",
+   "lead_lot",
+   "lead_invest",
+   "lead_partner",
+   "lead_subscribe",
+   "Регистрация"
+  ],
+  "utm": [
+   {
+    "dims": [
+     "avito",
+     "tg1-auto-lot",
+     "c1-camry-clean"
+    ],
+    "visits": 66,
+    "bounce": 27.3,
+    "depth": 1.48,
+    "sec": 33,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "–",
+     "–"
+    ],
+    "visits": 64,
+    "bounce": 18.8,
+    "depth": 3.23,
+    "sec": 167,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg1-auto-lot-2",
+     "c1-camry"
+    ],
+    "visits": 44,
+    "bounce": 25.0,
+    "depth": 1.2,
+    "sec": 20,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg2-auto-lot",
+     "c1-camry-clean"
+    ],
+    "visits": 41,
+    "bounce": 34.1,
+    "depth": 1.66,
+    "sec": 33,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg2-auto-lot",
+     "c1-camry"
+    ],
+    "visits": 37,
+    "bounce": 13.5,
+    "depth": 3.3,
+    "sec": 151,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg4-offer",
+     "p-flats"
+    ],
+    "visits": 20,
+    "bounce": 45.0,
+    "depth": 1.1,
+    "sec": 16,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg2-auto-lot",
+     "c2-mercedes-clean"
+    ],
+    "visits": 18,
+    "bounce": 44.4,
+    "depth": 1.0,
+    "sec": 10,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot-wide",
+     "f4-podolsk-2"
+    ],
+    "visits": 18,
+    "bounce": 27.8,
+    "depth": 1.06,
+    "sec": 52,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg4-offer",
+     "g1-flats"
+    ],
+    "visits": 18,
+    "bounce": 22.2,
+    "depth": 2.44,
+    "sec": 29,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot-wide",
+     "f5-goluboe"
+    ],
+    "visits": 15,
+    "bounce": 53.3,
+    "depth": 1.0,
+    "sec": 16,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg4-offer",
+     "p-both"
+    ],
+    "visits": 15,
+    "bounce": 53.3,
+    "depth": 1.2,
+    "sec": 39,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot",
+     "f4-podolsk"
+    ],
+    "visits": 12,
+    "bounce": 41.7,
+    "depth": 1.0,
+    "sec": 9,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot-wide",
+     "f4-podolsk"
+    ],
+    "visits": 12,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 8,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot",
+     "f4-podolsk-2"
+    ],
+    "visits": 10,
+    "bounce": 60.0,
+    "depth": 1.0,
+    "sec": 29,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot",
+     "f5-goluboe"
+    ],
+    "visits": 10,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 8,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg4-offer",
+     "g2-auto"
+    ],
+    "visits": 8,
+    "bounce": 37.5,
+    "depth": 1.0,
+    "sec": 10,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg2-auto-lot",
+     "c2-mercedes"
+    ],
+    "visits": 6,
+    "bounce": 50.0,
+    "depth": 1.17,
+    "sec": 20,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot",
+     "f1-motyakovo"
+    ],
+    "visits": 5,
+    "bounce": 40.0,
+    "depth": 1.4,
+    "sec": 29,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot",
+     "f2-klin"
+    ],
+    "visits": 4,
+    "bounce": 75.0,
+    "depth": 1.0,
+    "sec": 4,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot-wide",
+     "f3-voskresensk"
+    ],
+    "visits": 4,
+    "bounce": 75.0,
+    "depth": 1.0,
+    "sec": 4,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg1-auto-lot",
+     "c2-mercedes"
+    ],
+    "visits": 3,
+    "bounce": 66.7,
+    "depth": 1.0,
+    "sec": 5,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg1-auto-lot-2",
+     "c2-mercedes-b"
+    ],
+    "visits": 3,
+    "bounce": 66.7,
+    "depth": 1.0,
+    "sec": 5,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot-wide",
+     "f1-motyakovo"
+    ],
+    "visits": 3,
+    "bounce": 33.3,
+    "depth": 1.0,
+    "sec": 10,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "1-auto-74",
+     "a1-pajero-74"
+    ],
+    "visits": 2,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 8,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "1-auto-74",
+     "a2-astra-74"
+    ],
+    "visits": 2,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 8,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "1-auto-74",
+     "a3-sobol-74"
+    ],
+    "visits": 2,
+    "bounce": 100.0,
+    "depth": 1.0,
+    "sec": 0,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "1-auto-77",
+     "a9-auto-all"
+    ],
+    "visits": 2,
+    "bounce": 100.0,
+    "depth": 1.0,
+    "sec": 0,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg1-auto-lot-2",
+     "c2-mercedes"
+    ],
+    "visits": 2,
+    "bounce": 100.0,
+    "depth": 1.0,
+    "sec": 0,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot",
+     "f3-voskresensk"
+    ],
+    "visits": 2,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 8,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg3-flat-lot-wide",
+     "f2-klin"
+    ],
+    "visits": 2,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 7,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "tg4-offer",
+     "p-auto"
+    ],
+    "visits": 2,
+    "bounce": 100.0,
+    "depth": 1.0,
+    "sec": 0,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "telegram",
+     "landmark_cheap",
+     "–"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 8.0,
+    "sec": 561,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "telegram",
+     "lot_day",
+     "–"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 2.0,
+    "sec": 141,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "device": [
+   {
+    "dims": [
+     "avito",
+     "Smartphones"
+    ],
+    "visits": 250,
+    "bounce": 31.6,
+    "depth": 1.62,
+    "sec": 37,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "PC"
+    ],
+    "visits": 138,
+    "bounce": 46.4,
+    "depth": 1.24,
+    "sec": 34,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "Smartphones"
+    ],
+    "visits": 54,
+    "bounce": 20.4,
+    "depth": 3.0,
+    "sec": 137,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "PC"
+    ],
+    "visits": 10,
+    "bounce": 10.0,
+    "depth": 4.5,
+    "sec": 329,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "telegram",
+     "Smartphones"
+    ],
+    "visits": 2,
+    "bounce": 0.0,
+    "depth": 5.0,
+    "sec": 351,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "landing": [
+   {
+    "dims": [
+     "avito",
+     "/auto/gistorgi_auto:25000000910000000008_1"
+    ],
+    "visits": 188,
+    "bounce": 25.5,
+    "depth": 1.81,
+    "sec": 53,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/lot/gistorgi:21000005000000034071_1"
+    ],
+    "visits": 52,
+    "bounce": 42.3,
+    "depth": 1.02,
+    "sec": 27,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/"
+    ],
+    "visits": 38,
+    "bounce": 47.4,
+    "depth": 1.18,
+    "sec": 25,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/auto/gistorgi_auto:23000054780000002774_1"
+    ],
+    "visits": 32,
+    "bounce": 53.1,
+    "depth": 1.03,
+    "sec": 10,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/go"
+    ],
+    "visits": 29,
+    "bounce": 37.9,
+    "depth": 1.83,
+    "sec": 19,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/lot/gistorgi:21000005000000033751_1"
+    ],
+    "visits": 25,
+    "bounce": 52.0,
+    "depth": 1.0,
+    "sec": 13,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/"
+    ],
+    "visits": 11,
+    "bounce": 0.0,
+    "depth": 6.27,
+    "sec": 260,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/lot/cdt:386819"
+    ],
+    "visits": 8,
+    "bounce": 37.5,
+    "depth": 1.25,
+    "sec": 22,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/lot/cdt:386657"
+    ],
+    "visits": 6,
+    "bounce": 66.7,
+    "depth": 1.0,
+    "sec": 5,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/lot/cdt:389627"
+    ],
+    "visits": 6,
+    "bounce": 66.7,
+    "depth": 1.0,
+    "sec": 5,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "avito",
+     "/auto"
+    ],
+    "visits": 4,
+    "bounce": 75.0,
+    "depth": 1.0,
+    "sec": 4,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/torgi/lot/mets-242439-1/"
+    ],
+    "visits": 4,
+    "bounce": 75.0,
+    "depth": 1.25,
+    "sec": 41,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/torgi/ekaterinburg/"
+    ],
+    "visits": 3,
+    "bounce": 33.3,
+    "depth": 2.33,
+    "sec": 28,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/gorod-moskva/"
+    ],
+    "visits": 2,
+    "bounce": 50.0,
+    "depth": 1.5,
+    "sec": 18,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/torgi/ekaterinburg/garazhi/"
+    ],
+    "visits": 2,
+    "bounce": 50.0,
+    "depth": 1.0,
+    "sec": 11,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/torgi/lot/21000004030000000230_1/"
+    ],
+    "visits": 2,
+    "bounce": 0.0,
+    "depth": 3.0,
+    "sec": 280,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 8.0,
+    "sec": 1435,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/bankrotstvo/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 6.0,
+    "sec": 48,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/lnr/"
+    ],
+    "visits": 1,
+    "bounce": 100.0,
+    "depth": 1.0,
+    "sec": 1,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/lot/cdt-390343/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 1.0,
+    "sec": 16,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/lot/cdt-390534/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 2.0,
+    "sec": 98,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/lot/cdt-390807/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 1.0,
+    "sec": 15,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/lot/gistorgi_auto-22000036140000000819_1/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 1.0,
+    "sec": 15,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/lot/gistorgi_auto-23000023130000000007_1/"
+    ],
+    "visits": 1,
+    "bounce": 100.0,
+    "depth": 1.0,
+    "sec": 0,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/moskovskaya-oblast/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 5.0,
+    "sec": 305,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/spectehnika/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 1.0,
+    "sec": 55,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/sverdlovskaya-oblast/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 4.0,
+    "sec": 111,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/tatarstan/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 1.0,
+    "sec": 15,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/auto/ulyanovskaya-oblast/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 3.0,
+    "sec": 50,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "dims": [
+     "chatgpt.com",
+     "/torgi/"
+    ],
+    "visits": 1,
+    "bounce": 0.0,
+    "depth": 6.0,
+    "sec": 131,
+    "goals": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
  "webmaster": {
   "torggid.ru": {
    "host_id": "https:torggid.ru:443",
@@ -45,9 +1460,9 @@
    ],
    "errors": {
     "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
-    "indexing_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "indexing_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
    },
    "info": {
@@ -64,112 +1479,12 @@
    },
    "diagnostics": {
     "problems": {
-     "SLOW_AVG_RESPONSE_TIME": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
      "NOT_IN_SPRAV": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "ERRORS_IN_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_4XX": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_ERROR": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
      "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "BIG_FAVICON_ABSENT": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "SOFT_404": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "ERROR_IN_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_REGIONS": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_FAILED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_PROBLEM": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DUPLICATE_PAGES": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_MIRROR_IS_NOT_HTTPS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -179,7 +1494,37 @@
       "state": "ABSENT",
       "last_state_update": null
      },
+     "DUPLICATE_CONTENT_ATTRS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_TITLE": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
      "NO_METRIKA_COUNTER_BINDING": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERROR_IN_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_4XX": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_REGIONS": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_REDIRECTS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -194,8 +1539,33 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DUPLICATE_CONTENT_ATTRS": {
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
       "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -204,8 +1574,28 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "MAIN_PAGE_REDIRECTS": {
+     "MAIN_MIRROR_IS_NOT_HTTPS": {
       "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -214,13 +1604,38 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DOCUMENTS_MISSING_TITLE": {
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SOFT_404": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "URL_ALERT_5XX": {
-      "severity": "CRITICAL",
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      }
