@@ -10,6 +10,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from lot_history import merge_history
+from quality import thin_card
 from budget_collections import budget_lots, budget_summary, object_group
 from market_feed import CATEGORY, REGIONS, SOURCE, SOURCE_SITE, from_market, mln
 from auto_feed import FIELDS as AUTO_FIELDS, VTYPES, from_vehicles
@@ -737,18 +738,22 @@ def build():
             out += [x for x in closest(sim_region.get((d.get("region"), d.get("category")), [])) if x not in out][:4 - len(out)]
         return out
 
+    thin_n = 0
     for d in CARDS:
         similar = similar_to(d)
         active = d["status"] == "active"
+        thin = active and thin_card(d, set(CITY_NAME.values()))
+        thin_n += thin
         # карточка снятого лота остаётся для людей и ссылок, но из индекса и sitemap уходит: таких карточек
         # было около трети карты сайта, и Google тратил обход на них вместо актуальных лотов
-        write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active,
+        write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active or thin,
               d=d, active=active, similar=similar, og_image=d.get("photo") if active else None,
               # цена в заголовке различает лоты одного торга по одному адресу (машиноместа, кладовые меньше 8 м²):
               # без неё у таких карточек одинаковые title и description, и Google склеивает их как копии
               title=f"{d['label']} с торгов" + (f" за {rub(d['price'])}" if d.get("price") else "") + f": {d['caddr'][:60]}" + (" — архив" if not active else ""),
               # пересказ извещения в описании: у 20 тысяч карточек сниппет перестаёт быть одинаковым
               description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. " + (d['excerpt'][:140].rsplit(' ', 1)[0].rstrip(' .,;:') + "… " if d.get('excerpt') else "") + "Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
+    print(f"пустых карточек без адреса, площади и описания (noindex): {thin_n}")
     history_path.write_text(json.dumps(CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # ---------- раздел /auto/: техника с торгов ----------
