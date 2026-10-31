@@ -10,7 +10,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from lot_history import merge_history
-from quality import thin_card
+from quality import thin_card, yandex_card
 from budget_collections import budget_lots, budget_summary, object_group
 from market_feed import CATEGORY, REGIONS, SOURCE, SOURCE_SITE, from_market, mln
 from auto_feed import FIELDS as AUTO_FIELDS, VTYPES, from_vehicles
@@ -580,6 +580,7 @@ CITY_STATS = []
 def write(path, tpl, sitemap=True, priority="0.6", lastmod=TODAY, **ctx):
     ctx.setdefault("canonical", cfg.SITE_URL + path)
     ctx.setdefault("noindex", False)
+    ctx.setdefault("noindex_yandex", False)  # только для Яндекса: Google страницу индексирует
     ctx.setdefault("lastmod", lastmod)  # дата изменения страницы: в <time>, og:updated_time и разметке
     ctx.setdefault("og_image", None)  # фото лота вместо общей обложки: карточки лотов в мессенджерах и соцсетях
     html = env.get_template(tpl).render(path=path, **ctx)
@@ -738,22 +739,25 @@ def build():
             out += [x for x in closest(sim_region.get((d.get("region"), d.get("category")), [])) if x not in out][:4 - len(out)]
         return out
 
-    thin_n = 0
+    thin_n = yandex_n = 0
     for d in CARDS:
         similar = similar_to(d)
         active = d["status"] == "active"
         thin = active and thin_card(d, set(CITY_NAME.values()))
         thin_n += thin
+        to_yandex = active and not thin and yandex_card(d, set(CITY_NAME.values()), CITY_NAME)
+        yandex_n += to_yandex
         # карточка снятого лота остаётся для людей и ссылок, но из индекса и sitemap уходит: таких карточек
         # было около трети карты сайта, и Google тратил обход на них вместо актуальных лотов
         write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active or thin,
-              d=d, active=active, similar=similar, og_image=d.get("photo") if active else None,
+              noindex_yandex=not to_yandex, d=d, active=active, similar=similar, og_image=d.get("photo") if active else None,
               # цена в заголовке различает лоты одного торга по одному адресу (машиноместа, кладовые меньше 8 м²):
               # без неё у таких карточек одинаковые title и description, и Google склеивает их как копии
               title=f"{d['label']} с торгов" + (f" за {rub(d['price'])}" if d.get("price") else "") + f": {d['caddr'][:60]}" + (" — архив" if not active else ""),
               # пересказ извещения в описании: у 20 тысяч карточек сниппет перестаёт быть одинаковым
               description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. " + (d['excerpt'][:140].rsplit(' ', 1)[0].rstrip(' .,;:') + "… " if d.get('excerpt') else "") + "Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
     print(f"пустых карточек без адреса, площади и описания (noindex): {thin_n}")
+    print(f"карточек, открытых Яндексу (остальные meta yandex noindex): {yandex_n}")
     history_path.write_text(json.dumps(CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # ---------- раздел /auto/: техника с торгов ----------
@@ -937,7 +941,8 @@ def build():
         # contentsignals.org: нейропоиску и ответам ИИ цитировать можно (нам нужны переходы), обучать модели — нет
         "Content-Signal: search=yes, ai-input=yes, ai-train=no", "",
         "User-agent: Yandex", "Allow: /", "Disallow: /check/",
-        "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /", "",
+        "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /",
+        f"Sitemap: {cfg.SITE_URL}/sitemap-yandex.xml", "",
         "User-agent: YandexAdditional", "Allow: /", "", "User-agent: YandexAdditionalBot", "Allow: /", "",
         "User-agent: GPTBot", "Allow: /", "", "User-agent: OAI-SearchBot", "Allow: /", "",
         "User-agent: PerplexityBot", "Allow: /", "", "User-agent: ClaudeBot", "Allow: /", "",
@@ -1061,6 +1066,20 @@ def write_sitemaps(chunk=5000):
         index.append(f"<sitemap><loc>{cfg.SITE_URL}/{name}</loc><lastmod>{max(r[1] for r in rows)}</lastmod></sitemap>")
     (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                                      + "".join(index) + "</sitemapindex>", encoding="utf-8")
+    # отдельная карта для Вебмастера Яндекса: только хабы, статьи и сервисы (без карточек и глубоких подборок
+    # по районам), чтобы молодой домен обходили по сильным страницам, а не по тысячам однотипных
+    facet_slugs = {f[0] for f in FACETS}
+
+    def for_yandex(path):
+        parts = path.strip("/").split("/")
+        if parts[0] == "torgi":
+            return len(parts) <= 2 or (len(parts) == 3 and parts[1] in CITY_NAME and parts[2] in facet_slugs)
+        if parts[0] == "auto":
+            return len(parts) <= 2
+        return True
+    yandex = [r for r in SITEMAP if for_yandex(r[0])]
+    (OUT / "sitemap-yandex.xml").write_text(urlset(yandex), encoding="utf-8")
+    print(f"sitemap-yandex.xml: {len(yandex)} адресов")
 
 
 OLD_OUT = ROOT / "_site_old_domain"

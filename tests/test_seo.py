@@ -69,6 +69,12 @@ class BuildTests(unittest.TestCase):
             self.assertIn('https://torggid.ru/torgi/lot/test_0/', (site/'sitemap-lots-1.xml').read_text())
             self.assertIn('https://torggid.ru/stati/', (site/'sitemap-pages.xml').read_text())
             self.assertIn('Clean-param', (site/'robots.txt').read_text())
+            self.assertIn('https://torggid.ru/sitemap-yandex.xml', (site/'robots.txt').read_text())
+            yandex = (site/'sitemap-yandex.xml').read_text()
+            self.assertIn('https://torggid.ru/torgi/moskva/', yandex)
+            self.assertIn('https://torggid.ru/stati/', yandex)
+            self.assertNotIn('/torgi/lot/', yandex)
+            self.assertNotIn('name="yandex"', (site/'torgi/lot/test_0/index.html').read_text())  # полная карточка в миллионнике
             self.assertIn('Факты для цитирования', (site/'llms.txt').read_text())
             self.assertIn('Состав права нужно проверить', (site/'torgi/do-1-mln/index.html').read_text())
             self.assertIn('/byudzhet/', (site/'index.html').read_text())

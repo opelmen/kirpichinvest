@@ -16,3 +16,24 @@ def thin_card(d, fallback_addrs=()):
     addr = (d.get("caddr") or "").strip()
     no_addr = not addr or addr == "Адрес уточняется" or addr in fallback_addrs
     return no_addr and not d.get("excerpt") and not d.get("area")
+
+
+YANDEX_MIN_PRICE = 100_000
+
+
+def yandex_card(d, fallback_addrs=(), big_cities=()):
+    """True, если карточку стоит отдавать Яндексу (остальные получают meta name="yandex" noindex, в Google остаются).
+
+    Яндекс пересчитывает «малоценные» страницы по каждой и судит о сайте по их доле, поэтому ему отдаём
+    только карточки, где есть что показать: адрес, площадь, цена от 100 тыс. ₽ и пересказ извещения или фото
+    с датой торгов. В 16 городах-миллионниках, где есть спрос по запросам, хватает адреса, площади и цены."""
+    if thin_card(d, fallback_addrs):
+        return False
+    addr = (d.get("caddr") or "").strip()
+    if not addr or addr == "Адрес уточняется" or addr in fallback_addrs:
+        return False
+    if not d.get("area") or (d.get("price") or 0) < YANDEX_MIN_PRICE:
+        return False
+    if d.get("city") in big_cities:
+        return True
+    return bool(d.get("bidd_end")) and bool(d.get("photo") or d.get("excerpt"))
