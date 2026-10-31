@@ -63,6 +63,56 @@ def metrika_total(token, date1, date2):
     return {r["dimensions"][0].get("name") or "?": int(r["metrics"][0]) for r in data.get("data", [])}
 
 
+GOAL_WORDS = ("signup", "login", "hunt", "watch", "регистр", "lead", "заявк")
+
+
+def metrika_goals(token):
+    data = get("https://api-metrika.yandex.net/management/v1/counter/%s/goals" % COUNTER, token)
+    goals = [(g["id"], g.get("name", "")) for g in data.get("goals", [])]
+    return [g for g in goals if any(w in g[1].lower() for w in GOAL_WORDS)][:8]
+
+
+def metrika_ads(token, date1, date2):
+    """Рекламные визиты: по меткам UTM, устройствам и страницам входа, с целями."""
+    goals = metrika_goals(token)
+    gm = ["ym:s:goal%sreaches" % gid for gid, _ in goals]
+    base = ["ym:s:visits", "ym:s:bounceRate", "ym:s:pageDepth", "ym:s:avgVisitDurationSeconds"]
+
+    def rows(dims, filters, limit=60):
+        data = get(METRIKA, token, {"ids": COUNTER, "metrics": ",".join(base + gm), "dimensions": dims,
+                                    "filters": filters, "date1": date1, "date2": date2, "limit": limit,
+                                    "sort": "-ym:s:visits"})
+        out = []
+        for r in data.get("data", []):
+            m = r["metrics"]
+            out.append({"dims": [d.get("name") or "–" for d in r["dimensions"]], "visits": int(m[0]),
+                        "bounce": round(m[1], 1), "depth": round(m[2], 2), "sec": round(m[3]),
+                        "goals": [int(x) for x in m[4:]]})
+        return out
+
+    ad = "ym:s:trafficSource=='ad' OR ym:s:UTMSource!=''"
+    return {"period": [date1, date2], "goals": [n for _, n in goals],
+            "utm": rows("ym:s:UTMSource,ym:s:UTMCampaign,ym:s:UTMContent", ad),
+            "device": rows("ym:s:UTMSource,ym:s:deviceCategory", ad, 30),
+            "landing": rows("ym:s:UTMSource,ym:s:startURLPath", ad, 30)}
+
+
+def ads_md(a):
+    head = "| Визиты | Отказы, % | Глубина | Сек. | " + " | ".join(a["goals"]) + " |"
+    sep = "---|" * (4 + len(a["goals"]))
+    lines = ["## Реклама: визиты по меткам (%s – %s)" % tuple(a["period"]), "",
+             "Отказ = визит короче 15 секунд с одной страницей (accurateTrackBounce).", ""]
+    for key, cols in (("utm", "Источник | Кампания | Объявление"), ("device", "Источник | Устройство"),
+                      ("landing", "Источник | Страница входа")):
+        n = cols.count("|") + 1
+        lines += ["| " + cols + " " + head, "|" + "---|" * n + sep]
+        for r in a[key]:
+            lines.append("| " + " | ".join(r["dims"]) + " | %s | %s | %s | %s | " % (r["visits"], r["bounce"], r["depth"], r["sec"])
+                         + " | ".join(str(g) for g in r["goals"]) + " |")
+        lines.append("")
+    return lines
+
+
 def webmaster(token):
     uid = get(WEBMASTER + "/user", token)["user_id"]
     hosts = get("%s/user/%s/hosts" % (WEBMASTER, uid), token).get("hosts", [])
@@ -107,6 +157,8 @@ def to_md(r):
         lines.append("")
     if r.get("metrika_sources"):
         lines += ["Все визиты по источникам: " + ", ".join("%s %s" % kv for kv in r["metrika_sources"].items()), ""]
+    if r.get("metrika_ads"):
+        lines += ads_md(r["metrika_ads"])
     for name, h in (r.get("webmaster") or {}).items():
         lines += ["## Вебмастер: " + name, ""]
         s = h.get("summary") or {}
@@ -145,6 +197,7 @@ def to_md(r):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default="_project/seo/yandex-api")
+    ap.add_argument("--ads-days", type=int, default=14, help="за сколько дней смотреть рекламные визиты")
     args = ap.parse_args()
     token = os.environ.get("YANDEX_METRIKA_TOKEN")
     if not token:
@@ -156,6 +209,7 @@ def main():
     safe(r, "metrika_week", lambda: metrika_visits(token, str(d1), str(d2)))
     safe(r, "metrika_prev", lambda: metrika_visits(token, str(p1), str(p2)))
     safe(r, "metrika_sources", lambda: metrika_total(token, str(d1), str(d2)))
+    safe(r, "metrika_ads", lambda: metrika_ads(token, str(today - timedelta(days=args.ads_days)), str(today)))
     safe(r, "webmaster", lambda: webmaster(token))
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
