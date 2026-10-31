@@ -13,26 +13,29 @@
 <meta name="theme-color" content="#0E1A24">
 <link rel="canonical" href="https://privateinvest.pro/">
 <meta name="yandex-verification" content="54da038aafe8c1a9">
-<!-- Яндекс Метрика: номер счётчика в PI_CFG.metrika (0 — счётчик не грузится) -->
 <script>
-window.PI_CFG={metrika:113877734};
-(function(c){
-  // первое касание (страница входа, реферер, UTM) живёт 30 дней: заявка через неделю всё равно покажет, откуда человек пришёл
-  try{
-    var p=new URLSearchParams(location.search),u=[];
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){if(p.get(k))u.push(k+'='+p.get(k))});
-    var ft=JSON.parse(localStorage.getItem('pi_ft')||'null'),ext=document.referrer&&!/(^|\.)privateinvest\.pro$/.test(new URL(document.referrer).hostname);
-    if(!ft||Date.now()-ft.t>2592e6||u.length)ft={t:Date.now(),landing:location.href,referrer:ext?document.referrer:'',utm:u.join('&')};
-    localStorage.setItem('pi_ft',JSON.stringify(ft));
-  }catch(e){}
-  if(!c.metrika)return;
-  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
-  for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return}
-  k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id='+c.metrika,'ym');
-  ym(c.metrika,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true,trackHash:true});
-})(window.PI_CFG);
-function piGoal(g,params){try{if(window.ym&&PI_CFG.metrika)ym(PI_CFG.metrika,'reachGoal',g,params)}catch(e){}}
+// первое касание (страница входа, реферер, UTM) живёт 30 дней: заявка через неделю всё равно покажет, откуда человек пришёл
+(function(){try{
+  var p=new URLSearchParams(location.search),u=[];
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){if(p.get(k))u.push(k+'='+p.get(k))});
+  var ft=JSON.parse(localStorage.getItem('pi_ft')||'null'),ext=document.referrer&&!/(^|\.)privateinvest\.pro$/.test(new URL(document.referrer).hostname);
+  if(!ft||Date.now()-ft.t>2592e6||u.length)ft={t:Date.now(),landing:location.href,referrer:ext?document.referrer:'',utm:u.join('&')};
+  localStorage.setItem('pi_ft',JSON.stringify(ft));
+}catch(e){}})();
+function piGoal(g,params){try{if(window.ym)ym(113877734,'reachGoal',g,params)}catch(e){}}
 </script>
+<!-- Yandex.Metrika counter (стандартный код из кабинета: проверка счётчика в Метрике ищет его в HTML дословно) -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113877734', 'ym');
+
+    ym(113877734, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<!-- /Yandex.Metrika counter -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 /* Макет: витрина проверенных залоговых заявок + три кабинета. Стиль «цифровой» по мотивам сайта партнёра:

@@ -64,3 +64,21 @@ jobs:
             if grep -q 'Приватинвест' /tmp/p.html && grep -q 'showcase.json' /tmp/p.html; then echo "page content OK at $u"; exit 0; fi
           done
           echo 'page content missing'; head -c 500 /tmp/p.html; exit 1
+
+      - name: Yandex Metrika on the live page
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 30 https://privateinvest.pro/ -o /tmp/live.html
+          grep -q "ym(113877734, 'init'" /tmp/live.html && echo "counter code: in HTML" || { echo "counter code: MISSING"; exit 1; }
+          grep -q 'yandex-verification" content="54da038aafe8c1a9' /tmp/live.html && echo "webmaster meta: in HTML" || echo "webmaster meta: MISSING"
+          echo "tag.js: HTTP $(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://mc.yandex.ru/metrika/tag.js?id=113877734)"
+          # настоящий браузер: уходит ли хит счётчика при открытии страницы
+          cd /tmp && npm i -s puppeteer-core@23.11.1 >/dev/null 2>&1
+          CHROME=$(command -v google-chrome || command -v chromium-browser) node -e '
+            const p=require("/tmp/node_modules/puppeteer-core");(async()=>{
+              const b=await p.launch({executablePath:process.env.CHROME,args:["--no-sandbox"]});const pg=await b.newPage();
+              const hits=[],errs=[];pg.on("request",r=>{if(/mc\.yandex\.(ru|com)\/watch\/113877734/.test(r.url()))hits.push(r.url().slice(0,80))});
+              pg.on("pageerror",e=>errs.push(e.message));pg.on("requestfailed",r=>{if(/yandex/.test(r.url()))errs.push("failed "+r.url().slice(0,80)+" "+r.failure().errorText)});
+              await pg.goto("https://privateinvest.pro/?utm_source=ci_check",{waitUntil:"networkidle2",timeout:60000});await new Promise(r=>setTimeout(r,5000));
+              console.log("metrika hits:",hits.length,hits[0]||"");console.log("errors:",errs.length?errs:"none");await b.close();
+            })().catch(e=>{console.log("browser check failed:",e.message)})'
