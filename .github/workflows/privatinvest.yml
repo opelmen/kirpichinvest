@@ -3,7 +3,7 @@ name: Deploy privatinvest prototype
 on:
   push:
     branches: [main, "claude/**"]
-    paths: ["privatinvest/**", ".github/workflows/privatinvest.yml"]
+    paths: ["privatinvest/**", "privatinvest_src/**", ".github/workflows/privatinvest.yml"]
   workflow_dispatch:
 
 concurrency:
@@ -15,6 +15,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Landing pages are built from privatinvest_src (no stale HTML)
+        run: |
+          set -euo pipefail
+          python3 privatinvest_src/build.py
+          git status --porcelain privatinvest/
+          if [ -n "$(git status --porcelain privatinvest/)" ]; then echo "Run python3 privatinvest_src/build.py and commit the result"; git diff --stat; exit 1; fi
+
+      - name: Domain history (Wayback, RDAP) for SEO
+        continue-on-error: true
+        run: |
+          echo "=== RDAP"
+          curl -sSL --max-time 30 https://rdap.org/domain/privateinvest.pro | python3 -c "import json,sys;d=json.load(sys.stdin);print([(e.get('eventAction'),e.get('eventDate')) for e in d.get('events',[])]);print('ns:',[n.get('ldhName') for n in d.get('nameservers',[])])" || true
+          echo "=== Wayback snapshots by year"
+          curl -sS --max-time 60 "https://web.archive.org/cdx/search/cdx?url=privateinvest.pro&output=json&fl=timestamp,statuscode&collapse=timestamp:6" | python3 -c "
+          import json,sys,collections
+          rows=json.load(sys.stdin)[1:]
+          c=collections.Counter(r[0][:4] for r in rows);print(dict(sorted(c.items())));print('first',rows[:1],'last',rows[-1:])" || true
+          echo "=== Wayback URLs (old site structure)"
+          curl -sS --max-time 60 "https://web.archive.org/cdx/search/cdx?url=privateinvest.pro/*&fl=original,timestamp,statuscode&collapse=urlkey&limit=80" || true
+          for y in 2023 2024 2025; do
+            echo "=== snapshot $y"
+            u=$(curl -sS --max-time 30 "https://archive.org/wayback/available?url=privateinvest.pro&timestamp=${y}0601" | python3 -c "import json,sys;print((json.load(sys.stdin).get('archived_snapshots',{}).get('closest') or {}).get('url',''))")
+            echo "$u"; [ -n "$u" ] && curl -sSL --max-time 40 "$u" | python3 -c "import sys,re,html;s=sys.stdin.read();t=re.search(r'<title>(.*?)</title>',s,re.S);print('title:',html.unescape(t.group(1).strip()) if t else None);x=re.sub(r'<script.*?</script>|<style.*?</style>','',s,flags=re.S);x=re.sub(r'<[^>]+>',' ',x);print(' '.join(html.unescape(x).split())[:600])" || true
+          done
 
       - name: Prepare SSH
         env:
@@ -109,3 +134,37 @@ jobs:
               await pg.goto("https://privateinvest.pro/?utm_source=ci_check",{waitUntil:"networkidle2",timeout:60000});await new Promise(r=>setTimeout(r,5000));
               console.log("metrika hits:",hits.length,hits[0]||"");console.log("errors:",errs.length?errs:"none");await b.close();
             })().catch(e=>{console.log("browser check failed:",e.message)})'
+
+      - name: Landing pages, sitemap and robots on the live site
+        run: |
+          set -euo pipefail
+          bad=0
+          for u in $(python3 -c "import re;print(' '.join(re.findall(r'<loc>(.*?)</loc>',open('privatinvest/sitemap.xml').read())))"); do
+            code=$(curl -s -o /tmp/lp.html -w '%{http_code}' --max-time 30 "$u")
+            canon=$(grep -o '<link rel="canonical" href="[^"]*"' /tmp/lp.html | head -1 | sed 's/.*href="//;s/"$//')
+            echo "$code $u canonical=$canon"
+            [ "$code" = 200 ] && [ "$canon" = "$u" ] || bad=1
+          done
+          echo "404 page: $(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://privateinvest.pro/net-takoy-stranicy/)"
+          echo "no-slash redirect: $(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 https://privateinvest.pro/brokeram)"
+          exit $bad
+
+      - name: IndexNow (Yandex) for all sitemap URLs
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          key=$(basename $(ls privatinvest/*.txt | grep -E '/[0-9a-f]{32}\.txt$' | head -1) .txt)
+          live=$(curl -fsS --max-time 20 https://privateinvest.pro/$key.txt)
+          [ "$live" = "$key" ] || { echo "key file not live"; exit 1; }
+          python3 - "$key" <<'PY'
+          import json,re,sys,urllib.request
+          key=sys.argv[1]
+          urls=re.findall(r'<loc>(.*?)</loc>',open('privatinvest/sitemap.xml').read())
+          body=json.dumps({"host":"privateinvest.pro","key":key,"keyLocation":"https://privateinvest.pro/%s.txt"%key,"urlList":urls}).encode()
+          for ep in ("https://yandex.com/indexnow","https://api.indexnow.org/indexnow"):
+              try:
+                  r=urllib.request.urlopen(urllib.request.Request(ep,data=body,headers={"Content-Type":"application/json; charset=utf-8"}),timeout=45)
+                  print(ep,r.status,len(urls),"urls")
+              except Exception as e:
+                  print(ep,"error",getattr(e,'code',''),e)
+          PY

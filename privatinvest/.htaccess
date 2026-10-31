@@ -15,3 +15,6 @@ RewriteRule ^ https://privateinvest.pro%{REQUEST_URI} [L,R=301]
 <IfModule mod_headers.c>
   Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
+
+# Своя страница 404 (noindex), чтобы битые ссылки не отдавали главную
+ErrorDocument 404 /404.html
