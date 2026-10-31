@@ -146,7 +146,7 @@ jobs:
             [ "$code" = 200 ] && [ "$canon" = "$u" ] || bad=1
           done
           echo "404 page: $(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://privateinvest.pro/net-takoy-stranicy/)"
-          echo "no-slash redirect: $(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 https://privateinvest.pro/brokeram)"
+          r=$(curl -s -o /dev/null -w "%{http_code} %{redirect_url}" --max-time 20 https://privateinvest.pro/brokeram); echo "no-slash redirect: $r"
           exit $bad
 
       - name: IndexNow (Yandex) for all sitemap URLs
