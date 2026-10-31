@@ -13,11 +13,11 @@
 ## Вебмастер: torggid.ru
 
 - переобход: квота 150, осталось 140
-- ошибка summary: HTTP 404 {"host_id":null,"error_message":"Host \"http:torggid.ru:80\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
-- ошибка excluded_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"http:torggid.ru:80\" is not loaded in Ya.Webmaster yet"}
-- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_message":"Host \"http:torggid.ru:80\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
-- ошибка indexing_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"http:torggid.ru:80\" is not loaded in Ya.Webmaster yet"}
-- ошибка queries: HTTP 404 {"host_id":null,"error_message":"Host \"http:torggid.ru:80\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка summary: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка excluded_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
+- ошибка indexing_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка queries: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 
 ## Вебмастер: kirpichinvest.ru
 
