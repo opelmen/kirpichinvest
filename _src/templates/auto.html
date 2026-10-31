@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% from "_form.html" import lead_form, tg_block %}{% block tgglobal %}{% endblock %}
+{% block ld %}{{ crumbs_ld([("Главная","/")] + crumbs) }}{% if faq %}{{ faq_ld(faq) }}{% endif %}
+{% if lots and not archive %}{{ list_ld(h1, canonical, st.count, lots, (current_page-1)*60, "/auto/lot/") }}{% endif %}{% endblock %}
+{% block main %}<div class="wrap">
+<p class="crumbs"><a href="/">Главная</a>{% for n, u in crumbs %} / {% if loop.last %}{{ n }}{% else %}<a href="{{ u }}">{{ n }}</a>{% endif %}{% endfor %}</p>
+<h1>{{ h1 }}</h1>
+{% if archive %}<p class="lead">Завершённые или ушедшие из источника предложения: {{ st.count }} карточек. Истечение срока заявки не подтверждает продажу. Актуальная техника — в <a href="/auto/">каталоге</a>.</p>
+{% else %}<p class="lead">Машины и техника, которые сейчас продаются на торгах по банкротству и арестованному имуществу: {{ st.count }} лотов{% if st.median_price %}, медиана цены — {{ st.median_price|rub }}{% endif %}{% if st.with_vin %}, у {{ st.with_vin }}% в извещении есть VIN{% endif %}. Список обновляется несколько раз в день по данным ГИС Торги и площадок банкротства. VIN и госномер смотрите в извещении на площадке.</p>{% endif %}
+{% macro chips(links, label) %}<nav class="filters" aria-label="{{ label }}">{% for u, n in links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endmacro %}
+{% if type_links %}{{ chips(type_links, "Типы техники") }}{% endif %}
+{% if facet_links %}{{ chips(facet_links, "Подборки") }}{% endif %}
+{% if make_links %}{% if make_links|length > 12 %}<details class="places"><summary>Марки ({{ make_links|length }})</summary>{{ chips(make_links, "Марки") }}</details>{% else %}<nav class="filters" aria-label="Марки"><span class="mute small" style="align-self:center">Марки:</span>{% for u, n in make_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}{% endif %}
+{% if region_links %}{% if region_links|length > 12 %}<details class="places"><summary>Регионы ({{ region_links|length }})</summary>{{ chips(region_links, "Регионы") }}</details>{% else %}<nav class="filters" aria-label="Регионы"><span class="mute small" style="align-self:center">Регионы:</span>{% for u, n in region_links %}<a href="{{ u }}" {% if u == path %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}</nav>{% endif %}{% endif %}
+{% if not archive %}<div class="appbar follow"><p><b>Следите за этой подборкой бесплатно:</b> пришлём новые машины и снижения цены в Telegram или на почту. На платформе: все фото и документы торгов, бесплатная проверка залога и розыска по VIN, «История машины» за 99 ₽.</p><a class="btn" href="{{ cfg.APP_URL }}/auto{{ app_q }}{{ '&' if app_q else '?' }}follow=1&amp;from=auto_follow" onclick="if(window.ym)ym({{ cfg.METRIKA_ID or 0 }},'reachGoal','go_follow')">🔔 Следить за подборкой</a><a class="btn ghost" href="{{ cfg.APP_URL }}/auto{{ app_q }}{{ '&' if app_q else '?' }}from=auto_catalog">Открыть на платформе</a></div>{% endif %}
+{% if cs and cs.count %}<div class="scroll" style="margin:0 0 20px"><table class="t"><tr>
+<th>Активных лотов</th><th>Новых за 7 дней</th><th>Медиана цены</th><th>С фото</th><th>С VIN в извещении</th><th>Цена снижалась</th></tr>
+<tr><td><b>{{ cs.count }}</b></td><td>{{ cs.week_new }}</td><td>{{ cs.median_price|rub }}</td><td>{{ cs.with_photo }}%</td><td>{{ cs.with_vin }}%</td><td>{{ cs.dropped }}%</td></tr></table></div>
+<p class="mute small">Данные на <time datetime="{{ lastmod }}">{{ today }}</time> по ГИС Торги и площадкам банкротства.</p>{% endif %}
+<div class="lots">
+{% for d in lots %}
+  <a class="lot" href="/auto/lot/{{ d.id }}/">
+    {% if d.photo %}<img class="thumb" src="{{ d.photo }}" alt="" width="320" height="200" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
+    {% set ktag = {"bankruptcy": "Банкротное имущество", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество", "state": "Госимущество"}.get(d.kind) %}{% if ktag and not archive %}<span class="kindtag k-{{ d.kind }}">{{ ktag }}</span>{% endif %}
+    <span>{% if d.region_name %}<span class="tag" style="margin-right:6px">{{ d.region_name }}</span>{% endif %}<b>{{ d.label }}</b></span>
+    <span class="p">{{ d.price|rub }}</span>{% if not archive and d.price_drops and d.price_was %}<span class="small plus">↓ Цена снижалась {{ d.price_drops }} {{ "раз" if d.price_drops == 1 or d.price_drops > 4 else "раза" }}: {{ d.price_was|rub }} → {{ d.price|rub }}</span>{% elif not archive and d.repeat %}<span class="small plus">Повторные торги: цена уже снижена</span>{% endif %}
+    {% if archive %}<span class="tag">{{ "Приём заявок завершён" if d.status == "ended" else "Статус требует проверки" }}</span>{% endif %}
+    <span class="mute small">{{ d.vtype_name }}{% if d.mileage %} · пробег {{ "{:,}".format(d.mileage).replace(",", " ") }} км{% elif d.hours %} · {{ d.hours }} моточасов{% endif %}{% if not archive and d.days_left is not none and d.days_left >= 0 %} · заявки ещё {{ d.days_left|round|int }} дн.{% endif %}</span>
+    <span class="small">{% if d.has_vin %}VIN в извещении есть{% else %}VIN в извещении не указан{% endif %}{% if d.pledge %} · <b>упомянут залог</b>{% endif %}{% if d.purpose %} · {{ d.purpose|lower }}{% endif %}{% if d.photos_count %} · фото: {{ d.photos_count }}{% endif %}</span>
+  </a>
+{% else %}<p>Сейчас в этой подборке нет активных лотов. Подпишитесь — пришлём, как только появятся.</p>{% endfor %}
+</div>
+<div style="margin:20px 0">{{ tg_block("", "") }}</div>
+{% if pagination|length > 1 %}<nav class="filters" aria-label="Страницы каталога">{% for url, number in pagination %}<a href="{{ url }}" {% if number == current_page %}aria-current="page"{% endif %}>{{ number }}</a>{% endfor %}</nav>{% endif %}
+{% if faq %}<section style="padding-bottom:0"><div class="faq"><h2>Коротко о покупке машины с торгов</h2>{% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div></section>{% endif %}
+<section><div class="split">
+  <div><h2>Проверьте машину до ставки</h2><p>Бесплатно по VIN: залог в реестре ФНП, розыск и ограничения ГИБДД. В «Истории машины» за 99 ₽: пробег по техосмотрам, ОСАГО, лизинг, такси, прошлые объявления. VIN берите из извещения на площадке.</p>
+  <p><a class="btn" href="/proverka-avto-po-vin/">Проверить авто по VIN</a></p>
+  <p class="note small">Сведения о лотах взяты из ГИС Торги и площадок банкротства и могут отличаться от документов организатора. Перед подачей заявки сверяйтесь с извещением.</p></div>
+  {{ lead_form("check", "Нужна помощь с покупкой машины с торгов?", "Проверим документы торгов и машину, рассчитаем ставку, подадим заявку по договору.", "Отправить", [{"name":"lot","label":"Ссылка на лот или марка и регион","ph":"https://torgi.gov.ru/..."}]) }}
+</div></section>
+</div>{% endblock %}

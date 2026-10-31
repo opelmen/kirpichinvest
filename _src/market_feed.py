@@ -59,7 +59,12 @@ CATEGORY = {  # категория приложения → (название в
 }
 KIND = {"bankruptcy": "Банкротство", "arrest": "Арестованное имущество", "pledge": "Залоговое имущество", "state": "Государственное и муниципальное имущество"}
 SOURCE = {"gistorgi": "ГИС Торги", "mets": "МЭТС", "nis": "НИС", "centerr": "ЦентрЕР", "utpl": "УТПЛ", "gpb": "ЭТП ГПБ",
-          "fabrikant": "Фабрикант", "rad": "РАД", "cdt": "ЦДТ"}
+          "fabrikant": "Фабрикант", "rad": "РАД", "cdt": "ЦДТ", "sberast": "Сбербанк-АСТ", "gistorgi_auto": "ГИС Торги"}
+# Официальные сайты площадок: на страницах регионов отвечаем на запрос «торги по банкротству <регион> официальный сайт»
+SOURCE_SITE = {"gistorgi": "https://torgi.gov.ru/", "gistorgi_auto": "https://torgi.gov.ru/", "mets": "https://m-ets.ru/",
+               "nis": "https://nistp.ru/", "centerr": "https://centerr.ru/", "utpl": "https://utpl.ru/", "gpb": "https://etp.gpb.ru/",
+               "fabrikant": "https://www.fabrikant.ru/", "rad": "https://lot-online.ru/", "cdt": "https://cdtrf.ru/",
+               "sberast": "https://www.sberbank-ast.ru/"}
 
 
 def region_code(v):
@@ -215,6 +220,7 @@ def from_market(rows):
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
             "comps": r.get("comps") if cat in NONRES and ppm2 else None,
             "land_text": land_text(r.get("land")),
+            "descr": r.get("descr"),  # текст извещения: на сайт попадает только очищенный пересказ (notice_excerpt)
         }
         if (r.get("land") or {}).get("status") == "not_sold":
             d["flags"] = ", ".join(x for x in (d["flags"], "участок в лот не входит") if x)

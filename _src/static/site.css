@@ -137,6 +137,7 @@ footer h3{color:#fff;font-size:15px}footer ul{list-style:none;padding:0;margin:0
 .board .more-app{padding-top:4px;color:#9FB0C3;font-weight:400;font-size:14px}
 .appbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 20px}
 .appbar p{margin:0;flex:1 1 260px;font-size:15px}.appbar .btn{white-space:nowrap}
+.appbar.follow{border-color:var(--petrol);box-shadow:0 0 0 1px var(--petrol) inset}.appbar.follow .btn.ghost{padding-left:14px;padding-right:14px}
 .lotphoto{width:100%;max-height:360px;object-fit:cover;border-radius:12px;margin:0 0 16px;background:var(--line)}
 details.places{margin:0 0 16px}details.places summary{cursor:pointer;font-weight:500;padding:6px 0}details.places .filters{margin:10px 0 0}
 h1,h2{text-wrap:balance}
@@ -175,3 +176,6 @@ aside .box .form{border:0;padding:0;background:none;border-radius:0}aside .box .
 .fold-body{padding:0 16px 14px}.fold-body .t{margin:0}
 @media (max-width:900px){.spec4{grid-template-columns:1fr 1fr}.spec4>div{border-left:0;border-top:1px solid var(--line)}.spec4>div:first-child,.spec4>div:nth-child(2){border-top:0}.spec4>div:nth-child(2){border-left:1px solid var(--line)}.spec4>div:nth-child(4){border-left:1px solid var(--line)}}
 @media (max-width:640px){.xray-cta .btn{flex-basis:100%}.spec4 b{font-size:16px}.spec4 .sp-main b{font-size:19px}}
+.btn.max,.head-max{background:#5B3DF5;color:#fff}.btn.max:hover,.head-max:hover{background:#4529d9;color:#fff}.maxmark{font:800 11px/1 Onest,sans-serif;letter-spacing:.04em}.head-max{margin-left:6px}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:0 0 16px}.gallery .lotphoto{margin:0;max-height:200px;height:200px}.gallery .lotphoto:first-child{grid-column:1/-1;max-height:360px;height:auto}

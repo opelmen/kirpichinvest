@@ -8,3 +8,5 @@ __pycache__/
 _src/data/lot_history.json
 _site_old_domain/
 _src/data/market.json
+_src/data/vehicles.json
+_src/data/auto_history.json
