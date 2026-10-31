@@ -1,0 +1,49 @@
+name: Yandex weekly report
+
+# Только чтение API Метрики и Вебмастера. Результат кладётся в ветку seo-yandex-data,
+# а не в main, чтобы не запускать деплой сайта.
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # понедельник 09:00 МСК
+  workflow_dispatch:
+  pull_request:   # проверка скрипта в PR: только вывод в лог, без записи
+    paths:
+      - _src/yandex_report.py
+      - .github/workflows/yandex-report.yml
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pull numbers from Metrika and Webmaster
+        env:
+          YANDEX_METRIKA_TOKEN: ${{ secrets.YANDEX_METRIKA_TOKEN }}
+        run: python _src/yandex_report.py --out "$RUNNER_TEMP/yandex-api"
+
+      - name: Save to seo-yandex-data branch
+        if: github.event_name != 'pull_request'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin seo-yandex-data; then
+            git worktree add "$RUNNER_TEMP/data" FETCH_HEAD
+            git -C "$RUNNER_TEMP/data" checkout -B seo-yandex-data
+          else
+            git worktree add --orphan -b seo-yandex-data "$RUNNER_TEMP/data"
+          fi
+          mkdir -p "$RUNNER_TEMP/data/yandex-api"
+          cp "$RUNNER_TEMP"/yandex-api/* "$RUNNER_TEMP/data/yandex-api/"
+          cd "$RUNNER_TEMP/data"
+          git add yandex-api
+          git commit -m "Yandex report $(date -u +%F)" || exit 0
+          git push origin seo-yandex-data
