@@ -68,12 +68,16 @@ def webmaster(token):
     hosts = get("%s/user/%s/hosts" % (WEBMASTER, uid), token).get("hosts", [])
     out = {}
     for name in HOSTS:
-        host = next((h for h in hosts if (h.get("ascii_host_url") or "").rstrip("/").endswith("//" + name)), None)
+        # the account can hold http:, https: and www variants; take the https one with data
+        found = [h for h in hosts if (h.get("ascii_host_url") or "").rstrip("/").endswith("//" + name)]
+        found.sort(key=lambda h: (not h["host_id"].startswith("https:"), not h.get("verified")))
+        host = found[0] if found else None
         if not host:
             out[name] = {"errors": {"host": "not in Webmaster account"}}
             continue
         base = "%s/user/%s/hosts/%s" % (WEBMASTER, uid, urllib.parse.quote(host["host_id"], safe=""))
-        h = {"host_id": host["host_id"], "verified": host.get("verified")}
+        h = {"host_id": host["host_id"], "verified": host.get("verified"),
+             "variants": [x["host_id"] for x in found]}
         safe(h, "summary", lambda: get(base + "/summary", token))
         safe(h, "info", lambda: get(base, token))
         safe(h, "excluded_samples", lambda: get(base + "/search-urls/events/samples", token, {"limit": 100}))
