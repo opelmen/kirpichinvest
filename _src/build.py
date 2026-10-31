@@ -24,7 +24,7 @@ ROOT = SRC.parent
 OUT = ROOT / "_site"
 
 cfg = SimpleNamespace(
-    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="",  # личный телефон с сайта убран (John, 11.10.2026): связь через форму и бота
+    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="+7 995 595-54-00",  # телефон карточки Яндекс Бизнеса: только подвал, «О нас» и разметка, не на главных экранах (John, 31.10.2026)
    
     SITE_EMAIL="fond178@gmail.com", SITE_OWNER="ИП Смирнов Илья Александрович", SITE_INN="", SITE_OGRNIP="",
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",

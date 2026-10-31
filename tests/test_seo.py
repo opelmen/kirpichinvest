@@ -152,7 +152,9 @@ class BuildTests(unittest.TestCase):
             kazan = (site/'torgi/kazan/index.html').read_text()
             self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
             self.assertIn('Банкротное имущество</span>', kazan)
-            self.assertNotIn('995', deal_card)  # личного телефона на сайте нет
+            # телефон только в подвале и разметке (John, 31.10.2026), в теле карточки его нет
+            self.assertNotIn('995', deal_card.split('<main')[1].split('<footer')[0])
+            self.assertIn('595-54-00', deal_card.split('<footer')[1])
             self.assertIn('повторные торги: цена уже снижена', deal_card)  # повторные — плюс, не риск
             bld = (site/'torgi/lot/mets-32/index.html').read_text()
             self.assertIn('<th>Земельный участок</th><td>не продают, участок в аренде (КН 16:50:1:2, 900 м²)', bld)  # участок под зданием
