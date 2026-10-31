@@ -1,10 +1,14 @@
-== Sat Oct 31 10:32:38 UTC 2026 1c74bad push
+== Sat Oct 31 13:50:26 UTC 2026 239949f push
 пустых карточек без адреса, площади и описания (noindex): 516
-OK: страниц 36908 в sitemap, лотов 21835, техники 13355, статей 22
-Published release 41190475169-1
-Live verification: 7973 files (400 of 48616 lot pages), 0 errors
+карточек, открытых Яндексу (остальные meta yandex noindex): 14789
+sitemap-yandex.xml: 458 адресов
+OK: страниц 36893 в sitemap, лотов 21827, техники 13350, статей 22
+Published release 41204960748-1
+Live verification: 7970 files (400 of 48623 lot pages), 0 errors
 kirpichinvest.ru/ -> 301 https://torggid.ru/
 kirpichinvest.ru/torgi/ -> 301 https://torggid.ru/torgi/
 kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/ -> 301 https://torggid.ru/stati/proverka-kvartiry-s-torgov/
-новых URL для IndexNow: 0
+новых URL для IndexNow: 7
+IndexNow https://yandex.com/indexnow 200
+IndexNow https://api.indexnow.org/indexnow 200
 result: success

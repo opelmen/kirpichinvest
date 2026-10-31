@@ -3630,6 +3630,7 @@
 /auto/lot/cdt-391064/
 /auto/lot/cdt-391069/
 /auto/lot/cdt-391070/
+/auto/lot/cdt-391073/
 /auto/lot/centerr-1167343/
 /auto/lot/centerr-1168682/
 /auto/lot/centerr-1168707/
@@ -19490,7 +19491,6 @@
 /torgi/do-2-mln/page/20/
 /torgi/do-2-mln/page/200/
 /torgi/do-2-mln/page/201/
-/torgi/do-2-mln/page/202/
 /torgi/do-2-mln/page/21/
 /torgi/do-2-mln/page/22/
 /torgi/do-2-mln/page/23/
@@ -26826,6 +26826,8 @@
 /torgi/lot/21000017280000000541_1/
 /torgi/lot/21000017280000000542_1/
 /torgi/lot/21000017280000000545_1/
+/torgi/lot/21000017290000000017_1/
+/torgi/lot/21000017290000000017_2/
 /torgi/lot/21000017310000001330_1/
 /torgi/lot/21000017310000001331_1/
 /torgi/lot/21000017310000001333_1/
@@ -34726,6 +34728,7 @@
 /torgi/lot/22000138800000000325_2/
 /torgi/lot/22000138800000000325_3/
 /torgi/lot/22000138800000000325_5/
+/torgi/lot/22000138800000000326_1/
 /torgi/lot/22000139470000000116_1/
 /torgi/lot/22000139480000000045_1/
 /torgi/lot/22000139650000000009_1/
@@ -40668,6 +40671,7 @@
 /torgi/lot/26000004410000000036_1/
 /torgi/lot/26000004490000000019_1/
 /torgi/lot/26000004560000000023_1/
+/torgi/lot/26000004750000000003_1/
 /torgi/lot/26000004780000000012_1/
 /torgi/lot/26000004780000000013_4/
 /torgi/lot/26000004780000000013_5/
@@ -40955,6 +40959,7 @@
 /torgi/lot/26000018650000000002_2/
 /torgi/lot/26000018650000000002_3/
 /torgi/lot/26000018650000000002_4/
+/torgi/lot/26000018650000000003_1/
 /torgi/lot/26000019000000000005_1/
 /torgi/lot/26000019030000000003_1/
 /torgi/lot/26000019410000000002_1/
@@ -43775,6 +43780,7 @@
 /torgi/lot/cdt-391066/
 /torgi/lot/cdt-391067/
 /torgi/lot/cdt-391068/
+/torgi/lot/cdt-391072/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -55863,7 +55869,6 @@
 /torgi/volgograd/sredneahtubinskiy-rayon/
 /torgi/volgograd/svetloyarskiy-rayon/
 /torgi/volgograd/volzhskiy/
-/torgi/volgograd/vygodnye/
 /torgi/volgograd/zemlya/
 /torgi/volgograd/zemlya/page/2/
 /torgi/volgogradskaya-oblast/
@@ -55884,7 +55889,6 @@
 /torgi/volgogradskaya-oblast/page/3/
 /torgi/volgogradskaya-oblast/page/4/
 /torgi/volgogradskaya-oblast/page/5/
-/torgi/volgogradskaya-oblast/vygodnye/
 /torgi/volgogradskaya-oblast/zemlya/
 /torgi/volgogradskaya-oblast/zemlya/page/2/
 /torgi/vologodskaya-oblast/
