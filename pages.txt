@@ -56,7 +56,6 @@
 /auto/arestovannoe/page/42/
 /auto/arestovannoe/page/43/
 /auto/arestovannoe/page/44/
-/auto/arestovannoe/page/45/
 /auto/arestovannoe/page/5/
 /auto/arestovannoe/page/6/
 /auto/arestovannoe/page/7/
@@ -101,6 +100,7 @@
 /auto/arhiv/page/36/
 /auto/arhiv/page/37/
 /auto/arhiv/page/38/
+/auto/arhiv/page/39/
 /auto/arhiv/page/4/
 /auto/arhiv/page/5/
 /auto/arhiv/page/6/
@@ -909,7 +909,6 @@
 /auto/krasnoyarskiy-kray/page/4/
 /auto/krasnoyarskiy-kray/page/5/
 /auto/krasnoyarskiy-kray/page/6/
-/auto/krasnoyarskiy-kray/page/7/
 /auto/krasnoyarskiy-kray/pricepy/
 /auto/krasnoyarskiy-kray/spectehnika/
 /auto/krym/
@@ -1104,7 +1103,6 @@
 /auto/legkovye/do-1-mln/page/132/
 /auto/legkovye/do-1-mln/page/133/
 /auto/legkovye/do-1-mln/page/134/
-/auto/legkovye/do-1-mln/page/135/
 /auto/legkovye/do-1-mln/page/14/
 /auto/legkovye/do-1-mln/page/15/
 /auto/legkovye/do-1-mln/page/16/
@@ -3631,6 +3629,11 @@
 /auto/lot/cdt-391069/
 /auto/lot/cdt-391070/
 /auto/lot/cdt-391073/
+/auto/lot/cdt-391090/
+/auto/lot/cdt-391095/
+/auto/lot/cdt-391096/
+/auto/lot/cdt-391097/
+/auto/lot/cdt-391098/
 /auto/lot/centerr-1167343/
 /auto/lot/centerr-1168682/
 /auto/lot/centerr-1168707/
@@ -7106,6 +7109,8 @@
 /auto/lot/gistorgi_auto-22000138800000000321_7/
 /auto/lot/gistorgi_auto-22000138800000000322_5/
 /auto/lot/gistorgi_auto-22000138800000000323_4/
+/auto/lot/gistorgi_auto-22000138800000000326_4/
+/auto/lot/gistorgi_auto-22000138800000000326_7/
 /auto/lot/gistorgi_auto-22000143460000000004_1/
 /auto/lot/gistorgi_auto-22000144340000000007_1/
 /auto/lot/gistorgi_auto-22000144340000000007_4/
@@ -8411,6 +8416,16 @@
 /auto/lot/gistorgi_auto-23000053960000000138_7/
 /auto/lot/gistorgi_auto-23000053960000000138_8/
 /auto/lot/gistorgi_auto-23000053960000000138_9/
+/auto/lot/gistorgi_auto-23000053960000000139_1/
+/auto/lot/gistorgi_auto-23000053960000000139_10/
+/auto/lot/gistorgi_auto-23000053960000000139_2/
+/auto/lot/gistorgi_auto-23000053960000000139_3/
+/auto/lot/gistorgi_auto-23000053960000000139_4/
+/auto/lot/gistorgi_auto-23000053960000000139_5/
+/auto/lot/gistorgi_auto-23000053960000000139_6/
+/auto/lot/gistorgi_auto-23000053960000000139_7/
+/auto/lot/gistorgi_auto-23000053960000000139_8/
+/auto/lot/gistorgi_auto-23000053960000000139_9/
 /auto/lot/gistorgi_auto-23000054230000000389_1/
 /auto/lot/gistorgi_auto-23000054230000000389_10/
 /auto/lot/gistorgi_auto-23000054230000000389_11/
@@ -9376,6 +9391,9 @@
 /auto/lot/gistorgi_auto-24000035640000000156_3/
 /auto/lot/gistorgi_auto-24000035640000000156_4/
 /auto/lot/gistorgi_auto-24000035640000000157_1/
+/auto/lot/gistorgi_auto-24000035640000000158_1/
+/auto/lot/gistorgi_auto-24000035640000000159_1/
+/auto/lot/gistorgi_auto-24000035640000000160_2/
 /auto/lot/gistorgi_auto-24000035920000000037_1/
 /auto/lot/gistorgi_auto-24000035920000000037_2/
 /auto/lot/gistorgi_auto-24000036340000000005_1/
@@ -17227,6 +17245,7 @@
 /auto/lot/utender-767998/
 /auto/lot/utender-768026/
 /auto/lot/utender-768082/
+/auto/lot/utender-768142/
 /auto/lot/utpl-127401/
 /auto/lot/utpl-127566/
 /auto/lot/utpl-127610/
@@ -17302,7 +17321,6 @@
 /auto/marka/ford/page/6/
 /auto/marka/ford/page/7/
 /auto/marka/ford/page/8/
-/auto/marka/ford/page/9/
 /auto/marka/gac/
 /auto/marka/gaz/
 /auto/marka/gaz/page/2/
@@ -18017,7 +18035,6 @@
 /auto/s-vin/page/169/
 /auto/s-vin/page/17/
 /auto/s-vin/page/170/
-/auto/s-vin/page/171/
 /auto/s-vin/page/18/
 /auto/s-vin/page/19/
 /auto/s-vin/page/2/
@@ -40672,6 +40689,7 @@
 /torgi/lot/26000004490000000019_1/
 /torgi/lot/26000004560000000023_1/
 /torgi/lot/26000004750000000003_1/
+/torgi/lot/26000004750000000004_1/
 /torgi/lot/26000004780000000012_1/
 /torgi/lot/26000004780000000013_4/
 /torgi/lot/26000004780000000013_5/
@@ -43781,6 +43799,16 @@
 /torgi/lot/cdt-391067/
 /torgi/lot/cdt-391068/
 /torgi/lot/cdt-391072/
+/torgi/lot/cdt-391086/
+/torgi/lot/cdt-391087/
+/torgi/lot/cdt-391088/
+/torgi/lot/cdt-391089/
+/torgi/lot/cdt-391091/
+/torgi/lot/cdt-391092/
+/torgi/lot/cdt-391093/
+/torgi/lot/cdt-391094/
+/torgi/lot/cdt-391099/
+/torgi/lot/cdt-391100/
 /torgi/lot/centerr-1165022/
 /torgi/lot/centerr-1167409/
 /torgi/lot/centerr-1167446/
@@ -55300,6 +55328,7 @@
 /torgi/samara/krasnoyarskiy-rayon/
 /torgi/samara/kuybyshevskiy-rayon/
 /torgi/samara/leninskiy-rayon/
+/torgi/samara/neftegorskiy-rayon/
 /torgi/samara/novokuybyshevsk/
 /torgi/samara/odnokomnatnye/
 /torgi/samara/oktyabrsk/
@@ -55470,6 +55499,7 @@
 /torgi/smolenskaya-oblast/garazhi/
 /torgi/smolenskaya-oblast/kommercheskaya/
 /torgi/smolenskaya-oblast/page/2/
+/torgi/smolenskaya-oblast/page/3/
 /torgi/smolenskaya-oblast/vygodnye/
 /torgi/smolenskaya-oblast/zemlya/
 /torgi/stavropolskiy-kray/
@@ -56164,4 +56194,5 @@
 /torgi/zemlya/page/89/
 /torgi/zemlya/page/9/
 /torgi/zemlya/page/90/
+/torgi/zemlya/page/91/
 /uslugi/
