@@ -13,6 +13,12 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      # 02.11.2026 домен переехал на Timeweb. Если секреты TIMEWEB_* заданы, выкладываем туда, иначе на Beget, как раньше.
+      TW_HOST: ${{ secrets.TIMEWEB_HOST }}
+      TW_USER: ${{ secrets.TIMEWEB_USER }}
+      SSHPASS: ${{ secrets.TIMEWEB_PASSWORD }}
+      TW_PATH: ${{ secrets.TIMEWEB_PATH }}
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +47,24 @@ jobs:
             echo "$u"; [ -n "$u" ] && curl -sSL --max-time 40 "$u" | python3 -c "import sys,re,html;s=sys.stdin.read();t=re.search(r'<title>(.*?)</title>',s,re.S);print('title:',html.unescape(t.group(1).strip()) if t else None);x=re.sub(r'<script.*?</script>|<style.*?</style>','',s,flags=re.S);x=re.sub(r'<[^>]+>',' ',x);print(' '.join(html.unescape(x).split())[:600])" || true
           done
 
+      - name: Where the domain points now (DNS)
+        run: |
+          for h in privateinvest.pro www.privateinvest.pro; do echo "$h A: $(dig +short $h A | tr '\n' ' ') NS: $(dig +short privateinvest.pro NS | tr '\n' ' ')"; done
+          echo "Timeweb secrets: host=${TW_HOST:+set} user=${TW_USER:+set} password=${SSHPASS:+set} path=${TW_PATH:-default}"
+
+      - name: Deploy to Timeweb (backup first)
+        if: env.TW_HOST != ''
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y -qq sshpass >/dev/null
+          mkdir -p ~/.ssh && ssh-keyscan -T 20 "$TW_HOST" >> ~/.ssh/known_hosts
+          D="${TW_PATH:-privateinvest.pro/public_html}"
+          R="sshpass -e ssh -o PreferredAuthentications=password,keyboard-interactive -o PubkeyAuthentication=no $TW_USER@$TW_HOST"
+          $R "echo connected; ls -la ~ | head -30; ls -la $D 2>&1 | head -20"
+          $R "set -e; mkdir -p $D ~/privatinvest-backups; tar -czf ~/privatinvest-backups/\$(date +%Y%m%d-%H%M%S).tar.gz -C $D . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}"
+          tar -cz --exclude=README.md -C privatinvest . | $R "set -e; cd $D && tar -xzf - && ls -la | head -40"
+          echo "Deployed to Timeweb: $D"
+
       - name: Prepare SSH
         env:
           SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
@@ -63,12 +87,14 @@ jobs:
           dig +short privateinvest.pro A www.privateinvest.pro A || true
 
       - name: Check that the domain folder exists on Beget
+        if: env.TW_HOST == ''
         run: |
           set -euo pipefail
           # домен на Beget называется privateinvest.pro (латиницей)
           ssh fond178@fond178.beget.tech 'd=~/privateinvest.pro/public_html; if test -d "$d"; then echo "OK: $d"; ls -la "$d" | head -20; else echo "NO domain folder. Home listing:"; ls -1 ~; exit 1; fi'
 
       - name: Backup current site and deploy
+        if: env.TW_HOST == ''
         run: |
           set -euo pipefail
           ssh fond178@fond178.beget.tech 'set -e; d=~/privateinvest.pro/public_html; mkdir -p ~/privatinvest-backups; tar -czf ~/privatinvest-backups/$(date +%Y%m%d-%H%M%S).tar.gz -C "$d" . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}'
@@ -112,7 +138,7 @@ jobs:
           echo "http final: $final"
           if [ "${final%% *}" != "200" ] || ! grep -q 'Приватинвест' /tmp/r.html; then
             echo "redirect broken, removing .htaccess"
-            ssh fond178@fond178.beget.tech 'rm -f ~/privateinvest.pro/public_html/.htaccess'
+            if [ -n "$TW_HOST" ]; then sshpass -e ssh -o PubkeyAuthentication=no $TW_USER@$TW_HOST "rm -f ${TW_PATH:-privateinvest.pro/public_html}/.htaccess"; else ssh fond178@fond178.beget.tech 'rm -f ~/privateinvest.pro/public_html/.htaccess'; fi
             exit 1
           fi
           case "$final" in *https://privateinvest.pro/*) echo "redirect OK";; *) echo "no https redirect"; exit 1;; esac

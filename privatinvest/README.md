@@ -5,6 +5,7 @@
 Дизайн — «цифровой» стиль сайта партнёра (см. `/mnt/project-files/partner-zaloginvest/` в проекте).
 
 Выкладка: workflow `.github/workflows/privatinvest.yml` копирует папку на Beget тем же SSH-ключом,
+**02.11.2026 домен переехал на Timeweb.** Workflow выкладывает туда, если в GitHub заданы секреты TIMEWEB_HOST, TIMEWEB_USER, TIMEWEB_PASSWORD (и при необходимости TIMEWEB_PATH, по умолчанию privateinvest.pro/public_html); без них — на Beget, как раньше.
 что и торггид, в `~/privateinvest.pro/public_html` (на Beget домен заведён как privateinvest.pro).
 Запускается при изменении `privatinvest/**` и вручную (workflow_dispatch). Страница открыта для поисковиков (решение John 29.10.2026). Есть robots.txt и sitemap.xml; Метрика 113877734 (стандартный код в <head>, цели через piGoal), Вебмастер подтверждается meta yandex-verification в <head>.
 
