@@ -19,6 +19,7 @@ jobs:
       TW_USER: ${{ secrets.TIMEWEB_USER }}
       SSHPASS: ${{ secrets.TIMEWEB_PASSWORD }}
       TW_PATH: ${{ secrets.TIMEWEB_PATH }}
+      TW_KEY: ${{ secrets.TIMEWEB_SSH_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -56,11 +57,23 @@ jobs:
         if: env.TW_HOST != ''
         run: |
           set -euo pipefail
-          sudo apt-get install -y -qq sshpass >/dev/null
           mkdir -p ~/.ssh && ssh-keyscan -T 20 "$TW_HOST" >> ~/.ssh/known_hosts
-          D="${TW_PATH:-privateinvest.pro/public_html}"
-          R="sshpass -e ssh -o PreferredAuthentications=password,keyboard-interactive -o PubkeyAuthentication=no $TW_USER@$TW_HOST"
-          $R "echo connected; ls -la ~ | head -30; ls -la $D 2>&1 | head -20"
+          if [ -n "$TW_KEY" ]; then
+            printf '%s\n' "$TW_KEY" > ~/.ssh/tw_key && chmod 600 ~/.ssh/tw_key
+            R="ssh -i $HOME/.ssh/tw_key -o IdentitiesOnly=yes $TW_USER@$TW_HOST"
+          else
+            sudo apt-get install -y -qq sshpass >/dev/null
+            R="sshpass -e ssh -o PreferredAuthentications=password,keyboard-interactive -o PubkeyAuthentication=no $TW_USER@$TW_HOST"
+          fi
+          echo "R=$R" >> "$GITHUB_ENV"
+          # где лежит сайт: секрет TIMEWEB_PATH, иначе root из конфига nginx/apache для privateinvest.pro, иначе ~/privateinvest.pro/public_html
+          D="$TW_PATH"
+          if [ -z "$D" ]; then
+            D=$($R "grep -rhs -A40 'privateinvest.pro' /etc/nginx/sites-enabled /etc/nginx/conf.d /etc/apache2/sites-enabled 2>/dev/null | grep -m1 -E '^\s*(root|DocumentRoot)\s' | awk '{print \$2}' | tr -d ';\"'" || true)
+          fi
+          D="${D:-privateinvest.pro/public_html}"
+          echo "TW_DIR=$D" >> "$GITHUB_ENV"
+          $R "echo connected as \$(whoami) on \$(hostname); uname -a; ls -la ~ | head -20; echo '--- web servers'; (nginx -v; apache2 -v) 2>&1 | head; ls /etc/nginx/sites-enabled /etc/nginx/conf.d 2>/dev/null; ls /var/www 2>/dev/null; echo '--- site dir $D'; ls -la $D 2>&1 | head -30"
           $R "set -e; mkdir -p $D ~/privatinvest-backups; tar -czf ~/privatinvest-backups/\$(date +%Y%m%d-%H%M%S).tar.gz -C $D . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}"
           tar -cz --exclude=README.md -C privatinvest . | $R "set -e; cd $D && tar -xzf - && ls -la | head -40"
           echo "Deployed to Timeweb: $D"
@@ -138,7 +151,7 @@ jobs:
           echo "http final: $final"
           if [ "${final%% *}" != "200" ] || ! grep -q 'Приватинвест' /tmp/r.html; then
             echo "redirect broken, removing .htaccess"
-            if [ -n "$TW_HOST" ]; then sshpass -e ssh -o PubkeyAuthentication=no $TW_USER@$TW_HOST "rm -f ${TW_PATH:-privateinvest.pro/public_html}/.htaccess"; else ssh fond178@fond178.beget.tech 'rm -f ~/privateinvest.pro/public_html/.htaccess'; fi
+            if [ -n "$TW_HOST" ]; then $R "rm -f $TW_DIR/.htaccess"; else ssh fond178@fond178.beget.tech 'rm -f ~/privateinvest.pro/public_html/.htaccess'; fi
             exit 1
           fi
           case "$final" in *https://privateinvest.pro/*) echo "redirect OK";; *) echo "no https redirect"; exit 1;; esac
