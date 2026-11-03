@@ -88,6 +88,11 @@ def site_health():
     for p in TECH:
         r = fetch(p)
         out["tech"][p] = {k: r.get(k) for k in ("status", "ms", "bytes", "error")}
+    # mirrors: everything must end on https://torggid.ru/ (Yandex Webmaster shows https host as NOT_LOADED)
+    out["mirrors"] = {}
+    for u in ("http://torggid.ru/", "https://www.torggid.ru/", "http://www.torggid.ru/", "https://kirpichinvest.ru/"):
+        r = fetch(u, limit=1000)
+        out["mirrors"][u] = {"status": r.get("status"), "final": r.get("final"), "error": r.get("error")}
     out["robots_txt"] = (fetch("/robots.txt").get("body") or "")[:3000]
     urls, errs = sitemap_urls("/sitemap.xml")
     y_urls, y_errs = sitemap_urls("/sitemap-yandex.xml")
@@ -205,6 +210,9 @@ def to_md(r):
         sm = s.get("sitemap", {})
         L.append("Sitemap: %s адресов, sitemap-yandex: %s; ошибки: %s" % (
             sm.get("urls"), sm.get("yandex_urls"), {**sm.get("errors", {}), **sm.get("yandex_errors", {})} or "нет"))
+        bad_m = {u: x.get("final") or x.get("error") for u, x in s.get("mirrors", {}).items()
+                 if not (x.get("final") or "").startswith(BASE + "/")}
+        L.append("Зеркала: " + ("все ведут на https://torggid.ru/" if not bad_m else "НЕ на https://torggid.ru/: %s" % bad_m))
         ls = s.get("lot_sample", {})
         L.append("Карточки лотов (выборка %s): битых %s" % (ls.get("checked"), len(ls.get("bad", []))))
         L.append("")
