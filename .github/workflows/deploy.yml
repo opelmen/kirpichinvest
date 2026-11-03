@@ -1,14 +1,16 @@
-name: Deploy to Beget
+# Сборка и проверка сайта torggid.ru при push в main (без выкладки).
+# Выкладка с 03.11.2026 — из приватного репозитория opelmen/zalog-desk, workflow site.yml (3 раза в день и вручную):
+# хостинг Биггет пропал 02.11.2026, новый сервер 193.232.90.5 пускает только по ключу root, а ключ root
+# в публичном репозитории не держим. После слияния правок сюда — запустить zalog-desk → Actions → site → Run workflow.
+name: "Build site (deploy: zalog-desk site.yml)"
 
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: "15 3,9,15 * * *"   # пересборка со свежими лотами 3 раза в день (UTC)
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: deploy
@@ -24,20 +26,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Prepare SSH and load persistent card history
-        env:
-          SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
-        run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
-          ssh fond178@fond178.beget.tech 'if test -f ~/kirpichinvest-seo/lot_history.json; then cat ~/kirpichinvest-seo/lot_history.json; else printf "[]"; fi' > _src/data/lot_history.json
-          python -c "import json; assert isinstance(json.load(open('_src/data/lot_history.json')), list)"
-          # история карточек техники (раздел /auto/): lastmod и архив, как у недвижимости
-          ssh fond178@fond178.beget.tech 'if test -f ~/kirpichinvest-seo/auto_history.json; then cat ~/kirpichinvest-seo/auto_history.json; else printf "[]"; fi' > _src/data/auto_history.json
-          python -c "import json; assert isinstance(json.load(open('_src/data/auto_history.json')), list)"
+      - name: Empty card history (the real one lives on the server)
+        run: printf '[]' > _src/data/lot_history.json && printf '[]' > _src/data/auto_history.json
 
       - name: Build and test site (fail closed on missing feed)
         run: |
@@ -104,101 +94,3 @@ jobs:
             | tr -d '\r' | sed -n 's/^[Aa]ccess-[Cc]ontrol-[Aa]llow-[Oo]rigin: //p')
           echo "CORS for $origin: ${allowed:-none}"
           test "$allowed" = "$origin"
-
-      - name: Server backup and deploy
-        run: |
-          set -euo pipefail
-          release="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          ssh fond178@fond178.beget.tech "bash -s -- '$release'" <<'REMOTE'
-          set -euo pipefail
-          umask 077
-          release="$1"
-          # Disk quota is shared with the site: keep only the 5 newest release backups
-          # (25.10.2026 ~140 backups filled the quota and rsync failed with «Disk quota exceeded»),
-          # and drop staging dirs left by an interrupted rsync --delay-updates.
-          mkdir -p "$HOME/kirpichinvest-backups" "$HOME/torggid.ru/public_html"
-          ls -1 "$HOME/kirpichinvest-backups" | sort -t- -k1,1n | head -n -5 | while read -r old; do
-            rm -rf "$HOME/kirpichinvest-backups/$old"
-          done
-          find "$HOME/torggid.ru/public_html" -type d -name '.~tmp~' -prune -exec rm -rf {} + 2>/dev/null || true
-          printf 'DISK before backup: site %s, backups %s\n' "$(du -sh "$HOME/torggid.ru/public_html" | cut -f1)" "$(du -sh "$HOME/kirpichinvest-backups" | cut -f1)"
-          quota -s 2>/dev/null | tail -n 2 || true
-          mkdir -p "$HOME/kirpichinvest-backups/$release" "$HOME/kirpichinvest-seo"
-          backup="$HOME/kirpichinvest-backups/$release"
-          mkdir -p "$HOME/torggid.ru/public_html"
-          tar -czf "$backup/site.tar.gz" -C "$HOME/torggid.ru" public_html
-          tar -tzf "$backup/site.tar.gz" >/dev/null
-          tar -czf "$backup/old-domain.tar.gz" -C "$HOME/kirpichinvest.ru" public_html
-          tar -tzf "$backup/old-domain.tar.gz" >/dev/null
-          if test -f "$HOME/kirpichinvest-seo/lot_history.json"; then
-            cp "$HOME/kirpichinvest-seo/lot_history.json" "$backup/lot_history.json"
-          fi
-          if test -f "$HOME/kirpichinvest-seo/auto_history.json"; then
-            cp "$HOME/kirpichinvest-seo/auto_history.json" "$backup/auto_history.json"
-          fi
-          sha256sum "$backup/site.tar.gz" "$backup/old-domain.tar.gz" > "$backup/SHA256SUMS"
-          printf 'release=%s\nverified_tar=true\n' "$release" > "$backup/manifest.txt"
-          cat "$backup/SHA256SUMS"
-          printf 'BACKUP=%s\n' "$backup"
-          REMOTE
-          # Persist history first: a interrupted rsync cannot lose newly known IDs on the next run.
-          scp _src/data/lot_history.json fond178@fond178.beget.tech:kirpichinvest-seo/lot_history.next.json
-          ssh fond178@fond178.beget.tech 'chmod 600 ~/kirpichinvest-seo/lot_history.next.json && mv ~/kirpichinvest-seo/lot_history.next.json ~/kirpichinvest-seo/lot_history.json'
-          if test -s _src/data/auto_history.json; then
-            scp _src/data/auto_history.json fond178@fond178.beget.tech:kirpichinvest-seo/auto_history.next.json
-            ssh fond178@fond178.beget.tech 'chmod 600 ~/kirpichinvest-seo/auto_history.next.json && mv ~/kirpichinvest-seo/auto_history.next.json ~/kirpichinvest-seo/auto_history.json'
-          fi
-          rsync -az --delay-updates --delete-delay --exclude '.DS_Store' _site/ fond178@fond178.beget.tech:~/torggid.ru/public_html/
-          echo "Published release $release" | tee -a /tmp/build.log
-
-      - name: Verify live publication
-        run: |
-          set -euo pipefail
-          python _src/verify_live.py | tee -a /tmp/build.log
-          touch /tmp/site-verified
-
-      - name: Old domain kirpichinvest.ru -> 301 to torggid.ru (only after the new site is verified)
-        run: |
-          set -euo pipefail
-          rsync -az --delay-updates --delete-delay _site_old_domain/ fond178@fond178.beget.tech:~/kirpichinvest.ru/public_html/
-          for path in / /torgi/ /stati/proverka-kvartiry-s-torgov/; do
-            loc=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "https://kirpichinvest.ru$path")
-            echo "kirpichinvest.ru$path -> $loc" | tee -a /tmp/build.log
-            test "$loc" = "301 https://torggid.ru$path"
-          done
-
-      - name: IndexNow (Яндекс, Bing) — новые страницы
-        continue-on-error: true
-        run: |
-          git fetch -q origin deploy-log && git show origin/deploy-log:urls.txt > /tmp/prev_urls.txt 2>/dev/null || : > /tmp/prev_urls.txt
-          sort -u _site/urls.txt > /tmp/cur.txt; sort -u /tmp/prev_urls.txt > /tmp/prev.txt
-          comm -13 /tmp/prev.txt /tmp/cur.txt | head -9000 > /tmp/new_urls.txt
-          echo "новых URL для IndexNow: $(wc -l < /tmp/new_urls.txt)" | tee -a /tmp/build.log
-          python - <<'PY' | tee -a /tmp/build.log
-          import json, urllib.request
-          key = json.load(open("_src/config.json")).get("INDEXNOW_KEY", "")
-          urls = [u.strip() for u in open("/tmp/new_urls.txt") if u.strip()]
-          if key and urls:
-              body = json.dumps({"host": "torggid.ru", "key": key, "keyLocation": f"https://torggid.ru/{key}.txt", "urlList": urls}).encode()
-              for ep in ("https://yandex.com/indexnow", "https://api.indexnow.org/indexnow"):
-                  try:
-                      r = urllib.request.urlopen(urllib.request.Request(ep, data=body, headers={"Content-Type": "application/json; charset=utf-8"}), timeout=30)
-                      print("IndexNow", ep, r.status)
-                  except Exception as e:
-                      print("IndexNow", ep, "ошибка:", e)
-          PY
-
-      - name: Save log
-        if: always()
-        env:
-          GH: ${{ github.token }}
-        run: |
-          { echo "== $(date -u) ${GITHUB_SHA::7} ${{ github.event_name }}"; cat /tmp/build.log 2>/dev/null; echo "result: ${{ job.status }}"; } > /tmp/last.log
-          find _site -name index.html 2>/dev/null | sed 's#_site##;s#index.html##' | sort > /tmp/pages.txt || true
-          cp _site/urls.txt /tmp/urls.txt 2>/dev/null || true
-          mkdir /tmp/lr && cd /tmp/lr && git init -q && git remote add origin "https://x-access-token:${GH}@github.com/${GITHUB_REPOSITORY}.git"
-          git config user.name deploy-bot; git config user.email deploy@bot
-          git fetch -q origin deploy-log && git checkout -q deploy-log || git checkout -q --orphan deploy-log
-          cp /tmp/last.log .
-          if test -f /tmp/site-verified; then cp /tmp/pages.txt /tmp/urls.txt .; fi
-          git add -A && git commit -qm "log ${GITHUB_SHA::7}" && git push -q origin deploy-log
