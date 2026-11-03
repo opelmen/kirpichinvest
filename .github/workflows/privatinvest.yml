@@ -51,6 +51,9 @@ jobs:
       - name: Where the domain points now (DNS)
         run: |
           for h in privateinvest.pro www.privateinvest.pro; do echo "$h A: $(dig +short $h A | tr '\n' ' ') NS: $(dig +short privateinvest.pro NS | tr '\n' ' ')"; done
+          for h in kirpichinvest.ru check.kirpichinvest.ru torggid.ru check.privateinvest.pro; do echo "$h A: $(dig +short $h A | tr '\n' ' ') NS: $(dig +short ${h#check.} NS | tr '\n' ' ')"; done
+          [ "$TW_HOST" = "193.232.90.5" ] && echo "TIMEWEB_HOST = 193.232.90.5 (new VPS from John 03.11)" || echo "TIMEWEB_HOST differs from 193.232.90.5"
+          echo "SSH key secret: ${TW_KEY:+set}"
           echo "Timeweb secrets: host=${TW_HOST:+set} user=${TW_USER:+set} password=${SSHPASS:+set} path=${TW_PATH:-default}"
 
       - name: Deploy to Timeweb (backup first)
