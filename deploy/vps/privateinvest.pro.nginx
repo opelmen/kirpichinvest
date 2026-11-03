@@ -1,0 +1,42 @@
+# privateinvest.pro на VPS SpaceWeb (193.232.90.5). Ставит privatinvest.yml, правится в репозитории kirpichinvest.
+# Без default_server: соседние server-блоки (check.* Залог Деска) свои.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name privateinvest.pro www.privateinvest.pro;
+    location ^~ /.well-known/acme-challenge/ { root /var/www/letsencrypt; }
+    location / { return 301 https://privateinvest.pro$request_uri; }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name www.privateinvest.pro;
+    ssl_certificate     /etc/letsencrypt/live/privateinvest.pro/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/privateinvest.pro/privkey.pem;
+    return 301 https://privateinvest.pro$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name privateinvest.pro;
+    ssl_certificate     /etc/letsencrypt/live/privateinvest.pro/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/privateinvest.pro/privkey.pem;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    root /var/www/privateinvest.pro;
+    index index.html;
+    charset utf-8;
+    error_page 404 /404.html;
+
+    location ~ /\.(?!well-known) { deny all; }
+    location = /README.md { return 404; }
+    location /assets/ { expires 7d; add_header Cache-Control "public"; }
+    location / { try_files $uri $uri/ =404; }
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml application/xml text/plain;
+}

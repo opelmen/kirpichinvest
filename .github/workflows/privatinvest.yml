@@ -3,7 +3,7 @@ name: Deploy privatinvest prototype
 on:
   push:
     branches: [main, "claude/**"]
-    paths: ["privatinvest/**", "privatinvest_src/**", ".github/workflows/privatinvest.yml"]
+    paths: ["privatinvest/**", "privatinvest_src/**", "deploy/vps/**", ".github/workflows/privatinvest.yml"]
   workflow_dispatch:
 
 concurrency:
@@ -69,16 +69,15 @@ jobs:
             R="sshpass -e ssh -o PreferredAuthentications=password,keyboard-interactive -o PubkeyAuthentication=no $TW_USER@$TW_HOST"
           fi
           echo "R=$R" >> "$GITHUB_ENV"
-          # где лежит сайт: секрет TIMEWEB_PATH, иначе root из конфига nginx/apache для privateinvest.pro, иначе ~/privateinvest.pro/public_html
-          D="$TW_PATH"
-          if [ -z "$D" ]; then
-            D=$($R "grep -rhs -A40 'privateinvest.pro' /etc/nginx/sites-enabled /etc/nginx/conf.d /etc/apache2/sites-enabled 2>/dev/null | grep -m1 -E '^\s*(root|DocumentRoot)\s' | awk '{print \$2}' | tr -d ';\"'" || true)
-          fi
-          D="${D:-privateinvest.pro/public_html}"
+          # VPS SpaceWeb: nginx-сайт /var/www/privateinvest.pro + Let's Encrypt (deploy/vps), конфиги check.* не трогаем
+          D="${TW_PATH:-/var/www/privateinvest.pro}"
           echo "TW_DIR=$D" >> "$GITHUB_ENV"
-          $R "echo connected as \$(whoami) on \$(hostname); uname -a; ls -la ~ | head -20; echo '--- web servers'; (nginx -v; apache2 -v) 2>&1 | head; ls /etc/nginx/sites-enabled /etc/nginx/conf.d 2>/dev/null; ls /var/www 2>/dev/null; echo '--- site dir $D'; ls -la $D 2>&1 | head -30"
-          $R "set -e; mkdir -p $D ~/privatinvest-backups; tar -czf ~/privatinvest-backups/\$(date +%Y%m%d-%H%M%S).tar.gz -C $D . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}"
-          tar -cz --exclude=README.md -C privatinvest . | $R "set -e; cd $D && tar -xzf - && ls -la | head -40"
+          $R "echo connected as \$(whoami) on \$(hostname); uptime; df -h / | tail -1; ls /etc/nginx/sites-enabled 2>/dev/null"
+          tar -cz -C deploy/vps setup-site.sh privateinvest.pro.nginx | $R "mkdir -p /root/deploy-vps && tar -xzf - -C /root/deploy-vps"
+          $R "bash /root/deploy-vps/setup-site.sh privateinvest.pro /root/deploy-vps/privateinvest.pro.nginx privateinvest.pro,www.privateinvest.pro Invest@smirnoffond.ru"
+          $R "set -e; mkdir -p $D /root/privatinvest-backups; tar -czf /root/privatinvest-backups/\$(date +%Y%m%d-%H%M%S).tar.gz -C $D . ; ls -1t /root/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f /root/privatinvest-backups/{}"
+          # чистая выкладка: распаковываем во временную папку и подменяем целиком
+          tar -cz --exclude=README.md -C privatinvest . | $R "set -e; rm -rf $D.new; mkdir -p $D.new; tar -xzf - -C $D.new; chmod -R a+rX $D.new; rm -rf $D.old; mv $D $D.old; mv $D.new $D; rm -rf $D.old; ls -la $D | head -40"
           echo "Deployed to Timeweb: $D"
 
       - name: Prepare SSH
