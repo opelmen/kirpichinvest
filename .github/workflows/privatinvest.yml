@@ -82,6 +82,7 @@ jobs:
           echo "Deployed to Timeweb: $D"
 
       - name: Prepare SSH
+        if: env.TW_HOST == ''
         env:
           SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
         run: |
