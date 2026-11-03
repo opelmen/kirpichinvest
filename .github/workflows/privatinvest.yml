@@ -19,7 +19,7 @@ jobs:
       TW_USER: ${{ secrets.TIMEWEB_USER }}
       SSHPASS: ${{ secrets.TIMEWEB_PASSWORD }}
       TW_PATH: ${{ secrets.TIMEWEB_PATH }}
-      TW_KEY: ${{ secrets.TIMEWEB_SSH_KEY }}
+      TW_KEY: ${{ secrets.SERVER_SSH_KEY || secrets.TIMEWEB_SSH_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,7 +53,7 @@ jobs:
           for h in privateinvest.pro www.privateinvest.pro; do echo "$h A: $(dig +short $h A | tr '\n' ' ') NS: $(dig +short privateinvest.pro NS | tr '\n' ' ')"; done
           for h in kirpichinvest.ru check.kirpichinvest.ru torggid.ru check.privateinvest.pro; do echo "$h A: $(dig +short $h A | tr '\n' ' ') NS: $(dig +short ${h#check.} NS | tr '\n' ' ')"; done
           [ "$TW_HOST" = "193.232.90.5" ] && echo "TIMEWEB_HOST = 193.232.90.5 (new VPS from John 03.11)" || echo "TIMEWEB_HOST differs from 193.232.90.5"
-          echo "SSH key secret: ${TW_KEY:+set}"
+          echo "SSH key secret (SERVER_SSH_KEY or TIMEWEB_SSH_KEY): ${TW_KEY:+set}"
           echo "Timeweb secrets: host=${TW_HOST:+set} user=${TW_USER:+set} password=${SSHPASS:+set} path=${TW_PATH:-default}"
 
       - name: Deploy to Timeweb (backup first)
@@ -63,7 +63,8 @@ jobs:
           mkdir -p ~/.ssh && ssh-keyscan -T 20 "$TW_HOST" >> ~/.ssh/known_hosts
           if [ -n "$TW_KEY" ]; then
             printf '%s\n' "$TW_KEY" > ~/.ssh/tw_key && chmod 600 ~/.ssh/tw_key
-            R="ssh -i $HOME/.ssh/tw_key -o IdentitiesOnly=yes $TW_USER@$TW_HOST"
+            ssh-keygen -y -f ~/.ssh/tw_key | awk '{print "key fingerprint check:", $1, substr($2,1,24) "..."}' || echo "key secret is not a valid private key"
+            R="ssh -i $HOME/.ssh/tw_key -o IdentitiesOnly=yes root@$TW_HOST"
           else
             sudo apt-get install -y -qq sshpass >/dev/null
             R="sshpass -e ssh -o PreferredAuthentications=password,keyboard-interactive -o PubkeyAuthentication=no $TW_USER@$TW_HOST"
