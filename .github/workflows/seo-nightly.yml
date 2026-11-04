@@ -1,0 +1,55 @@
+name: SEO nightly snapshot
+
+# Каждую ночь в 01:40 МСК: Метрика за вчера, Вебмастер, проверка живого сайта.
+# Только чтение. Результат в ветку seo-yandex-data (nightly/), не в main, чтобы не запускать деплой.
+# В 02:00 МСК ночной разбор Claude читает nightly/latest.md и пишет выжимку в тред проекта.
+on:
+  schedule:
+    - cron: "40 22 * * *"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - _src/seo_nightly.py
+      - .github/workflows/seo-nightly.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seo-nightly
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect
+        env:
+          YANDEX_METRIKA_TOKEN: ${{ secrets.YANDEX_METRIKA_TOKEN }}
+        run: cd _src && python seo_nightly.py --out "$RUNNER_TEMP/nightly"
+
+      - name: Save to seo-yandex-data branch
+        if: github.event_name != 'pull_request'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin seo-yandex-data; then
+            git worktree add "$RUNNER_TEMP/data" FETCH_HEAD
+            git -C "$RUNNER_TEMP/data" checkout -B seo-yandex-data
+          else
+            git worktree add --orphan -b seo-yandex-data "$RUNNER_TEMP/data"
+          fi
+          mkdir -p "$RUNNER_TEMP/data/nightly"
+          cp "$RUNNER_TEMP"/nightly/* "$RUNNER_TEMP/data/nightly/"
+          cd "$RUNNER_TEMP/data"
+          git add nightly
+          git commit -m "SEO nightly $(date -u +%F)" || exit 0
+          for i in 1 2 3; do git push origin seo-yandex-data && break; git pull --rebase origin seo-yandex-data; done
