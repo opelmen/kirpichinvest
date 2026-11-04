@@ -726,7 +726,8 @@ def build():
         rcs = city_stats(rl)
         listing(f"/torgi/{rslug}/", rl, f"Недвижимость с торгов {rwhere}", rcrumbs, rlinks, region_links, "0.8",
                 faq=city_faq(rname, rwhere, rcs, region=True), cs=rcs, where=rwhere,
-                seo_title=f"Квартиры с торгов {rwhere} — торги по банкротству и арест")
+                # регионы: в GSC 9 из 10 запросов «торги по банкротству <регион> (официальный сайт)», позиции 12–20
+                seo_title=f"Торги по банкротству {rwhere} — квартиры и недвижимость, все площадки")
         for f, v in rfacets:
             listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
