@@ -633,7 +633,7 @@ def build():
                        if WIDE else "Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки."))
 
 
-    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False, budget=None, where=""):
+    def listing(path, lots, h1, crumbs, links, sub_links=(), priority="0.8", faq=None, cs=None, archive=False, budget=None, where="", seo_title=None):
         page_size = 60
         count = max(1, (len(lots) + page_size - 1) // page_size)
         pages = [(path if n == 1 else f"{path}page/{n}/", n) for n in range(1, count + 1)]
@@ -661,7 +661,7 @@ def build():
                   st=stats(lots), h1=h1 + suffix, crumbs=page_crumbs, facet_links=links,
                   town_links=sorted(sub_links), noindex=not lots or deep_dup, faq=(faq or []) if n == 1 else [],
                   cs=cs if n == 1 else None, pagination=pages, current_page=n, archive=archive, budget=budget, app_q=app_q,
-                  title=f"{h1}{suffix} — {tail}", where=where,
+                  title=(seo_title if seo_title and n == 1 else f"{h1}{suffix} — {tail}"), where=where,
                   description=description + suffix)
 
     budgets =[dict(budget_summary(LOTS, n*1_000_000), url=f"/torgi/do-{n}-mln/", million=n) for n in (1, 2, 3)]
@@ -692,7 +692,8 @@ def build():
         rcrumbs = [("Лоты", "/torgi/"), (rname, f"/torgi/{rslug}/")]
         rcs = city_stats(rl)
         listing(f"/torgi/{rslug}/", rl, f"Недвижимость с торгов {rwhere}", rcrumbs, rlinks, region_links, "0.8",
-                faq=city_faq(rname, rwhere, rcs, region=True), cs=rcs, where=rwhere)
+                faq=city_faq(rname, rwhere, rcs, region=True), cs=rcs, where=rwhere,
+                seo_title=f"Квартиры с торгов {rwhere} — торги по банкротству и арест")
         for f, v in rfacets:
             listing(f"/torgi/{rslug}/{f[0]}/", v, f"{f[3]}: {rname}", rcrumbs + [(f[1], f"/torgi/{rslug}/{f[0]}/")], rlinks, region_links, "0.7")
     for slug, name, flt, h1 in FACETS:
@@ -715,7 +716,8 @@ def build():
         cs = city_stats(cl)
         CITY_STATS.append((cslug, cname, where, cs))
         listing(f"/torgi/{cslug}/", cl, f"{OBJ} с торгов {where}", base_crumbs, links, sub_links, "0.9",
-                faq=city_faq(cname, where, cs), cs=cs, where=where)
+                faq=city_faq(cname, where, cs), cs=cs, where=where,
+                seo_title=f"Квартиры с торгов {where} — торги по банкротству и арест")
         for f, v in facets_here:
             listing(f"/torgi/{cslug}/{f[0]}/", v, f"{f[3]}: {cname}", base_crumbs + [(f[1], f"/torgi/{cslug}/{f[0]}/")], links, sub_links)
         for t, v in subs.items():
