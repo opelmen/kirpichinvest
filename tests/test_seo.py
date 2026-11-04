@@ -178,6 +178,12 @@ class BuildTests(unittest.TestCase):
             self.assertIn('площадка: МЭТС;', csv)
             self.assertIn(f'/analitika/{ym}/', (site/'analitika/index.html').read_text())
             self.assertIn(f'https://torggid.ru/analitika/{ym}/', (site/'sitemap-pages.xml').read_text())
+            # октябрь 2026 из снимка: страница не пропадает, хотя история каталога потеряна при аварии 02.11.2026
+            octo = (site/'analitika/2026-10/index.html').read_text()
+            self.assertIn('33021 лотов недвижимости', octo)
+            self.assertIn('Челябинская область', octo)
+            self.assertNotIn('None', octo)
+            self.assertIn('медиана скидки квартиры к рынку, %;27', (site/'analitika/2026-10/indeks.csv').read_text(encoding='utf-8-sig'))
             llms = (site/'llms.txt').read_text()
             self.assertIn('Индекс торгов ТоргГид', llms)
             self.assertIn('Все регионы России', llms)

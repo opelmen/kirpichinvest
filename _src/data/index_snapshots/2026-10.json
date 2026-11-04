@@ -1,0 +1,32 @@
+{
+  "ym": "2026-10",
+  "as_of": "2026-10-31",
+  "partial": true,
+  "note": "2 ноября 2026 года у хостинга ТоргГида случилась авария, и подробные таблицы за октябрь (категории, процедуры, площадки, цены по регионам) восстановить не удалось. Здесь приведены итоговые цифры, опубликованные 1 ноября. Полный набор таблиц будет в выпуске за ноябрь.",
+  "count": 33021,
+  "regions": 88,
+  "new": null,
+  "flats": 4208,
+  "flat_median_price": 3228790,
+  "flat_median_ppm2": null,
+  "flats_valued": null,
+  "flat_median_discount": 27,
+  "flats_below10": null,
+  "public": null,
+  "public_share": 13,
+  "repeat": null,
+  "repeat_share": 2,
+  "by_cat": [],
+  "by_kind": [],
+  "by_source": [],
+  "by_region": [
+    {"code": "77", "count": 2545},
+    {"code": "50", "count": 1554},
+    {"code": "74", "count": 1461},
+    {"code": "2", "count": 1096},
+    {"code": "23", "count": 1024},
+    {"code": "66", "count": 928},
+    {"code": "16", "count": 799},
+    {"code": "78", "count": 738}
+  ]
+}

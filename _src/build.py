@@ -375,6 +375,10 @@ def source_counts(lots):
 
 
 INDEX_START = "2026-10"  # с этого месяца история каталога полная по всей стране: раньше индекс не считаем
+# 02.11.2026 база каталога потеряна при аварии хостинга: даты появления лотов начались заново 03.11,
+# поэтому «новых за месяц» в ноябре не считаем, а закрытые месяцы берём из снимков _src/data/index_snapshots/
+CATALOG_RESET = "2026-11-03"
+INDEX_SNAPSHOTS = SRC / "data" / "index_snapshots"
 MONTHS_RU = ("январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь")
 MONTHS_PREP = ("в январе", "в феврале", "в марте", "в апреле", "в мае", "в июне", "в июле", "в августе", "в сентябре",
                "в октябре", "в ноябре", "в декабре")
@@ -462,7 +466,10 @@ def month_index(cards, ym, today=None):
         "start": start.isoformat(), "end": end.isoformat(), "closed": closed,
         "as_of": end.isoformat() if closed else today.isoformat(),
         "count": n, "regions": len(regs),
-        "new": sum(1 for d in lots if start.isoformat() <= (d.get("first_seen") or "")[:10] <= end.isoformat()) if ym > INDEX_START else None,
+        "new": None if ym == INDEX_START or start.isoformat() <= CATALOG_RESET <= end.isoformat()
+        else sum(1 for d in lots if start.isoformat() <= (d.get("first_seen") or "")[:10] <= end.isoformat()),
+        "new_note": "" if ym == INDEX_START or not (start.isoformat() <= CATALOG_RESET <= end.isoformat()) else
+        f"2 ноября {start.year} года база каталога пересобрана после аварии хостинга, поэтому число новых лотов за этот месяц не считаем: в него попали бы лоты, опубликованные раньше.",
         "by_cat": by_cat,
         "by_kind": sorted(kinds.items(), key=lambda kv: -kv[1]),
         "by_source": sorted(srcs.items(), key=lambda kv: -kv[1]),
@@ -475,7 +482,33 @@ def month_index(cards, ym, today=None):
     }
 
 
+def index_snapshot(ym):
+    """Снимок закрытого месяца индекса (json): страница месяца не должна пропадать, если история каталога потеряна."""
+    f = INDEX_SNAPSHOTS / f"{ym}.json"
+    if not f.exists():
+        return None
+    ix = json.loads(f.read_text(encoding="utf-8"))
+    start, end = month_bounds(ym)
+    ix.update({"month": MONTHS_RU[start.month - 1], "month_gen": MONTHS_GEN[start.month - 1],
+               "month_prep": MONTHS_PREP[start.month - 1], "year": start.year,
+               "start": start.isoformat(), "end": end.isoformat(), "closed": True})
+    ix["by_region"] = [{"slug": REGIONS[r["code"]][0], "name": REGIONS[r["code"]][1], "count": r["count"],
+                        "flats": r.get("flats"), "median_flat_price": r.get("median_flat_price"),
+                        "median_flat_ppm2": r.get("median_flat_ppm2")} for r in ix["by_region"]]
+    ix["by_kind"] = [tuple(x) for x in ix.get("by_kind", [])]
+    ix["by_source"] = [tuple(x) for x in ix.get("by_source", [])]
+    return ix
+
+
+def all_indexes(cards, today=None):
+    """Все месяцы индекса по порядку: снимок, если он есть, иначе расчёт по каталогу."""
+    months = sorted(set(index_months(cards, today)) | {f.stem for f in INDEX_SNAPSHOTS.glob("*.json")})
+    return [ix for ix in (index_snapshot(ym) or month_index(cards, ym, today) for ym in months) if ix]
+
+
 def index_csv(ix):
+    def v(x):
+        return "" if x is None else x
     rows = [("показатель", "значение")]
     rows += [("месяц", ix["ym"]), ("данные на", ix["as_of"]), ("лотов в продаже", ix["count"]), ("регионов", ix["regions"])]
     if ix["new"] is not None:
@@ -483,9 +516,9 @@ def index_csv(ix):
     rows += [("доля публичного предложения, %", ix["public_share"]), ("доля повторных торгов, %", ix["repeat_share"]),
              ("квартир", ix["flats"]), ("медиана начальной цены квартиры, руб", ix["flat_median_price"] or ""),
              ("медиана цены м² квартиры, руб", ix["flat_median_ppm2"] or ""),
-             ("квартир с оценкой рынка", ix["flats_valued"]),
-             ("медиана скидки квартиры к рынку, %", "" if ix["flat_median_discount"] is None else ix["flat_median_discount"]),
-             ("доля квартир дешевле рынка на 10% и больше, %", "" if ix["flats_below10"] is None else ix["flats_below10"])]
+             ("квартир с оценкой рынка", v(ix["flats_valued"])),
+             ("медиана скидки квартиры к рынку, %", v(ix["flat_median_discount"])),
+             ("доля квартир дешевле рынка на 10% и больше, %", v(ix["flats_below10"]))]
     rows += [(f"категория: {c['name']}", c["count"]) for c in ix["by_cat"]]
     rows += [(f"процедура: {k}", v) for k, v in ix["by_kind"]]
     rows += [(f"площадка: {k}", v) for k, v in ix["by_source"]]
@@ -901,7 +934,7 @@ def build():
         ok = [x for x in r if x.get("result_status") == "SUCCEED"]
         ratios = [x["result_price"] / x["price"] for x in ok if x.get("result_price") and x.get("price")]
         res_rows.append((cslug, cname, len(r), round(100 * len(ok) / len(r)), median(ratios)))
-    indexes = [ix for ix in (month_index(CARDS, ym) for ym in index_months(CARDS)) if ix]
+    indexes = all_indexes(CARDS)
     for i, ix in enumerate(indexes):
         prev = indexes[i - 1] if i else None
         write(f"/analitika/{ix['ym']}/", "index_month.html", priority="0.8", lastmod=ix["as_of"], ix=ix, prev=prev,
