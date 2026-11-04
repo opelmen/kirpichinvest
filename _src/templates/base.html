@@ -93,8 +93,9 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <a class="logo" href="/"><img src="/static/brand/logo-light.svg" alt="{{ cfg.SITE_NAME }}" width="141" height="36"></a>
   <button class="burger" aria-label="Меню" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰ Меню</button>
   <nav class="nav">
-    <a href="/torgi/" {% if path.startswith('/torgi') %}aria-current="page"{% endif %}>Каталог</a>
-    <a href="{{ cfg.APP_URL }}/?from=nav">Поиск на карте</a>
+    {# «Каталог» ведёт в полный каталог платформы: статичный /torgi/ остаётся для поиска и ссылок (John 04.11.2026) #}
+    <a href="{{ cfg.APP_URL }}/?view=list&amp;from=nav_catalog">Каталог</a>
+    <a href="{{ cfg.APP_URL }}/?view=map&amp;from=nav">Поиск на карте</a>
     {% if has_auto %}<a href="/auto/" {% if path.startswith('/auto') %}aria-current="page"{% endif %}>Авто</a>{% elif cfg.AUTO_URL %}<a href="{{ cfg.AUTO_URL }}">Авто</a>{% endif %}
     <a href="/kupit-kvartiru-s-torgov/" {% if path.startswith('/kupit') %}aria-current="page"{% endif %}>Под ключ</a>
     <a href="/proverka-lota/" {% if path.startswith('/proverka') %}aria-current="page"{% endif %}>Проверка лота</a>
