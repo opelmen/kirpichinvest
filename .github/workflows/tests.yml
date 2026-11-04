@@ -1,0 +1,22 @@
+name: Tests
+
+# Те же тесты, что в деплое, но для веток и PR: ошибка видна до пачки на выкладку.
+on:
+  pull_request:
+  push:
+    branches: ["claude/**"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: |
+          pip install -q jinja2==3.1.4 markdown==3.7
+          python -m unittest discover -s tests -v

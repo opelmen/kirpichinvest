@@ -69,6 +69,12 @@ class BuildTests(unittest.TestCase):
             self.assertIn('https://torggid.ru/torgi/lot/test_0/', (site/'sitemap-lots-1.xml').read_text())
             self.assertIn('https://torggid.ru/stati/', (site/'sitemap-pages.xml').read_text())
             self.assertIn('Clean-param', (site/'robots.txt').read_text())
+            self.assertIn('https://torggid.ru/sitemap-yandex.xml', (site/'robots.txt').read_text())
+            yandex = (site/'sitemap-yandex.xml').read_text()
+            self.assertIn('https://torggid.ru/torgi/moskva/', yandex)
+            self.assertIn('https://torggid.ru/stati/', yandex)
+            self.assertNotIn('/torgi/lot/', yandex)
+            self.assertNotIn('name="yandex"', (site/'torgi/lot/test_0/index.html').read_text())  # полная карточка в миллионнике
             self.assertIn('Факты для цитирования', (site/'llms.txt').read_text())
             self.assertIn('Состав права нужно проверить', (site/'torgi/do-1-mln/index.html').read_text())
             self.assertIn('/byudzhet/', (site/'index.html').read_text())
@@ -152,7 +158,9 @@ class BuildTests(unittest.TestCase):
             kazan = (site/'torgi/kazan/index.html').read_text()
             self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
             self.assertIn('Банкротное имущество</span>', kazan)
-            self.assertNotIn('995', deal_card)  # личного телефона на сайте нет
+            # телефон только в подвале и разметке (John, 31.10.2026), в теле карточки его нет
+            self.assertNotIn('995', deal_card.split('<main')[1].split('<footer')[0])
+            self.assertIn('595-54-00', deal_card.split('<footer')[1])
             self.assertIn('повторные торги: цена уже снижена', deal_card)  # повторные — плюс, не риск
             bld = (site/'torgi/lot/mets-32/index.html').read_text()
             self.assertIn('<th>Земельный участок</th><td>не продают, участок в аренде (КН 16:50:1:2, 900 м²)', bld)  # участок под зданием

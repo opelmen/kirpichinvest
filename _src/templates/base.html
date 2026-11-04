@@ -9,7 +9,7 @@
 {% if cfg.YANDEX_VERIFICATION %}<meta name="yandex-verification" content="{{ cfg.YANDEX_VERIFICATION }}">{% endif %}
 {% if cfg.GOOGLE_VERIFICATION %}<meta name="google-site-verification" content="{{ cfg.GOOGLE_VERIFICATION }}">{% endif %}
 {% if cfg.BING_VERIFICATION %}<meta name="msvalidate.01" content="{{ cfg.BING_VERIFICATION }}">{% endif %}
-{% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
+{% if noindex %}<meta name="robots" content="noindex, follow">{% elif noindex_yandex %}<meta name="yandex" content="noindex, follow">{% endif %}
 <meta property="og:type" content="{% block og_type %}website{% endblock %}">
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">
