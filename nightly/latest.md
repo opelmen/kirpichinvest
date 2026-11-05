@@ -1,24 +1,23 @@
-# ТоргГид: ночной срез 2026-11-05
+# ТоргГид: ночной срез 2026-11-06
 
 ## Метрика
 
-Вчера (2026-11-04) по источникам: Ad traffic 373, Direct traffic 60, Internal traffic 4, Search engine traffic 1
-Позавчера: Direct traffic 12, Internal traffic 2
+Вчера (2026-11-05) по источникам: Direct traffic 33, Ad traffic 17, Internal traffic 7, Link traffic 1
+Позавчера: Ad traffic 373, Direct traffic 60, Internal traffic 4, Search engine traffic 1
 
-Поиск вчера: Bing 1
-Поиск за 7 дней: Yandex 3 (отказы 0.0%, 175 с), Bing 2 (отказы 50.0%, 109 с), Google 1 (отказы 0.0%, 15 с)
+Поиск вчера: 0
+Поиск за 7 дней: Yandex 2 (отказы 0.0%, 178 с), Google 1 (отказы 0.0%, 15 с), Bing 1 (отказы 100.0%, 0 с)
 
 Входы из поиска за 7 дней:
-- / — 4
+- / — 3
 - /torgi/lot/23000028580000000167_15/ — 1
-- /torgi/moskva/ — 1
 
 Переходы из ИИ-ассистентов за 7 дней: 0
-Достижения целей за 7 дней: Ad traffic 60, Direct traffic 17, Internal traffic 6, Link traffic 0, Search engine traffic 0
+Достижения целей за 7 дней: Ad traffic 36, Direct traffic 18, Internal traffic 6, Link traffic 0, Search engine traffic 0
 
 ## Вебмастер: torggid.ru
 
-- ошибка summary: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
+- ошибка summary: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 - ошибка excluded_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
 - ошибка in_search_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 - ошибка indexing_samples: Remote end closed connection without response
@@ -36,18 +35,18 @@
 
 | Страница | Код | мс | title | robots/yandex |
 |---|---|---|---|---|
-| / | 200 | 1299 | Недвижимость с торгов по всей России — ТоргГид | – |
-| /torgi/ | 200 | 905 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
-| /torgi/moskva/ | 200 | 907 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
-| /torgi/sankt-peterburg/ | 200 | 926 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
-| /auto/ | 200 | 896 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
-| /stati/ | 200 | 716 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
-| /proverka-lota/ | 200 | 716 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
-| /kupit-kvartiru-s-torgov/ | 200 | 733 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
-| /analitika/ | 200 | 724 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
+| / | 200 | 1534 | Недвижимость с торгов по всей России — ТоргГид | – |
+| /torgi/ | 200 | 1308 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
+| /torgi/moskva/ | 200 | 1431 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
+| /torgi/sankt-peterburg/ | 200 | 1520 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
+| /auto/ | 200 | 1221 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
+| /stati/ | 200 | 1141 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
+| /proverka-lota/ | 200 | 1064 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
+| /kupit-kvartiru-s-torgov/ | 200 | 1143 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
+| /analitika/ | 200 | 1032 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
 
 Служебные: /robots.txt 200, /sitemap.xml 200, /sitemap-yandex.xml 200, /llms.txt 200
-Sitemap: 26241 адресов, sitemap-yandex: 429; ошибки: нет
+Sitemap: 29330 адресов, sitemap-yandex: 437; ошибки: нет
 Зеркала: все ведут на https://torggid.ru/
 Карточки лотов (выборка 25): битых 0
 
