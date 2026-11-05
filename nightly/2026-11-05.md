@@ -19,8 +19,8 @@
 ## Вебмастер: torggid.ru
 
 - ошибка summary: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
-- ошибка excluded_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
-- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
+- ошибка excluded_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
+- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 - ошибка indexing_samples: Remote end closed connection without response
 - ошибка queries: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 
@@ -36,15 +36,15 @@
 
 | Страница | Код | мс | title | robots/yandex |
 |---|---|---|---|---|
-| / | 200 | 1260 | Недвижимость с торгов по всей России — ТоргГид | – |
-| /torgi/ | 200 | 1116 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
-| /torgi/moskva/ | 200 | 1109 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
-| /torgi/sankt-peterburg/ | 200 | 1094 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
-| /auto/ | 200 | 1008 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
-| /stati/ | 200 | 986 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
-| /proverka-lota/ | 200 | 641 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
-| /kupit-kvartiru-s-torgov/ | 200 | 962 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
-| /analitika/ | 200 | 949 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
+| / | 200 | 1299 | Недвижимость с торгов по всей России — ТоргГид | – |
+| /torgi/ | 200 | 905 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
+| /torgi/moskva/ | 200 | 907 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
+| /torgi/sankt-peterburg/ | 200 | 926 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
+| /auto/ | 200 | 896 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
+| /stati/ | 200 | 716 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
+| /proverka-lota/ | 200 | 716 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
+| /kupit-kvartiru-s-torgov/ | 200 | 733 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
+| /analitika/ | 200 | 724 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
 
 Служебные: /robots.txt 200, /sitemap.xml 200, /sitemap-yandex.xml 200, /llms.txt 200
 Sitemap: 26241 адресов, sitemap-yandex: 429; ошибки: нет
