@@ -165,6 +165,8 @@ class BuildTests(unittest.TestCase):
             kazan = (site/'torgi/kazan/index.html').read_text()
             self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
             self.assertIn('Банкротное имущество</span>', kazan)
+            self.assertRegex(kazan, r'<p class="lead">Сейчас \d+ лот\w* в Казани и пригородах со всех площадок')  # ТЗ-5: абзац-ответ под h1 с цифрами
+            self.assertIn('новых за 7 дней — ', kazan)
             # телефон только в подвале и разметке (John, 31.10.2026), в теле карточки его нет
             self.assertNotIn('995', deal_card.split('<main')[1].split('<footer')[0])
             self.assertIn('595-54-00', deal_card.split('<footer')[1])
