@@ -660,7 +660,15 @@ def build():
         sane = [d for d in LOTS if d.get("price") and d["price"] < 1e9 and not (d.get("area") and d["price"] / d["area"] > 3e6)
                 and d.get("category", "flat") in ("flat", "house") and "доля" not in (d.get("flags") or "")]
         board = sorted(sane, key=lambda d: d.get("first_seen") or "", reverse=True)[:6]
+    # регионы на главной: страницы /torgi/{регион}/ ловят «торги по банкротству <регион>» (GSC: позиции 12–20),
+    # а ссылки на них были только из подвала и со страницы /torgi/
+    home_regions = {}
+    for d in LOTS:
+        if d.get("region") in REGIONS and str(d["region"]) not in ("77", "78"):
+            home_regions[d["region"]] = home_regions.get(d["region"], 0) + 1
+    home_regions = sorted(((REGIONS[c][0], REGIONS[c][1], n) for c, n in home_regions.items()), key=lambda x: (-x[2], x[1]))
     write("/", "home.html", priority="1.0", lots=board, board_deals=board_deals, deals_count=len(deals), st=st, articles=ARTICLES[:6],
+          regions=home_regions,
           title=(f"Недвижимость с торгов по всей России — {cfg.SITE_NAME}" if WIDE else f"Квартиры с торгов в 16 городах России — {cfg.SITE_NAME}"),
           description=("Каталог недвижимости с торгов по банкротству и арестованному имуществу по всей России: квартиры, дома, земля, коммерция. Цена к рынку, риски, сроки заявок и расчёт максимальной ставки."
                        if WIDE else "Каталог квартир с торгов в 16 городах-миллионниках и в радиусе 100 км: актуальные лоты, цены и сроки заявок. Проверка рисков и расчёт максимальной ставки."))

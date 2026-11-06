@@ -47,6 +47,9 @@
   <p><a href="/byudzhet/">Что можно найти на торгах до 1, 2 и 3 млн ₽</a> · <a href="/stati/kvartira-s-torgov-s-dolgami/">Покупка с долгами: что проверить</a></p>
   <p class="mute">{% if wide %}Ниже — 16 городов-миллионников; лоты остальных регионов в <a href="{{ cfg.APP_URL }}/?view=list&amp;from=home_regions">каталоге</a>.{% else %}16 городов-миллионников и населённые пункты в радиусе 100 км.{% endif %} Торги электронные — участвовать можно из любого города.</p>
   <nav class="filters" aria-label="Города" style="margin-top:14px">{% for slug, name, where, n in cities %}<a href="/torgi/{{ slug }}/">{{ name }}{% if n %} · {{ n }}{% endif %}</a>{% endfor %}</nav>
+  {% if regions %}<h3 style="margin-top:22px">Торги по банкротству по регионам</h3>
+  <p class="mute small">Все площадки, лоты региона в одном списке, число активных лотов в скобках.</p>
+  <nav class="filters" aria-label="Регионы" style="margin-top:10px">{% for slug, name, n in regions %}<a href="/torgi/{{ slug }}/">{{ name }} · {{ n }}</a>{% endfor %}</nav>{% endif %}
 </div></section>
 
 <section><div class="wrap">
