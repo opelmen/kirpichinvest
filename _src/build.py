@@ -784,6 +784,7 @@ def build():
         return out
 
     thin_n = yandex_n = 0
+    yandex_by = {}
     for d in CARDS:
         similar = similar_to(d)
         active = d["status"] == "active"
@@ -791,6 +792,18 @@ def build():
         thin_n += thin
         to_yandex = active and not thin and yandex_card(d, set(CITY_NAME.values()), CITY_NAME)
         yandex_n += to_yandex
+        if to_yandex:
+            # ТЗ-3 (06.11.2026): раскладка открытых Яндексу карточек по порогам — чтобы по site-log выбрать,
+            # как сузить их до 3–5 тысяч без выгрузки ленты лотов
+            p = d.get("price") or 0
+            ex = len((d.get("excerpt") or "").strip()) >= 200
+            ph = bool(d.get("photo"))
+            for key, ok in (("цена ≥500 тыс.", p >= 500_000), ("цена ≥1 млн", p >= 1_000_000),
+                            ("фото", ph), ("пересказ ≥200", ex), ("фото и пересказ", ph and ex),
+                            ("фото и цена ≥500 тыс.", ph and p >= 500_000), ("фото и цена ≥1 млн", ph and p >= 1_000_000),
+                            ("фото и пересказ и цена ≥500 тыс.", ph and ex and p >= 500_000),
+                            ("квартиры", d.get("category") == "flat"), ("квартиры с фото", ph and d.get("category") == "flat")):
+                yandex_by[key] = yandex_by.get(key, 0) + ok
         # карточка снятого лота остаётся для людей и ссылок, но из индекса и sitemap уходит: таких карточек
         # было около трети карты сайта, и Google тратил обход на них вместо актуальных лотов
         write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active or thin,
@@ -802,6 +815,7 @@ def build():
               description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. " + (d['excerpt'][:140].rsplit(' ', 1)[0].rstrip(' .,;:') + "… " if d.get('excerpt') else "") + "Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
     print(f"пустых карточек без адреса, площади и описания (noindex): {thin_n}")
     print(f"карточек, открытых Яндексу (остальные meta yandex noindex): {yandex_n}")
+    print("  из них по порогам: " + ", ".join(f"{k} {v}" for k, v in yandex_by.items()))
     history_path.write_text(json.dumps(CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # ---------- раздел /auto/: техника с торгов ----------
