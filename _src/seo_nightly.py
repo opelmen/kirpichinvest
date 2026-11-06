@@ -23,6 +23,9 @@ UA = "TorgGid-Nightly-SEO/1.0"
 KEY_PAGES = ("/", "/torgi/", "/torgi/moskva/", "/torgi/sankt-peterburg/", "/auto/", "/stati/",
              "/proverka-lota/", "/kupit-kvartiru-s-torgov/", "/analitika/")
 TECH = ("/robots.txt", "/sitemap.xml", "/sitemap-yandex.xml", "/llms.txt")
+# ChatGPT ставит utm_source=chatgpt.com, и Метрика пишет такие визиты в «прямые»: ИИ считаем по utm ИЛИ рефереру
+AI_RE = "chatgpt|openai|perplexity|copilot|gemini|claude|anthropic|deepseek|alice|ya-ai|gigachat|phind|kagi"
+AI_FILTER = "ym:s:UTMSource=~'%s' OR ym:s:referalSource=~'%s'" % (AI_RE, AI_RE)
 AI_REFERRERS = ("chatgpt", "openai", "perplexity", "gemini", "bard", "copilot", "claude", "anthropic",
                 "deepseek", "alice", "ya.ru/alice", "gigachat", "you.com", "phind", "kagi")
 
@@ -149,6 +152,16 @@ def metrika_block(token, today):
         ai = [x for x in allr if any(a in x[0].lower() for a in AI_REFERRERS)]
         return {"top": allr[:15], "ai": ai}
 
+    def ai(date1, date2):
+        rows = metrika(token, {"metrics": "ym:s:visits,ym:s:sumGoalReachesAny,ym:s:bounceRate",
+                               "dimensions": "ym:s:UTMSource", "filters": AI_FILTER, "date1": date1, "date2": date2})
+        by = {x["dimensions"][0].get("name") or "(реферер)": int(x["metrics"][0]) for x in rows}
+        goals = sum(int(x["metrics"][1]) for x in rows)
+        land = metrika(token, {"metrics": "ym:s:visits", "dimensions": "ym:s:startURLPath", "filters": AI_FILTER,
+                               "date1": date1, "date2": date2, "sort": "-ym:s:visits", "limit": 10})
+        return {"visits": sum(by.values()), "by_source": by, "goal_reaches": goals,
+                "landings": [[x["dimensions"][0].get("name"), int(x["metrics"][0])] for x in land]}
+
     def goals():
         rows = metrika(token, {"metrics": "ym:s:sumGoalReachesAny,ym:s:visits", "dimensions": "ym:s:trafficSource",
                                "date1": w1, "date2": w2})
@@ -161,6 +174,9 @@ def metrika_block(token, today):
     safe(r, "organic_landings_week", landings)
     safe(r, "referrers_week", referrers)
     safe(r, "goal_reaches_week", goals)
+    safe(r, "ai_day", lambda: ai(d1, d1))
+    safe(r, "ai_week", lambda: ai(w1, w2))
+    safe(r, "ai_30d", lambda: ai(str(today - timedelta(days=30)), d1))
     return r
 
 
@@ -177,7 +193,14 @@ def to_md(r):
         if m.get("organic_landings_week"):
             L += ["", "Входы из поиска за 7 дней:"] + ["- %s — %s" % (u, n) for u, n in m["organic_landings_week"][:15]]
         ref = m.get("referrers_week") or {}
-        L += ["", "Переходы из ИИ-ассистентов за 7 дней: " + (", ".join("%s %s" % tuple(x) for x in ref.get("ai", [])) or "0")]
+        L += ["", "ИИ-ассистенты (utm_source или реферер):"]
+        for key, label in (("ai_day", "вчера"), ("ai_week", "7 дней"), ("ai_30d", "30 дней")):
+            a = m.get(key) or {}
+            L.append("- %s: %s визитов (%s), целей %s" % (label, a.get("visits", 0),
+                     ", ".join("%s %s" % kv for kv in (a.get("by_source") or {}).items()) or "–", a.get("goal_reaches", 0)))
+        if (m.get("ai_week") or {}).get("landings"):
+            L.append("- входы за 7 дней: " + ", ".join("%s %s" % tuple(x) for x in m["ai_week"]["landings"][:8]))
+        L.append("Переходы по рефереру ИИ за 7 дней: " + (", ".join("%s %s" % tuple(x) for x in ref.get("ai", [])) or "0"))
         if m.get("goal_reaches_week"):
             L.append("Достижения целей за 7 дней: " + ", ".join("%s %s" % kv for kv in m["goal_reaches_week"].items()))
         for k, v in (m.get("errors") or {}).items():
