@@ -225,7 +225,7 @@ def webmaster_act(token, queue_path, state_path, today, limit):
         if want in have:
             out["sitemap"] = "уже в Вебмастере"
         else:
-            post(base + "/user-added-sitemaps", token, {"url": want})
+            post(base + "/user-added-sitemaps/", token, {"url": want})
             out["sitemap"] = "добавлен"
     except Exception as e:
         out["errors"]["sitemap"] = str(e)
@@ -243,18 +243,26 @@ def webmaster_act(token, queue_path, state_path, today, limit):
     except Exception as e:
         out["errors"]["quota"] = str(e)
         left = 0
+    failed = 0
     for url in pick_recrawl(read_queue(queue_path), state, today, min(limit, left)):
         try:
-            post(base + "/recrawl/queue", token, {"url": url})
+            post(base + "/recrawl/queue/", token, {"url": url})
             out["sent"].append(url)
             state[url] = str(today)
+            failed = 0
         except Exception as e:
             msg = str(e)
-            out["errors"]["recrawl " + url] = msg
+            failed += 1
+            if failed <= 3:
+                out["errors"]["recrawl " + url] = msg
             if "HTTP 403" in msg or "HTTP 401" in msg:
                 out["errors"]["token"] = "токен без права на переобход: нужен OAuth-токен с правом webmaster:hostinfo и доступом на запись"
                 break
             if "HTTP 429" in msg or "QUOTA" in msg.upper():
+                break
+            if failed >= 3:
+                # 06.11.2026: на host_data_status NOT_LOADED Вебмастер отвечал HTTP 504 на каждый POST — не долбим API 30 раз
+                out["errors"]["recrawl"] = "3 ошибки подряд, остальные адреса не отправлены (сервис Вебмастера недоступен или хост ещё не загружен)"
                 break
     sp.parent.mkdir(parents=True, exist_ok=True)
     sp.write_text(json.dumps(state, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
