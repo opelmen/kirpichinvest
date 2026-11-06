@@ -133,7 +133,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Где проходят торги по банкротству и аресту в Татарстане', region)
             self.assertIn('<a href="https://m-ets.ru/" rel="nofollow noopener" target="_blank">МЭТС</a>', region)
             # title начинается с формулировки Вордстата («квартиры с торгов <город>») и несёт «торги по банкротству»
-            self.assertIn('Квартиры с торгов в Татарстане — торги по банкротству и арест', region.split('<title>')[1].split('</title>')[0])
+            self.assertIn('Торги по банкротству в Татарстане — квартиры и недвижимость, все площадки', region.split('<title>')[1].split('</title>')[0])
             self.assertNotIn('Где проходят торги', (site/'torgi/tatarstan/povtornye-torgi/index.html').read_text())  # только на главной странице региона
             self.assertIn('ItemList', region)
             self.assertNotIn('follow=1', region)  # регион платформа не фильтрует: без «Следить», только поиск на карте
