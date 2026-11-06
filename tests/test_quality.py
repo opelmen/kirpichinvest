@@ -40,6 +40,14 @@ class YandexCardTests(unittest.TestCase):
         self.assertFalse(yandex_card(card, big_cities={'moskva'}))
         self.assertTrue(yandex_card(dict(card, bidd_end='2099-01-01', photo='p.jpg'), big_cities={'moskva'}))
 
+    def test_house_or_land_needs_photo_excerpt_and_million(self):
+        house = dict(self.FULL, category='house', photo='p.jpg')
+        self.assertTrue(yandex_card(house))
+        self.assertFalse(yandex_card(dict(house, photo=None)))              # без фото
+        self.assertFalse(yandex_card(dict(house, excerpt='Дом, участок')))  # без пересказа
+        self.assertFalse(yandex_card(dict(house, price=800_000)))           # дешевле 1 млн
+        self.assertTrue(yandex_card(dict(self.FULL, category='land', photo='p.jpg', price=1_000_000)))
+
     def test_short_excerpt_is_not_enough(self):
         self.assertFalse(yandex_card(dict(self.FULL, excerpt='Квартира, 2 этаж')))
 
