@@ -30,12 +30,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Collect
-        env:
-          YANDEX_METRIKA_TOKEN: ${{ secrets.YANDEX_METRIKA_TOKEN }}
-        run: cd _src && python seo_nightly.py --out "$RUNNER_TEMP/nightly"
-
-      - name: Save to seo-yandex-data branch
+      # состояние переобхода (recrawl-state.json) живёт в ветке данных: берём его до сбора, чтобы не слать один адрес каждую ночь
+      - name: Previous data
         if: github.event_name != 'pull_request'
         run: |
           set -euo pipefail
@@ -47,6 +43,20 @@ jobs:
           else
             git worktree add --orphan -b seo-yandex-data "$RUNNER_TEMP/data"
           fi
+          mkdir -p "$RUNNER_TEMP/nightly"
+          cp "$RUNNER_TEMP/data/nightly/recrawl-state.json" "$RUNNER_TEMP/nightly/" 2>/dev/null || true
+
+      # --act (ТЗ-1, 06.11.2026): sitemap-yandex.xml в Вебмастер и до 30 адресов из _src/data/recrawl_queue.txt на переобход.
+      # В PR только чтение.
+      - name: Collect
+        env:
+          YANDEX_METRIKA_TOKEN: ${{ secrets.YANDEX_METRIKA_TOKEN }}
+        run: cd _src && python seo_nightly.py --out "$RUNNER_TEMP/nightly" ${{ github.event_name != 'pull_request' && '--act' || '' }}
+
+      - name: Save to seo-yandex-data branch
+        if: github.event_name != 'pull_request'
+        run: |
+          set -euo pipefail
           mkdir -p "$RUNNER_TEMP/data/nightly"
           cp "$RUNNER_TEMP"/nightly/* "$RUNNER_TEMP/data/nightly/"
           cd "$RUNNER_TEMP/data"

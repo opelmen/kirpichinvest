@@ -18,15 +18,18 @@ def thin_card(d, fallback_addrs=()):
     return no_addr and not d.get("excerpt") and not d.get("area")
 
 
-YANDEX_MIN_PRICE = 100_000
+YANDEX_MIN_PRICE = 300_000
+YANDEX_MIN_EXCERPT = 200  # знаков пересказа извещения: короче — карточка для Яндекса неотличима от соседней
 
 
 def yandex_card(d, fallback_addrs=(), big_cities=()):
     """True, если карточку стоит отдавать Яндексу (остальные получают meta name="yandex" noindex, в Google остаются).
 
-    Яндекс пересчитывает «малоценные» страницы по каждой и судит о сайте по их доле, поэтому ему отдаём
-    только карточки, где есть что показать: адрес, площадь, цена от 100 тыс. ₽ и пересказ извещения или фото
-    с датой торгов. В 16 городах-миллионниках, где есть спрос по запросам, хватает адреса, площади и цены."""
+    Яндекс пересчитывает «малоценные» страницы по каждой и судит о сайте по их доле. Пока домен молодой и
+    в Вебмастере не загружен, ему отдаём только карточки, где есть что показать: адрес, площадь, цена
+    от 300 тыс. ₽, дата окончания приёма заявок и фото или пересказ извещения от 200 знаков. Послабление
+    для 16 миллионников (06.11.2026: 12 394 открытых карточки при плане 2–4 тысячи) снято; `big_cities`
+    оставлен в сигнатуре, чтобы вернуть его, когда страниц в поиске Яндекса станет больше."""
     if thin_card(d, fallback_addrs):
         return False
     addr = (d.get("caddr") or "").strip()
@@ -34,6 +37,9 @@ def yandex_card(d, fallback_addrs=(), big_cities=()):
         return False
     if not d.get("area") or (d.get("price") or 0) < YANDEX_MIN_PRICE:
         return False
-    if d.get("city") in big_cities:
-        return True
-    return bool(d.get("bidd_end")) and bool(d.get("photo") or d.get("excerpt"))
+    if not d.get("bidd_end"):
+        return False
+    return (
+        bool(d.get("photo"))
+        or len((d.get("excerpt") or "").strip()) >= YANDEX_MIN_EXCERPT
+    )
