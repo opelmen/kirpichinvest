@@ -205,6 +205,21 @@ def pick_recrawl(queue, state, today, limit):
     return picked
 
 
+def probe_other_host(token, uid, hosts, skip_id):
+    """Диагностика: тот же POST на другой подтверждённый хост аккаунта (kirpichinvest.ru, статус OK).
+    Если там проходит — API и токен в порядке, а 504 даёт именно незагруженный хост torggid.ru."""
+    other = next((h for h in hosts if h.get("host_id") != skip_id and h.get("verified")), None)
+    if not other:
+        return "другого подтверждённого хоста нет"
+    hid = other["host_id"]
+    url = "https://" + hid.split(":")[1] + "/"
+    try:
+        post("%s/user/%s/hosts/%s/recrawl/queue/" % (WEBMASTER, uid, urllib.parse.quote(hid, safe="")), token, {"url": url})
+        return "переобход %s принят — API и токен работают, 504 только у https:torggid.ru:443" % hid
+    except Exception as e:
+        return "%s: %s" % (hid, str(e)[:120])
+
+
 def webmaster_act(token, queue_path, state_path, today, limit):
     """ТЗ-1 (06.11.2026): sitemap-yandex.xml в Вебмастер, если его там нет, и переобход адресов из очереди в пределах квоты.
 
@@ -263,6 +278,7 @@ def webmaster_act(token, queue_path, state_path, today, limit):
             if failed >= 3:
                 # 06.11.2026: на host_data_status NOT_LOADED Вебмастер отвечал HTTP 504 на каждый POST — не долбим API 30 раз
                 out["errors"]["recrawl"] = "3 ошибки подряд, остальные адреса не отправлены (сервис Вебмастера недоступен или хост ещё не загружен)"
+                out["probe"] = probe_other_host(token, uid, hosts, host["host_id"])
                 break
     sp.parent.mkdir(parents=True, exist_ok=True)
     sp.write_text(json.dumps(state, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
@@ -330,6 +346,8 @@ def to_md(r):
         L += ["  - %s" % u.replace(BASE, "") for u in a.get("sent", [])]
         for k, v in (a.get("errors") or {}).items():
             L.append("- ошибка %s: %s" % (k, str(v)[:200]))
+        if a.get("probe"):
+            L.append("- проверка на другом хосте: %s" % a["probe"])
         L.append("")
     for k, v in (r.get("errors") or {}).items():
         L.append("- ошибка %s: %s" % (k, v))
