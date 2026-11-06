@@ -1,0 +1,56 @@
+# Очередь переобхода для Яндекс Вебмастера (ТЗ-1, 06.11.2026). Один адрес в строке, путь от корня.
+# Порядок = приоритет. Каждый адрес отправляется не чаще раза в 7 дней; за ночь уходит до --recrawl-max адресов
+# в пределах квоты. Новые статьи и изменённые хабы добавлять наверх.
+/
+/torgi/
+/auto/
+/stati/
+/analitika/
+/proverka-lota/
+/kupit-kvartiru-s-torgov/
+/uslugi/
+/proverka-avto-po-vin/
+# регионы с показами в Search Console по «торги по банкротству <регион> официальный сайт» (25.10.2026)
+/torgi/permskiy-kray/
+/torgi/kurganskaya-oblast/
+/torgi/nizhegorodskaya-oblast/
+/torgi/irkutskaya-oblast/
+/torgi/samarskaya-oblast/
+/torgi/sverdlovskaya-oblast/
+/torgi/tatarstan/
+/torgi/chelyabinskaya-oblast/
+/torgi/novosibirskaya-oblast/
+/torgi/krasnodarskiy-kray/
+/torgi/rostovskaya-oblast/
+/torgi/moskovskaya-oblast/
+/torgi/leningradskaya-oblast/
+/torgi/krasnoyarskiy-kray/
+/torgi/voronezhskaya-oblast/
+# 16 городов
+/torgi/moskva/
+/torgi/sankt-peterburg/
+/torgi/novosibirsk/
+/torgi/ekaterinburg/
+/torgi/kazan/
+/torgi/krasnoyarsk/
+/torgi/nizhniy-novgorod/
+/torgi/chelyabinsk/
+/torgi/ufa/
+/torgi/krasnodar/
+/torgi/samara/
+/torgi/rostov-na-donu/
+/torgi/omsk/
+/torgi/voronezh/
+/torgi/perm/
+/torgi/volgograd/
+# подборки и статьи последних недель
+/torgi/bankrotstvo/
+/torgi/arestovannoe/
+/torgi/povtornye-torgi/
+/stati/ploshchadki-torgov-po-bankrotstvu/
+/stati/proverka-doma-i-uchastka-s-torgov/
+/stati/kommercheskaya-nedvizhimost-s-torgov-chto-proverit/
+/stati/osparivanie-torgov-po-bankrotstvu/
+/stati/dolya-v-kvartire-s-torgov/
+/stati/efrsb-kak-chitat-soobshchenie-o-torgah/
+/stati/proverka-kvartiry-s-torgov/

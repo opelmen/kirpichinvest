@@ -85,7 +85,7 @@
   </div></details>
   </div>
 
-  {% if d.city_name %}<p><a href="/torgi/{{ d.city }}/">Актуальные лоты: {{ d.city_name }}</a></p>{% elif d.region_slug %}<p><a href="/torgi/{{ d.region_slug }}/">Актуальные лоты: {{ d.region_name }}</a></p>{% endif %}
+  {% if d.city_name or d.region_slug %}<p>Актуальные лоты: {% if d.city_name %}<a href="/torgi/{{ d.city }}/">{{ d.city_name }}</a>{% endif %}{% if d.city_name and d.region_slug and d.region_slug != d.city %} · {% endif %}{% if d.region_slug and d.region_slug != d.city %}<a href="/torgi/{{ d.region_slug }}/">{{ d.region_name }}</a>{% endif %}</p>{% endif %}
   {% if similar %}<h2>Похожие лоты</h2><div class="lots">{% for s in similar %}<a class="lot" href="/torgi/lot/{{ s.id }}/"><span><b>{{ s.label }}</b> · {{ s.caddr[:90] }}</span><span class="p">{{ s.price|rub }}</span></a>{% endfor %}</div>{% endif %}
   <p class="mute small" style="margin-top:24px">Данные о лоте получены {{ "с площадки " ~ d.source_name if d.source_name and d.source_name != "ГИС Торги" else "из открытого реестра ГИС Торги" }} и обновляются автоматически. Мы не являемся организатором торгов.</p>
 </div>

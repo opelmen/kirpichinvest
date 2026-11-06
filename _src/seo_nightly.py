@@ -11,12 +11,13 @@ import os
 import re
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from yandex_report import COUNTER, METRIKA, get, safe, webmaster
+from yandex_report import COUNTER, METRIKA, WEBMASTER, get, safe, webmaster
 
 BASE = "https://torggid.ru"
 UA = "TorgGid-Nightly-SEO/1.0"
@@ -26,6 +27,7 @@ TECH = ("/robots.txt", "/sitemap.xml", "/sitemap-yandex.xml", "/llms.txt")
 # ChatGPT ставит utm_source=chatgpt.com, и Метрика пишет такие визиты в «прямые»: ИИ считаем по utm ИЛИ рефереру
 AI_RE = "chatgpt|openai|perplexity|copilot|gemini|claude|anthropic|deepseek|alice|ya-ai|gigachat|phind|kagi"
 AI_FILTER = "ym:s:UTMSource=~'%s' OR ym:s:referalSource=~'%s'" % (AI_RE, AI_RE)
+RECRAWL_EVERY_DAYS = 7  # один и тот же адрес не чаще раза в неделю: квота нужна новым и изменённым страницам
 AI_REFERRERS = ("chatgpt", "openai", "perplexity", "gemini", "bard", "copilot", "claude", "anthropic",
                 "deepseek", "alice", "ya.ru/alice", "gigachat", "you.com", "phind", "kagi")
 
@@ -180,6 +182,125 @@ def metrika_block(token, today):
     return r
 
 
+def post(url, token, body):
+    data = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(url, data=data, method="POST",
+                                 headers={"Authorization": "OAuth " + token, "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            return json.loads(raw) if raw.strip() else {}
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:300])) from None
+
+
+def read_queue(path):
+    """Адреса из файла очереди: по одному в строке, пустые строки и # комментарии пропускаются, порядок сохраняется."""
+    out = []
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if not line.startswith("http"):
+            line = BASE + line
+        if line not in out:
+            out.append(line)
+    return out
+
+
+def pick_recrawl(queue, state, today, limit):
+    """Какие адреса отправить сегодня: по порядку очереди, минуя те, что уходили меньше RECRAWL_EVERY_DAYS назад."""
+    picked = []
+    for url in queue:
+        last = state.get(url)
+        if last and (today - datetime.strptime(last, "%Y-%m-%d").date()).days < RECRAWL_EVERY_DAYS:
+            continue
+        picked.append(url)
+        if len(picked) >= limit:
+            break
+    return picked
+
+
+def probe_other_host(token, uid, hosts, skip_id):
+    """Диагностика: тот же POST на другой подтверждённый хост аккаунта (kirpichinvest.ru, статус OK).
+    Если там проходит — API и токен в порядке, а 504 даёт именно незагруженный хост torggid.ru."""
+    other = next((h for h in hosts if h.get("host_id") != skip_id and h.get("verified")), None)
+    if not other:
+        return "другого подтверждённого хоста нет"
+    hid = other["host_id"]
+    url = "https://" + hid.split(":")[1] + "/"
+    try:
+        post("%s/user/%s/hosts/%s/recrawl/queue/" % (WEBMASTER, uid, urllib.parse.quote(hid, safe="")), token, {"url": url})
+        return "переобход %s принят — API и токен работают, 504 только у https:torggid.ru:443" % hid
+    except Exception as e:
+        return "%s: %s" % (hid, str(e)[:120])
+
+
+def webmaster_act(token, queue_path, state_path, today, limit):
+    """ТЗ-1 (06.11.2026): sitemap-yandex.xml в Вебмастер, если его там нет, и переобход адресов из очереди в пределах квоты.
+
+    Пишет только в свой сайт; каждый шаг записывается, ошибка одного шага не останавливает остальные.
+    Если токен без прав на запись (HTTP 403) — в отчёте появится просьба выпустить новый токен."""
+    out = {"sitemap": None, "sent": [], "skipped": 0, "errors": {}}
+    uid = get(WEBMASTER + "/user", token)["user_id"]
+    hosts = get("%s/user/%s/hosts" % (WEBMASTER, uid), token).get("hosts", [])
+    host = next((h for h in hosts if h.get("host_id") == "https:torggid.ru:443"), None)
+    if not host:
+        out["errors"]["host"] = "https:torggid.ru:443 нет в аккаунте Вебмастера"
+        return out
+    base = "%s/user/%s/hosts/%s" % (WEBMASTER, uid, urllib.parse.quote(host["host_id"], safe=""))
+    want = BASE + "/sitemap-yandex.xml"
+    try:
+        have = {s.get("sitemap_url") for s in get(base + "/user-added-sitemaps", token).get("sitemaps", [])}
+        have |= {s.get("sitemap_url") for s in get(base + "/sitemaps", token).get("sitemaps", [])}
+        if want in have:
+            out["sitemap"] = "уже в Вебмастере"
+        else:
+            post(base + "/user-added-sitemaps/", token, {"url": want})
+            out["sitemap"] = "добавлен"
+    except Exception as e:
+        out["errors"]["sitemap"] = str(e)
+    state = {}
+    sp = Path(state_path)
+    if sp.exists():
+        try:
+            state = json.loads(sp.read_text(encoding="utf-8"))
+        except Exception:
+            state = {}
+    try:
+        quota = get(base + "/recrawl/quota", token)
+        out["quota"] = {"daily": quota.get("daily_quota"), "left": quota.get("quota_remainder")}
+        left = int(quota.get("quota_remainder") or 0)
+    except Exception as e:
+        out["errors"]["quota"] = str(e)
+        left = 0
+    failed = 0
+    for url in pick_recrawl(read_queue(queue_path), state, today, min(limit, left)):
+        try:
+            post(base + "/recrawl/queue/", token, {"url": url})
+            out["sent"].append(url)
+            state[url] = str(today)
+            failed = 0
+        except Exception as e:
+            msg = str(e)
+            failed += 1
+            if failed <= 3:
+                out["errors"]["recrawl " + url] = msg
+            if "HTTP 403" in msg or "HTTP 401" in msg:
+                out["errors"]["token"] = "токен без права на переобход: нужен OAuth-токен с правом webmaster:hostinfo и доступом на запись"
+                break
+            if "HTTP 429" in msg or "QUOTA" in msg.upper():
+                break
+            if failed >= 3:
+                # 06.11.2026: на host_data_status NOT_LOADED Вебмастер отвечал HTTP 504 на каждый POST — не долбим API 30 раз
+                out["errors"]["recrawl"] = "3 ошибки подряд, остальные адреса не отправлены (сервис Вебмастера недоступен или хост ещё не загружен)"
+                out["probe"] = probe_other_host(token, uid, hosts, host["host_id"])
+                break
+    sp.parent.mkdir(parents=True, exist_ok=True)
+    sp.write_text(json.dumps(state, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    return out
+
+
 def to_md(r):
     L = ["# ТоргГид: ночной срез %s" % r["date"], ""]
     m = r.get("metrika") or {}
@@ -239,6 +360,18 @@ def to_md(r):
         ls = s.get("lot_sample", {})
         L.append("Карточки лотов (выборка %s): битых %s" % (ls.get("checked"), len(ls.get("bad", []))))
         L.append("")
+    a = r.get("act")
+    if a:
+        q = a.get("quota") or {}
+        L += ["## Вебмастер: действия", "",
+              "- sitemap-yandex.xml: %s" % (a.get("sitemap") or "не проверен"),
+              "- переобход: отправлено %s, квота на день %s, оставалось %s" % (len(a.get("sent", [])), q.get("daily"), q.get("left"))]
+        L += ["  - %s" % u.replace(BASE, "") for u in a.get("sent", [])]
+        for k, v in (a.get("errors") or {}).items():
+            L.append("- ошибка %s: %s" % (k, str(v)[:200]))
+        if a.get("probe"):
+            L.append("- проверка на другом хосте: %s" % a["probe"])
+        L.append("")
     for k, v in (r.get("errors") or {}).items():
         L.append("- ошибка %s: %s" % (k, v))
     return "\n".join(L) + "\n"
@@ -248,6 +381,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default="nightly")
     ap.add_argument("--no-site", action="store_true")
+    ap.add_argument("--act", action="store_true", help="добавить sitemap-yandex.xml и отправить очередь на переобход (ТЗ-1)")
+    ap.add_argument("--queue", default=str(Path(__file__).with_name("data") / "recrawl_queue.txt"))
+    ap.add_argument("--recrawl-max", type=int, default=30)
     args = ap.parse_args()
     token = os.environ.get("YANDEX_METRIKA_TOKEN")
     # run starts ~01:40 MSK: "today" by UTC is still the previous Moscow day, so take MSK date
@@ -256,6 +392,8 @@ def main():
     if token:
         safe(r, "metrika", lambda: metrika_block(token, today))
         safe(r, "webmaster", lambda: webmaster(token))
+        if args.act:
+            safe(r, "act", lambda: webmaster_act(token, args.queue, Path(args.out) / "recrawl-state.json", today, args.recrawl_max))
     else:
         r.setdefault("errors", {})["token"] = "YANDEX_METRIKA_TOKEN is not set"
     if not args.no_site:
