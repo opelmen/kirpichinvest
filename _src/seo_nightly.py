@@ -489,6 +489,12 @@ def to_md(r):
             L += ["", "Топ запросов Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in q["top"]]
         if g.get("pages"):
             L += ["", "Страницы с показами в Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in g["pages"]]
+        if g.get("sitemaps") is not None:
+            L += ["", "Sitemap в Google (путь — загружен, ошибки, предупреждения, отправлено, в индексе):"] + [
+                "- %s — %s, %s, %s, %s, %s" % tuple(x) for x in g["sitemaps"]] if g["sitemaps"] else ["", "Sitemap в Google: не добавлены"]
+        if g.get("inspect"):
+            L += ["", "Проверка страниц в Google (страница — вердикт, статус, обход, загрузка, robots, индексация, canonical Google):"] + [
+                "- %s — %s" % (x[0], ", ".join(str(v) for v in x[1:])) for x in g["inspect"]]
         for k, v in (g.get("errors") or {}).items():
             L.append("- ошибка %s: %s" % (k, str(v)[:300]))
         L.append("")
@@ -498,6 +504,9 @@ def to_md(r):
 
 
 GSC = "https://www.googleapis.com/webmasters/v3"
+# ключевые страницы для проверки индекса в Google (URL Inspection API, 2 000 запросов в день)
+INSPECT = ["/", "/torgi/", "/torgi/moskva/", "/torgi/sankt-peterburg/", "/torgi/samara/", "/torgi/nizhniy-novgorod/",
+           "/torgi/permskiy-kray/", "/auto/", "/stati/", "/stati/proverka-kvartiry-s-torgov/"]
 
 
 def google_token(sa_json, scope="https://www.googleapis.com/auth/webmasters.readonly"):
@@ -598,6 +607,34 @@ def gsc_block(sa_json, today):
 
     part("queries", queries)
     part("pages", pages)
+
+    def sitemaps():
+        rows = gsc_call(token, "/sites/%s/sitemaps" % enc).get("sitemap") or []
+        return [[x.get("path", "").replace(BASE, ""), str(x.get("lastDownloaded", ""))[:10], x.get("errors"), x.get("warnings"),
+                 sum(int(c.get("submitted") or 0) for c in x.get("contents") or []),
+                 sum(int(c.get("indexed") or 0) for c in x.get("contents") or [])] for x in rows]
+
+    part("sitemaps", sitemaps)
+
+    def inspect():
+        # как Google видит ключевые страницы: в индексе ли, когда обходил, что получил при загрузке, какой canonical выбрал
+        res = []
+        for path in INSPECT:
+            body = {"inspectionUrl": BASE + path, "siteUrl": site, "languageCode": "ru-RU"}
+            req = urllib.request.Request("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
+                                         data=json.dumps(body).encode(), method="POST",
+                                         headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=60) as resp:
+                    r = (json.loads(resp.read().decode()).get("inspectionResult") or {}).get("indexStatusResult") or {}
+                res.append([path, r.get("verdict"), r.get("coverageState"), str(r.get("lastCrawlTime", ""))[:10],
+                            r.get("pageFetchState"), r.get("robotsTxtState"), r.get("indexingState"),
+                            (r.get("googleCanonical") or "").replace(BASE, "")])
+            except urllib.error.HTTPError as e:
+                res.append([path, "HTTP %s" % e.code, e.read().decode("utf-8", "replace")[:120], "", "", "", "", ""])
+        return res
+
+    part("inspect", inspect)
     if not out["errors"]:
         del out["errors"]
     return out
