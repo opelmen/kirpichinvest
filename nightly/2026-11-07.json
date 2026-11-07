@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-07T00:54:56+00:00",
+ "generated": "2026-11-07T10:12:33+00:00",
  "date": "2026-11-07",
  "metrika": {
   "day": "2026-11-06",
@@ -79,11 +79,11 @@
     "http:torggid.ru:80"
    ],
    "errors": {
-    "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "summary": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
-    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
     "indexing_samples": "Remote end closed connection without response",
-    "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
+    "queries": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}"
    },
    "info": {
     "host_id": "https:torggid.ru:443",
@@ -99,67 +99,12 @@
    },
    "diagnostics": {
     "problems": {
-     "NO_REGIONS": {
+     "URL_ALERT_4XX": {
       "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_IN_SPRAV": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DISALLOWED_IN_ROBOTS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DUPLICATE_CONTENT_ATTRS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
      "NO_METRIKA_COUNTER_BINDING": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_FAILED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_PROBLEM": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_5XX": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_NEED_PAPER": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -169,42 +114,12 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "ERROR_IN_ROBOTS_TXT": {
+     "NO_SITEMAP_MODIFICATIONS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "SLOW_AVG_RESPONSE_TIME": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "CONNECT_FAILED": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "BIG_FAVICON_ABSENT": {
+     "NO_REGIONS": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
@@ -214,32 +129,7 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DUPLICATE_PAGES": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_MIRROR_IS_NOT_HTTPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_4XX": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DNS_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_ERROR": {
+     "ERROR_IN_ROBOTS_TXT": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -249,7 +139,112 @@
       "state": "ABSENT",
       "last_state_update": null
      },
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_IN_SPRAV": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_CONTENT_ATTRS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
      "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_MIRROR_IS_NOT_HTTPS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -258,12 +253,17 @@
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
+     },
+     "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
      }
     }
    },
    "recrawl_quota": {
     "daily_quota": 150,
-    "quota_remainder": 150
+    "quota_remainder": 140
    }
   },
   "kirpichinvest.ru": {
@@ -1365,16 +1365,122 @@
   },
   "quota": {
    "daily": 150,
-   "left": 150
+   "left": 140
   },
   "probe": "https:contora.store:443: HTTP 504 "
+ },
+ "bing": {
+  "crawl": {
+   "date": "/Date(1793",
+   "in_index": 465,
+   "crawled": 196,
+   "crawl_errors": 8,
+   "blocked": null,
+   "in_links": 1
+  },
+  "traffic": {
+   "impressions_7d": 17,
+   "clicks_7d": 0,
+   "days": 7
+  },
+  "queries": [
+   [
+    "с московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    3
+   ],
+   [
+    "торги квартир в москве на аукционе",
+    1,
+    0,
+    7
+   ],
+   [
+    "site.investmoscow.ru квартира торги ноябрь 2026",
+    1,
+    0,
+    5
+   ],
+   [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
+   ],
+   [
+    "дом нирнзее нежилое помещение торги",
+    1,
+    0,
+    4
+   ],
+   [
+    "гис торги продажа квартир москва московская область электронные торги",
+    1,
+    0,
+    3
+   ],
+   [
+    "московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    4
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "недвижимость москва толрги",
+    1,
+    0,
+    4
+   ],
+   [
+    "аукционы по продаже недвижимости в москве",
+    1,
+    0,
+    8
+   ],
+   [
+    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
+    1,
+    0,
+    1
+   ]
+  ],
+  "pages": [
+   [
+    "/torgi/moskva/",
+    11,
+    0
+   ]
+  ],
+  "feeds": [
+   [
+    "/sitemap.xml",
+    "Success",
+    36880,
+    "/Date(1793"
+   ]
+  ],
+  "submitted_feeds": [
+   "/sitemap-yandex.xml"
+  ],
+  "quota": {
+   "daily": 100,
+   "monthly": 2400
+  },
+  "submitted_urls": 50
  },
  "site": {
   "pages": {
    "/": {
     "status": 200,
-    "ms": 887,
-    "bytes": 50207,
+    "ms": 1296,
+    "bytes": 52638,
     "final": "https://torggid.ru/",
     "error": null,
     "title": "Недвижимость с торгов по всей России — ТоргГид",
@@ -1387,8 +1493,8 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 1071,
-    "bytes": 102289,
+    "ms": 1254,
+    "bytes": 100739,
     "final": "https://torggid.ru/torgi/",
     "error": null,
     "title": "Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид",
@@ -1401,8 +1507,8 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 1125,
-    "bytes": 101805,
+    "ms": 1389,
+    "bytes": 102256,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
     "title": "Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арест — ТоргГид",
@@ -1415,8 +1521,8 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 903,
-    "bytes": 104246,
+    "ms": 1290,
+    "bytes": 106283,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
     "title": "Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротству и арест — ТоргГид",
@@ -1429,8 +1535,8 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 667,
-    "bytes": 91040,
+    "ms": 1124,
+    "bytes": 94382,
     "final": "https://torggid.ru/auto/",
     "error": null,
     "title": "Автомобили и техника с торгов по всей России — актуальные лоты 2026 — ТоргГид",
@@ -1443,8 +1549,8 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 844,
-    "bytes": 31084,
+    "ms": 990,
+    "bytes": 33513,
     "final": "https://torggid.ru/stati/",
     "error": null,
     "title": "Статьи о покупке недвижимости с торгов — ТоргГид",
@@ -1457,8 +1563,8 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 793,
-    "bytes": 36623,
+    "ms": 676,
+    "bytes": 39052,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
     "title": "Проверка лота перед торгами: юридическая и рыночная — ТоргГид",
@@ -1471,8 +1577,8 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 787,
-    "bytes": 32256,
+    "ms": 946,
+    "bytes": 34685,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
     "title": "Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид",
@@ -1485,8 +1591,8 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 510,
-    "bytes": 26282,
+    "ms": 944,
+    "bytes": 28710,
     "final": "https://torggid.ru/analitika/",
     "error": null,
     "title": "Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид",
@@ -1501,25 +1607,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 702,
+    "ms": 722,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 639,
+    "ms": 768,
     "bytes": 1092,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 858,
+    "ms": 1116,
     "bytes": 51391,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 792,
+    "ms": 961,
     "bytes": 24873,
     "error": null
    }
@@ -1548,10 +1654,10 @@
   },
   "robots_txt": "User-agent: *\nAllow: /\nDisallow: /check/\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n\nUser-agent: Yandex\nAllow: /\nDisallow: /check/\nClean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /\nSitemap: https://torggid.ru/sitemap-yandex.xml\n\nUser-agent: YandexAdditional\nAllow: /\n\nUser-agent: YandexAdditionalBot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nUser-agent: Applebot-Extended\nAllow: /\n\nSitemap: https://torggid.ru/sitemap.xml\n",
   "sitemap": {
-   "urls": 30120,
+   "urls": 30516,
    "by_section": {
-    "torgi": 19265,
-    "auto": 10813,
+    "torgi": 19450,
+    "auto": 11024,
     "stati": 23,
     "analitika": 3,
     "proverka-lota": 2,
