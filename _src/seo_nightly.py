@@ -489,6 +489,8 @@ def to_md(r):
             L += ["", "Топ запросов Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in q["top"]]
         if g.get("pages"):
             L += ["", "Страницы с показами в Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in g["pages"]]
+        if g.get("submit"):
+            L += ["", "Отправка sitemap в Google:"] + ["- %s — %s" % tuple(x) for x in g["submit"]]
         if g.get("sitemaps") is not None:
             L += ["", "Sitemap в Google (путь — загружен, ошибки, предупреждения, отправлено, в индексе):"] + [
                 "- %s — %s, %s, %s, %s, %s" % tuple(x) for x in g["sitemaps"]] if g["sitemaps"] else ["", "Sitemap в Google: не добавлены"]
@@ -531,9 +533,9 @@ def google_token(sa_json, scope="https://www.googleapis.com/auth/webmasters.read
         raise RuntimeError("token HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
 
 
-def gsc_call(token, path, body=None):
+def gsc_call(token, path, body=None, method=None):
     data = json.dumps(body).encode() if body is not None else None
-    req = urllib.request.Request(GSC + path, data=data, method="POST" if data else "GET",
+    req = urllib.request.Request(GSC + path, data=data, method=method or ("POST" if data else "GET"),
                                  headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=60) as resp:
@@ -542,12 +544,17 @@ def gsc_call(token, path, body=None):
         raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
 
 
-def gsc_block(sa_json, today):
+# что переотправляем в Google каждую ночь в режиме --act (нужны права «Полный» у сервисного аккаунта)
+GSC_SITEMAPS = ["/sitemap.xml"]
+
+
+def gsc_block(sa_json, today, act=False):
     """ТЗ-6 (07.11.2026): Google Search Console через сервисный аккаунт (секрет GSC_SERVICE_ACCOUNT, JSON ключа).
     Данные GSC отстают на ~3 дня: берём 7 дней, заканчивая позавчера-3. Запросы на позициях 4–20 с показами —
     «быстрые победы» для НЧ (подтянуть текст/ссылки на страницу)."""
     out = {"errors": {}}
-    token, email = google_token(sa_json)
+    scope = "https://www.googleapis.com/auth/webmasters" if act else "https://www.googleapis.com/auth/webmasters.readonly"
+    token, email = google_token(sa_json, scope)
     sites = [s.get("siteUrl") for s in (gsc_call(token, "/sites").get("siteEntry") or [])]
     mine = [s for s in sites if "torggid.ru" in (s or "")]
     if not mine:
@@ -614,6 +621,22 @@ def gsc_block(sa_json, today):
                  sum(int(c.get("submitted") or 0) for c in x.get("contents") or []),
                  sum(int(c.get("indexed") or 0) for c in x.get("contents") or [])] for x in rows]
 
+    def submit():
+        # переотправка sitemap: Google перечитывает его в ближайшие часы (страницы добавятся без ручной работы)
+        res = []
+        for path in GSC_SITEMAPS:
+            try:
+                gsc_call(token, "/sites/%s/sitemaps/%s" % (enc, urllib.parse.quote(BASE + path, safe="")), method="PUT")
+                res.append([path, "отправлен"])
+            except RuntimeError as e:
+                msg = str(e)
+                if "HTTP 403" in msg:
+                    msg = "нет прав: дать %s права «Полный» в Search Console → Настройки → Пользователи" % email
+                res.append([path, msg[:200]])
+        return res
+
+    if act:
+        part("submit", submit)
     part("sitemaps", sitemaps)
 
     def inspect():
@@ -664,7 +687,7 @@ def main():
         safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act))
     gsc_key = os.environ.get("GSC_SERVICE_ACCOUNT")
     if gsc_key:
-        safe(r, "gsc", lambda: gsc_block(gsc_key, today))
+        safe(r, "gsc", lambda: gsc_block(gsc_key, today, act=args.act))
     else:
         r.setdefault("errors", {})["gsc"] = "GSC_SERVICE_ACCOUNT не задан (JSON ключа сервисного аккаунта Google)"
     if not args.no_site:

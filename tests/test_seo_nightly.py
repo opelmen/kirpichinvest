@@ -136,3 +136,26 @@ class RecrawlQueueTests(unittest.TestCase):
             "inspect": [["/torgi/", "NEUTRAL", "Crawled - currently not indexed", "2026-11-01", "SUCCESSFUL", "ALLOWED", "INDEXING_ALLOWED", "/torgi/"]]}})
         self.assertIn("- /sitemap.xml — 2026-11-06, 0, 0, 30000, 0", md)
         self.assertIn("- /torgi/ — NEUTRAL, Crawled - currently not indexed, 2026-11-01", md)
+
+    def test_gsc_submit_sitemap_put_and_403_hint(self):
+        import seo_nightly as sn
+        from datetime import date
+        from unittest import mock
+        calls = []
+
+        def fake_call(token, path, body=None, method=None):
+            calls.append((path, method))
+            if path == "/sites":
+                return {"siteEntry": [{"siteUrl": "sc-domain:torggid.ru"}]}
+            if method == "PUT":
+                raise RuntimeError("HTTP 403 forbidden")
+            return {}
+
+        with mock.patch.object(sn, "google_token", return_value=("t", "sa@x.iam.gserviceaccount.com")) as tok, \
+                mock.patch.object(sn, "gsc_call", side_effect=fake_call), \
+                mock.patch.object(sn.urllib.request, "urlopen", side_effect=OSError("no net")):
+            g = sn.gsc_block("{}", date(2026, 11, 7), act=True)
+        self.assertTrue(tok.call_args[0][1].endswith("/webmasters"))
+        self.assertIn(("/sites/sc-domain%3Atorggid.ru/sitemaps/https%3A%2F%2Ftorggid.ru%2Fsitemap.xml", "PUT"), calls)
+        self.assertIn("«Полный»", g["submit"][0][1])
+        self.assertIn("Отправка sitemap в Google", sn.to_md({"date": "2026-11-07", "gsc": g}))
