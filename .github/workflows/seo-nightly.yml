@@ -45,6 +45,7 @@ jobs:
           fi
           mkdir -p "$RUNNER_TEMP/nightly"
           cp "$RUNNER_TEMP/data/nightly/recrawl-state.json" "$RUNNER_TEMP/nightly/" 2>/dev/null || true
+          cp "$RUNNER_TEMP/data/nightly/bing-state.json" "$RUNNER_TEMP/nightly/" 2>/dev/null || true
 
       # --act (ТЗ-1, 06.11.2026): sitemap-yandex.xml в Вебмастер и до 30 адресов из _src/data/recrawl_queue.txt на переобход.
       # В PR только чтение.

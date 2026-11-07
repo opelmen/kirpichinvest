@@ -137,6 +137,16 @@ class RecrawlQueueTests(unittest.TestCase):
         self.assertIn("- /sitemap.xml — 2026-11-06, 0, 0, 30000, 0", md)
         self.assertIn("- /torgi/ — NEUTRAL, Crawled - currently not indexed, 2026-11-01", md)
 
+    def test_bing_pick_rotates_and_skips_recent(self):
+        import seo_nightly as sn
+        from datetime import date
+        B = "https://torggid.ru"
+        queue = [B + "/torgi/"]
+        sm = [B + "/auto/lot/1/", B + "/torgi/lot/1/", B + "/torgi/permskiy-kray/", B + "/torgi/", B + "/stati/a/"]
+        state = {B + "/stati/a/": "2026-11-01", B + "/torgi/lot/1/": "2026-09-01"}
+        got = sn.bing_pick(queue, sm, state, date(2026, 11, 8), n=3)
+        self.assertEqual(got, [B + "/torgi/", B + "/torgi/permskiy-kray/", B + "/torgi/lot/1/"])
+
     def test_gsc_submit_sitemap_put_and_403_hint(self):
         import seo_nightly as sn
         from datetime import date

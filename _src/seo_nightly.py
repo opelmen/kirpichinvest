@@ -311,7 +311,25 @@ def bing_date(v):
     return str(v or "")[:10]
 
 
-def bing_block(key, queue_path, act):
+def bing_pick(queue, sitemap, state, today, n=100, days=30):
+    """ГЕО-6 (08.11.2026): ротация адресов для Bing SubmitUrlBatch. Раньше каждую ночь уходила одна и та же очередь
+    хабов (~50 из 100 квоты). Теперь: хабы из очереди, затем остальные страницы sitemap — сначала разделы, регионы
+    и статьи, потом карточки недвижимости, потом техники; адрес, отправленный за последние `days` дней, пропускаем."""
+    def rank(u):
+        return 2 if "/auto/lot/" in u else (1 if "/lot/" in u else 0)
+    cut = str(today - timedelta(days=days))
+    seen, out = set(), []
+    for u in list(queue) + sorted(sitemap, key=rank):
+        if u in seen or (state.get(u) or "") > cut:
+            continue
+        seen.add(u)
+        out.append(u)
+        if len(out) >= n:
+            break
+    return out
+
+
+def bing_block(key, queue_path, act, state_path=None, today=None):
     """ГЕО-2 (07.11.2026): через Bing ищут ChatGPT и Copilot. Что в индексе Bing, запросы и страницы с кликами,
     sitemap и (в режиме --act) отправка хабов из очереди переобхода через SubmitUrlBatch."""
     site = BASE + "/"
@@ -367,10 +385,24 @@ def bing_block(key, queue_path, act):
         try:
             q = bing_call("GetUrlSubmissionQuota", key, siteUrl=site) or {}
             out["quota"] = {"daily": q.get("DailyQuota"), "monthly": q.get("MonthlyQuota")}
-            urls = read_queue(queue_path)[: max(0, min(100, int(q.get("DailyQuota") or 0)))]
+            n = max(0, min(100, int(q.get("DailyQuota") or 0)))
+            state = {}
+            sp = Path(state_path) if state_path else None
+            if sp and sp.exists():
+                state = json.loads(sp.read_text(encoding="utf-8"))
+            sm, _ = sitemap_urls("/sitemap.xml")
+            urls = bing_pick(read_queue(queue_path), sm, state, today or datetime.now(timezone.utc).date(), n)
             if urls:
                 bing_call("SubmitUrlBatch", key, {"siteUrl": site, "urlList": urls})
                 out["submitted_urls"] = len(urls)
+                d = str(today or datetime.now(timezone.utc).date())
+                state.update({u: d for u in urls})
+                out["submitted_by_kind"] = {k: sum(1 for u in urls if f(u)) for k, f in (
+                    ("разделы и статьи", lambda u: "/lot/" not in u), ("недвижимость", lambda u: "/torgi/lot/" in u),
+                    ("техника", lambda u: "/auto/lot/" in u))}
+                if sp:
+                    sp.parent.mkdir(parents=True, exist_ok=True)
+                    sp.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
         except Exception as e:
             out["errors"]["submit"] = str(e)
     if not out["errors"]:
@@ -458,6 +490,8 @@ def to_md(r):
             L.append("- отправлены sitemap: " + ", ".join(b["submitted_feeds"]))
         if b.get("quota"):
             L.append("- квота отправки адресов: %s в день, %s в месяц; отправлено %s" % (b["quota"].get("daily"), b["quota"].get("monthly"), b.get("submitted_urls", 0)))
+            if b.get("submitted_by_kind"):
+                L.append("- из них: " + ", ".join("%s %s" % kv for kv in b["submitted_by_kind"].items()))
         if b.get("queries"):
             L += ["", "Запросы в Bing (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(q) for q in b["queries"]]
         if b.get("pages"):
@@ -684,7 +718,7 @@ def main():
         r.setdefault("errors", {})["token"] = "YANDEX_METRIKA_TOKEN is not set"
     bing_key = os.environ.get("BING_WEBMASTER_KEY")
     if bing_key:
-        safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act))
+        safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act, Path(args.out) / "bing-state.json", today))
     gsc_key = os.environ.get("GSC_SERVICE_ACCOUNT")
     if gsc_key:
         safe(r, "gsc", lambda: gsc_block(gsc_key, today, act=args.act))
