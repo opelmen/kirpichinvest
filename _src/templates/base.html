@@ -113,7 +113,7 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   {% if cfg.MAX_CHANNEL %}<a class="head-tg head-max" href="{{ cfg.MAX_CHANNEL }}" title="Канал в Max: лот дня" aria-label="Канал в Max"><span class="maxmark" aria-hidden="true">MAX</span></a>{% endif %}
   <a class="btn head-cta" href="/#zayavka">Оставить заявку</a>
 </div></header>
-<main id="main">{% block main %}{% endblock %}
+<main id="main"><div id="aibar" class="wrap" hidden><div class="appbar follow"><p><b>Пришли из <span data-ai-name>ИИ-ассистента</span>?</b> Такие лоты с разбором рисков и снижениями цены мы присылаем бесплатно{% if cfg.TG_BOT %} в Telegram{% endif %}{% if cfg.MAX_CHANNEL %} и Max{% endif %}. Задаток и документы — у организатора торгов, мы только помогаем проверить.</p>{% if cfg.TG_BOT %}<a class="btn" href="{{ cfg.TG_BOT }}?start=ai" data-ai-cta="tg">Получать в Telegram</a>{% endif %}{% if cfg.MAX_CHANNEL %}<a class="btn ghost" href="{{ cfg.MAX_CHANNEL }}" data-ai-cta="max">В Max</a>{% endif %}<button type="button" class="btn ghost" data-ai-close aria-label="Скрыть">×</button></div></div>{% block main %}{% endblock %}
 {% from "_form.html" import tg_block %}{% block tgglobal %}<section style="padding:0 0 48px"><div class="wrap">{{ tg_block() }}</div></section>{% endblock %}</main>
 <footer><div class="wrap">
   <div class="cols">
@@ -144,6 +144,17 @@ ym({{ cfg.METRIKA_ID }}, 'init', {ssr:true, webvisor:true, clickmap:true, ecomme
   <p style="margin-top:24px">© {{ year }} {{ cfg.SITE_NAME }}</p>
 </div></footer>
 <script>
+/* GEO (07.11.2026): визит из ИИ-ассистента (utm_source или реферер) — плашка «получать такие лоты» и цели ai_visit / ai_click в Метрике.
+   ChatGPT ставит utm_source=chatgpt.com, Perplexity и Copilot приходят реферером; Метрика сама считает их «прямыми». */
+(function(){try{var p=new URLSearchParams(location.search),src=(p.get("utm_source")||"").toLowerCase(),ref="";try{ref=document.referrer?new URL(document.referrer).hostname.toLowerCase():""}catch(e){}
+var ai=[["chatgpt","ChatGPT"],["openai","ChatGPT"],["perplexity","Perplexity"],["copilot","Copilot"],["bing.com/chat","Copilot"],["gemini","Gemini"],["claude","Claude"],["deepseek","DeepSeek"],["alice","Алисы"],["ya-ai","Алисы"],["yandex ai","Алисы"],["gigachat","GigaChat"],["mistral","Mistral"],["you.com","You.com"]],name="";
+for(var i=0;i<ai.length;i++){if(src.indexOf(ai[i][0])>-1||ref.indexOf(ai[i][0])>-1){name=ai[i][1];break}}
+if(name)sessionStorage.setItem("ai_src",name);else name=sessionStorage.getItem("ai_src")||"";
+if(!name||localStorage.getItem("aibar_off"))return;var b=document.getElementById("aibar");if(!b)return;
+b.querySelector("[data-ai-name]").textContent=name;b.hidden=false;
+if(window.ym){% if cfg.METRIKA_ID %}ym({{ cfg.METRIKA_ID }},"reachGoal","ai_visit",{ai:name}){% endif %};
+b.querySelectorAll("[data-ai-cta]").forEach(function(a){a.addEventListener("click",function(){if(window.ym){% if cfg.METRIKA_ID %}ym({{ cfg.METRIKA_ID }},"reachGoal","ai_click",{ai:name,to:a.dataset.aiCta}){% endif %}})});
+b.querySelector("[data-ai-close]").addEventListener("click",function(){b.hidden=true;try{localStorage.setItem("aibar_off","1")}catch(e){}})}catch(e){}})();
 (function(){var p=new URLSearchParams(location.search),u=[];["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){if(p.get(k))u.push(k+"="+p.get(k))});
 try{if(u.length)sessionStorage.setItem("utm",u.join("&"))}catch(e){}
 /* откуда пришёл: кука tg_acq на весь torggid.ru, её читает кабинет app.torggid.ru при регистрации. Рекламный переход перезаписывает, обычный — только первый раз */
