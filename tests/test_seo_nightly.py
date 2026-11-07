@@ -128,3 +128,11 @@ class RecrawlQueueTests(unittest.TestCase):
                                                      "daily": [["2026-10-30", 1, 40, 12.5]]}})
         self.assertIn("- 2026-10-30 — 1, 40, 12.5", md)
         self.assertIn("за 28 дней", md)
+
+    def test_gsc_inspect_and_sitemaps_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "gsc": {"site": "https://torggid.ru/",
+            "sitemaps": [["/sitemap.xml", "2026-11-06", 0, 0, 30000, 0]],
+            "inspect": [["/torgi/", "NEUTRAL", "Crawled - currently not indexed", "2026-11-01", "SUCCESSFUL", "ALLOWED", "INDEXING_ALLOWED", "/torgi/"]]}})
+        self.assertIn("- /sitemap.xml — 2026-11-06, 0, 0, 30000, 0", md)
+        self.assertIn("- /torgi/ — NEUTRAL, Crawled - currently not indexed, 2026-11-01", md)
