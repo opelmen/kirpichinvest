@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-07T10:25:02+00:00",
+ "generated": "2026-11-07T15:24:34+00:00",
  "date": "2026-11-07",
  "metrika": {
   "day": "2026-11-06",
@@ -79,8 +79,8 @@
     "http:torggid.ru:80"
    ],
    "errors": {
-    "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "summary": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "indexing_samples": "Remote end closed connection without response",
     "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
@@ -1188,67 +1188,7 @@
    },
    "diagnostics": {
     "problems": {
-     "URL_ALERT_4XX": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_BINDING": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_TITLE": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
      "NO_REGIONS": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "THREATS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "ERROR_IN_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_REDIRECTS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_PROBLEM": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "SLOW_AVG_RESPONSE_TIME": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_NEED_PAPER": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "BIG_FAVICON_ABSENT": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
@@ -1258,13 +1198,8 @@
       "state": "PRESENT",
       "last_state_update": "2026-09-30T07:41:40.077+03:00"
      },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_5XX": {
-      "severity": "CRITICAL",
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -1273,42 +1208,12 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "CONNECT_FAILED": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DISALLOWED_IN_ROBOTS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+     "NO_ROBOTS_TXT": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DNS_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "PRESENT",
-      "last_state_update": "2026-10-10T08:07:56.042+03:00"
-     },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
+     "NO_METRIKA_COUNTER_BINDING": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1318,7 +1223,82 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "MAIN_PAGE_ERROR": {
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "NO_SITEMAP_MODIFICATIONS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_TITLE": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERROR_IN_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "PRESENT",
+      "last_state_update": "2026-10-10T08:07:56.042+03:00"
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "THREATS": {
       "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
@@ -1328,8 +1308,8 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "ERRORS_IN_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -1338,15 +1318,35 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "SOFT_404": {
-      "severity": "POSSIBLE_PROBLEM",
+     "URL_ALERT_4XX": {
+      "severity": "RECOMMENDATION",
       "state": "ABSENT",
-      "last_state_update": "2026-10-03T10:33:06.648+03:00"
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
      },
      "FAVICON_ERROR": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
+     },
+     "MAIN_PAGE_REDIRECTS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SOFT_404": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": "2026-10-03T10:33:06.648+03:00"
      }
     }
    }
@@ -1385,6 +1385,30 @@
   },
   "queries": [
    [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
+   ],
+   [
+    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
+    1,
+    0,
+    1
+   ],
+   [
+    "недвижимость москва толрги",
+    1,
+    0,
+    4
+   ],
+   [
+    "аукционы по продаже недвижимости в москве",
+    1,
+    0,
+    8
+   ],
+   [
     "с московская 66 офис 411,4 этаж саратов 2 гис",
     1,
     0,
@@ -1403,22 +1427,16 @@
     4
    ],
    [
-    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
+    "site.investmoscow.ru квартира торги ноябрь 2026",
     1,
     0,
-    1
+    5
    ],
    [
     "торги квартир в москве на аукционе",
     1,
     0,
     7
-   ],
-   [
-    "site.investmoscow.ru квартира торги ноябрь 2026",
-    1,
-    0,
-    5
    ],
    [
     "дом нирнзее нежилое помещение торги",
@@ -1431,24 +1449,6 @@
     1,
     0,
     3
-   ],
-   [
-    "недвижимость москва толрги",
-    1,
-    0,
-    4
-   ],
-   [
-    "аукционы по продаже недвижимости в москве",
-    1,
-    0,
-    8
-   ],
-   [
-    "балтым арестованное имущество земельный участок торги",
-    1,
-    0,
-    6
    ]
   ],
   "pages": [
@@ -1473,19 +1473,18 @@
    ]
   ],
   "quota": {
-   "daily": 50,
-   "monthly": 2350
-  },
-  "submitted_urls": 50
+   "daily": 0,
+   "monthly": 2300
+  }
  },
  "errors": {
-  "gsc": "GSC_SERVICE_ACCOUNT не задан (JSON ключа сервисного аккаунта Google)"
+  "gsc": "HTTP 403 {\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Google Search Console API has not been used in project 692705189257 before or it is disabled. Enable it by visiting https://console.developers.google.co"
  },
  "site": {
   "pages": {
    "/": {
     "status": 200,
-    "ms": 1303,
+    "ms": 1132,
     "bytes": 52638,
     "final": "https://torggid.ru/",
     "error": null,
@@ -1499,7 +1498,7 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 1454,
+    "ms": 1079,
     "bytes": 100739,
     "final": "https://torggid.ru/torgi/",
     "error": null,
@@ -1513,7 +1512,7 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 1662,
+    "ms": 1280,
     "bytes": 102256,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
@@ -1527,7 +1526,7 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 1387,
+    "ms": 1173,
     "bytes": 106283,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
@@ -1541,7 +1540,7 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 1297,
+    "ms": 1058,
     "bytes": 94382,
     "final": "https://torggid.ru/auto/",
     "error": null,
@@ -1555,7 +1554,7 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 1115,
+    "ms": 923,
     "bytes": 33513,
     "final": "https://torggid.ru/stati/",
     "error": null,
@@ -1569,7 +1568,7 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 1105,
+    "ms": 985,
     "bytes": 39052,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
@@ -1583,7 +1582,7 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 1022,
+    "ms": 613,
     "bytes": 34685,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
@@ -1597,7 +1596,7 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 1097,
+    "ms": 966,
     "bytes": 28710,
     "final": "https://torggid.ru/analitika/",
     "error": null,
@@ -1613,25 +1612,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 759,
+    "ms": 500,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 565,
+    "ms": 914,
     "bytes": 1092,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 942,
+    "ms": 1102,
     "bytes": 51391,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 769,
+    "ms": 960,
     "bytes": 24873,
     "error": null
    }
