@@ -113,3 +113,8 @@ class RecrawlQueueTests(unittest.TestCase):
         with self.assertRaises(Exception) as cm:
             sn.google_token(sa)
         self.assertNotIn("private_key", str(cm.exception))
+
+    def test_bing_date_parses_wcf_format(self):
+        import seo_nightly as sn
+        self.assertEqual(sn.bing_date("/Date(1793000000000)/"), "2026-10-26")
+        self.assertEqual(sn.bing_date("2026-11-06T00:00:00"), "2026-11-06")

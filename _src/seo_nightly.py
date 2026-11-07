@@ -303,6 +303,14 @@ def bing_call(method, key, body=None, **params):
         raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
 
 
+def bing_date(v):
+    """Bing отдаёт даты как /Date(1793000000000)/ (мс с 1970) — в YYYY-MM-DD."""
+    m = re.search(r"/Date\((-?\d+)", str(v or ""))
+    if m:
+        return datetime.fromtimestamp(int(m.group(1)) / 1000, timezone.utc).strftime("%Y-%m-%d")
+    return str(v or "")[:10]
+
+
 def bing_block(key, queue_path, act):
     """ГЕО-2 (07.11.2026): через Bing ищут ChatGPT и Copilot. Что в индексе Bing, запросы и страницы с кликами,
     sitemap и (в режиме --act) отправка хабов из очереди переобхода через SubmitUrlBatch."""
@@ -318,7 +326,7 @@ def bing_block(key, queue_path, act):
     def crawl():
         rows = bing_call("GetCrawlStats", key, siteUrl=site) or []
         last = rows[-1] if rows else {}
-        return {"date": str(last.get("Date", ""))[:10], "in_index": last.get("InIndex"), "crawled": last.get("CrawledPages"),
+        return {"date": bing_date(last.get("Date")), "in_index": last.get("InIndex"), "crawled": last.get("CrawledPages"),
                 "crawl_errors": last.get("CrawlErrors"), "blocked": last.get("BlockedByRobots"), "in_links": last.get("InLinks")}
 
     def traffic():
@@ -339,7 +347,7 @@ def bing_block(key, queue_path, act):
 
     def feeds():
         rows = bing_call("GetFeeds", key, siteUrl=site) or []
-        return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), str(x.get("LastCrawled", ""))[:10]] for x in rows]
+        return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), bing_date(x.get("LastCrawled"))] for x in rows]
 
     part("crawl", crawl)
     part("traffic", traffic)
