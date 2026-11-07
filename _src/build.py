@@ -97,7 +97,7 @@ for f in sorted((SRC / "content").glob("*.md")):
     if "<!-- faq -->" in body:
         body, fq = body.split("<!-- faq -->", 1)
         faq = [{"q": q.strip(), "a": a.strip()} for q, a in re.findall(r"^### (.+?)\n(.+?)(?=\n### |\Z)", fq.strip(), re.S | re.M)]
-    meta.update(slug=f.stem.split("_", 1)[-1], html=markdown.markdown(body, extensions=["tables"]), faq=faq)
+    meta.update(slug=f.stem.split("_", 1)[-1], html=markdown.markdown(body, extensions=["tables"]), faq=faq, md=body)
     ARTICLES.append(meta)
 
 # ---------- лоты ----------
@@ -986,6 +986,22 @@ def build():
           description="Покажем ваш лот покупателям и инвесторам: карточка на сайте, Telegram, подготовка лота к продаже — фото, документы, проверка.")
     write("/stati/", "articles.html", priority="0.7", articles=ARTICLES, title="Статьи о покупке недвижимости с торгов",
           description="Как устроены торги по банкротству и арестованному имуществу, риски, проверка лота, расчёт ставки.")
+    # ГЕО-3 (08.11.2026): цифры каталога прямо в тексте статьи ({{ n_lots }}, {% for … in platforms %}) —
+    # ИИ-ассистенты цитируют страницы со свежими числами и датой; пересчитываются с каждой сборкой
+    _pct = lambda xs, f: round(100 * sum(1 for d in xs if f(d)) / len(xs)) if xs else 0
+    _flats = [d for d in LOTS if d.get("category") == "flat"]
+    ART_VARS = {
+        "today": date.today().strftime("%d.%m.%Y"), "n_lots": len(LOTS), "n_flats": len(_flats),
+        "n_regions": len({d.get("region") for d in LOTS if d.get("region")}), "n_auto": len(AUTOS),
+        "share_povt": _pct(LOTS, lambda d: d.get("repeat")),
+        "share_public": _pct(LOTS, lambda d: "публичн" in (d.get("bidd_type") or "").lower()),
+        "median_flat": rub(median([d.get("price") for d in _flats])) if _flats else "нет данных",
+        "median_auto": rub(median([d.get("price") for d in AUTOS])) if AUTOS else "нет данных",
+        "platforms": [(name, n, round(100 * n / len(LOTS)) if LOTS else 0) for name, _, n in source_counts(LOTS)[:8]],
+    }
+    for a in ARTICLES:
+        if "{{" in a["md"] or "{%" in a["md"]:
+            a["html"] = markdown.markdown(Environment().from_string(a["md"]).render(**ART_VARS), extensions=["tables"])
     for a in ARTICLES:
         preferred = [slug.strip() for slug in a.get("related", "").split(",") if slug.strip()]
         candidates = {x["slug"]: x for x in ARTICLES if x["slug"] != a["slug"]}
