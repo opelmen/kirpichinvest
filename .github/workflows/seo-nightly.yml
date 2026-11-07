@@ -51,6 +51,7 @@ jobs:
       - name: Collect
         env:
           YANDEX_METRIKA_TOKEN: ${{ secrets.YANDEX_METRIKA_TOKEN }}
+          BING_WEBMASTER_KEY: ${{ secrets.BING_WEBMASTER_KEY }}
         run: cd _src && python seo_nightly.py --out "$RUNNER_TEMP/nightly" ${{ github.event_name != 'pull_request' && '--act' || '' }}
 
       - name: Save to seo-yandex-data branch
