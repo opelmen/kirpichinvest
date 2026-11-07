@@ -58,3 +58,114 @@ class RecrawlQueueTests(unittest.TestCase):
         self.assertIn("sitemap-yandex.xml: добавлен", md)
         self.assertIn("отправлено 1", md)
         self.assertIn("  - /torgi/", md)
+
+    def test_bing_section_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "bing": {
+            "crawl": {"date": "2026-11-06", "in_index": 1200, "crawled": 300, "crawl_errors": 2, "blocked": 0, "in_links": 10},
+            "traffic": {"impressions_7d": 450, "clicks_7d": 12, "days": 7},
+            "queries": [["квартиры с торгов казань", 40, 3, 4.5]], "pages": [["/torgi/kazan/", 40, 3]],
+            "feeds": [["/sitemap.xml", "Processed", 30000, "2026-11-06"]], "submitted_feeds": ["/sitemap-yandex.xml"],
+            "quota": {"daily": 100, "monthly": 1000}, "submitted_urls": 30}})
+        self.assertIn("## Bing", md)
+        self.assertIn("в индексе Bing: 1200", md)
+        self.assertIn("показы за 7 дн.: 450, клики: 12", md)
+        self.assertIn("/sitemap.xml (Processed, 30000 адресов, обход 2026-11-06)", md)
+        self.assertIn("отправлены sitemap: /sitemap-yandex.xml", md)
+        self.assertIn("отправлено 30", md)
+        self.assertIn("- квартиры с торгов казань — 40, 3, 4.5", md)
+
+    def test_bing_errors_are_reported_not_raised(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "bing": {"errors": {"crawl": "HTTP 401 InvalidApiKey"}}})
+        self.assertIn("ошибка crawl: HTTP 401 InvalidApiKey", md)
+
+    def test_gsc_section_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "gsc": {
+            "site": "sc-domain:torggid.ru", "period": "2026-10-29 — 2026-11-04",
+            "totals": {"clicks": 12, "impressions": 900, "ctr": 1.3, "position": 14.2},
+            "totals_prev": {"clicks": 9, "impressions": 700, "ctr": 1.3, "position": 15.0},
+            "queries": {"count": 320, "top": [["квартиры с торгов", 100, 2, 12.0]],
+                        "wins": [["торги по банкротству казань официальный сайт", 40, 0, 11.5]]},
+            "pages": [["/torgi/kazan/", 40, 0, 11.5]]}})
+        self.assertIn("## Google Search Console", md)
+        self.assertIn("клики 12 (пред. 9), показы 900 (пред. 700)", md)
+        self.assertIn("Быстрые победы", md)
+        self.assertIn("- торги по банкротству казань официальный сайт — 40, 0, 11.5", md)
+
+    def test_gsc_missing_key_is_reported(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "errors": {"gsc": "GSC_SERVICE_ACCOUNT не задан"}})
+        self.assertIn("ошибка gsc: GSC_SERVICE_ACCOUNT не задан", md)
+
+    def test_google_token_signs_jwt(self):
+        import json
+        import seo_nightly as sn
+        try:
+            from cryptography.hazmat.primitives import serialization
+            from cryptography.hazmat.primitives.asymmetric import rsa
+        except ImportError:
+            self.skipTest("cryptography не установлена")
+        key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        pem = key.private_key_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
+                                    serialization.NoEncryption()).decode() if hasattr(key, "private_key_bytes") else \
+            key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()).decode()
+        sa = json.dumps({"client_email": "x@y.iam.gserviceaccount.com", "token_uri": "http://127.0.0.1:9/token", "private_key": pem})
+        # подпись проходит, падает только сетевой обмен токена
+        with self.assertRaises(Exception) as cm:
+            sn.google_token(sa)
+        self.assertNotIn("private_key", str(cm.exception))
+
+    def test_bing_date_parses_wcf_format(self):
+        import seo_nightly as sn
+        self.assertEqual(sn.bing_date("/Date(1793000000000)/"), "2026-10-26")
+        self.assertEqual(sn.bing_date("2026-11-06T00:00:00"), "2026-11-06")
+
+    def test_gsc_daily_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "gsc": {"site": "https://torggid.ru/", "period_28": "2026-10-08 — 2026-11-04",
+                                                     "daily": [["2026-10-30", 1, 40, 12.5]]}})
+        self.assertIn("- 2026-10-30 — 1, 40, 12.5", md)
+        self.assertIn("за 28 дней", md)
+
+    def test_gsc_inspect_and_sitemaps_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "gsc": {"site": "https://torggid.ru/",
+            "sitemaps": [["/sitemap.xml", "2026-11-06", 0, 0, 30000, 0]],
+            "inspect": [["/torgi/", "NEUTRAL", "Crawled - currently not indexed", "2026-11-01", "SUCCESSFUL", "ALLOWED", "INDEXING_ALLOWED", "/torgi/"]]}})
+        self.assertIn("- /sitemap.xml — 2026-11-06, 0, 0, 30000, 0", md)
+        self.assertIn("- /torgi/ — NEUTRAL, Crawled - currently not indexed, 2026-11-01", md)
+
+    def test_bing_pick_rotates_and_skips_recent(self):
+        import seo_nightly as sn
+        from datetime import date
+        B = "https://torggid.ru"
+        queue = [B + "/torgi/"]
+        sm = [B + "/auto/lot/1/", B + "/torgi/lot/1/", B + "/torgi/permskiy-kray/", B + "/torgi/", B + "/stati/a/"]
+        state = {B + "/stati/a/": "2026-11-01", B + "/torgi/lot/1/": "2026-09-01"}
+        got = sn.bing_pick(queue, sm, state, date(2026, 11, 8), n=3)
+        self.assertEqual(got, [B + "/torgi/", B + "/torgi/permskiy-kray/", B + "/torgi/lot/1/"])
+
+    def test_gsc_submit_sitemap_put_and_403_hint(self):
+        import seo_nightly as sn
+        from datetime import date
+        from unittest import mock
+        calls = []
+
+        def fake_call(token, path, body=None, method=None):
+            calls.append((path, method))
+            if path == "/sites":
+                return {"siteEntry": [{"siteUrl": "sc-domain:torggid.ru"}]}
+            if method == "PUT":
+                raise RuntimeError("HTTP 403 forbidden")
+            return {}
+
+        with mock.patch.object(sn, "google_token", return_value=("t", "sa@x.iam.gserviceaccount.com")) as tok, \
+                mock.patch.object(sn, "gsc_call", side_effect=fake_call), \
+                mock.patch.object(sn.urllib.request, "urlopen", side_effect=OSError("no net")):
+            g = sn.gsc_block("{}", date(2026, 11, 7), act=True)
+        self.assertTrue(tok.call_args[0][1].endswith("/webmasters"))
+        self.assertIn(("/sites/sc-domain%3Atorggid.ru/sitemaps/https%3A%2F%2Ftorggid.ru%2Fsitemap.xml", "PUT"), calls)
+        self.assertIn("«Полный»", g["submit"][0][1])
+        self.assertIn("Отправка sitemap в Google", sn.to_md({"date": "2026-11-07", "gsc": g}))

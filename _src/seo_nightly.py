@@ -301,6 +301,131 @@ def webmaster_act(token, queue_path, state_path, today, limit):
     return out
 
 
+BING = "https://ssl.bing.com/webmaster/api.svc/json"
+
+
+def bing_call(method, key, body=None, **params):
+    """Bing Webmaster API (JSON): GET с apikey в query, POST — JSON-тело. Ошибка ключа/прав приходит как 4xx с текстом."""
+    params["apikey"] = key
+    url = "%s/%s?%s" % (BING, method, urllib.parse.urlencode(params))
+    data = json.dumps(body).encode("utf-8") if body is not None else None
+    req = urllib.request.Request(url, data=data, method="POST" if body is not None else "GET",
+                                 headers={"Content-Type": "application/json; charset=utf-8"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            return (json.loads(raw) if raw.strip() else {}).get("d")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
+
+
+def bing_date(v):
+    """Bing отдаёт даты как /Date(1793000000000)/ (мс с 1970) — в YYYY-MM-DD."""
+    m = re.search(r"/Date\((-?\d+)", str(v or ""))
+    if m:
+        return datetime.fromtimestamp(int(m.group(1)) / 1000, timezone.utc).strftime("%Y-%m-%d")
+    return str(v or "")[:10]
+
+
+def bing_pick(queue, sitemap, state, today, n=100, days=30):
+    """ГЕО-6 (08.11.2026): ротация адресов для Bing SubmitUrlBatch. Раньше каждую ночь уходила одна и та же очередь
+    хабов (~50 из 100 квоты). Теперь: хабы из очереди, затем остальные страницы sitemap — сначала разделы, регионы
+    и статьи, потом карточки недвижимости, потом техники; адрес, отправленный за последние `days` дней, пропускаем."""
+    def rank(u):
+        return 2 if "/auto/lot/" in u else (1 if "/lot/" in u else 0)
+    cut = str(today - timedelta(days=days))
+    seen, out = set(), []
+    for u in list(queue) + sorted(sitemap, key=rank):
+        if u in seen or (state.get(u) or "") > cut:
+            continue
+        seen.add(u)
+        out.append(u)
+        if len(out) >= n:
+            break
+    return out
+
+
+def bing_block(key, queue_path, act, state_path=None, today=None):
+    """ГЕО-2 (07.11.2026): через Bing ищут ChatGPT и Copilot. Что в индексе Bing, запросы и страницы с кликами,
+    sitemap и (в режиме --act) отправка хабов из очереди переобхода через SubmitUrlBatch."""
+    site = BASE + "/"
+    out = {"errors": {}}
+
+    def part(name, fn):
+        try:
+            out[name] = fn()
+        except Exception as e:
+            out["errors"][name] = str(e)
+
+    def crawl():
+        rows = bing_call("GetCrawlStats", key, siteUrl=site) or []
+        last = rows[-1] if rows else {}
+        return {"date": bing_date(last.get("Date")), "in_index": last.get("InIndex"), "crawled": last.get("CrawledPages"),
+                "crawl_errors": last.get("CrawlErrors"), "blocked": last.get("BlockedByRobots"), "in_links": last.get("InLinks")}
+
+    def traffic():
+        rows = bing_call("GetRankAndTrafficStats", key, siteUrl=site) or []
+        week = rows[-7:]
+        return {"impressions_7d": sum(int(x.get("Impressions") or 0) for x in week),
+                "clicks_7d": sum(int(x.get("Clicks") or 0) for x in week), "days": len(week)}
+
+    def queries():
+        rows = bing_call("GetQueryStats", key, siteUrl=site) or []
+        rows.sort(key=lambda x: -(x.get("Impressions") or 0))
+        return [[x.get("Query"), x.get("Impressions"), x.get("Clicks"), x.get("AvgImpressionPosition")] for x in rows[:15]]
+
+    def pages():
+        rows = bing_call("GetPageStats", key, siteUrl=site) or []
+        rows.sort(key=lambda x: -(x.get("Impressions") or 0))
+        return [[(x.get("Query") or x.get("Url") or "").replace(BASE, ""), x.get("Impressions"), x.get("Clicks")] for x in rows[:15]]
+
+    def feeds():
+        rows = bing_call("GetFeeds", key, siteUrl=site) or []
+        return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), bing_date(x.get("LastCrawled"))] for x in rows]
+
+    part("crawl", crawl)
+    part("traffic", traffic)
+    part("queries", queries)
+    part("pages", pages)
+    part("feeds", feeds)
+    if act and "feeds" in out:
+        have = {f[0] for f in out["feeds"]}
+        for sm in ("/sitemap.xml", "/sitemap-yandex.xml"):
+            if sm not in have:
+                try:
+                    bing_call("SubmitFeed", key, {"siteUrl": site, "feedUrl": BASE + sm})
+                    out.setdefault("submitted_feeds", []).append(sm)
+                except Exception as e:
+                    out["errors"]["feed " + sm] = str(e)
+    if act:
+        try:
+            q = bing_call("GetUrlSubmissionQuota", key, siteUrl=site) or {}
+            out["quota"] = {"daily": q.get("DailyQuota"), "monthly": q.get("MonthlyQuota")}
+            n = max(0, min(100, int(q.get("DailyQuota") or 0)))
+            state = {}
+            sp = Path(state_path) if state_path else None
+            if sp and sp.exists():
+                state = json.loads(sp.read_text(encoding="utf-8"))
+            sm, _ = sitemap_urls("/sitemap.xml")
+            urls = bing_pick(read_queue(queue_path), sm, state, today or datetime.now(timezone.utc).date(), n)
+            if urls:
+                bing_call("SubmitUrlBatch", key, {"siteUrl": site, "urlList": urls})
+                out["submitted_urls"] = len(urls)
+                d = str(today or datetime.now(timezone.utc).date())
+                state.update({u: d for u in urls})
+                out["submitted_by_kind"] = {k: sum(1 for u in urls if f(u)) for k, f in (
+                    ("разделы и статьи", lambda u: "/lot/" not in u), ("недвижимость", lambda u: "/torgi/lot/" in u),
+                    ("техника", lambda u: "/auto/lot/" in u))}
+                if sp:
+                    sp.parent.mkdir(parents=True, exist_ok=True)
+                    sp.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+        except Exception as e:
+            out["errors"]["submit"] = str(e)
+    if not out["errors"]:
+        del out["errors"]
+    return out
+
+
 def to_md(r):
     L = ["# ТоргГид: ночной срез %s" % r["date"], ""]
     m = r.get("metrika") or {}
@@ -372,9 +497,227 @@ def to_md(r):
         if a.get("probe"):
             L.append("- проверка на другом хосте: %s" % a["probe"])
         L.append("")
+    b = r.get("bing")
+    if b:
+        L += ["## Bing (через него ищут ChatGPT и Copilot)", ""]
+        c = b.get("crawl") or {}
+        if c:
+            L.append("- в индексе Bing: %s, обойдено за день: %s, ошибок обхода: %s, закрыто robots: %s (на %s)" % (
+                c.get("in_index"), c.get("crawled"), c.get("crawl_errors"), c.get("blocked"), c.get("date")))
+        t = b.get("traffic") or {}
+        if t:
+            L.append("- показы за %s дн.: %s, клики: %s" % (t.get("days"), t.get("impressions_7d"), t.get("clicks_7d")))
+        if b.get("feeds") is not None:
+            L.append("- sitemap в Bing: " + (", ".join("%s (%s, %s адресов, обход %s)" % tuple(f) for f in b["feeds"]) or "нет"))
+        if b.get("submitted_feeds"):
+            L.append("- отправлены sitemap: " + ", ".join(b["submitted_feeds"]))
+        if b.get("quota"):
+            L.append("- квота отправки адресов: %s в день, %s в месяц; отправлено %s" % (b["quota"].get("daily"), b["quota"].get("monthly"), b.get("submitted_urls", 0)))
+            if b.get("submitted_by_kind"):
+                L.append("- из них: " + ", ".join("%s %s" % kv for kv in b["submitted_by_kind"].items()))
+        if b.get("queries"):
+            L += ["", "Запросы в Bing (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(q) for q in b["queries"]]
+        if b.get("pages"):
+            L += ["", "Страницы с показами в Bing:"] + ["- %s — %s показов, %s кликов" % tuple(pg) for pg in b["pages"]]
+        for k, v in (b.get("errors") or {}).items():
+            L.append("- ошибка %s: %s" % (k, str(v)[:200]))
+        L.append("")
+    g = r.get("gsc")
+    if g:
+        L += ["## Google Search Console", ""]
+        if g.get("site"):
+            L.append("- ресурс %s, период %s (данные GSC отстают на 3 дня)" % (g["site"], g.get("period")))
+        t, tp = g.get("totals") or {}, g.get("totals_prev") or {}
+        if t:
+            L.append("- за 7 дней: клики %s (пред. %s), показы %s (пред. %s), CTR %s%%, средняя позиция %s (пред. %s)" % (
+                t.get("clicks"), tp.get("clicks", "–"), t.get("impressions"), tp.get("impressions", "–"), t.get("ctr"),
+                t.get("position"), tp.get("position", "–")))
+        if g.get("daily"):
+            L += ["", "По дням (дата — клики, показы, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in g["daily"]]
+        q = g.get("queries") or {}
+        if g.get("period_28"):
+            L.append("")
+            L.append("Запросы и страницы ниже — за 28 дней (%s)" % g["period_28"])
+        if q.get("count") is not None:
+            L.append("- запросов с показами: %s" % q["count"])
+        if q.get("wins"):
+            L += ["", "Быстрые победы (позиция 4–20, показы ≥ 5): запрос — показы, клики, позиция"] + ["- %s — %s, %s, %s" % tuple(x) for x in q["wins"]]
+        if q.get("top"):
+            L += ["", "Топ запросов Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in q["top"]]
+        if g.get("pages"):
+            L += ["", "Страницы с показами в Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in g["pages"]]
+        if g.get("submit"):
+            L += ["", "Отправка sitemap в Google:"] + ["- %s — %s" % tuple(x) for x in g["submit"]]
+        if g.get("sitemaps") is not None:
+            L += ["", "Sitemap в Google (путь — загружен, ошибки, предупреждения, отправлено, в индексе):"] + [
+                "- %s — %s, %s, %s, %s, %s" % tuple(x) for x in g["sitemaps"]] if g["sitemaps"] else ["", "Sitemap в Google: не добавлены"]
+        if g.get("inspect"):
+            L += ["", "Проверка страниц в Google (страница — вердикт, статус, обход, загрузка, robots, индексация, canonical Google):"] + [
+                "- %s — %s" % (x[0], ", ".join(str(v) for v in x[1:])) for x in g["inspect"]]
+        for k, v in (g.get("errors") or {}).items():
+            L.append("- ошибка %s: %s" % (k, str(v)[:300]))
+        L.append("")
     for k, v in (r.get("errors") or {}).items():
         L.append("- ошибка %s: %s" % (k, v))
     return "\n".join(L) + "\n"
+
+
+GSC = "https://www.googleapis.com/webmasters/v3"
+# ключевые страницы для проверки индекса в Google (URL Inspection API, 2 000 запросов в день)
+INSPECT = ["/", "/torgi/", "/torgi/moskva/", "/torgi/sankt-peterburg/", "/torgi/samara/", "/torgi/nizhniy-novgorod/",
+           "/torgi/permskiy-kray/", "/auto/", "/stati/", "/stati/proverka-kvartiry-s-torgov/"]
+
+
+def google_token(sa_json, scope="https://www.googleapis.com/auth/webmasters.readonly"):
+    """Токен сервисного аккаунта Google: JWT RS256 (библиотека cryptography) → oauth2 token."""
+    import base64
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import padding
+    sa = json.loads(sa_json) if isinstance(sa_json, str) else sa_json
+    b64 = lambda b: base64.urlsafe_b64encode(b).rstrip(b"=")
+    now = int(time.time())
+    header = b64(json.dumps({"alg": "RS256", "typ": "JWT"}).encode())
+    claims = b64(json.dumps({"iss": sa["client_email"], "scope": scope, "aud": sa["token_uri"],
+                             "iat": now, "exp": now + 3600}).encode())
+    key = serialization.load_pem_private_key(sa["private_key"].encode(), password=None)
+    sig = key.sign(header + b"." + claims, padding.PKCS1v15(), hashes.SHA256())
+    jwt = (header + b"." + claims + b"." + b64(sig)).decode()
+    body = urllib.parse.urlencode({"grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer", "assertion": jwt}).encode()
+    try:
+        with urllib.request.urlopen(urllib.request.Request(sa["token_uri"], data=body), timeout=60) as resp:
+            return json.loads(resp.read().decode())["access_token"], sa["client_email"]
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("token HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
+
+
+def gsc_call(token, path, body=None, method=None):
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(GSC + path, data=data, method=method or ("POST" if data else "GET"),
+                                 headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return json.loads(resp.read().decode("utf-8", "replace") or "{}")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
+
+
+# что переотправляем в Google каждую ночь в режиме --act (нужны права «Полный» у сервисного аккаунта)
+GSC_SITEMAPS = ["/sitemap.xml"]
+
+
+def gsc_block(sa_json, today, act=False):
+    """ТЗ-6 (07.11.2026): Google Search Console через сервисный аккаунт (секрет GSC_SERVICE_ACCOUNT, JSON ключа).
+    Данные GSC отстают на ~3 дня: берём 7 дней, заканчивая позавчера-3. Запросы на позициях 4–20 с показами —
+    «быстрые победы» для НЧ (подтянуть текст/ссылки на страницу)."""
+    out = {"errors": {}}
+    scope = "https://www.googleapis.com/auth/webmasters" if act else "https://www.googleapis.com/auth/webmasters.readonly"
+    token, email = google_token(sa_json, scope)
+    sites = [s.get("siteUrl") for s in (gsc_call(token, "/sites").get("siteEntry") or [])]
+    mine = [s for s in sites if "torggid.ru" in (s or "")]
+    if not mine:
+        out["errors"]["sites"] = "сервисный аккаунт %s не добавлен в ресурс torggid.ru в Search Console (доступные: %s)" % (email, sites or "нет")
+        return out
+    site = sorted(mine, key=lambda s: not s.startswith("sc-domain:"))[0]
+    out["site"] = site
+    end = today - timedelta(days=3)
+    start = end - timedelta(days=6)
+    p_end = start - timedelta(days=1)
+    p_start = p_end - timedelta(days=6)
+    out["period"] = "%s — %s" % (start, end)
+    enc = urllib.parse.quote(site, safe="")
+
+    def query(dims, s, e, limit=25000, extra=None):
+        body = {"startDate": str(s), "endDate": str(e), "dimensions": dims, "rowLimit": limit}
+        body.update(extra or {})
+        return gsc_call(token, "/sites/%s/searchAnalytics/query" % enc, body).get("rows") or []
+
+    def totals(s, e):
+        rows = query([], s, e)
+        t = rows[0] if rows else {}
+        return {"clicks": int(t.get("clicks", 0)), "impressions": int(t.get("impressions", 0)),
+                "ctr": round(100 * float(t.get("ctr", 0)), 1), "position": round(float(t.get("position", 0)), 1)}
+
+    def part(name, fn):
+        try:
+            out[name] = fn()
+        except Exception as e:
+            out["errors"][name] = str(e)
+
+    part("totals", lambda: totals(start, end))
+    part("totals_prev", lambda: totals(p_start, p_end))
+    # по дням за 28 дней: видно, где провал и где данные GSC ещё не досчитаны
+    m_start = end - timedelta(days=27)
+    out["period_28"] = "%s — %s" % (m_start, end)
+
+    def daily():
+        rows = query(["date"], m_start, end, 100)
+        return [[x["keys"][0], int(x["clicks"]), int(x["impressions"]), round(x["position"], 1)] for x in rows]
+
+    part("daily", daily)
+
+    def queries():
+        rows = query(["query"], m_start, end, 5000)
+        rows.sort(key=lambda x: -x["impressions"])
+        top = [[x["keys"][0], int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)] for x in rows[:20]]
+        wins = [[x["keys"][0], int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)]
+                for x in rows if 3.5 <= x["position"] <= 20 and x["impressions"] >= 5]
+        wins.sort(key=lambda x: (-x[1], x[3]))
+        return {"top": top, "wins": wins[:25], "count": len(rows)}
+
+    def pages():
+        rows = query(["page"], m_start, end, 5000)
+        rows.sort(key=lambda x: -x["impressions"])
+        return [[x["keys"][0].replace(BASE, ""), int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)] for x in rows[:15]]
+
+    part("queries", queries)
+    part("pages", pages)
+
+    def sitemaps():
+        rows = gsc_call(token, "/sites/%s/sitemaps" % enc).get("sitemap") or []
+        return [[x.get("path", "").replace(BASE, ""), str(x.get("lastDownloaded", ""))[:10], x.get("errors"), x.get("warnings"),
+                 sum(int(c.get("submitted") or 0) for c in x.get("contents") or []),
+                 sum(int(c.get("indexed") or 0) for c in x.get("contents") or [])] for x in rows]
+
+    def submit():
+        # переотправка sitemap: Google перечитывает его в ближайшие часы (страницы добавятся без ручной работы)
+        res = []
+        for path in GSC_SITEMAPS:
+            try:
+                gsc_call(token, "/sites/%s/sitemaps/%s" % (enc, urllib.parse.quote(BASE + path, safe="")), method="PUT")
+                res.append([path, "отправлен"])
+            except RuntimeError as e:
+                msg = str(e)
+                if "HTTP 403" in msg:
+                    msg = "нет прав: дать %s права «Полный» в Search Console → Настройки → Пользователи" % email
+                res.append([path, msg[:200]])
+        return res
+
+    if act:
+        part("submit", submit)
+    part("sitemaps", sitemaps)
+
+    def inspect():
+        # как Google видит ключевые страницы: в индексе ли, когда обходил, что получил при загрузке, какой canonical выбрал
+        res = []
+        for path in INSPECT:
+            body = {"inspectionUrl": BASE + path, "siteUrl": site, "languageCode": "ru-RU"}
+            req = urllib.request.Request("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
+                                         data=json.dumps(body).encode(), method="POST",
+                                         headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=60) as resp:
+                    r = (json.loads(resp.read().decode()).get("inspectionResult") or {}).get("indexStatusResult") or {}
+                res.append([path, r.get("verdict"), r.get("coverageState"), str(r.get("lastCrawlTime", ""))[:10],
+                            r.get("pageFetchState"), r.get("robotsTxtState"), r.get("indexingState"),
+                            (r.get("googleCanonical") or "").replace(BASE, "")])
+            except urllib.error.HTTPError as e:
+                res.append([path, "HTTP %s" % e.code, e.read().decode("utf-8", "replace")[:120], "", "", "", "", ""])
+        return res
+
+    part("inspect", inspect)
+    if not out["errors"]:
+        del out["errors"]
+    return out
 
 
 def main():
@@ -396,6 +739,14 @@ def main():
             safe(r, "act", lambda: webmaster_act(token, args.queue, Path(args.out) / "recrawl-state.json", today, args.recrawl_max))
     else:
         r.setdefault("errors", {})["token"] = "YANDEX_METRIKA_TOKEN is not set"
+    bing_key = os.environ.get("BING_WEBMASTER_KEY")
+    if bing_key:
+        safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act, Path(args.out) / "bing-state.json", today))
+    gsc_key = os.environ.get("GSC_SERVICE_ACCOUNT")
+    if gsc_key:
+        safe(r, "gsc", lambda: gsc_block(gsc_key, today, act=args.act))
+    else:
+        r.setdefault("errors", {})["gsc"] = "GSC_SERVICE_ACCOUNT не задан (JSON ключа сервисного аккаунта Google)"
     if not args.no_site:
         safe(r, "site", site_health)
     out = Path(args.out)

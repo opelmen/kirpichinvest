@@ -20,6 +20,9 @@ def thin_card(d, fallback_addrs=()):
 
 YANDEX_MIN_PRICE = 300_000
 YANDEX_MIN_EXCERPT = 200  # знаков пересказа извещения: короче — карточка для Яндекса неотличима от соседней
+# 07.11.2026: после #55 Яндексу открывалось 8 976 карточек, из них квартир лишь 1 475; остальное — дома, земля,
+# коммерция. Квартиры открываем как раньше, остальное — только с фото, пересказом и ценой от 1 млн ₽
+YANDEX_MIN_PRICE_OTHER = 1_000_000
 
 
 def yandex_card(d, fallback_addrs=(), big_cities=()):
@@ -27,7 +30,8 @@ def yandex_card(d, fallback_addrs=(), big_cities=()):
 
     Яндекс пересчитывает «малоценные» страницы по каждой и судит о сайте по их доле. Пока домен молодой и
     в Вебмастере не загружен, ему отдаём только карточки, где есть что показать: адрес, площадь, цена
-    от 300 тыс. ₽, дата окончания приёма заявок и фото или пересказ извещения от 200 знаков. Послабление
+    от 300 тыс. ₽, дата окончания приёма заявок и фото или пересказ извещения от 200 знаков (квартиры);
+    дома, земля и коммерция — только с фото, пересказом и ценой от 1 млн ₽. Послабление
     для 16 миллионников (06.11.2026: 12 394 открытых карточки при плане 2–4 тысячи) снято; `big_cities`
     оставлен в сигнатуре, чтобы вернуть его, когда страниц в поиске Яндекса станет больше."""
     if thin_card(d, fallback_addrs):
@@ -39,7 +43,8 @@ def yandex_card(d, fallback_addrs=(), big_cities=()):
         return False
     if not d.get("bidd_end"):
         return False
-    return (
-        bool(d.get("photo"))
-        or len((d.get("excerpt") or "").strip()) >= YANDEX_MIN_EXCERPT
-    )
+    photo = bool(d.get("photo"))
+    long_excerpt = len((d.get("excerpt") or "").strip()) >= YANDEX_MIN_EXCERPT
+    if (d.get("category") or "flat") == "flat":
+        return photo or long_excerpt
+    return photo and long_excerpt and (d.get("price") or 0) >= YANDEX_MIN_PRICE_OTHER

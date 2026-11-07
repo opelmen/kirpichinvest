@@ -47,7 +47,8 @@ class BuildTests(unittest.TestCase):
             rows = [dict(id=f'test_{i}', city='moskva', region='77', address='Москва, Тестовая улица, дом 1', price=1000000, area=40, bidd_end='2099-01-01T00:00:00Z') for i in range(65)]
             rows[1]['bidd_type'] = 'Реализация имущества должников'
             data = base / '_src/data'
-            rows[0].update(city='sankt-peterburg', region='47', address='Ленинградская область, Гатчинский район, г. Гатчина, Тестовая улица, дом 1')
+            rows[0].update(city='sankt-peterburg', region='47', address='Ленинградская область, Гатчинский район, г. Гатчина, Тестовая улица, дом 1',
+                           photo='https://torgi.gov.ru/new/image/1.jpg')  # ТЗ-6: в индекс и карту сайта только карточки с фото или пересказом
             (data/'lot_history.json').write_text('[]')
             (data/'lots.json').write_text(json.dumps(rows))
             def build():
@@ -74,9 +75,10 @@ class BuildTests(unittest.TestCase):
             self.assertIn('https://torggid.ru/torgi/moskva/', yandex)
             self.assertIn('https://torggid.ru/stati/', yandex)
             self.assertNotIn('/torgi/lot/', yandex)
-            # 06.11.2026: без фото и пересказа карточка закрыта для Яндекса даже в миллионнике (в Google остаётся)
-            self.assertIn('<meta name="yandex" content="noindex, follow">', (site/'torgi/lot/test_0/index.html').read_text())
-            self.assertNotIn('name="robots" content="noindex', (site/'torgi/lot/test_0/index.html').read_text())
+            # ТЗ-6 (07.11.2026): без фото и пересказа карточка закрыта noindex для всех поисковиков и вне карты сайта
+            self.assertIn('<meta name="robots" content="noindex, follow">', (site/'torgi/lot/test_2/index.html').read_text())
+            self.assertNotIn('https://torggid.ru/torgi/lot/test_2/', (site/'sitemap-lots-1.xml').read_text())
+            self.assertNotIn('noindex', (site/'torgi/lot/test_0/index.html').read_text())  # с фото — в индексе
             home = (site/'index.html').read_text()
             self.assertIn('Торги по банкротству по регионам', home)
             self.assertIn('href="/torgi/leningradskaya-oblast/"', home)
@@ -107,6 +109,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('noindex', (site/'torgi/do-1-mln/index.html').read_text())
             self.assertNotIn('https://torggid.ru/torgi/do-1-mln/', (site/'sitemap-catalog.xml').read_text())
             card = (site/'torgi/lot/test_0/index.html').read_text()
+            self.assertIn('id="aibar"', card)  # GEO: плашка для визитов из ИИ-ассистентов, цели ai_visit / ai_click
+            self.assertIn('"reachGoal","ai_visit"', card)
             self.assertIn('Результат торгов и факт продажи не подтверждены', card)
             self.assertNotIn('Получить отчёт', card)
             self.assertIn('/torgi/arhiv/', (site/'torgi/index.html').read_text())
@@ -136,7 +140,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn('FAQPage', region)  # у региона свои вопросы с цифрами каталога, как у города
             # запрос «торги по банкротству <регион> официальный сайт» (GSC 25.10): площадки региона с числом лотов и ссылками
             self.assertIn('Какой официальный сайт торгов по банкротству в Татарстане?', region)
-            self.assertIn('Где проходят торги по банкротству и аресту в Татарстане', region)
+            self.assertIn('Официальные сайты торгов по банкротству в Татарстане', region)
             self.assertIn('<a href="https://m-ets.ru/" rel="nofollow noopener" target="_blank">МЭТС</a>', region)
             # title начинается с формулировки Вордстата («квартиры с торгов <город>») и несёт «торги по банкротству»
             self.assertIn('Торги по банкротству в Татарстане — квартиры и недвижимость, все площадки', region.split('<title>')[1].split('</title>')[0])
@@ -165,6 +169,8 @@ class BuildTests(unittest.TestCase):
             kazan = (site/'torgi/kazan/index.html').read_text()
             self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
             self.assertIn('Банкротное имущество</span>', kazan)
+            self.assertRegex(kazan, r'<p class="lead">Сейчас \d+ лот\w* в Казани и пригородах со всех площадок')  # ТЗ-5: абзац-ответ под h1 с цифрами
+            self.assertIn('новых за 7 дней — ', kazan)
             # телефон только в подвале и разметке (John, 31.10.2026), в теле карточки его нет
             self.assertNotIn('995', deal_card.split('<main')[1].split('<footer')[0])
             self.assertIn('595-54-00', deal_card.split('<footer')[1])

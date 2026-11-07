@@ -97,7 +97,7 @@ for f in sorted((SRC / "content").glob("*.md")):
     if "<!-- faq -->" in body:
         body, fq = body.split("<!-- faq -->", 1)
         faq = [{"q": q.strip(), "a": a.strip()} for q, a in re.findall(r"^### (.+?)\n(.+?)(?=\n### |\Z)", fq.strip(), re.S | re.M)]
-    meta.update(slug=f.stem.split("_", 1)[-1], html=markdown.markdown(body, extensions=["tables"]), faq=faq)
+    meta.update(slug=f.stem.split("_", 1)[-1], html=markdown.markdown(body, extensions=["tables"]), faq=faq, md=body)
     ARTICLES.append(meta)
 
 # ---------- лоты ----------
@@ -784,6 +784,7 @@ def build():
         return out
 
     thin_n = yandex_n = 0
+    yandex_by = {}
     for d in CARDS:
         similar = similar_to(d)
         active = d["status"] == "active"
@@ -791,17 +792,32 @@ def build():
         thin_n += thin
         to_yandex = active and not thin and yandex_card(d, set(CITY_NAME.values()), CITY_NAME)
         yandex_n += to_yandex
+        if to_yandex:
+            # ТЗ-3 (06.11.2026): раскладка открытых Яндексу карточек по порогам — чтобы по site-log выбрать,
+            # как сузить их до 3–5 тысяч без выгрузки ленты лотов
+            p = d.get("price") or 0
+            ex = len((d.get("excerpt") or "").strip()) >= 200
+            ph = bool(d.get("photo"))
+            for key, ok in (("цена ≥500 тыс.", p >= 500_000), ("цена ≥1 млн", p >= 1_000_000),
+                            ("фото", ph), ("пересказ ≥200", ex), ("фото и пересказ", ph and ex),
+                            ("фото и цена ≥500 тыс.", ph and p >= 500_000), ("фото и цена ≥1 млн", ph and p >= 1_000_000),
+                            ("фото и пересказ и цена ≥500 тыс.", ph and ex and p >= 500_000),
+                            ("квартиры", d.get("category") == "flat"), ("квартиры с фото", ph and d.get("category") == "flat")):
+                yandex_by[key] = yandex_by.get(key, 0) + ok
         # карточка снятого лота остаётся для людей и ссылок, но из индекса и sitemap уходит: таких карточек
         # было около трети карты сайта, и Google тратил обход на них вместо актуальных лотов
-        write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active or thin,
-              noindex_yandex=not to_yandex, d=d, active=active, similar=similar, og_image=d.get("photo") if active else None,
+        # ТЗ-6 (07.11.2026): GSC — с 25.10 Google выкинул из индекса даже хабы («просканирована, но не проиндексирована»),
+        # показы 60 в день → 0. Молодой домен с 30 тысячами однотипных карточек получил оценку «малоценный».
+        # Порог качества Яндекса (фото/пересказ/цена) теперь общий: слабые карточки закрыты noindex для всех и вне sitemap.
+        write(f"/torgi/lot/{d['id']}/", "lot.html", priority="0.5", lastmod=d['lastmod'], noindex=not active or thin or not to_yandex, d=d, active=active, similar=similar, og_image=d.get("photo") if active else None,
               # цена в заголовке различает лоты одного торга по одному адресу (машиноместа, кладовые меньше 8 м²):
               # без неё у таких карточек одинаковые title и description, и Google склеивает их как копии
               title=f"{d['label']} с торгов" + (f" за {rub(d['price'])}" if d.get("price") else "") + f": {d['caddr'][:60]}" + (" — архив" if not active else ""),
               # пересказ извещения в описании: у 20 тысяч карточек сниппет перестаёт быть одинаковым
               description=f"{d['label']} с торгов: {d['caddr']}. " + (f"Начальная цена {rub(d.get('price'))}. " + (d['excerpt'][:140].rsplit(' ', 1)[0].rstrip(' .,;:') + "… " if d.get('excerpt') else "") + "Срок подачи заявки и сведения об объекте." if active else "Архив предложения. Уточняйте статус и результат у организатора торгов."))
     print(f"пустых карточек без адреса, площади и описания (noindex): {thin_n}")
-    print(f"карточек, открытых Яндексу (остальные meta yandex noindex): {yandex_n}")
+    print(f"карточек в индексе (Яндекс и Google, остальные noindex): {yandex_n}")
+    print("  из них по порогам: " + ", ".join(f"{k} {v}" for k, v in yandex_by.items()))
     history_path.write_text(json.dumps(CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # ---------- раздел /auto/: техника с торгов ----------
@@ -896,14 +912,20 @@ def build():
                 out += [x for x in closest(pool_v.get(d["vtype"], [])) if x not in out][:4 - len(out)]
             return out
 
+        auto_open = 0
         for d in AUTO_CARDS:
             active = d["status"] == "active"
-            write(f"/auto/lot/{d['id']}/", "auto_lot.html", priority="0.5", lastmod=d["lastmod"], noindex=not active,
+            # ТЗ-6: в индекс только карточки техники с фото, ценой и описанием (марка и год или пересказ от 200 знаков)
+            strong = (active and bool(d.get("photo")) and bool(d.get("price"))
+                      and ((d.get("make") and d.get("year")) or len((d.get("excerpt") or "").strip()) >= 200))
+            auto_open += bool(strong)
+            write(f"/auto/lot/{d['id']}/", "auto_lot.html", priority="0.5", lastmod=d["lastmod"], noindex=not strong,
                   d=d, active=active, similar=similar_auto(d) if active else [], og_image=d.get("photo") if active else None,
                   title=f"{d['label']} с торгов" + (f" {d['region_where']}" if d.get("region_where") else "") + (f" за {rub(d['price'])}" if d.get("price") else "") + (" — архив" if not active else ""),
                   description=(f"{d['label']} с торгов{' ' + d['region_where'] if d.get('region_where') else ''}: {rub(d.get('price'))}. "
                                + (d["excerpt"][:140].rsplit(" ", 1)[0].rstrip(" .,;:") + "… " if d.get("excerpt") else "")
                                + ("Срок заявки, что проверить по VIN до ставки." if active else "Архив предложения, результат торгов не подтверждён.")))
+        print(f"карточек техники в индексе (фото, цена, марка и год): {auto_open} из {len(AUTO_CARDS)}")
     if AUTO_CARDS or auto_history_path.exists():
         auto_history_path.write_text(json.dumps(AUTO_CARDS, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -964,6 +986,22 @@ def build():
           description="Покажем ваш лот покупателям и инвесторам: карточка на сайте, Telegram, подготовка лота к продаже — фото, документы, проверка.")
     write("/stati/", "articles.html", priority="0.7", articles=ARTICLES, title="Статьи о покупке недвижимости с торгов",
           description="Как устроены торги по банкротству и арестованному имуществу, риски, проверка лота, расчёт ставки.")
+    # ГЕО-3 (08.11.2026): цифры каталога прямо в тексте статьи ({{ n_lots }}, {% for … in platforms %}) —
+    # ИИ-ассистенты цитируют страницы со свежими числами и датой; пересчитываются с каждой сборкой
+    _pct = lambda xs, f: round(100 * sum(1 for d in xs if f(d)) / len(xs)) if xs else 0
+    _flats = [d for d in LOTS if d.get("category") == "flat"]
+    ART_VARS = {
+        "today": date.today().strftime("%d.%m.%Y"), "n_lots": len(LOTS), "n_flats": len(_flats),
+        "n_regions": len({d.get("region") for d in LOTS if d.get("region")}), "n_auto": len(AUTOS),
+        "share_povt": _pct(LOTS, lambda d: d.get("repeat")),
+        "share_public": _pct(LOTS, lambda d: "публичн" in (d.get("bidd_type") or "").lower()),
+        "median_flat": rub(median([d.get("price") for d in _flats])) if _flats else "нет данных",
+        "median_auto": rub(median([d.get("price") for d in AUTOS])) if AUTOS else "нет данных",
+        "platforms": [(name, n, round(100 * n / len(LOTS)) if LOTS else 0) for name, _, n in source_counts(LOTS)[:8]],
+    }
+    for a in ARTICLES:
+        if "{{" in a["md"] or "{%" in a["md"]:
+            a["html"] = markdown.markdown(Environment().from_string(a["md"]).render(**ART_VARS), extensions=["tables"])
     for a in ARTICLES:
         preferred = [slug.strip() for slug in a.get("related", "").split(",") if slug.strip()]
         candidates = {x["slug"]: x for x in ARTICLES if x["slug"] != a["slug"]}
