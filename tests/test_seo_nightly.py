@@ -58,3 +58,24 @@ class RecrawlQueueTests(unittest.TestCase):
         self.assertIn("sitemap-yandex.xml: добавлен", md)
         self.assertIn("отправлено 1", md)
         self.assertIn("  - /torgi/", md)
+
+    def test_bing_section_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "bing": {
+            "crawl": {"date": "2026-11-06", "in_index": 1200, "crawled": 300, "crawl_errors": 2, "blocked": 0, "in_links": 10},
+            "traffic": {"impressions_7d": 450, "clicks_7d": 12, "days": 7},
+            "queries": [["квартиры с торгов казань", 40, 3, 4.5]], "pages": [["/torgi/kazan/", 40, 3]],
+            "feeds": [["/sitemap.xml", "Processed", 30000, "2026-11-06"]], "submitted_feeds": ["/sitemap-yandex.xml"],
+            "quota": {"daily": 100, "monthly": 1000}, "submitted_urls": 30}})
+        self.assertIn("## Bing", md)
+        self.assertIn("в индексе Bing: 1200", md)
+        self.assertIn("показы за 7 дн.: 450, клики: 12", md)
+        self.assertIn("/sitemap.xml (Processed, 30000 адресов, обход 2026-11-06)", md)
+        self.assertIn("отправлены sitemap: /sitemap-yandex.xml", md)
+        self.assertIn("отправлено 30", md)
+        self.assertIn("- квартиры с торгов казань — 40, 3, 4.5", md)
+
+    def test_bing_errors_are_reported_not_raised(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "bing": {"errors": {"crawl": "HTTP 401 InvalidApiKey"}}})
+        self.assertIn("ошибка crawl: HTTP 401 InvalidApiKey", md)

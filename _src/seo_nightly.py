@@ -285,6 +285,91 @@ def webmaster_act(token, queue_path, state_path, today, limit):
     return out
 
 
+BING = "https://ssl.bing.com/webmaster/api.svc/json"
+
+
+def bing_call(method, key, body=None, **params):
+    """Bing Webmaster API (JSON): GET с apikey в query, POST — JSON-тело. Ошибка ключа/прав приходит как 4xx с текстом."""
+    params["apikey"] = key
+    url = "%s/%s?%s" % (BING, method, urllib.parse.urlencode(params))
+    data = json.dumps(body).encode("utf-8") if body is not None else None
+    req = urllib.request.Request(url, data=data, method="POST" if body is not None else "GET",
+                                 headers={"Content-Type": "application/json; charset=utf-8"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            return (json.loads(raw) if raw.strip() else {}).get("d")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
+
+
+def bing_block(key, queue_path, act):
+    """ГЕО-2 (07.11.2026): через Bing ищут ChatGPT и Copilot. Что в индексе Bing, запросы и страницы с кликами,
+    sitemap и (в режиме --act) отправка хабов из очереди переобхода через SubmitUrlBatch."""
+    site = BASE + "/"
+    out = {"errors": {}}
+
+    def part(name, fn):
+        try:
+            out[name] = fn()
+        except Exception as e:
+            out["errors"][name] = str(e)
+
+    def crawl():
+        rows = bing_call("GetCrawlStats", key, siteUrl=site) or []
+        last = rows[-1] if rows else {}
+        return {"date": str(last.get("Date", ""))[:10], "in_index": last.get("InIndex"), "crawled": last.get("CrawledPages"),
+                "crawl_errors": last.get("CrawlErrors"), "blocked": last.get("BlockedByRobots"), "in_links": last.get("InLinks")}
+
+    def traffic():
+        rows = bing_call("GetRankAndTrafficStats", key, siteUrl=site) or []
+        week = rows[-7:]
+        return {"impressions_7d": sum(int(x.get("Impressions") or 0) for x in week),
+                "clicks_7d": sum(int(x.get("Clicks") or 0) for x in week), "days": len(week)}
+
+    def queries():
+        rows = bing_call("GetQueryStats", key, siteUrl=site) or []
+        rows.sort(key=lambda x: -(x.get("Impressions") or 0))
+        return [[x.get("Query"), x.get("Impressions"), x.get("Clicks"), x.get("AvgImpressionPosition")] for x in rows[:15]]
+
+    def pages():
+        rows = bing_call("GetPageStats", key, siteUrl=site) or []
+        rows.sort(key=lambda x: -(x.get("Impressions") or 0))
+        return [[(x.get("Query") or x.get("Url") or "").replace(BASE, ""), x.get("Impressions"), x.get("Clicks")] for x in rows[:15]]
+
+    def feeds():
+        rows = bing_call("GetFeeds", key, siteUrl=site) or []
+        return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), str(x.get("LastCrawled", ""))[:10]] for x in rows]
+
+    part("crawl", crawl)
+    part("traffic", traffic)
+    part("queries", queries)
+    part("pages", pages)
+    part("feeds", feeds)
+    if act and "feeds" in out:
+        have = {f[0] for f in out["feeds"]}
+        for sm in ("/sitemap.xml", "/sitemap-yandex.xml"):
+            if sm not in have:
+                try:
+                    bing_call("SubmitFeed", key, {"siteUrl": site, "feedUrl": BASE + sm})
+                    out.setdefault("submitted_feeds", []).append(sm)
+                except Exception as e:
+                    out["errors"]["feed " + sm] = str(e)
+    if act:
+        try:
+            q = bing_call("GetUrlSubmissionQuota", key, siteUrl=site) or {}
+            out["quota"] = {"daily": q.get("DailyQuota"), "monthly": q.get("MonthlyQuota")}
+            urls = read_queue(queue_path)[: max(0, min(100, int(q.get("DailyQuota") or 0)))]
+            if urls:
+                bing_call("SubmitUrlBatch", key, {"siteUrl": site, "urlList": urls})
+                out["submitted_urls"] = len(urls)
+        except Exception as e:
+            out["errors"]["submit"] = str(e)
+    if not out["errors"]:
+        del out["errors"]
+    return out
+
+
 def to_md(r):
     L = ["# ТоргГид: ночной срез %s" % r["date"], ""]
     m = r.get("metrika") or {}
@@ -349,6 +434,29 @@ def to_md(r):
         if a.get("probe"):
             L.append("- проверка на другом хосте: %s" % a["probe"])
         L.append("")
+    b = r.get("bing")
+    if b:
+        L += ["## Bing (через него ищут ChatGPT и Copilot)", ""]
+        c = b.get("crawl") or {}
+        if c:
+            L.append("- в индексе Bing: %s, обойдено за день: %s, ошибок обхода: %s, закрыто robots: %s (на %s)" % (
+                c.get("in_index"), c.get("crawled"), c.get("crawl_errors"), c.get("blocked"), c.get("date")))
+        t = b.get("traffic") or {}
+        if t:
+            L.append("- показы за %s дн.: %s, клики: %s" % (t.get("days"), t.get("impressions_7d"), t.get("clicks_7d")))
+        if b.get("feeds") is not None:
+            L.append("- sitemap в Bing: " + (", ".join("%s (%s, %s адресов, обход %s)" % tuple(f) for f in b["feeds"]) or "нет"))
+        if b.get("submitted_feeds"):
+            L.append("- отправлены sitemap: " + ", ".join(b["submitted_feeds"]))
+        if b.get("quota"):
+            L.append("- квота отправки адресов: %s в день, %s в месяц; отправлено %s" % (b["quota"].get("daily"), b["quota"].get("monthly"), b.get("submitted_urls", 0)))
+        if b.get("queries"):
+            L += ["", "Запросы в Bing (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(q) for q in b["queries"]]
+        if b.get("pages"):
+            L += ["", "Страницы с показами в Bing:"] + ["- %s — %s показов, %s кликов" % tuple(pg) for pg in b["pages"]]
+        for k, v in (b.get("errors") or {}).items():
+            L.append("- ошибка %s: %s" % (k, str(v)[:200]))
+        L.append("")
     for k, v in (r.get("errors") or {}).items():
         L.append("- ошибка %s: %s" % (k, v))
     return "\n".join(L) + "\n"
@@ -373,6 +481,9 @@ def main():
             safe(r, "act", lambda: webmaster_act(token, args.queue, Path(args.out) / "recrawl-state.json", today, args.recrawl_max))
     else:
         r.setdefault("errors", {})["token"] = "YANDEX_METRIKA_TOKEN is not set"
+    bing_key = os.environ.get("BING_WEBMASTER_KEY")
+    if bing_key:
+        safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act))
     if not args.no_site:
         safe(r, "site", site_health)
     out = Path(args.out)
