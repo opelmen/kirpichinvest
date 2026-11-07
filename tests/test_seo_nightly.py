@@ -121,3 +121,10 @@ class RecrawlQueueTests(unittest.TestCase):
         import seo_nightly as sn
         self.assertEqual(sn.bing_date("/Date(1793000000000)/"), "2026-10-26")
         self.assertEqual(sn.bing_date("2026-11-06T00:00:00"), "2026-11-06")
+
+    def test_gsc_daily_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "gsc": {"site": "https://torggid.ru/", "period_28": "2026-10-08 — 2026-11-04",
+                                                     "daily": [["2026-10-30", 1, 40, 12.5]]}})
+        self.assertIn("- 2026-10-30 — 1, 40, 12.5", md)
+        self.assertIn("за 28 дней", md)

@@ -475,7 +475,12 @@ def to_md(r):
             L.append("- за 7 дней: клики %s (пред. %s), показы %s (пред. %s), CTR %s%%, средняя позиция %s (пред. %s)" % (
                 t.get("clicks"), tp.get("clicks", "–"), t.get("impressions"), tp.get("impressions", "–"), t.get("ctr"),
                 t.get("position"), tp.get("position", "–")))
+        if g.get("daily"):
+            L += ["", "По дням (дата — клики, показы, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in g["daily"]]
         q = g.get("queries") or {}
+        if g.get("period_28"):
+            L.append("")
+            L.append("Запросы и страницы ниже — за 28 дней (%s)" % g["period_28"])
         if q.get("count") is not None:
             L.append("- запросов с показами: %s" % q["count"])
         if q.get("wins"):
@@ -567,9 +572,18 @@ def gsc_block(sa_json, today):
 
     part("totals", lambda: totals(start, end))
     part("totals_prev", lambda: totals(p_start, p_end))
+    # по дням за 28 дней: видно, где провал и где данные GSC ещё не досчитаны
+    m_start = end - timedelta(days=27)
+    out["period_28"] = "%s — %s" % (m_start, end)
+
+    def daily():
+        rows = query(["date"], m_start, end, 100)
+        return [[x["keys"][0], int(x["clicks"]), int(x["impressions"]), round(x["position"], 1)] for x in rows]
+
+    part("daily", daily)
 
     def queries():
-        rows = query(["query"], start, end, 5000)
+        rows = query(["query"], m_start, end, 5000)
         rows.sort(key=lambda x: -x["impressions"])
         top = [[x["keys"][0], int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)] for x in rows[:20]]
         wins = [[x["keys"][0], int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)]
@@ -578,7 +592,7 @@ def gsc_block(sa_json, today):
         return {"top": top, "wins": wins[:25], "count": len(rows)}
 
     def pages():
-        rows = query(["page"], start, end, 5000)
+        rows = query(["page"], m_start, end, 5000)
         rows.sort(key=lambda x: -x["impressions"])
         return [[x["keys"][0].replace(BASE, ""), int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)] for x in rows[:15]]
 
