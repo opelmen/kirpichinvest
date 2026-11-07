@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-07T15:45:17+00:00",
+ "generated": "2026-11-07T15:54:01+00:00",
  "date": "2026-11-07",
  "metrika": {
   "day": "2026-11-06",
@@ -81,7 +81,7 @@
    "errors": {
     "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
     "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
-    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
     "indexing_samples": "Remote end closed connection without response",
     "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
    },
@@ -1385,16 +1385,40 @@
   },
   "queries": [
    [
-    "торги квартир в москве на аукционе",
+    "с московская 66 офис 411,4 этаж саратов 2 гис",
     1,
     0,
-    7
+    3
+   ],
+   [
+    "недвижимость москва толрги",
+    1,
+    0,
+    4
    ],
    [
     "аукционы по продаже недвижимости в москве",
     1,
     0,
     8
+   ],
+   [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    4
    ],
    [
     "\"квартира\" \"торги\" \"2020\" \"раменки\"",
@@ -1409,28 +1433,10 @@
     5
    ],
    [
-    "с московская 66 офис 411,4 этаж саратов 2 гис",
+    "торги квартир в москве на аукционе",
     1,
     0,
-    3
-   ],
-   [
-    "московская 66 офис 411,4 этаж саратов 2 гис",
-    1,
-    0,
-    4
-   ],
-   [
-    "\"симоновский\" \"17\" \"14\" \"торги\"",
-    1,
-    0,
-    3
-   ],
-   [
-    "недвижимость москва толрги",
-    1,
-    0,
-    4
+    7
    ],
    [
     "дом нирнзее нежилое помещение торги",
@@ -1443,12 +1449,6 @@
     1,
     0,
     3
-   ],
-   [
-    "балтым арестованное имущество земельный участок торги",
-    1,
-    0,
-    6
    ]
   ],
   "pages": [
@@ -2025,13 +2025,125 @@
     0,
     14.5
    ]
+  ],
+  "sitemaps": [
+   [
+    "/sitemap.xml",
+    "2026-10-25",
+    "0",
+    "0",
+    20663,
+    0
+   ]
+  ],
+  "inspect": [
+   [
+    "/",
+    "PASS",
+    "Страница отправлена и проиндексирована",
+    "2026-11-04",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/"
+   ],
+   [
+    "/torgi/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-27",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/"
+   ],
+   [
+    "/torgi/moskva/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-27",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/moskva/"
+   ],
+   [
+    "/torgi/sankt-peterburg/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-22",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/sankt-peterburg/"
+   ],
+   [
+    "/torgi/samara/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-15",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/samara/"
+   ],
+   [
+    "/torgi/nizhniy-novgorod/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-15",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/nizhniy-novgorod/"
+   ],
+   [
+    "/torgi/permskiy-kray/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-15",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/permskiy-kray/"
+   ],
+   [
+    "/auto/",
+    "NEUTRAL",
+    "URL неизвестен Google",
+    "",
+    "PAGE_FETCH_STATE_UNSPECIFIED",
+    "ROBOTS_TXT_STATE_UNSPECIFIED",
+    "INDEXING_STATE_UNSPECIFIED",
+    ""
+   ],
+   [
+    "/stati/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-11",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/stati/"
+   ],
+   [
+    "/stati/proverka-kvartiry-s-torgov/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-12",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/stati/proverka-kvartiry-s-torgov/"
+   ]
   ]
  },
  "site": {
   "pages": {
    "/": {
     "status": 200,
-    "ms": 1297,
+    "ms": 1319,
     "bytes": 52638,
     "final": "https://torggid.ru/",
     "error": null,
@@ -2045,7 +2157,7 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 1388,
+    "ms": 1139,
     "bytes": 100739,
     "final": "https://torggid.ru/torgi/",
     "error": null,
@@ -2059,7 +2171,7 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 1103,
+    "ms": 1430,
     "bytes": 102256,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
@@ -2073,7 +2185,7 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 1183,
+    "ms": 1506,
     "bytes": 106283,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
@@ -2087,7 +2199,7 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 799,
+    "ms": 1530,
     "bytes": 94382,
     "final": "https://torggid.ru/auto/",
     "error": null,
@@ -2101,7 +2213,7 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 1123,
+    "ms": 740,
     "bytes": 33513,
     "final": "https://torggid.ru/stati/",
     "error": null,
@@ -2115,7 +2227,7 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 983,
+    "ms": 1034,
     "bytes": 39052,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
@@ -2129,7 +2241,7 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 647,
+    "ms": 763,
     "bytes": 34685,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
@@ -2143,7 +2255,7 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 936,
+    "ms": 1280,
     "bytes": 28710,
     "final": "https://torggid.ru/analitika/",
     "error": null,
@@ -2159,25 +2271,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 492,
+    "ms": 572,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 487,
+    "ms": 854,
     "bytes": 1092,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 1255,
+    "ms": 951,
     "bytes": 51391,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 926,
+    "ms": 1124,
     "bytes": 24873,
     "error": null
    }

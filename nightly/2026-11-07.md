@@ -19,7 +19,7 @@
 
 - ошибка summary: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 - ошибка excluded_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
-- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
+- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 - ошибка indexing_samples: Remote end closed connection without response
 - ошибка queries: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 
@@ -35,15 +35,15 @@
 
 | Страница | Код | мс | title | robots/yandex |
 |---|---|---|---|---|
-| / | 200 | 1297 | Недвижимость с торгов по всей России — ТоргГид | – |
-| /torgi/ | 200 | 1388 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
-| /torgi/moskva/ | 200 | 1103 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
-| /torgi/sankt-peterburg/ | 200 | 1183 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
-| /auto/ | 200 | 799 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
-| /stati/ | 200 | 1123 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
-| /proverka-lota/ | 200 | 983 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
-| /kupit-kvartiru-s-torgov/ | 200 | 647 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
-| /analitika/ | 200 | 936 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
+| / | 200 | 1319 | Недвижимость с торгов по всей России — ТоргГид | – |
+| /torgi/ | 200 | 1139 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
+| /torgi/moskva/ | 200 | 1430 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
+| /torgi/sankt-peterburg/ | 200 | 1506 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
+| /auto/ | 200 | 1530 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
+| /stati/ | 200 | 740 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
+| /proverka-lota/ | 200 | 1034 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
+| /kupit-kvartiru-s-torgov/ | 200 | 763 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
+| /analitika/ | 200 | 1280 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
 
 Служебные: /robots.txt 200, /sitemap.xml 200, /sitemap-yandex.xml 200, /llms.txt 200
 Sitemap: 30516 адресов, sitemap-yandex: 438; ошибки: нет
@@ -69,17 +69,17 @@ Sitemap: 30516 адресов, sitemap-yandex: 438; ошибки: нет
 - квота отправки адресов: 0 в день, 2300 в месяц; отправлено 0
 
 Запросы в Bing (показы, клики, позиция):
-- торги квартир в москве на аукционе — 1, 0, 7
+- с московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 3
+- недвижимость москва толрги — 1, 0, 4
 - аукционы по продаже недвижимости в москве — 1, 0, 8
+- балтым арестованное имущество земельный участок торги — 1, 0, 6
+- "симоновский" "17" "14" "торги" — 1, 0, 3
+- московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 4
 - "квартира" "торги" "2020" "раменки" — 1, 0, 1
 - site.investmoscow.ru квартира торги ноябрь 2026 — 1, 0, 5
-- с московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 3
-- московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 4
-- "симоновский" "17" "14" "торги" — 1, 0, 3
-- недвижимость москва толрги — 1, 0, 4
+- торги квартир в москве на аукционе — 1, 0, 7
 - дом нирнзее нежилое помещение торги — 1, 0, 4
 - гис торги продажа квартир москва московская область электронные торги — 1, 0, 3
-- балтым арестованное имущество земельный участок торги — 1, 0, 6
 
 Страницы с показами в Bing:
 - /torgi/moskva/ — 11 показов, 0 кликов
@@ -186,4 +186,19 @@ Sitemap: 30516 адресов, sitemap-yandex: 438; ошибки: нет
 - /torgi/nizhniy-novgorod/bankrotstvo/page/2/ — 25, 0, 12.3
 - /torgi/moskva/ — 24, 0, 15.6
 - /torgi/nizhniy-novgorod/kommercheskaya/ — 24, 0, 14.5
+
+Sitemap в Google (путь — загружен, ошибки, предупреждения, отправлено, в индексе):
+- /sitemap.xml — 2026-10-25, 0, 0, 20663, 0
+
+Проверка страниц в Google (страница — вердикт, статус, обход, загрузка, robots, индексация, canonical Google):
+- / — PASS, Страница отправлена и проиндексирована, 2026-11-04, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /
+- /torgi/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-27, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /torgi/
+- /torgi/moskva/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-27, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /torgi/moskva/
+- /torgi/sankt-peterburg/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-22, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /torgi/sankt-peterburg/
+- /torgi/samara/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-15, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /torgi/samara/
+- /torgi/nizhniy-novgorod/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-15, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /torgi/nizhniy-novgorod/
+- /torgi/permskiy-kray/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-15, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /torgi/permskiy-kray/
+- /auto/ — NEUTRAL, URL неизвестен Google, , PAGE_FETCH_STATE_UNSPECIFIED, ROBOTS_TXT_STATE_UNSPECIFIED, INDEXING_STATE_UNSPECIFIED, 
+- /stati/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-11, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /stati/
+- /stati/proverka-kvartiry-s-torgov/ — NEUTRAL, Страница просканирована, но пока не проиндексирована, 2026-10-12, SUCCESSFUL, ALLOWED, INDEXING_ALLOWED, /stati/proverka-kvartiry-s-torgov/
 
