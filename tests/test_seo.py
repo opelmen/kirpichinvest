@@ -47,7 +47,8 @@ class BuildTests(unittest.TestCase):
             rows = [dict(id=f'test_{i}', city='moskva', region='77', address='Москва, Тестовая улица, дом 1', price=1000000, area=40, bidd_end='2099-01-01T00:00:00Z') for i in range(65)]
             rows[1]['bidd_type'] = 'Реализация имущества должников'
             data = base / '_src/data'
-            rows[0].update(city='sankt-peterburg', region='47', address='Ленинградская область, Гатчинский район, г. Гатчина, Тестовая улица, дом 1')
+            rows[0].update(city='sankt-peterburg', region='47', address='Ленинградская область, Гатчинский район, г. Гатчина, Тестовая улица, дом 1',
+                           photo='https://torgi.gov.ru/new/image/1.jpg')  # ТЗ-6: в индекс и карту сайта только карточки с фото или пересказом
             (data/'lot_history.json').write_text('[]')
             (data/'lots.json').write_text(json.dumps(rows))
             def build():
@@ -74,9 +75,10 @@ class BuildTests(unittest.TestCase):
             self.assertIn('https://torggid.ru/torgi/moskva/', yandex)
             self.assertIn('https://torggid.ru/stati/', yandex)
             self.assertNotIn('/torgi/lot/', yandex)
-            # 06.11.2026: без фото и пересказа карточка закрыта для Яндекса даже в миллионнике (в Google остаётся)
-            self.assertIn('<meta name="yandex" content="noindex, follow">', (site/'torgi/lot/test_0/index.html').read_text())
-            self.assertNotIn('name="robots" content="noindex', (site/'torgi/lot/test_0/index.html').read_text())
+            # ТЗ-6 (07.11.2026): без фото и пересказа карточка закрыта noindex для всех поисковиков и вне карты сайта
+            self.assertIn('<meta name="robots" content="noindex, follow">', (site/'torgi/lot/test_2/index.html').read_text())
+            self.assertNotIn('https://torggid.ru/torgi/lot/test_2/', (site/'sitemap-lots-1.xml').read_text())
+            self.assertNotIn('noindex', (site/'torgi/lot/test_0/index.html').read_text())  # с фото — в индексе
             home = (site/'index.html').read_text()
             self.assertIn('Торги по банкротству по регионам', home)
             self.assertIn('href="/torgi/leningradskaya-oblast/"', home)
