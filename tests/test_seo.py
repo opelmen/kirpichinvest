@@ -107,6 +107,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('noindex', (site/'torgi/do-1-mln/index.html').read_text())
             self.assertNotIn('https://torggid.ru/torgi/do-1-mln/', (site/'sitemap-catalog.xml').read_text())
             card = (site/'torgi/lot/test_0/index.html').read_text()
+            self.assertIn('id="aibar"', card)  # GEO: плашка для визитов из ИИ-ассистентов, цели ai_visit / ai_click
+            self.assertIn('"reachGoal","ai_visit"', card)
             self.assertIn('Результат торгов и факт продажи не подтверждены', card)
             self.assertNotIn('Получить отчёт', card)
             self.assertIn('/torgi/arhiv/', (site/'torgi/index.html').read_text())
