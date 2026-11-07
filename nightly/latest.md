@@ -17,11 +17,11 @@
 
 ## Вебмастер: torggid.ru
 
-- ошибка summary: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
-- ошибка excluded_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
-- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
+- ошибка summary: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка excluded_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка in_search_samples: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
 - ошибка indexing_samples: Remote end closed connection without response
-- ошибка queries: HTTP 404 {"host_id":null,"error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet","error_code":"HOST_NOT_LOADED"}
+- ошибка queries: HTTP 404 {"host_id":null,"error_code":"HOST_NOT_LOADED","error_message":"Host \"https:torggid.ru:443\" is not loaded in Ya.Webmaster yet"}
 
 ## Вебмастер: kirpichinvest.ru
 
@@ -35,15 +35,15 @@
 
 | Страница | Код | мс | title | robots/yandex |
 |---|---|---|---|---|
-| / | 200 | 1132 | Недвижимость с торгов по всей России — ТоргГид | – |
-| /torgi/ | 200 | 1079 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
-| /torgi/moskva/ | 200 | 1280 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
-| /torgi/sankt-peterburg/ | 200 | 1173 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
-| /auto/ | 200 | 1058 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
-| /stati/ | 200 | 923 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
-| /proverka-lota/ | 200 | 985 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
-| /kupit-kvartiru-s-torgov/ | 200 | 613 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
-| /analitika/ | 200 | 966 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
+| / | 200 | 1214 | Недвижимость с торгов по всей России — ТоргГид | – |
+| /torgi/ | 200 | 1356 | Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид | – |
+| /torgi/moskva/ | 200 | 1000 | Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арес | – |
+| /torgi/sankt-peterburg/ | 200 | 1397 | Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротст | – |
+| /auto/ | 200 | 1369 | Автомобили и техника с торгов по всей России — актуальные лоты 2026 —  | – |
+| /stati/ | 200 | 1076 | Статьи о покупке недвижимости с торгов — ТоргГид | – |
+| /proverka-lota/ | 200 | 1048 | Проверка лота перед торгами: юридическая и рыночная — ТоргГид | – |
+| /kupit-kvartiru-s-torgov/ | 200 | 673 | Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид | – |
+| /analitika/ | 200 | 915 | Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид | – |
 
 Служебные: /robots.txt 200, /sitemap.xml 200, /sitemap-yandex.xml 200, /llms.txt 200
 Sitemap: 30516 адресов, sitemap-yandex: 438; ошибки: нет
@@ -69,22 +69,36 @@ Sitemap: 30516 адресов, sitemap-yandex: 438; ошибки: нет
 - квота отправки адресов: 0 в день, 2300 в месяц; отправлено 0
 
 Запросы в Bing (показы, клики, позиция):
-- балтым арестованное имущество земельный участок торги — 1, 0, 6
-- "квартира" "торги" "2020" "раменки" — 1, 0, 1
-- недвижимость москва толрги — 1, 0, 4
 - аукционы по продаже недвижимости в москве — 1, 0, 8
-- с московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 3
-- "симоновский" "17" "14" "торги" — 1, 0, 3
-- московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 4
-- site.investmoscow.ru квартира торги ноябрь 2026 — 1, 0, 5
 - торги квартир в москве на аукционе — 1, 0, 7
+- недвижимость москва толрги — 1, 0, 4
+- "квартира" "торги" "2020" "раменки" — 1, 0, 1
+- site.investmoscow.ru квартира торги ноябрь 2026 — 1, 0, 5
+- с московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 3
+- балтым арестованное имущество земельный участок торги — 1, 0, 6
 - дом нирнзее нежилое помещение торги — 1, 0, 4
 - гис торги продажа квартир москва московская область электронные торги — 1, 0, 3
+- "симоновский" "17" "14" "торги" — 1, 0, 3
+- московская 66 офис 411,4 этаж саратов 2 гис — 1, 0, 4
 
 Страницы с показами в Bing:
 - /torgi/moskva/ — 11 показов, 0 кликов
 
-- ошибка gsc: HTTP 403 {
-  "error": {
-    "code": 403,
-    "message": "Google Search Console API has not been used in project 692705189257 before or it is disabled. Enable it by visiting https://console.developers.google.co
+## Google Search Console
+
+- ресурс https://torggid.ru/, период 2026-10-29 — 2026-11-04 (данные GSC отстают на 3 дня)
+- за 7 дней: клики 0 (пред. 8), показы 2 (пред. 246), CTR 0.0%, средняя позиция 1.0 (пред. 12.8)
+- запросов с показами: 0
+
+Страницы с показами в Google (показы, клики, позиция):
+- / — 2, 0, 1
+- /torgi/lot/21000017500000001780_6/ — 1, 0, 7
+- /torgi/lot/21000032000000000692_10/ — 1, 0, 3
+- /torgi/lot/22000010600000000378_4/ — 1, 0, 2
+- /torgi/lot/22000160440000000088_2/ — 1, 0, 4
+- /torgi/lot/23000007350000000418_1/ — 1, 0, 6
+- /torgi/lot/23000051770000001060_10/ — 1, 0, 8
+- /torgi/lot/25000038790000000166_1/ — 1, 0, 5
+- /torgi/lot/mets-235881-1/ — 1, 0, 9
+- /torgi/lot/mets-236204-1/ — 1, 0, 10
+
