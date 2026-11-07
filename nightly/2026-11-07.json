@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-07T15:36:33+00:00",
+ "generated": "2026-11-07T15:45:17+00:00",
  "date": "2026-11-07",
  "metrika": {
   "day": "2026-11-06",
@@ -80,10 +80,10 @@
    ],
    "errors": {
     "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "indexing_samples": "Remote end closed connection without response",
-    "queries": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}"
+    "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
    },
    "info": {
     "host_id": "https:torggid.ru:443",
@@ -99,67 +99,12 @@
    },
    "diagnostics": {
     "problems": {
-     "NO_REGIONS": {
+     "URL_ALERT_4XX": {
       "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_IN_SPRAV": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DISALLOWED_IN_ROBOTS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DUPLICATE_CONTENT_ATTRS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
      "NO_METRIKA_COUNTER_BINDING": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_FAILED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_PROBLEM": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_5XX": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_NEED_PAPER": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -169,42 +114,12 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "ERROR_IN_ROBOTS_TXT": {
+     "NO_SITEMAP_MODIFICATIONS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "SLOW_AVG_RESPONSE_TIME": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "CONNECT_FAILED": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "BIG_FAVICON_ABSENT": {
+     "NO_REGIONS": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
@@ -214,32 +129,7 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DUPLICATE_PAGES": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_MIRROR_IS_NOT_HTTPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_4XX": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DNS_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_ERROR": {
+     "ERROR_IN_ROBOTS_TXT": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -249,12 +139,122 @@
       "state": "ABSENT",
       "last_state_update": null
      },
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_IN_SPRAV": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_CONTENT_ATTRS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
      "ERRORS_IN_SITEMAPS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
+     "MAIN_MIRROR_IS_NOT_HTTPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
      "SOFT_404": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_ERROR": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1385,22 +1385,16 @@
   },
   "queries": [
    [
-    "аукционы по продаже недвижимости в москве",
-    1,
-    0,
-    8
-   ],
-   [
     "торги квартир в москве на аукционе",
     1,
     0,
     7
    ],
    [
-    "недвижимость москва толрги",
+    "аукционы по продаже недвижимости в москве",
     1,
     0,
-    4
+    8
    ],
    [
     "\"квартира\" \"торги\" \"2020\" \"раменки\"",
@@ -1421,10 +1415,22 @@
     3
    ],
    [
-    "балтым арестованное имущество земельный участок торги",
+    "московская 66 офис 411,4 этаж саратов 2 гис",
     1,
     0,
-    6
+    4
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "недвижимость москва толрги",
+    1,
+    0,
+    4
    ],
    [
     "дом нирнзее нежилое помещение торги",
@@ -1439,16 +1445,10 @@
     3
    ],
    [
-    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    "балтым арестованное имущество земельный участок торги",
     1,
     0,
-    3
-   ],
-   [
-    "московская 66 офис 411,4 этаж саратов 2 гис",
-    1,
-    0,
-    4
+    6
    ]
   ],
   "pages": [
@@ -1492,71 +1492,538 @@
    "ctr": 3.3,
    "position": 12.8
   },
-  "queries": {
-   "top": [],
-   "wins": [],
-   "count": 0
-  },
-  "pages": [
+  "period_28": "2026-10-08 — 2026-11-04",
+  "daily": [
    [
-    "/",
-    2,
+    "2026-10-09",
     0,
+    0,
+    0
+   ],
+   [
+    "2026-10-10",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-10-11",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-10-12",
+    1,
+    16,
+    20
+   ],
+   [
+    "2026-10-13",
+    1,
+    31,
+    13.8
+   ],
+   [
+    "2026-10-14",
+    0,
+    29,
+    15.8
+   ],
+   [
+    "2026-10-15",
+    1,
+    40,
+    13.6
+   ],
+   [
+    "2026-10-16",
+    0,
+    68,
+    16.7
+   ],
+   [
+    "2026-10-17",
+    2,
+    82,
+    15.1
+   ],
+   [
+    "2026-10-18",
+    1,
+    145,
+    18.4
+   ],
+   [
+    "2026-10-19",
+    0,
+    358,
+    17.6
+   ],
+   [
+    "2026-10-20",
+    0,
+    121,
+    15.5
+   ],
+   [
+    "2026-10-21",
+    5,
+    63,
+    11.0
+   ],
+   [
+    "2026-10-22",
+    2,
+    68,
+    12.4
+   ],
+   [
+    "2026-10-23",
+    1,
+    81,
+    13.8
+   ],
+   [
+    "2026-10-24",
+    5,
+    63,
+    12.0
+   ],
+   [
+    "2026-10-25",
+    0,
+    15,
+    14.2
+   ],
+   [
+    "2026-10-26",
+    0,
+    11,
+    10.2
+   ],
+   [
+    "2026-10-27",
+    0,
+    6,
+    11
+   ],
+   [
+    "2026-10-28",
+    0,
+    2,
+    17
+   ],
+   [
+    "2026-10-29",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-10-30",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-10-31",
+    0,
+    1,
     1
    ],
    [
-    "/torgi/lot/21000017500000001780_6/",
-    1,
+    "2026-11-01",
     0,
-    7
+    0,
+    0
    ],
    [
-    "/torgi/lot/21000032000000000692_10/",
-    1,
+    "2026-11-02",
     0,
-    3
+    1,
+    1
    ],
    [
-    "/torgi/lot/22000010600000000378_4/",
-    1,
+    "2026-11-03",
     0,
-    2
+    0,
+    0
    ],
    [
-    "/torgi/lot/22000160440000000088_2/",
-    1,
+    "2026-11-04",
     0,
-    4
+    0,
+    0
+   ]
+  ],
+  "queries": {
+   "top": [
+    [
+     "торги по банкротству пермь официальный сайт",
+     22,
+     0,
+     12.6
+    ],
+    [
+     "торги по банкротству курганская область официальный сайт",
+     20,
+     0,
+     18.9
+    ],
+    [
+     "аукцион банкротства нижний новгород",
+     19,
+     0,
+     13.6
+    ],
+    [
+     "торги по банкротству курганская",
+     19,
+     0,
+     16.3
+    ],
+    [
+     "коммерческие торги в нижнем новгороде",
+     17,
+     0,
+     13.5
+    ],
+    [
+     "торги по банкротству курган",
+     17,
+     0,
+     15.8
+    ],
+    [
+     "торги по банкротству иркутская область",
+     16,
+     0,
+     16.1
+    ],
+    [
+     "торги по банкротству курганская область",
+     15,
+     0,
+     17.8
+    ],
+    [
+     "торги по банкротству нижний новгород",
+     14,
+     0,
+     22.5
+    ],
+    [
+     "торги по банкротству нижний новгород недвижимость",
+     14,
+     0,
+     20.1
+    ],
+    [
+     "торги по банкротству тольятти",
+     14,
+     0,
+     18
+    ],
+    [
+     "сайт торгов по банкротству екатеринбург",
+     13,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству самара",
+     13,
+     0,
+     18.6
+    ],
+    [
+     "торги по банкротству ставропольский край официальный сайт",
+     13,
+     0,
+     22.4
+    ],
+    [
+     "торги по банкротству ставропольский край",
+     12,
+     0,
+     13.9
+    ],
+    [
+     "торги по банкротству челябинская область недвижимость",
+     12,
+     0,
+     20.6
+    ],
+    [
+     "торги по банкротству иркутск официальный сайт",
+     11,
+     0,
+     15.3
+    ],
+    [
+     "торги по банкротству нижний",
+     11,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству саратовская область официальный сайт",
+     11,
+     0,
+     15.1
+    ],
+    [
+     "торги по банкротству екатеринбург",
+     10,
+     0,
+     29.4
+    ]
+   ],
+   "wins": [
+    [
+     "торги по банкротству пермь официальный сайт",
+     22,
+     0,
+     12.6
+    ],
+    [
+     "торги по банкротству курганская область официальный сайт",
+     20,
+     0,
+     18.9
+    ],
+    [
+     "аукцион банкротства нижний новгород",
+     19,
+     0,
+     13.6
+    ],
+    [
+     "торги по банкротству курганская",
+     19,
+     0,
+     16.3
+    ],
+    [
+     "коммерческие торги в нижнем новгороде",
+     17,
+     0,
+     13.5
+    ],
+    [
+     "торги по банкротству курган",
+     17,
+     0,
+     15.8
+    ],
+    [
+     "торги по банкротству иркутская область",
+     16,
+     0,
+     16.1
+    ],
+    [
+     "торги по банкротству курганская область",
+     15,
+     0,
+     17.8
+    ],
+    [
+     "торги по банкротству тольятти",
+     14,
+     0,
+     18
+    ],
+    [
+     "сайт торгов по банкротству екатеринбург",
+     13,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству самара",
+     13,
+     0,
+     18.6
+    ],
+    [
+     "торги по банкротству ставропольский край",
+     12,
+     0,
+     13.9
+    ],
+    [
+     "торги по банкротству саратовская область официальный сайт",
+     11,
+     0,
+     15.1
+    ],
+    [
+     "торги по банкротству иркутск официальный сайт",
+     11,
+     0,
+     15.3
+    ],
+    [
+     "торги по банкротству нижний",
+     11,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству псковская",
+     10,
+     0,
+     13.6
+    ],
+    [
+     "торги по банкротству спб официальный сайт",
+     10,
+     0,
+     14.4
+    ],
+    [
+     "мосторги недвижимость",
+     9,
+     0,
+     8.6
+    ],
+    [
+     "торги по банкротству нижний новгород авто",
+     9,
+     0,
+     11.8
+    ],
+    [
+     "торги по банкротству псковская область",
+     9,
+     0,
+     12.4
+    ],
+    [
+     "торги по банкротству пермь",
+     9,
+     0,
+     14.7
+    ],
+    [
+     "торги по банкротству спб и ленобласти официальный",
+     9,
+     0,
+     19.3
+    ],
+    [
+     "аукционы по банкротству самара",
+     8,
+     0,
+     17.6
+    ],
+    [
+     "аукцион по банкротству спб и ленобласти дачи",
+     8,
+     0,
+     18.9
+    ],
+    [
+     "торги по банкротству саратов официальный сайт",
+     7,
+     0,
+     7.4
+    ]
+   ],
+   "count": 172
+  },
+  "pages": [
+   [
+    "/torgi/sankt-peterburg/",
+    73,
+    1,
+    15.7
    ],
    [
-    "/torgi/lot/23000007350000000418_1/",
-    1,
+    "/torgi/samara/",
+    73,
     0,
-    6
+    15.8
    ],
    [
-    "/torgi/lot/23000051770000001060_10/",
-    1,
+    "/torgi/irkutskaya-oblast/",
+    53,
     0,
-    8
+    18.6
    ],
    [
-    "/torgi/lot/25000038790000000166_1/",
-    1,
+    "/torgi/stavropolskiy-kray/",
+    46,
     0,
-    5
+    17.5
    ],
    [
-    "/torgi/lot/mets-235881-1/",
-    1,
+    "/torgi/nizhniy-novgorod/",
+    44,
     0,
-    9
+    15.2
    ],
    [
-    "/torgi/lot/mets-236204-1/",
+    "/torgi/ekaterinburg/",
+    41,
     1,
+    17.7
+   ],
+   [
+    "/torgi/kurganskaya-oblast/do-5-mln/",
+    36,
     0,
-    10
+    17.7
+   ],
+   [
+    "/torgi/permskiy-kray/bankrotstvo/",
+    33,
+    0,
+    12.4
+   ],
+   [
+    "/torgi/kurganskaya-oblast/page/4/",
+    28,
+    0,
+    21.6
+   ],
+   [
+    "/torgi/saratovskaya-oblast/",
+    27,
+    1,
+    12.9
+   ],
+   [
+    "/torgi/novosibirsk/",
+    27,
+    0,
+    16.6
+   ],
+   [
+    "/torgi/nizhniy-novgorod/bankrotstvo/",
+    26,
+    0,
+    11.8
+   ],
+   [
+    "/torgi/nizhniy-novgorod/bankrotstvo/page/2/",
+    25,
+    0,
+    12.3
+   ],
+   [
+    "/torgi/moskva/",
+    24,
+    0,
+    15.6
+   ],
+   [
+    "/torgi/nizhniy-novgorod/kommercheskaya/",
+    24,
+    0,
+    14.5
    ]
   ]
  },
@@ -1564,7 +2031,7 @@
   "pages": {
    "/": {
     "status": 200,
-    "ms": 1214,
+    "ms": 1297,
     "bytes": 52638,
     "final": "https://torggid.ru/",
     "error": null,
@@ -1578,7 +2045,7 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 1356,
+    "ms": 1388,
     "bytes": 100739,
     "final": "https://torggid.ru/torgi/",
     "error": null,
@@ -1592,7 +2059,7 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 1000,
+    "ms": 1103,
     "bytes": 102256,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
@@ -1606,7 +2073,7 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 1397,
+    "ms": 1183,
     "bytes": 106283,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
@@ -1620,7 +2087,7 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 1369,
+    "ms": 799,
     "bytes": 94382,
     "final": "https://torggid.ru/auto/",
     "error": null,
@@ -1634,7 +2101,7 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 1076,
+    "ms": 1123,
     "bytes": 33513,
     "final": "https://torggid.ru/stati/",
     "error": null,
@@ -1648,7 +2115,7 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 1048,
+    "ms": 983,
     "bytes": 39052,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
@@ -1662,7 +2129,7 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 673,
+    "ms": 647,
     "bytes": 34685,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
@@ -1676,7 +2143,7 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 915,
+    "ms": 936,
     "bytes": 28710,
     "final": "https://torggid.ru/analitika/",
     "error": null,
@@ -1692,25 +2159,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 520,
+    "ms": 492,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 750,
+    "ms": 487,
     "bytes": 1092,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 1373,
+    "ms": 1255,
     "bytes": 51391,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 883,
+    "ms": 926,
     "bytes": 24873,
     "error": null
    }
