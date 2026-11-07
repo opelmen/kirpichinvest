@@ -303,6 +303,14 @@ def bing_call(method, key, body=None, **params):
         raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
 
 
+def bing_date(v):
+    """Bing отдаёт даты как /Date(1793000000000)/ (мс с 1970) — в YYYY-MM-DD."""
+    m = re.search(r"/Date\((-?\d+)", str(v or ""))
+    if m:
+        return datetime.fromtimestamp(int(m.group(1)) / 1000, timezone.utc).strftime("%Y-%m-%d")
+    return str(v or "")[:10]
+
+
 def bing_block(key, queue_path, act):
     """ГЕО-2 (07.11.2026): через Bing ищут ChatGPT и Copilot. Что в индексе Bing, запросы и страницы с кликами,
     sitemap и (в режиме --act) отправка хабов из очереди переобхода через SubmitUrlBatch."""
@@ -318,7 +326,7 @@ def bing_block(key, queue_path, act):
     def crawl():
         rows = bing_call("GetCrawlStats", key, siteUrl=site) or []
         last = rows[-1] if rows else {}
-        return {"date": str(last.get("Date", ""))[:10], "in_index": last.get("InIndex"), "crawled": last.get("CrawledPages"),
+        return {"date": bing_date(last.get("Date")), "in_index": last.get("InIndex"), "crawled": last.get("CrawledPages"),
                 "crawl_errors": last.get("CrawlErrors"), "blocked": last.get("BlockedByRobots"), "in_links": last.get("InLinks")}
 
     def traffic():
@@ -339,7 +347,7 @@ def bing_block(key, queue_path, act):
 
     def feeds():
         rows = bing_call("GetFeeds", key, siteUrl=site) or []
-        return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), str(x.get("LastCrawled", ""))[:10]] for x in rows]
+        return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), bing_date(x.get("LastCrawled"))] for x in rows]
 
     part("crawl", crawl)
     part("traffic", traffic)
@@ -457,9 +465,128 @@ def to_md(r):
         for k, v in (b.get("errors") or {}).items():
             L.append("- ошибка %s: %s" % (k, str(v)[:200]))
         L.append("")
+    g = r.get("gsc")
+    if g:
+        L += ["## Google Search Console", ""]
+        if g.get("site"):
+            L.append("- ресурс %s, период %s (данные GSC отстают на 3 дня)" % (g["site"], g.get("period")))
+        t, tp = g.get("totals") or {}, g.get("totals_prev") or {}
+        if t:
+            L.append("- за 7 дней: клики %s (пред. %s), показы %s (пред. %s), CTR %s%%, средняя позиция %s (пред. %s)" % (
+                t.get("clicks"), tp.get("clicks", "–"), t.get("impressions"), tp.get("impressions", "–"), t.get("ctr"),
+                t.get("position"), tp.get("position", "–")))
+        q = g.get("queries") or {}
+        if q.get("count") is not None:
+            L.append("- запросов с показами: %s" % q["count"])
+        if q.get("wins"):
+            L += ["", "Быстрые победы (позиция 4–20, показы ≥ 5): запрос — показы, клики, позиция"] + ["- %s — %s, %s, %s" % tuple(x) for x in q["wins"]]
+        if q.get("top"):
+            L += ["", "Топ запросов Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in q["top"]]
+        if g.get("pages"):
+            L += ["", "Страницы с показами в Google (показы, клики, позиция):"] + ["- %s — %s, %s, %s" % tuple(x) for x in g["pages"]]
+        for k, v in (g.get("errors") or {}).items():
+            L.append("- ошибка %s: %s" % (k, str(v)[:300]))
+        L.append("")
     for k, v in (r.get("errors") or {}).items():
         L.append("- ошибка %s: %s" % (k, v))
     return "\n".join(L) + "\n"
+
+
+GSC = "https://www.googleapis.com/webmasters/v3"
+
+
+def google_token(sa_json, scope="https://www.googleapis.com/auth/webmasters.readonly"):
+    """Токен сервисного аккаунта Google: JWT RS256 (библиотека cryptography) → oauth2 token."""
+    import base64
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import padding
+    sa = json.loads(sa_json) if isinstance(sa_json, str) else sa_json
+    b64 = lambda b: base64.urlsafe_b64encode(b).rstrip(b"=")
+    now = int(time.time())
+    header = b64(json.dumps({"alg": "RS256", "typ": "JWT"}).encode())
+    claims = b64(json.dumps({"iss": sa["client_email"], "scope": scope, "aud": sa["token_uri"],
+                             "iat": now, "exp": now + 3600}).encode())
+    key = serialization.load_pem_private_key(sa["private_key"].encode(), password=None)
+    sig = key.sign(header + b"." + claims, padding.PKCS1v15(), hashes.SHA256())
+    jwt = (header + b"." + claims + b"." + b64(sig)).decode()
+    body = urllib.parse.urlencode({"grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer", "assertion": jwt}).encode()
+    try:
+        with urllib.request.urlopen(urllib.request.Request(sa["token_uri"], data=body), timeout=60) as resp:
+            return json.loads(resp.read().decode())["access_token"], sa["client_email"]
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("token HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
+
+
+def gsc_call(token, path, body=None):
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(GSC + path, data=data, method="POST" if data else "GET",
+                                 headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return json.loads(resp.read().decode("utf-8", "replace") or "{}")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("HTTP %s %s" % (e.code, e.read().decode("utf-8", "replace")[:200])) from None
+
+
+def gsc_block(sa_json, today):
+    """ТЗ-6 (07.11.2026): Google Search Console через сервисный аккаунт (секрет GSC_SERVICE_ACCOUNT, JSON ключа).
+    Данные GSC отстают на ~3 дня: берём 7 дней, заканчивая позавчера-3. Запросы на позициях 4–20 с показами —
+    «быстрые победы» для НЧ (подтянуть текст/ссылки на страницу)."""
+    out = {"errors": {}}
+    token, email = google_token(sa_json)
+    sites = [s.get("siteUrl") for s in (gsc_call(token, "/sites").get("siteEntry") or [])]
+    mine = [s for s in sites if "torggid.ru" in (s or "")]
+    if not mine:
+        out["errors"]["sites"] = "сервисный аккаунт %s не добавлен в ресурс torggid.ru в Search Console (доступные: %s)" % (email, sites or "нет")
+        return out
+    site = sorted(mine, key=lambda s: not s.startswith("sc-domain:"))[0]
+    out["site"] = site
+    end = today - timedelta(days=3)
+    start = end - timedelta(days=6)
+    p_end = start - timedelta(days=1)
+    p_start = p_end - timedelta(days=6)
+    out["period"] = "%s — %s" % (start, end)
+    enc = urllib.parse.quote(site, safe="")
+
+    def query(dims, s, e, limit=25000, extra=None):
+        body = {"startDate": str(s), "endDate": str(e), "dimensions": dims, "rowLimit": limit}
+        body.update(extra or {})
+        return gsc_call(token, "/sites/%s/searchAnalytics/query" % enc, body).get("rows") or []
+
+    def totals(s, e):
+        rows = query([], s, e)
+        t = rows[0] if rows else {}
+        return {"clicks": int(t.get("clicks", 0)), "impressions": int(t.get("impressions", 0)),
+                "ctr": round(100 * float(t.get("ctr", 0)), 1), "position": round(float(t.get("position", 0)), 1)}
+
+    def part(name, fn):
+        try:
+            out[name] = fn()
+        except Exception as e:
+            out["errors"][name] = str(e)
+
+    part("totals", lambda: totals(start, end))
+    part("totals_prev", lambda: totals(p_start, p_end))
+
+    def queries():
+        rows = query(["query"], start, end, 5000)
+        rows.sort(key=lambda x: -x["impressions"])
+        top = [[x["keys"][0], int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)] for x in rows[:20]]
+        wins = [[x["keys"][0], int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)]
+                for x in rows if 3.5 <= x["position"] <= 20 and x["impressions"] >= 5]
+        wins.sort(key=lambda x: (-x[1], x[3]))
+        return {"top": top, "wins": wins[:25], "count": len(rows)}
+
+    def pages():
+        rows = query(["page"], start, end, 5000)
+        rows.sort(key=lambda x: -x["impressions"])
+        return [[x["keys"][0].replace(BASE, ""), int(x["impressions"]), int(x["clicks"]), round(x["position"], 1)] for x in rows[:15]]
+
+    part("queries", queries)
+    part("pages", pages)
+    if not out["errors"]:
+        del out["errors"]
+    return out
 
 
 def main():
@@ -484,6 +611,11 @@ def main():
     bing_key = os.environ.get("BING_WEBMASTER_KEY")
     if bing_key:
         safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act))
+    gsc_key = os.environ.get("GSC_SERVICE_ACCOUNT")
+    if gsc_key:
+        safe(r, "gsc", lambda: gsc_block(gsc_key, today))
+    else:
+        r.setdefault("errors", {})["gsc"] = "GSC_SERVICE_ACCOUNT не задан (JSON ключа сервисного аккаунта Google)"
     if not args.no_site:
         safe(r, "site", site_health)
     out = Path(args.out)
