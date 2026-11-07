@@ -918,7 +918,7 @@ def build():
             # ТЗ-6: в индекс только карточки техники с фото, ценой и описанием (марка и год или пересказ от 200 знаков)
             strong = (active and bool(d.get("photo")) and bool(d.get("price"))
                       and ((d.get("make") and d.get("year")) or len((d.get("excerpt") or "").strip()) >= 200))
-            auto_open += strong
+            auto_open += bool(strong)
             write(f"/auto/lot/{d['id']}/", "auto_lot.html", priority="0.5", lastmod=d["lastmod"], noindex=not strong,
                   d=d, active=active, similar=similar_auto(d) if active else [], og_image=d.get("photo") if active else None,
                   title=f"{d['label']} с торгов" + (f" {d['region_where']}" if d.get("region_where") else "") + (f" за {rub(d['price'])}" if d.get("price") else "") + (" — архив" if not active else ""),
