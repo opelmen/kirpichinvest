@@ -48,10 +48,14 @@ jobs:
 
       # --act (ТЗ-1, 06.11.2026): sitemap-yandex.xml в Вебмастер и до 30 адресов из _src/data/recrawl_queue.txt на переобход.
       # В PR только чтение.
+      - name: Deps
+        run: pip install -q cryptography
+
       - name: Collect
         env:
           YANDEX_METRIKA_TOKEN: ${{ secrets.YANDEX_METRIKA_TOKEN }}
           BING_WEBMASTER_KEY: ${{ secrets.BING_WEBMASTER_KEY }}
+          GSC_SERVICE_ACCOUNT: ${{ secrets.GSC_SERVICE_ACCOUNT }}
         run: cd _src && python seo_nightly.py --out "$RUNNER_TEMP/nightly" ${{ github.event_name != 'pull_request' && '--act' || '' }}
 
       - name: Save to seo-yandex-data branch

@@ -79,3 +79,37 @@ class RecrawlQueueTests(unittest.TestCase):
         import seo_nightly as sn
         md = sn.to_md({"date": "2026-11-07", "bing": {"errors": {"crawl": "HTTP 401 InvalidApiKey"}}})
         self.assertIn("ошибка crawl: HTTP 401 InvalidApiKey", md)
+
+    def test_gsc_section_in_report(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "gsc": {
+            "site": "sc-domain:torggid.ru", "period": "2026-10-29 — 2026-11-04",
+            "totals": {"clicks": 12, "impressions": 900, "ctr": 1.3, "position": 14.2},
+            "totals_prev": {"clicks": 9, "impressions": 700, "ctr": 1.3, "position": 15.0},
+            "queries": {"count": 320, "top": [["квартиры с торгов", 100, 2, 12.0]],
+                        "wins": [["торги по банкротству казань официальный сайт", 40, 0, 11.5]]},
+            "pages": [["/torgi/kazan/", 40, 0, 11.5]]}})
+        self.assertIn("## Google Search Console", md)
+        self.assertIn("клики 12 (пред. 9), показы 900 (пред. 700)", md)
+        self.assertIn("Быстрые победы", md)
+        self.assertIn("- торги по банкротству казань официальный сайт — 40, 0, 11.5", md)
+
+    def test_gsc_missing_key_is_reported(self):
+        import seo_nightly as sn
+        md = sn.to_md({"date": "2026-11-07", "errors": {"gsc": "GSC_SERVICE_ACCOUNT не задан"}})
+        self.assertIn("ошибка gsc: GSC_SERVICE_ACCOUNT не задан", md)
+
+    def test_google_token_signs_jwt(self):
+        import json
+        import seo_nightly as sn
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import rsa
+        key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        pem = key.private_key_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
+                                    serialization.NoEncryption()).decode() if hasattr(key, "private_key_bytes") else \
+            key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()).decode()
+        sa = json.dumps({"client_email": "x@y.iam.gserviceaccount.com", "token_uri": "http://127.0.0.1:9/token", "private_key": pem})
+        # подпись проходит, падает только сетевой обмен токена
+        with self.assertRaises(Exception) as cm:
+            sn.google_token(sa)
+        self.assertNotIn("private_key", str(cm.exception))
