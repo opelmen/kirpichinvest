@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-07T15:54:01+00:00",
+ "generated": "2026-11-07T19:10:36+00:00",
  "date": "2026-11-07",
  "metrika": {
   "day": "2026-11-06",
@@ -1371,10 +1371,10 @@
  },
  "bing": {
   "crawl": {
-   "date": "2026-11-02",
-   "in_index": 465,
-   "crawled": 196,
-   "crawl_errors": 8,
+   "date": "2026-11-03",
+   "in_index": 606,
+   "crawled": 132,
+   "crawl_errors": 41,
    "blocked": null,
    "in_links": 1
   },
@@ -1385,10 +1385,10 @@
   },
   "queries": [
    [
-    "с московская 66 офис 411,4 этаж саратов 2 гис",
+    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
     1,
     0,
-    3
+    1
    ],
    [
     "недвижимость москва толрги",
@@ -1403,13 +1403,7 @@
     8
    ],
    [
-    "балтым арестованное имущество земельный участок торги",
-    1,
-    0,
-    6
-   ],
-   [
-    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    "с московская 66 офис 411,4 этаж саратов 2 гис",
     1,
     0,
     3
@@ -1419,24 +1413,6 @@
     1,
     0,
     4
-   ],
-   [
-    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
-    1,
-    0,
-    1
-   ],
-   [
-    "site.investmoscow.ru квартира торги ноябрь 2026",
-    1,
-    0,
-    5
-   ],
-   [
-    "торги квартир в москве на аукционе",
-    1,
-    0,
-    7
    ],
    [
     "дом нирнзее нежилое помещение торги",
@@ -1449,6 +1425,30 @@
     1,
     0,
     3
+   ],
+   [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "site.investmoscow.ru квартира торги ноябрь 2026",
+    1,
+    0,
+    5
+   ],
+   [
+    "торги квартир в москве на аукционе",
+    1,
+    0,
+    7
    ]
   ],
   "pages": [
@@ -2026,10 +2026,16 @@
     14.5
    ]
   ],
+  "submit": [
+   [
+    "/sitemap.xml",
+    "отправлен"
+   ]
+  ],
   "sitemaps": [
    [
     "/sitemap.xml",
-    "2026-10-25",
+    "2026-11-07",
     "0",
     "0",
     20663,
@@ -2143,8 +2149,8 @@
   "pages": {
    "/": {
     "status": 200,
-    "ms": 1319,
-    "bytes": 52638,
+    "ms": 1115,
+    "bytes": 52588,
     "final": "https://torggid.ru/",
     "error": null,
     "title": "Недвижимость с торгов по всей России — ТоргГид",
@@ -2157,8 +2163,8 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 1139,
-    "bytes": 100739,
+    "ms": 1221,
+    "bytes": 100576,
     "final": "https://torggid.ru/torgi/",
     "error": null,
     "title": "Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид",
@@ -2171,7 +2177,7 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 1430,
+    "ms": 1092,
     "bytes": 102256,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
@@ -2185,8 +2191,8 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 1506,
-    "bytes": 106283,
+    "ms": 918,
+    "bytes": 104582,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
     "title": "Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротству и арест — ТоргГид",
@@ -2199,8 +2205,8 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 1530,
-    "bytes": 94382,
+    "ms": 1109,
+    "bytes": 93688,
     "final": "https://torggid.ru/auto/",
     "error": null,
     "title": "Автомобили и техника с торгов по всей России — актуальные лоты 2026 — ТоргГид",
@@ -2213,7 +2219,7 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 740,
+    "ms": 976,
     "bytes": 33513,
     "final": "https://torggid.ru/stati/",
     "error": null,
@@ -2227,7 +2233,7 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 1034,
+    "ms": 639,
     "bytes": 39052,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
@@ -2241,7 +2247,7 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 763,
+    "ms": 627,
     "bytes": 34685,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
@@ -2255,8 +2261,8 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 1280,
-    "bytes": 28710,
+    "ms": 638,
+    "bytes": 28708,
     "final": "https://torggid.ru/analitika/",
     "error": null,
     "title": "Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид",
@@ -2271,25 +2277,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 572,
+    "ms": 462,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 854,
-    "bytes": 1092,
+    "ms": 781,
+    "bytes": 799,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 951,
+    "ms": 1079,
     "bytes": 51391,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 1124,
+    "ms": 633,
     "bytes": 24873,
     "error": null
    }
@@ -2318,10 +2324,10 @@
   },
   "robots_txt": "User-agent: *\nAllow: /\nDisallow: /check/\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n\nUser-agent: Yandex\nAllow: /\nDisallow: /check/\nClean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /\nSitemap: https://torggid.ru/sitemap-yandex.xml\n\nUser-agent: YandexAdditional\nAllow: /\n\nUser-agent: YandexAdditionalBot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nUser-agent: Applebot-Extended\nAllow: /\n\nSitemap: https://torggid.ru/sitemap.xml\n",
   "sitemap": {
-   "urls": 30516,
+   "urls": 15962,
    "by_section": {
-    "torgi": 19450,
-    "auto": 11024,
+    "auto": 9094,
+    "torgi": 6826,
     "stati": 23,
     "analitika": 3,
     "proverka-lota": 2,
