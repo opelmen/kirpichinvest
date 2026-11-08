@@ -298,6 +298,10 @@ class AutoSectionTests(unittest.TestCase):
             self.assertIn('<meta property="og:image" content="https://torgi.gov.ru/new/image/1.jpg">', car)
             self.assertIn('https://app.torggid.ru/auto/gistorgi_auto%3A0_1?from=site_auto_check', car)
             self.assertIn('Похожие машины с торгов', car)
+            # ГЕО-5: гость из ИИ-ассистента на технике видит проверку VIN, на недвижимости — подписку
+            self.assertIn('data-ai-cta="vin"', car)
+            self.assertIn('data-ai-cta="vin"', index)
+            self.assertNotIn('data-ai-cta="vin"', (site/'index.html').read_text())
             truck = (site/'auto/lot/mets-0/index.html').read_text()
             self.assertIn('Грузовой автомобиль КАМАЗ 65115, 2012', truck)
             self.assertIn('упомянут залог', truck.lower())
