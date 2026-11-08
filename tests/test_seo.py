@@ -171,9 +171,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Банкротное имущество</span>', kazan)
             self.assertRegex(kazan, r'<p class="lead">Сейчас \d+ лот\w* в Казани и пригородах со всех площадок')  # ТЗ-5: абзац-ответ под h1 с цифрами
             self.assertIn('новых за 7 дней — ', kazan)
-            # телефон только в подвале и разметке (John, 31.10.2026), в теле карточки его нет
-            self.assertNotIn('995', deal_card.split('<main')[1].split('<footer')[0])
-            self.assertIn('595-54-00', deal_card.split('<footer')[1])
+            # личный номер John на сайте не показываем нигде (John, 08.11.2026)
+            self.assertNotIn('595-54-00', deal_card)
             self.assertIn('повторные торги: цена уже снижена', deal_card)  # повторные — плюс, не риск
             bld = (site/'torgi/lot/mets-32/index.html').read_text()
             self.assertIn('<th>Земельный участок</th><td>не продают, участок в аренде (КН 16:50:1:2, 900 м²)', bld)  # участок под зданием
@@ -299,6 +298,10 @@ class AutoSectionTests(unittest.TestCase):
             self.assertIn('<meta property="og:image" content="https://torgi.gov.ru/new/image/1.jpg">', car)
             self.assertIn('https://app.torggid.ru/auto/gistorgi_auto%3A0_1?from=site_auto_check', car)
             self.assertIn('Похожие машины с торгов', car)
+            # ГЕО-5: гость из ИИ-ассистента на технике видит проверку VIN, на недвижимости — подписку
+            self.assertIn('data-ai-cta="vin"', car)
+            self.assertIn('data-ai-cta="vin"', index)
+            self.assertNotIn('data-ai-cta="vin"', (site/'index.html').read_text())
             truck = (site/'auto/lot/mets-0/index.html').read_text()
             self.assertIn('Грузовой автомобиль КАМАЗ 65115, 2012', truck)
             self.assertIn('упомянут залог', truck.lower())

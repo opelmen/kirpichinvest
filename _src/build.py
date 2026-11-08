@@ -24,7 +24,7 @@ ROOT = SRC.parent
 OUT = ROOT / "_site"
 
 cfg = SimpleNamespace(
-    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="+7 995 595-54-00",  # телефон карточки Яндекс Бизнеса: только подвал, «О нас» и разметка, не на главных экранах (John, 31.10.2026)
+    SITE_NAME="ТоргГид", SITE_URL="https://torggid.ru", SITE_PHONE="",  # John 08.11.2026: номер личный, на сайте не светим (ни подвал, ни разметка); связь — бот и почта
    
     SITE_EMAIL="fond178@gmail.com", SITE_OWNER="ИП Смирнов Илья Александрович", SITE_INN="", SITE_OGRNIP="",
     SITE_ADDRESS="Санкт-Петербург", SITE_TELEGRAM="https://t.me/smirnoffond", METRIKA_ID="",
@@ -1096,6 +1096,7 @@ RewriteRule ^(.*)$ """ + cfg.SITE_URL + """/$1 [R=301,L]
 RewriteRule ^torgi/spb/?$ /torgi/sankt-peterburg/ [R=301,L]
 RewriteRule ^torgi/lenoblast/?$ /torgi/sankt-peterburg/ [R=301,L]
 RewriteRule ^torgi/lenoblast/(.+)$ /torgi/sankt-peterburg/$1 [R=301,L]
+RewriteRule ^(sample|primer|primer-otcheta)/?$ /proverka-lota/primer/ [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !/$
 RewriteCond %{REQUEST_URI} !\\.[a-z0-9]+$ [NC]
