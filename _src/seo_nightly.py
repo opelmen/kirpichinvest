@@ -149,6 +149,15 @@ def metrika_block(token, today):
                                "date1": w1, "date2": w2, "sort": "-ym:s:visits", "limit": 50})
         allr = [[x["dimensions"][0].get("name") or "?", int(x["metrics"][0])] for x in rows]
         ai = [x for x in allr if any(a in x[0].lower() for a in AI_REFERRERS)]
+        # ChatGPT ставит utm_source=chatgpt.com, и Метрика пишет такие визиты в «прямые» без реферера:
+        # без этой выборки срез показывал 0 переходов из ИИ при ~30 визитах из ChatGPT в день (09.11.2026)
+        utm = metrika(token, {"metrics": "ym:s:visits", "dimensions": "ym:s:UTMSource",
+                              "date1": w1, "date2": w2, "sort": "-ym:s:visits", "limit": 50})
+        seen = {x[0].lower() for x in ai}
+        for x in utm:
+            name = (x["dimensions"][0].get("name") or "").lower()
+            if name and name not in seen and any(a in name for a in AI_REFERRERS):
+                ai.append(["utm " + name, int(x["metrics"][0])])
         return {"top": allr[:15], "ai": ai}
 
     def goals():
