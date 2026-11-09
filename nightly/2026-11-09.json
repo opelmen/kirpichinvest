@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-08T23:08:56+00:00",
+ "generated": "2026-11-09T00:52:17+00:00",
  "date": "2026-11-09",
  "metrika": {
   "day": "2026-11-08",
@@ -59,9 +59,9 @@
     "http:torggid.ru:80"
    ],
    "errors": {
-    "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
-    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "summary": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
     "indexing_samples": "Remote end closed connection without response",
     "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
    },
@@ -79,67 +79,7 @@
    },
    "diagnostics": {
     "problems": {
-     "URL_ALERT_4XX": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_BINDING": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_TITLE": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
      "NO_REGIONS": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "THREATS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "ERROR_IN_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_REDIRECTS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_PROBLEM": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "SLOW_AVG_RESPONSE_TIME": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_NEED_PAPER": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "BIG_FAVICON_ABSENT": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
@@ -149,13 +89,8 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_5XX": {
-      "severity": "CRITICAL",
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -164,42 +99,12 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "CONNECT_FAILED": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DISALLOWED_IN_ROBOTS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+     "NO_ROBOTS_TXT": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DNS_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
+     "NO_METRIKA_COUNTER_BINDING": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -209,7 +114,82 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "MAIN_PAGE_ERROR": {
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "NO_SITEMAP_MODIFICATIONS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_TITLE": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERROR_IN_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "THREATS": {
       "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
@@ -219,8 +199,8 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "ERRORS_IN_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -229,12 +209,32 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "SOFT_404": {
-      "severity": "POSSIBLE_PROBLEM",
+     "URL_ALERT_4XX": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
      },
      "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_REDIRECTS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SOFT_404": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1168,67 +1168,12 @@
    },
    "diagnostics": {
     "problems": {
-     "NO_REGIONS": {
+     "URL_ALERT_4XX": {
       "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_IN_SPRAV": {
-      "severity": "RECOMMENDATION",
-      "state": "PRESENT",
-      "last_state_update": "2026-09-30T07:41:40.077+03:00"
-     },
-     "DISALLOWED_IN_ROBOTS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DUPLICATE_CONTENT_ATTRS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
      "NO_METRIKA_COUNTER_BINDING": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_FAILED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_PROBLEM": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_5XX": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_NEED_PAPER": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1238,42 +1183,12 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "ERROR_IN_ROBOTS_TXT": {
+     "NO_SITEMAP_MODIFICATIONS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "SLOW_AVG_RESPONSE_TIME": {
-      "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "CONNECT_FAILED": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "PRESENT",
-      "last_state_update": "2026-10-10T08:07:56.042+03:00"
-     },
-     "BIG_FAVICON_ABSENT": {
+     "NO_REGIONS": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
@@ -1283,32 +1198,7 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DUPLICATE_PAGES": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_MIRROR_IS_NOT_HTTPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "URL_ALERT_4XX": {
-      "severity": "RECOMMENDATION",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DNS_ERROR": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "FAVICON_ERROR": {
+     "ERROR_IN_ROBOTS_TXT": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1318,7 +1208,112 @@
       "state": "ABSENT",
       "last_state_update": null
      },
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_IN_SPRAV": {
+      "severity": "RECOMMENDATION",
+      "state": "PRESENT",
+      "last_state_update": "2026-09-30T07:41:40.077+03:00"
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_CONTENT_ATTRS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "PRESENT",
+      "last_state_update": "2026-10-10T08:07:56.042+03:00"
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
      "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_MIRROR_IS_NOT_HTTPS": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1327,6 +1322,11 @@
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": "2026-10-03T10:33:06.648+03:00"
+     },
+     "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
      }
     }
    }
@@ -1350,9 +1350,6 @@
   "probe": "https:contora.store:443: HTTP 504 "
  },
  "bing": {
-  "errors": {
-   "submit": "HTTP 400 {\"ErrorCode\":8,\"Message\":\"ERROR!!! You have exceeded your daily url submission quota : 100\"}"
-  },
   "crawl": {
    "date": "2026-11-03",
    "in_index": 606,
@@ -1374,10 +1371,10 @@
     7
    ],
    [
-    "торги от города москва",
+    "торги москва",
     2,
     0,
-    10
+    9
    ],
    [
     "торггид",
@@ -1386,10 +1383,52 @@
     4
    ],
    [
-    "торги москва",
+    "торги от города москва",
     2,
     0,
-    9
+    10
+   ],
+   [
+    "торги квартир в москве на аукционе",
+    1,
+    0,
+    7
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "недвижимость москва толрги",
+    1,
+    0,
+    4
+   ],
+   [
+    "аукционы по продаже недвижимости в москве",
+    1,
+    0,
+    8
+   ],
+   [
+    "московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    4
+   ],
+   [
+    "site.investmoscow.ru квартира торги ноябрь 2026",
+    1,
+    0,
+    5
+   ],
+   [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
    ],
    [
     "дом нирнзее нежилое помещение торги",
@@ -1404,58 +1443,16 @@
     3
    ],
    [
-    "аукционы по продаже недвижимости в москве",
-    1,
-    0,
-    8
-   ],
-   [
-    "балтым арестованное имущество земельный участок торги",
-    1,
-    0,
-    6
-   ],
-   [
     "\"квартира\" \"торги\" \"2020\" \"раменки\"",
     1,
     0,
     1
    ],
    [
-    "\"симоновский\" \"17\" \"14\" \"торги\"",
-    1,
-    0,
-    3
-   ],
-   [
-    "московская 66 офис 411,4 этаж саратов 2 гис",
-    1,
-    0,
-    4
-   ],
-   [
-    "недвижимость москва толрги",
-    1,
-    0,
-    4
-   ],
-   [
     "с московская 66 офис 411,4 этаж саратов 2 гис",
     1,
     0,
     3
-   ],
-   [
-    "site.investmoscow.ru квартира торги ноябрь 2026",
-    1,
-    0,
-    5
-   ],
-   [
-    "торги квартир в москве на аукционе",
-    1,
-    0,
-    7
    ]
   ],
   "pages": [
@@ -1480,8 +1477,14 @@
    ]
   ],
   "quota": {
-   "daily": 0,
+   "daily": 100,
    "monthly": 2200
+  },
+  "submitted_urls": 100,
+  "submitted_by_kind": {
+   "разделы и статьи": 100,
+   "недвижимость": 0,
+   "техника": 0
   }
  },
  "gsc": {
@@ -2162,7 +2165,7 @@
   "pages": {
    "/": {
     "status": 200,
-    "ms": 1076,
+    "ms": 914,
     "bytes": 52526,
     "final": "https://torggid.ru/",
     "error": null,
@@ -2176,7 +2179,7 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 1205,
+    "ms": 1377,
     "bytes": 101933,
     "final": "https://torggid.ru/torgi/",
     "error": null,
@@ -2190,7 +2193,7 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 1231,
+    "ms": 1127,
     "bytes": 104132,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
@@ -2204,7 +2207,7 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 1196,
+    "ms": 1396,
     "bytes": 104532,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
@@ -2218,7 +2221,7 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 1254,
+    "ms": 906,
     "bytes": 95626,
     "final": "https://torggid.ru/auto/",
     "error": null,
@@ -2232,7 +2235,7 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 1104,
+    "ms": 1171,
     "bytes": 39731,
     "final": "https://torggid.ru/stati/",
     "error": null,
@@ -2246,7 +2249,7 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 954,
+    "ms": 1102,
     "bytes": 38968,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
@@ -2260,7 +2263,7 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 887,
+    "ms": 732,
     "bytes": 35007,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
@@ -2274,7 +2277,7 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 1098,
+    "ms": 762,
     "bytes": 28626,
     "final": "https://torggid.ru/analitika/",
     "error": null,
@@ -2290,25 +2293,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 492,
+    "ms": 563,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 462,
+    "ms": 569,
     "bytes": 799,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 1083,
+    "ms": 940,
     "bytes": 52976,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 675,
+    "ms": 750,
     "bytes": 30512,
     "error": null
    }
