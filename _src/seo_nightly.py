@@ -383,13 +383,19 @@ def bing_block(key, queue_path, act, state_path=None, today=None):
     part("feeds", feeds)
     if act and "feeds" in out:
         have = {f[0] for f in out["feeds"]}
-        for sm in ("/sitemap.xml", "/sitemap-yandex.xml"):
-            if sm not in have:
-                try:
-                    bing_call("SubmitFeed", key, {"siteUrl": site, "feedUrl": BASE + sm})
-                    out.setdefault("submitted_feeds", []).append(sm)
-                except Exception as e:
-                    out["errors"]["feed " + sm] = str(e)
+        # 10.11.2026: sitemap-yandex.xml — подмножество для Яндекса, Bing пишет по нему «not accessible»;
+        # Bing достаточно полного sitemap.xml, его переподаём каждую ночь (Bing перечитывает индекс sitemap)
+        if "/sitemap-yandex.xml" in have:
+            try:
+                bing_call("RemoveFeed", key, {"siteUrl": site, "feedUrl": BASE + "/sitemap-yandex.xml"})
+                out.setdefault("removed_feeds", []).append("/sitemap-yandex.xml")
+            except Exception as e:
+                out["errors"]["remove feed"] = str(e)
+        try:
+            bing_call("SubmitFeed", key, {"siteUrl": site, "feedUrl": BASE + "/sitemap.xml"})
+            out.setdefault("submitted_feeds", []).append("/sitemap.xml")
+        except Exception as e:
+            out["errors"]["feed /sitemap.xml"] = str(e)
     if act:
         try:
             q = bing_call("GetUrlSubmissionQuota", key, siteUrl=site) or {}
@@ -495,6 +501,8 @@ def to_md(r):
             L.append("- показы за %s дн.: %s, клики: %s" % (t.get("days"), t.get("impressions_7d"), t.get("clicks_7d")))
         if b.get("feeds") is not None:
             L.append("- sitemap в Bing: " + (", ".join("%s (%s, %s адресов, обход %s)" % tuple(f) for f in b["feeds"]) or "нет"))
+        if b.get("removed_feeds"):
+            L.append("- убраны из Bing: " + ", ".join(b["removed_feeds"]))
         if b.get("submitted_feeds"):
             L.append("- отправлены sitemap: " + ", ".join(b["submitted_feeds"]))
         if b.get("quota"):
