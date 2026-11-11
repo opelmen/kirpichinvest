@@ -137,6 +137,23 @@ class RecrawlQueueTests(unittest.TestCase):
         self.assertIn("- /sitemap.xml — 2026-11-06, 0, 0, 30000, 0", md)
         self.assertIn("- /torgi/ — NEUTRAL, Crawled - currently not indexed, 2026-11-01", md)
 
+    def test_ai_visits_counted_by_utm_source(self):
+        import seo_nightly as sn
+        from datetime import date
+        from unittest import mock
+
+        def fake(token, params):
+            dim = params.get("dimensions")
+            if dim == "ym:s:referalSource":
+                return [{"dimensions": [{"name": "perplexity.ai"}], "metrics": [3]}, {"dimensions": [{"name": "vk.com"}], "metrics": [9]}]
+            if dim == "ym:s:UTMSource":
+                return [{"dimensions": [{"name": "chatgpt.com"}], "metrics": [120]}, {"dimensions": [{"name": "avito"}], "metrics": [50]}]
+            return []
+
+        with mock.patch.object(sn, "metrika", side_effect=fake):
+            m = sn.metrika_block("t", date(2026, 11, 9))
+        self.assertEqual(m["referrers_week"]["ai"], [["perplexity.ai", 3], ["utm chatgpt.com", 120]])
+
     def test_bing_pick_rotates_and_skips_recent(self):
         import seo_nightly as sn
         from datetime import date
