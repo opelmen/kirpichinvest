@@ -1,0 +1,111 @@
+name: Deploy privatinvest prototype
+
+on:
+  push:
+    branches: [main, "claude/**"]
+    paths: ["privatinvest/**", ".github/workflows/privatinvest.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: privatinvest
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare SSH
+        env:
+          SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 fond178.beget.tech >> ~/.ssh/known_hosts
+
+      - name: TLS certificate and http->https check (diagnostics)
+        continue-on-error: true
+        run: |
+          for h in privateinvest.pro www.privateinvest.pro; do
+            echo "=== $h"
+            echo | timeout 20 openssl s_client -servername $h -connect $h:443 2>/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName 2>&1 | head -12
+            curl -sS -o /dev/null -w "https verify: %{ssl_verify_result} code %{http_code}\n" --max-time 20 https://$h/ 2>&1 | tail -1
+            curl -sS -o /dev/null -w "http code %{http_code} -> %{redirect_url}\n" --max-time 20 http://$h/ 2>&1 | tail -1
+          done
+          dig +short privateinvest.pro A www.privateinvest.pro A || true
+
+      - name: Check that the domain folder exists on Beget
+        run: |
+          set -euo pipefail
+          # домен на Beget называется privateinvest.pro (латиницей)
+          ssh fond178@fond178.beget.tech 'd=~/privateinvest.pro/public_html; if test -d "$d"; then echo "OK: $d"; ls -la "$d" | head -20; else echo "NO domain folder. Home listing:"; ls -1 ~; exit 1; fi'
+
+      - name: Backup current site and deploy
+        run: |
+          set -euo pipefail
+          ssh fond178@fond178.beget.tech 'set -e; d=~/privateinvest.pro/public_html; mkdir -p ~/privatinvest-backups; tar -czf ~/privatinvest-backups/$(date +%Y%m%d-%H%M%S).tar.gz -C "$d" . ; ls -1t ~/privatinvest-backups | tail -n +6 | xargs -r -I{} rm -f ~/privatinvest-backups/{}'
+          rsync -az --delete --exclude='.well-known' privatinvest/ fond178@fond178.beget.tech:privateinvest.pro/public_html/
+          echo "Deployed: https://privateinvest.pro/"
+
+      - name: Showcase feed from Zalog Desk (no personal data)
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 60 https://check.kirpichinvest.ru/public/showcase.json -o /tmp/sc.json
+          python3 - <<'PY'
+          import json, re
+          raw = open('/tmp/sc.json', encoding='utf-8').read()
+          d = json.loads(raw)
+          print('items:', len(d['items']), 'updated:', d.get('updated'))
+          for it in d['items']:
+              print(it['id'], '|', it['type'], '|', it['city'], '|', it['street'], '|', it['loan'], it['rate'], it['ltv'], '| checks:', len(it['checks']))
+          assert not re.search(r'\d{2}:\d{2}:\d{6,7}:\d+', raw), 'cadastral number in feed'
+          assert not re.search(r'\b\d{12}\b', raw), 'INN-like number in feed'
+          PY
+
+      - name: Smoke check
+        run: |
+          set -euo pipefail
+          sleep 5
+          for u in https://privateinvest.pro/ http://privateinvest.pro/; do
+            code=$(curl -s -o /tmp/p.html -w '%{http_code}' --max-time 30 -L "$u" || true)
+            echo "$u -> HTTP $code"
+            if grep -q 'Приватинвест' /tmp/p.html && grep -q 'showcase.json' /tmp/p.html; then echo "page content OK at $u"; exit 0; fi
+          done
+          echo 'page content missing'; head -c 500 /tmp/p.html; exit 1
+
+      - name: http -> https redirect (rollback .htaccess on loop)
+        run: |
+          set -uo pipefail
+          sleep 3
+          for u in http://privateinvest.pro/ http://www.privateinvest.pro/ https://www.privateinvest.pro/; do
+            curl -s -o /dev/null -w "$u -> %{http_code} %{redirect_url}\n" --max-time 20 "$u"
+          done
+          final=$(curl -s -o /tmp/r.html -w '%{http_code} %{url_effective}' --max-time 30 -L --max-redirs 5 http://privateinvest.pro/)
+          echo "http final: $final"
+          if [ "${final%% *}" != "200" ] || ! grep -q 'Приватинвест' /tmp/r.html; then
+            echo "redirect broken, removing .htaccess"
+            ssh fond178@fond178.beget.tech 'rm -f ~/privateinvest.pro/public_html/.htaccess'
+            exit 1
+          fi
+          case "$final" in *https://privateinvest.pro/*) echo "redirect OK";; *) echo "no https redirect"; exit 1;; esac
+
+      - name: Yandex Metrika on the live page
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 30 https://privateinvest.pro/ -o /tmp/live.html
+          grep -q "ym(113877734, 'init'" /tmp/live.html && echo "counter code: in HTML" || { echo "counter code: MISSING"; exit 1; }
+          grep -q 'yandex-verification" content="54da038aafe8c1a9' /tmp/live.html && echo "webmaster meta: in HTML" || echo "webmaster meta: MISSING"
+          echo "tag.js: HTTP $(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://mc.yandex.ru/metrika/tag.js?id=113877734)"
+          # настоящий браузер: уходит ли хит счётчика при открытии страницы
+          cd /tmp && npm i -s puppeteer-core@23.11.1 >/dev/null 2>&1
+          CHROME=$(command -v google-chrome || command -v chromium-browser) node -e '
+            const p=require("/tmp/node_modules/puppeteer-core");(async()=>{
+              const b=await p.launch({executablePath:process.env.CHROME,args:["--no-sandbox"]});const pg=await b.newPage();
+              const hits=[],errs=[];pg.on("request",r=>{if(/mc\.yandex\.(ru|com)\/watch\/113877734/.test(r.url()))hits.push(r.url().slice(0,80))});
+              pg.on("pageerror",e=>errs.push(e.message));pg.on("requestfailed",r=>{if(/yandex/.test(r.url()))errs.push("failed "+r.url().slice(0,80)+" "+r.failure().errorText)});
+              await pg.goto("https://privateinvest.pro/?utm_source=ci_check",{waitUntil:"networkidle2",timeout:60000});await new Promise(r=>setTimeout(r,5000));
+              console.log("metrika hits:",hits.length,hits[0]||"");console.log("errors:",errs.length?errs:"none");await b.close();
+            })().catch(e=>{console.log("browser check failed:",e.message)})'

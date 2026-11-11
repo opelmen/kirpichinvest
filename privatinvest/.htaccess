@@ -1,0 +1,17 @@
+# privateinvest.pro: все заходы на https://privateinvest.pro (без www), иначе браузер пишет «Не защищено».
+# .well-known не трогаем: через него Let's Encrypt продлевает сертификат.
+# На Beget перед Apache стоит nginx, поэтому https проверяем и по %{HTTPS}, и по X-Forwarded-Proto (иначе петля).
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://privateinvest.pro%{REQUEST_URI} [L,R=301]
+
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://privateinvest.pro%{REQUEST_URI} [L,R=301]
+
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
