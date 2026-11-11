@@ -217,7 +217,8 @@ def from_market(rows):
             "repeat": r.get("stage") == "repeat" or "repeat" in keys,
             "market_basis": r.get("market_basis"), "next_step": next_step(r.get("price_schedule")),
             "price_drops": r.get("price_drops") or 0, "price_was": r.get("price_was"),
-            "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
+            # thumb — миниатюра нашей копии для списков (480 px вместо снимка 1280 px); нет копии — само фото
+            "photo": r.get("photo"), "thumb": r.get("photo_thumb") or r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
             "comps": r.get("comps") if cat in NONRES and ppm2 else None,
             "land_text": land_text(r.get("land")),
             "descr": r.get("descr"),  # текст извещения: на сайт попадает только очищенный пересказ (notice_excerpt)
