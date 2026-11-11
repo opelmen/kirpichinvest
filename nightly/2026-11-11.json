@@ -1,0 +1,2403 @@
+{
+ "generated": "2026-11-11T01:14:23+00:00",
+ "date": "2026-11-11",
+ "metrika": {
+  "day": "2026-11-10",
+  "prev_day": "2026-11-09",
+  "week": [
+   "2026-11-04",
+   "2026-11-10"
+  ],
+  "sources_day": {
+   "Direct traffic": 47,
+   "Ad traffic": 7,
+   "Internal traffic": 6,
+   "Search engine traffic": 1
+  },
+  "sources_prev_day": {
+   "Direct traffic": 56,
+   "Ad traffic": 19,
+   "Internal traffic": 10
+  },
+  "organic_day": {
+   "Yandex": {
+    "visits": 1,
+    "bounce": 0.0,
+    "sec": 85
+   }
+  },
+  "organic_week": {
+   "Yandex": {
+    "visits": 1,
+    "bounce": 0.0,
+    "sec": 85
+   },
+   "Bing": {
+    "visits": 1,
+    "bounce": 100.0,
+    "sec": 0
+   }
+  },
+  "organic_landings_week": [
+   [
+    "/",
+    1
+   ],
+   [
+    "/auto/lot/gistorgi_auto-26000013000000001202_1/",
+    1
+   ]
+  ],
+  "referrers_week": {
+   "top": [
+    [
+     "addcatalogs.manyweb.ru",
+     1
+    ]
+   ],
+   "ai": [
+    [
+     "utm chatgpt.com",
+     191
+    ]
+   ]
+  },
+  "goal_reaches_week": {
+   "Direct traffic": 75,
+   "Ad traffic": 26,
+   "Internal traffic": 19,
+   "Link traffic": 0,
+   "Search engine traffic": 0,
+   "Social network traffic": 0
+  }
+ },
+ "webmaster": {
+  "torggid.ru": {
+   "host_id": "https:torggid.ru:443",
+   "verified": true,
+   "variants": [
+    "https:torggid.ru:443",
+    "http:torggid.ru:80"
+   ],
+   "errors": {
+    "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
+    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "indexing_samples": "Remote end closed connection without response",
+    "queries": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}"
+   },
+   "info": {
+    "host_id": "https:torggid.ru:443",
+    "verified": true,
+    "main_mirror": null,
+    "host_data_status": "NOT_LOADED",
+    "host_display_name": "torggid.ru",
+    "ascii_host_url": "https://torggid.ru/",
+    "unicode_host_url": "https://torggid.ru/"
+   },
+   "sitemaps": {
+    "sitemaps": []
+   },
+   "diagnostics": {
+    "problems": {
+     "NO_REGIONS": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_IN_SPRAV": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_CONTENT_ATTRS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_BINDING": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "NO_SITEMAP_MODIFICATIONS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_TITLE": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERROR_IN_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "THREATS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_MIRROR_IS_NOT_HTTPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_4XX": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_REDIRECTS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SOFT_404": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     }
+    }
+   },
+   "recrawl_quota": {
+    "daily_quota": 150,
+    "quota_remainder": 150
+   }
+  },
+  "kirpichinvest.ru": {
+   "host_id": "https:kirpichinvest.ru:443",
+   "verified": true,
+   "variants": [
+    "https:kirpichinvest.ru:443"
+   ],
+   "summary": {
+    "sqi": 0,
+    "excluded_pages_count": 0,
+    "searchable_pages_count": 1,
+    "site_problems": {
+     "RECOMMENDATION": 1,
+     "POSSIBLE_PROBLEM": 1
+    }
+   },
+   "info": {
+    "host_id": "https:kirpichinvest.ru:443",
+    "verified": true,
+    "main_mirror": null,
+    "host_data_status": "OK",
+    "host_display_name": "kirpichinvest.ru",
+    "ascii_host_url": "https://kirpichinvest.ru/",
+    "unicode_host_url": "https://kirpichinvest.ru/"
+   },
+   "excluded_samples": {
+    "count": 88,
+    "samples": [
+     {
+      "url": "https://kirpichinvest.ru/",
+      "title": "Квартиры с торгов в СПб и Ленобласти: подбор, проверка, покупка под ключ",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/o-nas/",
+      "title": "О нас и контакты — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/",
+      "title": "Как проверить квартиру с торгов перед подачей заявки: чек-лист из 12 пунктов — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/publichnoe-predlozhenie/",
+      "title": "Публичное предложение на торгах по банкротству: как работает снижение цены — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/torgi-po-bankrotstvu-i-torgi-arestovannogo-imushchestva/",
+      "title": "Торги по банкротству и торги арестованного имущества: в чём разница — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/zhilcy-v-kvartire-s-torgov/",
+      "title": "Жильцы в квартире с торгов: как снять с учёта и выселить после покупки — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/chelyabinsk/",
+      "title": "Квартиры с торгов в Челябинске и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/chelyabinsk/chelyabinskiy-rayon/",
+      "title": "Квартиры с торгов: Челябинский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/do-5-mln/",
+      "title": "Квартиры с торгов до 5 млн рублей в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/doli/",
+      "title": "Доли в квартирах с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/dvuhkomnatnye/",
+      "title": "Двухкомнатные квартиры с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/ekaterinburg/",
+      "title": "Квартиры с торгов в Екатеринбурге и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/krasnodar/",
+      "title": "Квартиры с торгов в Краснодаре и пригородах — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/krasnodar/gelendzhik/",
+      "title": "Квартиры с торгов: Геленджик — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/krasnoyarsk/doli/",
+      "title": "Доли в квартирах с торгов: Красноярск — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/moskva/doli/",
+      "title": "Доли в квартирах с торгов: Москва — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/moskva/komnaty/",
+      "title": "Комнаты с торгов: Москва — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/moskva/trehkomnatnye/",
+      "title": "Трёх- и многокомнатные квартиры с торгов: Москва — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/nizhniy-novgorod/",
+      "title": "Квартиры с торгов в Нижнем Новгороде и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/odnokomnatnye/",
+      "title": "Однокомнатные квартиры с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/omsk/",
+      "title": "Квартиры с торгов в Омске и пригородах — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/omsk/doli/",
+      "title": "Доли в квартирах с торгов: Омск — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/perm/",
+      "title": "Квартиры с торгов в Перми и пригородах — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/perm/doli/",
+      "title": "Доли в квартирах с торгов: Пермь — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/povtornye-torgi/",
+      "title": "Квартиры на повторных торгах в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/rostov-na-donu/",
+      "title": "Квартиры с торгов в Ростове-на-Дону и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/rostov-na-donu/rostov-na/",
+      "title": "Квартиры с торгов: Ростов-на- — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/samara/",
+      "title": "Квартиры с торгов в Самаре, Тольятти и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/doli/",
+      "title": "Доли в квартирах с торгов: Санкт-Петербург — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/gatchinskiy-rayon/",
+      "title": "Квартиры с торгов: Гатчинский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/kingiseppskiy-rayon/",
+      "title": "Квартиры с торгов: Кингисеппский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/kirovskiy-rayon/",
+      "title": "Квартиры с торгов: Кировский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/povtornye-torgi/",
+      "title": "Квартиры на повторных торгах: Санкт-Петербург — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/volosovskiy-rayon/",
+      "title": "Квартиры с торгов: Волосовский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/vsevolozhskiy-rayon/",
+      "title": "Квартиры с торгов: Всеволожский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/trehkomnatnye/",
+      "title": "Трёх- и многокомнатные квартиры с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/ufa/komnaty/",
+      "title": "Комнаты с торгов: Уфа — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-07T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/investoram/",
+      "title": "Инвесторам: покупка недвижимости с торгов в СПб — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/kalkulyator-stavki/",
+      "title": "Калькулятор максимальной ставки на торгах по недвижимости — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/slovar/",
+      "title": "Словарь терминов торгов по банкротству и арестованному имуществу — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/",
+      "title": "Статьи о покупке недвижимости с торгов — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/torgi-po-bankrotstvu-i-torgi-arestovannogo-imushchestva/",
+      "title": "Торги по банкротству и торги арестованного имущества: в чём разница — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/zadatok-na-torgah/",
+      "title": "Задаток на торгах по банкротству: сколько, куда платить, когда вернут — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/",
+      "title": "Квартиры с торгов в городах-миллионниках России — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/chelyabinsk/chelyabinskiy-rayon/",
+      "title": "Квартиры с торгов: Челябинский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/",
+      "title": "Квартиры с торгов в Санкт-Петербурге и Ленобласти — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-05T00:00:00.000+03:00",
+      "last_access": "2026-09-28T00:00:00.000+03:00",
+      "event": "REMOVED_FROM_SEARCH",
+      "excluded_url_status": "LOW_QUALITY",
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/",
+      "title": "Квартиры с торгов в СПб и Ленобласти: подбор, проверка, покупка под ключ",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/investoram/",
+      "title": "Инвесторам: покупка недвижимости с торгов в СПб — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/kalkulyator-stavki/",
+      "title": "Калькулятор максимальной ставки на торгах по недвижимости — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/o-nas/",
+      "title": "О нас и контакты — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/slovar/",
+      "title": "Словарь терминов торгов по банкротству и арестованному имуществу — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/",
+      "title": "Статьи о покупке недвижимости с торгов — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/",
+      "title": "Как проверить квартиру с торгов перед подачей заявки: чек-лист из 12 пунктов — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/publichnoe-predlozhenie/",
+      "title": "Публичное предложение на торгах по банкротству: как работает снижение цены — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/zhilcy-v-kvartire-s-torgov/",
+      "title": "Жильцы в квартире с торгов: как снять с учёта и выселить после покупки — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/",
+      "title": "Квартиры с торгов в городах-миллионниках России — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/chelyabinsk/",
+      "title": "Квартиры с торгов в Челябинске и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/do-5-mln/",
+      "title": "Квартиры с торгов до 5 млн рублей в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/doli/",
+      "title": "Доли в квартирах с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/dvuhkomnatnye/",
+      "title": "Двухкомнатные квартиры с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/ekaterinburg/",
+      "title": "Квартиры с торгов в Екатеринбурге и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/krasnodar/",
+      "title": "Квартиры с торгов в Краснодаре и пригородах — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/krasnodar/gelendzhik/",
+      "title": "Квартиры с торгов: Геленджик — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/krasnoyarsk/doli/",
+      "title": "Доли в квартирах с торгов: Красноярск — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/moskva/doli/",
+      "title": "Доли в квартирах с торгов: Москва — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/moskva/komnaty/",
+      "title": "Комнаты с торгов: Москва — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/moskva/trehkomnatnye/",
+      "title": "Трёх- и многокомнатные квартиры с торгов: Москва — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/nizhniy-novgorod/",
+      "title": "Квартиры с торгов в Нижнем Новгороде и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/odnokomnatnye/",
+      "title": "Однокомнатные квартиры с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/omsk/",
+      "title": "Квартиры с торгов в Омске и пригородах — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/omsk/doli/",
+      "title": "Доли в квартирах с торгов: Омск — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/perm/",
+      "title": "Квартиры с торгов в Перми и пригородах — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/perm/doli/",
+      "title": "Доли в квартирах с торгов: Пермь — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/povtornye-torgi/",
+      "title": "Квартиры на повторных торгах в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/rostov-na-donu/",
+      "title": "Квартиры с торгов в Ростове-на-Дону и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/rostov-na-donu/rostov-na/",
+      "title": "Квартиры с торгов: Ростов-на- — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/samara/",
+      "title": "Квартиры с торгов в Самаре, Тольятти и области — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/",
+      "title": "Квартиры с торгов в Санкт-Петербурге и Ленобласти — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/doli/",
+      "title": "Доли в квартирах с торгов: Санкт-Петербург — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/gatchinskiy-rayon/",
+      "title": "Квартиры с торгов: Гатчинский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/kingiseppskiy-rayon/",
+      "title": "Квартиры с торгов: Кингисеппский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/kirovskiy-rayon/",
+      "title": "Квартиры с торгов: Кировский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/povtornye-torgi/",
+      "title": "Квартиры на повторных торгах: Санкт-Петербург — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/volosovskiy-rayon/",
+      "title": "Квартиры с торгов: Волосовский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/sankt-peterburg/vsevolozhskiy-rayon/",
+      "title": "Квартиры с торгов: Всеволожский район — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/trehkomnatnye/",
+      "title": "Трёх- и многокомнатные квартиры с торгов в городах-миллионниках — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     },
+     {
+      "url": "https://kirpichinvest.ru/torgi/ufa/komnaty/",
+      "title": "Комнаты с торгов: Уфа — актуальные лоты 2026 — КирпичИнвест",
+      "event_date": "2026-10-02T00:00:00.000+03:00",
+      "last_access": "2026-09-27T00:00:00.000+03:00",
+      "event": "APPEARED_IN_SEARCH",
+      "excluded_url_status": null,
+      "bad_http_status": null,
+      "target_url": null
+     }
+    ]
+   },
+   "in_search_samples": {
+    "count": 2,
+    "samples": [
+     {
+      "url": "https://kirpichinvest.ru/stati/proverka-kvartiry-s-torgov/",
+      "last_access": "2026-10-08T03:05:47.000+03:00",
+      "title": "Риски покупки квартиры с торгов: чек-лист из 12 проверок — КирпичИнвест"
+     },
+     {
+      "url": "https://kirpichinvest.ru/stati/zadatok-na-torgah/",
+      "last_access": "2026-09-28T23:39:02.000+03:00",
+      "title": "Задаток на торгах по банкротству: сколько, куда платить, когда вернут — КирпичИнвест"
+     }
+    ]
+   },
+   "errors": {
+    "indexing_samples": "Remote end closed connection without response"
+   },
+   "sitemaps": {
+    "sitemaps": []
+   },
+   "diagnostics": {
+    "problems": {
+     "NO_REGIONS": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_IN_SPRAV": {
+      "severity": "RECOMMENDATION",
+      "state": "PRESENT",
+      "last_state_update": "2026-09-30T07:41:40.077+03:00"
+     },
+     "DISALLOWED_IN_ROBOTS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_CONTENT_ATTRS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_BINDING": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_PROBLEM": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "NO_SITEMAP_MODIFICATIONS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_5XX": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_NEED_PAPER": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_TITLE": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERROR_IN_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "INSIGNIFICANT_CGI_PARAMETER": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SLOW_AVG_RESPONSE_TIME": {
+      "severity": "CRITICAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_CRAWL_ENABLED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "PRESENT",
+      "last_state_update": "2026-10-10T08:07:56.042+03:00"
+     },
+     "BIG_FAVICON_ABSENT": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "THREATS": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_MIRROR_IS_NOT_HTTPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "URL_ALERT_4XX": {
+      "severity": "RECOMMENDATION",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_REDIRECTS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "SOFT_404": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": "2026-10-03T10:33:06.648+03:00"
+     }
+    }
+   }
+  }
+ },
+ "act": {
+  "sitemap": null,
+  "sent": [],
+  "skipped": 0,
+  "errors": {
+   "sitemap": "HTTP 504 ",
+   "recrawl https://torggid.ru/": "HTTP 504 ",
+   "recrawl https://torggid.ru/torgi/": "HTTP 504 ",
+   "recrawl https://torggid.ru/auto/": "HTTP 504 ",
+   "recrawl": "3 ошибки подряд, остальные адреса не отправлены (сервис Вебмастера недоступен или хост ещё не загружен)"
+  },
+  "quota": {
+   "daily": 150,
+   "left": 150
+  },
+  "probe": "https:contora.store:443: HTTP 504 "
+ },
+ "bing": {
+  "crawl": {
+   "date": "2026-11-03",
+   "in_index": 606,
+   "crawled": 132,
+   "crawl_errors": 41,
+   "blocked": null,
+   "in_links": 1
+  },
+  "traffic": {
+   "impressions_7d": 7,
+   "clicks_7d": 0,
+   "days": 7
+  },
+  "queries": [
+   [
+    "торги недвижимость москва",
+    3,
+    0,
+    7
+   ],
+   [
+    "торггид",
+    2,
+    0,
+    4
+   ],
+   [
+    "торги москва",
+    2,
+    0,
+    9
+   ],
+   [
+    "торги от города москва",
+    2,
+    0,
+    10
+   ],
+   [
+    "торги квартир в москве на аукционе",
+    1,
+    0,
+    7
+   ],
+   [
+    "недвижимость москва толрги",
+    1,
+    0,
+    4
+   ],
+   [
+    "дом нирнзее нежилое помещение торги",
+    1,
+    0,
+    4
+   ],
+   [
+    "гис торги продажа квартир москва московская область электронные торги",
+    1,
+    0,
+    3
+   ],
+   [
+    "site.investmoscow.ru квартира торги ноябрь 2026",
+    1,
+    0,
+    5
+   ],
+   [
+    "аукционы по продаже недвижимости в москве",
+    1,
+    0,
+    8
+   ],
+   [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    4
+   ],
+   [
+    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
+    1,
+    0,
+    1
+   ],
+   [
+    "с московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    3
+   ]
+  ],
+  "pages": [
+   [
+    "/torgi/moskva/",
+    12,
+    0
+   ],
+   [
+    "/torgi/moskva/",
+    11,
+    0
+   ],
+   [
+    "/torgi/lot/mets-242439-1/",
+    1,
+    0
+   ],
+   [
+    "/slovar/",
+    1,
+    0
+   ]
+  ],
+  "feeds": [
+   [
+    "/sitemap.xml",
+    "Success",
+    23610,
+    "2026-11-04"
+   ]
+  ],
+  "submitted_feeds": [
+   "/sitemap.xml"
+  ],
+  "quota": {
+   "daily": 100,
+   "monthly": 2000
+  },
+  "submitted_urls": 100,
+  "submitted_by_kind": {
+   "разделы и статьи": 100,
+   "недвижимость": 0,
+   "техника": 0
+  }
+ },
+ "gsc": {
+  "site": "https://torggid.ru/",
+  "period": "2026-11-02 — 2026-11-08",
+  "totals": {
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0.0,
+   "position": 1.0
+  },
+  "totals_prev": {
+   "clicks": 0,
+   "impressions": 20,
+   "ctr": 0.0,
+   "position": 10.7
+  },
+  "period_28": "2026-10-12 — 2026-11-08",
+  "daily": [
+   [
+    "2026-10-12",
+    1,
+    16,
+    20
+   ],
+   [
+    "2026-10-13",
+    1,
+    31,
+    13.8
+   ],
+   [
+    "2026-10-14",
+    0,
+    29,
+    15.8
+   ],
+   [
+    "2026-10-15",
+    1,
+    40,
+    13.6
+   ],
+   [
+    "2026-10-16",
+    0,
+    68,
+    16.7
+   ],
+   [
+    "2026-10-17",
+    2,
+    82,
+    15.1
+   ],
+   [
+    "2026-10-18",
+    1,
+    145,
+    18.4
+   ],
+   [
+    "2026-10-19",
+    0,
+    358,
+    17.6
+   ],
+   [
+    "2026-10-20",
+    0,
+    121,
+    15.5
+   ],
+   [
+    "2026-10-21",
+    5,
+    63,
+    11.0
+   ],
+   [
+    "2026-10-22",
+    2,
+    68,
+    12.4
+   ],
+   [
+    "2026-10-23",
+    1,
+    81,
+    13.8
+   ],
+   [
+    "2026-10-24",
+    5,
+    63,
+    12.0
+   ],
+   [
+    "2026-10-25",
+    0,
+    15,
+    14.2
+   ],
+   [
+    "2026-10-26",
+    0,
+    11,
+    10.2
+   ],
+   [
+    "2026-10-27",
+    0,
+    6,
+    11
+   ],
+   [
+    "2026-10-28",
+    0,
+    2,
+    17
+   ],
+   [
+    "2026-10-29",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-10-30",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-10-31",
+    0,
+    1,
+    1
+   ],
+   [
+    "2026-11-01",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-11-02",
+    0,
+    1,
+    1
+   ],
+   [
+    "2026-11-03",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-11-04",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-11-05",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-11-06",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-11-07",
+    0,
+    0,
+    0
+   ],
+   [
+    "2026-11-08",
+    0,
+    0,
+    0
+   ]
+  ],
+  "queries": {
+   "top": [
+    [
+     "торги по банкротству пермь официальный сайт",
+     22,
+     0,
+     12.6
+    ],
+    [
+     "торги по банкротству курганская область официальный сайт",
+     20,
+     0,
+     18.9
+    ],
+    [
+     "аукцион банкротства нижний новгород",
+     19,
+     0,
+     13.6
+    ],
+    [
+     "торги по банкротству курганская",
+     19,
+     0,
+     16.3
+    ],
+    [
+     "коммерческие торги в нижнем новгороде",
+     17,
+     0,
+     13.5
+    ],
+    [
+     "торги по банкротству курган",
+     17,
+     0,
+     15.8
+    ],
+    [
+     "торги по банкротству иркутская область",
+     16,
+     0,
+     16.1
+    ],
+    [
+     "торги по банкротству курганская область",
+     15,
+     0,
+     17.8
+    ],
+    [
+     "торги по банкротству нижний новгород",
+     14,
+     0,
+     22.5
+    ],
+    [
+     "торги по банкротству нижний новгород недвижимость",
+     14,
+     0,
+     20.1
+    ],
+    [
+     "торги по банкротству тольятти",
+     14,
+     0,
+     18
+    ],
+    [
+     "сайт торгов по банкротству екатеринбург",
+     13,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству самара",
+     13,
+     0,
+     18.6
+    ],
+    [
+     "торги по банкротству ставропольский край официальный сайт",
+     13,
+     0,
+     22.4
+    ],
+    [
+     "торги по банкротству ставропольский край",
+     12,
+     0,
+     13.9
+    ],
+    [
+     "торги по банкротству челябинская область недвижимость",
+     12,
+     0,
+     20.6
+    ],
+    [
+     "торги по банкротству иркутск официальный сайт",
+     11,
+     0,
+     15.3
+    ],
+    [
+     "торги по банкротству нижний",
+     11,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству саратовская область официальный сайт",
+     11,
+     0,
+     15.1
+    ],
+    [
+     "торги по банкротству екатеринбург",
+     10,
+     0,
+     29.4
+    ]
+   ],
+   "wins": [
+    [
+     "торги по банкротству пермь официальный сайт",
+     22,
+     0,
+     12.6
+    ],
+    [
+     "торги по банкротству курганская область официальный сайт",
+     20,
+     0,
+     18.9
+    ],
+    [
+     "аукцион банкротства нижний новгород",
+     19,
+     0,
+     13.6
+    ],
+    [
+     "торги по банкротству курганская",
+     19,
+     0,
+     16.3
+    ],
+    [
+     "коммерческие торги в нижнем новгороде",
+     17,
+     0,
+     13.5
+    ],
+    [
+     "торги по банкротству курган",
+     17,
+     0,
+     15.8
+    ],
+    [
+     "торги по банкротству иркутская область",
+     16,
+     0,
+     16.1
+    ],
+    [
+     "торги по банкротству курганская область",
+     15,
+     0,
+     17.8
+    ],
+    [
+     "торги по банкротству тольятти",
+     14,
+     0,
+     18
+    ],
+    [
+     "сайт торгов по банкротству екатеринбург",
+     13,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству самара",
+     13,
+     0,
+     18.6
+    ],
+    [
+     "торги по банкротству ставропольский край",
+     12,
+     0,
+     13.9
+    ],
+    [
+     "торги по банкротству саратовская область официальный сайт",
+     11,
+     0,
+     15.1
+    ],
+    [
+     "торги по банкротству иркутск официальный сайт",
+     11,
+     0,
+     15.3
+    ],
+    [
+     "торги по банкротству нижний",
+     11,
+     0,
+     16.5
+    ],
+    [
+     "торги по банкротству псковская",
+     10,
+     0,
+     13.6
+    ],
+    [
+     "торги по банкротству спб официальный сайт",
+     10,
+     0,
+     14.4
+    ],
+    [
+     "мосторги недвижимость",
+     9,
+     0,
+     8.6
+    ],
+    [
+     "торги по банкротству нижний новгород авто",
+     9,
+     0,
+     11.8
+    ],
+    [
+     "торги по банкротству псковская область",
+     9,
+     0,
+     12.4
+    ],
+    [
+     "торги по банкротству пермь",
+     9,
+     0,
+     14.7
+    ],
+    [
+     "торги по банкротству спб и ленобласти официальный",
+     9,
+     0,
+     19.3
+    ],
+    [
+     "аукционы по банкротству самара",
+     8,
+     0,
+     17.6
+    ],
+    [
+     "аукцион по банкротству спб и ленобласти дачи",
+     8,
+     0,
+     18.9
+    ],
+    [
+     "торги по банкротству саратов официальный сайт",
+     7,
+     0,
+     7.4
+    ]
+   ],
+   "count": 172
+  },
+  "pages": [
+   [
+    "/torgi/sankt-peterburg/",
+    73,
+    1,
+    15.7
+   ],
+   [
+    "/torgi/samara/",
+    73,
+    0,
+    15.8
+   ],
+   [
+    "/torgi/irkutskaya-oblast/",
+    53,
+    0,
+    18.6
+   ],
+   [
+    "/torgi/stavropolskiy-kray/",
+    46,
+    0,
+    17.5
+   ],
+   [
+    "/torgi/nizhniy-novgorod/",
+    44,
+    0,
+    15.2
+   ],
+   [
+    "/torgi/ekaterinburg/",
+    41,
+    1,
+    17.7
+   ],
+   [
+    "/torgi/kurganskaya-oblast/do-5-mln/",
+    36,
+    0,
+    17.7
+   ],
+   [
+    "/torgi/permskiy-kray/bankrotstvo/",
+    33,
+    0,
+    12.4
+   ],
+   [
+    "/torgi/kurganskaya-oblast/page/4/",
+    28,
+    0,
+    21.6
+   ],
+   [
+    "/torgi/saratovskaya-oblast/",
+    27,
+    1,
+    12.9
+   ],
+   [
+    "/torgi/novosibirsk/",
+    27,
+    0,
+    16.6
+   ],
+   [
+    "/torgi/nizhniy-novgorod/bankrotstvo/",
+    26,
+    0,
+    11.8
+   ],
+   [
+    "/torgi/nizhniy-novgorod/bankrotstvo/page/2/",
+    25,
+    0,
+    12.3
+   ],
+   [
+    "/torgi/moskva/",
+    24,
+    0,
+    15.6
+   ],
+   [
+    "/torgi/nizhniy-novgorod/kommercheskaya/",
+    24,
+    0,
+    14.5
+   ]
+  ],
+  "submit": [
+   [
+    "/sitemap.xml",
+    "отправлен"
+   ]
+  ],
+  "sitemaps": [
+   [
+    "/sitemap.xml",
+    "2026-11-10",
+    "0",
+    "0",
+    20663,
+    0
+   ]
+  ],
+  "inspect": [
+   [
+    "/",
+    "PASS",
+    "Страница отправлена и проиндексирована",
+    "2026-11-04",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/"
+   ],
+   [
+    "/torgi/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-11-07",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/"
+   ],
+   [
+    "/torgi/moskva/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-11-07",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/moskva/"
+   ],
+   [
+    "/torgi/sankt-peterburg/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-22",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/sankt-peterburg/"
+   ],
+   [
+    "/torgi/samara/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-15",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/samara/"
+   ],
+   [
+    "/torgi/nizhniy-novgorod/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-11-07",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/nizhniy-novgorod/"
+   ],
+   [
+    "/torgi/permskiy-kray/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-11-07",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/torgi/permskiy-kray/"
+   ],
+   [
+    "/auto/",
+    "NEUTRAL",
+    "URL неизвестен Google",
+    "",
+    "PAGE_FETCH_STATE_UNSPECIFIED",
+    "ROBOTS_TXT_STATE_UNSPECIFIED",
+    "INDEXING_STATE_UNSPECIFIED",
+    ""
+   ],
+   [
+    "/stati/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-11",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/stati/"
+   ],
+   [
+    "/stati/proverka-kvartiry-s-torgov/",
+    "NEUTRAL",
+    "Страница просканирована, но пока не проиндексирована",
+    "2026-10-12",
+    "SUCCESSFUL",
+    "ALLOWED",
+    "INDEXING_ALLOWED",
+    "/stati/proverka-kvartiry-s-torgov/"
+   ]
+  ]
+ },
+ "site": {
+  "pages": {
+   "/": {
+    "status": 200,
+    "ms": 1250,
+    "bytes": 52527,
+    "final": "https://torggid.ru/",
+    "error": null,
+    "title": "Недвижимость с торгов по всей России — ТоргГид",
+    "h1": "Все торги недвижимостью в России с честным разбором каждого лота",
+    "canonical": "https://torggid.ru/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 184,
+    "jsonld": 2
+   },
+   "/torgi/": {
+    "status": 200,
+    "ms": 931,
+    "bytes": 102951,
+    "final": "https://torggid.ru/torgi/",
+    "error": null,
+    "title": "Недвижимость с торгов по всей России — актуальные лоты 2026 — ТоргГид",
+    "h1": "Недвижимость с торгов по всей России",
+    "canonical": "https://torggid.ru/torgi/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 105,
+    "jsonld": 3
+   },
+   "/torgi/moskva/": {
+    "status": 200,
+    "ms": 1376,
+    "bytes": 106946,
+    "final": "https://torggid.ru/torgi/moskva/",
+    "error": null,
+    "title": "Квартиры с торгов в Москве и Подмосковье — торги по банкротству и арест — ТоргГид",
+    "h1": "Недвижимость с торгов в Москве и Подмосковье",
+    "canonical": "https://torggid.ru/torgi/moskva/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 185,
+    "jsonld": 4
+   },
+   "/torgi/sankt-peterburg/": {
+    "status": 200,
+    "ms": 972,
+    "bytes": 103429,
+    "final": "https://torggid.ru/torgi/sankt-peterburg/",
+    "error": null,
+    "title": "Квартиры с торгов в Санкт-Петербурге и Ленобласти — торги по банкротству и арест — ТоргГид",
+    "h1": "Недвижимость с торгов в Санкт-Петербурге и Ленобласти",
+    "canonical": "https://torggid.ru/torgi/sankt-peterburg/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 188,
+    "jsonld": 4
+   },
+   "/auto/": {
+    "status": 200,
+    "ms": 923,
+    "bytes": 99385,
+    "final": "https://torggid.ru/auto/",
+    "error": null,
+    "title": "Автомобили и техника с торгов по всей России — актуальные лоты 2026 — ТоргГид",
+    "h1": "Автомобили и техника с торгов по всей России",
+    "canonical": "https://torggid.ru/auto/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 135,
+    "jsonld": 4
+   },
+   "/stati/": {
+    "status": 200,
+    "ms": 1251,
+    "bytes": 39731,
+    "final": "https://torggid.ru/stati/",
+    "error": null,
+    "title": "Статьи о покупке недвижимости с торгов — ТоргГид",
+    "h1": "Статьи о покупке недвижимости с торгов",
+    "canonical": "https://torggid.ru/stati/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 97,
+    "jsonld": 1
+   },
+   "/proverka-lota/": {
+    "status": 200,
+    "ms": 1071,
+    "bytes": 38968,
+    "final": "https://torggid.ru/proverka-lota/",
+    "error": null,
+    "title": "Проверка лота перед торгами: юридическая и рыночная — ТоргГид",
+    "h1": "Проверка лота перед торгами",
+    "canonical": "https://torggid.ru/proverka-lota/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 121,
+    "jsonld": 3
+   },
+   "/kupit-kvartiru-s-torgov/": {
+    "status": 200,
+    "ms": 1087,
+    "bytes": 35007,
+    "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
+    "error": null,
+    "title": "Купить квартиру с торгов под ключ — подбор и сопровождение — ТоргГид",
+    "h1": "Купить квартиру с торгов под ключ",
+    "canonical": "https://torggid.ru/kupit-kvartiru-s-torgov/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 156,
+    "jsonld": 3
+   },
+   "/analitika/": {
+    "status": 200,
+    "ms": 971,
+    "bytes": 29012,
+    "final": "https://torggid.ru/analitika/",
+    "error": null,
+    "title": "Статистика торгов недвижимостью по городам России, 11.2026 — ТоргГид",
+    "h1": "Статистика торгов недвижимостью по городам",
+    "canonical": "https://torggid.ru/analitika/",
+    "robots": null,
+    "yandex": null,
+    "description_len": 165,
+    "jsonld": 3
+   }
+  },
+  "tech": {
+   "/robots.txt": {
+    "status": 200,
+    "ms": 468,
+    "bytes": 606,
+    "error": null
+   },
+   "/sitemap.xml": {
+    "status": 200,
+    "ms": 461,
+    "bytes": 799,
+    "error": null
+   },
+   "/sitemap-yandex.xml": {
+    "status": 200,
+    "ms": 999,
+    "bytes": 53126,
+    "error": null
+   },
+   "/llms.txt": {
+    "status": 200,
+    "ms": 619,
+    "bytes": 30512,
+    "error": null
+   }
+  },
+  "mirrors": {
+   "http://torggid.ru/": {
+    "status": 200,
+    "final": "https://torggid.ru/",
+    "error": null
+   },
+   "https://www.torggid.ru/": {
+    "status": 200,
+    "final": "https://torggid.ru/",
+    "error": null
+   },
+   "http://www.torggid.ru/": {
+    "status": 200,
+    "final": "https://torggid.ru/",
+    "error": null
+   },
+   "https://kirpichinvest.ru/": {
+    "status": 200,
+    "final": "https://torggid.ru/",
+    "error": null
+   }
+  },
+  "robots_txt": "User-agent: *\nAllow: /\nDisallow: /check/\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n\nUser-agent: Yandex\nAllow: /\nDisallow: /check/\nClean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid /\nSitemap: https://torggid.ru/sitemap-yandex.xml\n\nUser-agent: YandexAdditional\nAllow: /\n\nUser-agent: YandexAdditionalBot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nUser-agent: Applebot-Extended\nAllow: /\n\nSitemap: https://torggid.ru/sitemap.xml\n",
+  "sitemap": {
+   "urls": 16784,
+   "by_section": {
+    "auto": 10149,
+    "torgi": 6583,
+    "stati": 33,
+    "analitika": 3,
+    "proverka-lota": 2,
+    "(home)": 1,
+    "byudzhet": 1,
+    "uslugi": 1,
+    "kupit-kvartiru-s-torgov": 1,
+    "investoram": 1,
+    "kalkulyator-stavki": 1,
+    "proverka-avto-po-vin": 1,
+    "slovar": 1,
+    "o-nas": 1,
+    "kontakty": 1
+   },
+   "errors": {},
+   "yandex_urls": 451,
+   "yandex_errors": {}
+  },
+  "lot_sample": {
+   "checked": 25,
+   "bad": []
+  }
+ }
+}
