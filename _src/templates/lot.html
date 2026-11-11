@@ -64,6 +64,11 @@
     </table></div>
     {% if app_lot %}<p class="mute small">Список объявлений, по которым считали, и шкала цены — в <a href="{{ app_lot }}?from=lot_full_card#market">полной карточке</a>.</p>{% endif %}
   </div></details>{% endif %}
+  {% if active and d.schedule %}<details class="fold" open><summary>График снижения цены: {{ d.schedule|length }} {{ "этап" if d.schedule|length % 10 == 1 and d.schedule|length % 100 != 11 else ("этапа" if 2 <= d.schedule|length % 10 <= 4 and not 12 <= d.schedule|length % 100 <= 14 else "этапов") }}</summary><div class="fold-body">
+    <p>Публичное предложение: цена снижается по графику из сообщения о торгах. Заявка, поданная на текущем этапе с ценой не ниже цены этапа, может забрать лот раньше других, поэтому ждать минимальной цены рискованно. Как выбрать момент, в статье <a href="/stati/publichnoe-predlozhenie/">о публичном предложении</a>.</p>
+    <div class="scroll"><table class="t"><tr><th>С даты</th><th>Цена</th><th></th></tr>
+    {% for dt, pr, stt in d.schedule %}<tr{% if stt == "past" %} class="mute"{% endif %}><td>{{ dt }}</td><td>{% if stt == "current" %}<b>{{ pr|rub }}</b>{% else %}{{ pr|rub }}{% endif %}</td><td>{{ {"current": "идёт сейчас", "next": "следующий этап", "past": "прошёл", "future": ""}[stt] }}</td></tr>{% endfor %}
+    </table></div><p class="mute small">Даты и цены из графика в сообщении о торгах на площадке. Перед заявкой сверьте их с извещением.</p></div></details>{% endif %}
   {% if d.excerpt %}<details class="fold" open><summary>Что сказано в извещении</summary><div class="fold-body"><p>{{ d.excerpt }}</p><p class="mute small">Пересказ описания лота с площадки без персональных данных. Полный текст и документы — по ссылке на извещение ниже.</p></div></details>{% endif %}
   <details class="fold"><summary>Характеристики и кадастр</summary><div class="fold-body"><div class="scroll"><table class="t">
     {% if d.area %}<tr><th>Площадь</th><td>{{ d.area|round(1) }} м²</td></tr>{% endif %}
