@@ -129,6 +129,10 @@ class BuildTests(unittest.TestCase):
                        bidd_end='2099-01-01T00:00:00+00:00', first_seen='2026-10-09T00:00:00+00:00')
             rows = [dict(row, id='gistorgi:21000000000000000001_1', source='gistorgi', kind='arrest', category='land', city='kazan')]
             rows += [dict(row, id=f'mets:{i}') for i in range(3)]
+            # ТЗ-9а: график снижения цены публичного предложения на странице лота
+            rows[1]['price_schedule'] = [dict(start='2026-01-01T00:00:00+00:00', price=2_500_000),
+                                         dict(start='2026-02-01T00:00:00+00:00', price=2_000_000),
+                                         dict(start='2099-01-01T00:00:00+00:00', price=1_500_000)]
             rows.append(dict(row, id='mets:9', discount_pct=55.0, suspect=True))
             rows.append(dict(row, id='mets:10', address='г. Казань, Иванов Иван Иванович, ул. Ленина, д. 7', market_conf='low'))
             (data/'market.json').write_text(json.dumps({'lots': rows}, ensure_ascii=False))
@@ -146,6 +150,13 @@ class BuildTests(unittest.TestCase):
             self.assertIn('Торги по банкротству в Татарстане — квартиры и недвижимость, все площадки', region.split('<title>')[1].split('</title>')[0])
             self.assertNotIn('Где проходят торги', (site/'torgi/tatarstan/povtornye-torgi/index.html').read_text())  # только на главной странице региона
             self.assertIn('ItemList', region)
+            lot = (site/'torgi/lot/mets-0/index.html')
+            if not lot.exists():
+                lot = next(p for p in (site/'torgi/lot').iterdir() if p.name.startswith('mets') and p.name.endswith('0'))/'index.html'
+            card = lot.read_text()
+            self.assertIn('График снижения цены: 3 этапа', card)
+            self.assertIn('идёт сейчас', card)
+            self.assertIn('следующий этап', card)
             self.assertNotIn('follow=1', region)  # регион платформа не фильтрует: без «Следить», только поиск на карте
             self.assertIn('/?category=land&amp;follow=1', (site/'torgi/zemlya/index.html').read_text())
             deal = dict(row, id='mets:20', city='kazan', address='г. Казань, ул. Баумана, д. 5', risks=[], discount_pct=25.0, market_price=2_700_000)

@@ -163,6 +163,32 @@ def next_step(schedule, now=None):
     return None
 
 
+def schedule_rows(schedule, now=None, limit=40):
+    """ТЗ-9а (12.11.2026): весь график снижения цены публичного предложения для страницы лота:
+    [[дата начала «дд.мм.гггг», цена, состояние]], состояние — past / current / next / future."""
+    from datetime import datetime, timezone
+    now = now or datetime.now(timezone.utc)
+    rows = []
+    for st in schedule or []:
+        try:
+            t = datetime.fromisoformat(str(st.get("start")).replace("Z", "+00:00"))
+        except (ValueError, AttributeError):
+            continue
+        if not st.get("price"):
+            continue
+        rows.append([t if t.tzinfo else t.replace(tzinfo=timezone.utc), st["price"]])
+    rows.sort(key=lambda x: x[0])
+    out, cur = [], None
+    for i, (t, _) in enumerate(rows):
+        if t <= now:
+            cur = i
+    nxt = (cur + 1) if cur is not None else 0
+    for i, (t, price) in enumerate(rows):
+        state = "current" if i == cur else "next" if i == nxt and t > now else "past" if t <= now else "future"
+        out.append([t.strftime("%d.%m.%Y"), price, state])
+    return out[:limit] if len(out) >= 2 else None
+
+
 def land_text(x):
     """Продают ли участок под зданием (поле land выгрузки) — одна строка для страницы лота."""
     if not x:
@@ -216,6 +242,7 @@ def from_market(rows):
             "risks": [x for x in r.get("risks") or [] if x.get("key") != "repeat"],
             "repeat": r.get("stage") == "repeat" or "repeat" in keys,
             "market_basis": r.get("market_basis"), "next_step": next_step(r.get("price_schedule")),
+            "schedule": schedule_rows(r.get("price_schedule")),
             "price_drops": r.get("price_drops") or 0, "price_was": r.get("price_was"),
             "photo": r.get("photo"), "status": "active", "suspect": bool(r.get("suspect")),
             "comps": r.get("comps") if cat in NONRES and ppm2 else None,
