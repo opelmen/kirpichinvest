@@ -74,7 +74,8 @@ def from_vehicles(rows):
             "price": r.get("price"), "price_start": r.get("price_start"),
             "price_was": r.get("price_was"), "price_drops": r.get("price_drops") or 0,
             "bidd_end": r.get("bidd_end"), "first_seen": r.get("first_seen"),
-            "photo": photo, "photos": photos[:4] or ([photo] if photo else []), "photos_count": r.get("photos_count") or len(photos),
+            "photo": photo, "thumb": r.get("photo_thumb") if r.get("photo_thumb") and photo == r.get("photo") else photo,
+            "photos": photos[:4] or ([photo] if photo else []), "photos_count": r.get("photos_count") or len(photos),
             "excerpt": re.sub(r"\s+", " ", str(r.get("descr") or "")).strip()[:600],
             "status": "active",
         }
