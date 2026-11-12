@@ -759,7 +759,10 @@ def build():
         CITY_STATS.append((cslug, cname, where, cs))
         listing(f"/torgi/{cslug}/", cl, f"{OBJ} с торгов {where}", base_crumbs, links, sub_links, "0.9",
                 faq=city_faq(cname, where, cs), cs=cs, where=where,
-                seo_title=f"Квартиры с торгов {where} — торги по банкротству и арест")
+                # Москва и Петербург: спрос «квартиры с торгов <город>» (Вордстат 600 и 107/мес); остальные города в GSC
+                # ищут «торги по банкротству <город> (официальный сайт)» — Пермь, Самара, Нижний, Екатеринбург, позиции 12–20
+                seo_title=(f"Квартиры с торгов {where} — торги по банкротству и арест" if cslug in ("moskva", "sankt-peterburg")
+                           else f"Торги по банкротству {where} — квартиры и недвижимость, все площадки"))
         for f, v in facets_here:
             listing(f"/torgi/{cslug}/{f[0]}/", v, f"{f[3]}: {cname}", base_crumbs + [(f[1], f"/torgi/{cslug}/{f[0]}/")], links, sub_links)
         for t, v in subs.items():

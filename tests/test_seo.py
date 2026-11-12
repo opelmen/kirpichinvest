@@ -93,6 +93,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(page2.count('class="lot"'), 5)
             self.assertIn('/torgi/page/2/', (site/'torgi/index.html').read_text())
             moskva = (site/'torgi/moskva/index.html').read_text()
+            self.assertIn('<title>Квартиры с торгов в Москве', moskva)
             self.assertIn('aria-label="Другие города"', moskva)
             self.assertIn('href="/torgi/sankt-peterburg/"', moskva.split('aria-label="Другие города"')[1].split('</nav>')[0])
             # посадочные под рекламу: подборка сохраняется «Охотником» в платформе, ссылки в платформу без utm (Метрика не рвёт визит)
@@ -178,6 +179,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('<b>Жильцы и дети</b> <span class="st">нет данных</span>', deal_card)  # о чём молчит извещение — отдельной строкой со статусом
             self.assertIn('?start=ask_mets-20', deal_card)
             kazan = (site/'torgi/kazan/index.html').read_text()
+            # города кроме Москвы и Петербурга: title под «торги по банкротству <город>» (GSC 09.11)
+            self.assertIn('<title>Торги по банкротству в Казани', kazan)
             self.assertIn('Цена снижалась 2 раза: 2,5 млн', kazan)  # история снижения цены в каталоге
             self.assertIn('Банкротное имущество</span>', kazan)
             self.assertRegex(kazan, r'<p class="lead">Сейчас \d+ лот\w* в Казани и пригородах со всех площадок')  # ТЗ-5: абзац-ответ под h1 с цифрами
