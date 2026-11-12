@@ -154,6 +154,41 @@ class RecrawlQueueTests(unittest.TestCase):
             m = sn.metrika_block("t", date(2026, 11, 9))
         self.assertEqual(m["referrers_week"]["ai"], [["perplexity.ai", 3], ["utm chatgpt.com", 120]])
 
+    def test_indexnow_first_night_then_rotation(self):
+        import json as _j
+        import tempfile
+        import seo_nightly as sn
+        from datetime import date
+        from pathlib import Path
+        from unittest import mock
+        B = "https://torggid.ru"
+        key = _j.loads(Path(sn.__file__).with_name("config.json").read_text(encoding="utf-8"))["INDEXNOW_KEY"]
+        hubs = [B + "/torgi/", B + "/torgi/moskva/"]
+        allu = hubs + [B + "/auto/lot/1/", B + "/torgi/lot/1/", B + "/stati/a/", "https://evil.example/x/"]
+        sent = []
+
+        def fake_sm(path, depth=0):
+            return (hubs, {}) if "yandex" in path else (allu, {})
+
+        def fake_post(ep, body):
+            sent.append((ep, _j.loads(body)))
+            return 200
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.object(sn, "sitemap_urls", side_effect=fake_sm), \
+                mock.patch.object(sn, "fetch", return_value={"status": 200, "body": key}), \
+                mock.patch.object(sn, "indexnow_post", side_effect=fake_post):
+            st = Path(d) / "indexnow-state.json"
+            r1 = sn.indexnow_block(True, st, date(2026, 11, 13), first_n=4, n=2)
+            self.assertEqual(r1["submitted"], 4)
+            self.assertEqual(sent[0][1]["urlList"], [B + "/torgi/", B + "/torgi/moskva/", B + "/stati/a/", B + "/torgi/lot/1/"])
+            self.assertEqual(sent[0][1]["host"], "torggid.ru")
+            r2 = sn.indexnow_block(True, st, date(2026, 11, 14), first_n=4, n=2)
+            self.assertEqual(sent[-1][1]["urlList"], [B + "/auto/lot/1/"])
+            self.assertEqual(r2["picked"], 1)
+            md = sn.to_md({"date": "2026-11-13", "indexnow": r1})
+            self.assertIn("IndexNow", md)
+            self.assertIn("принято Яндексом: 4", md)
+
     def test_bing_pick_rotates_and_skips_recent(self):
         import seo_nightly as sn
         from datetime import date
