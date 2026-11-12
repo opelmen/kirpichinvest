@@ -1,6 +1,6 @@
 """Nightly SEO/GEO snapshot for torggid.ru: Metrika by day, Webmaster, live site health.
 
-Read-only: GET requests only, nothing is submitted or changed.
+Read-only without --act. With --act: Webmaster sitemap/recrawl, Bing URL batch, GSC sitemap, IndexNow.
 Token: YANDEX_METRIKA_TOKEN (metrika:read, webmaster:hostinfo). Without it only site health runs.
 Writes <out>/<date>.json, <out>/<date>.md and <out>/latest.md; each failed call is recorded, not fatal.
 The night analysis (Claude) reads these files from the seo-yandex-data branch.
@@ -425,6 +425,64 @@ def bing_block(key, queue_path, act, state_path=None, today=None):
     return out
 
 
+INDEXNOW_ENDPOINTS = ("https://yandex.com/indexnow", "https://api.indexnow.org/indexnow")
+
+
+def indexnow_post(endpoint, body):
+    req = urllib.request.Request(endpoint, data=body, headers={"Content-Type": "application/json; charset=utf-8",
+                                                              "User-Agent": UA})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.status
+    except urllib.error.HTTPError as e:
+        return e.code
+    except Exception as e:
+        return "сеть: %s" % str(e)[:80]
+
+
+def indexnow_block(act, state_path=None, today=None, first_n=5000, n=1000, days=14):
+    """ТЗ-1в (12.11.2026): пока Вебмастер не загружает torggid.ru (HOST_NOT_LOADED с 31.10), страницы шлём в Яндекс
+    напрямую через IndexNow — он работает без Вебмастера, YandexBot ходит на сайт каждый день. Первая ночь —
+    до `first_n` адресов (хабы из sitemap-yandex.xml, затем разделы и статьи, недвижимость, техника), дальше
+    каждую ночь `n` следующих; адрес, отправленный за `days` дней, пропускаем. Ключ — публичный INDEXNOW_KEY
+    из config.json (он и так лежит на сайте файлом /<ключ>.txt)."""
+    out = {}
+    today = today or datetime.now(timezone.utc).date()
+    key = json.loads(Path(__file__).with_name("config.json").read_text(encoding="utf-8")).get("INDEXNOW_KEY", "")
+    if not re.fullmatch(r"[a-zA-Z0-9-]{8,128}", key or ""):
+        return {"error": "INDEXNOW_KEY не задан в config.json"}
+    sp = Path(state_path) if state_path else None
+    state = json.loads(sp.read_text(encoding="utf-8")) if sp and sp.exists() else {}
+    hubs, e1 = sitemap_urls("/sitemap-yandex.xml")
+    allu, e2 = sitemap_urls("/sitemap.xml")
+    if e1 or e2:
+        out["sitemap_errors"] = {**e1, **e2}
+    own = [u for u in hubs + allu if u.startswith(BASE + "/") and "?" not in u and "#" not in u]
+    urls = bing_pick(hubs, own, state, today, first_n if not state else n, days)
+    out["candidates"] = len(set(own))
+    out["sent_before"] = len(state)
+    out["picked"] = len(urls)
+    out["by_kind"] = {k: sum(1 for u in urls if f(u)) for k, f in (
+        ("разделы и статьи", lambda u: "/lot/" not in u), ("недвижимость", lambda u: "/torgi/lot/" in u),
+        ("техника", lambda u: "/auto/lot/" in u))}
+    if not act or not urls:
+        return out
+    key_ok = fetch("/%s.txt" % key)
+    if key_ok.get("status") != 200 or (key_ok.get("body") or "").strip() != key:
+        out["error"] = "файл ключа на сайте не совпал (%s), ничего не отправлено" % key_ok.get("status")
+        return out
+    body = json.dumps({"host": BASE.split("//")[1], "key": key, "keyLocation": "%s/%s.txt" % (BASE, key),
+                       "urlList": urls}).encode()
+    out["responses"] = {ep.split("/")[2]: indexnow_post(ep, body) for ep in INDEXNOW_ENDPOINTS}
+    if out["responses"].get("yandex.com") in (200, 202):
+        out["submitted"] = len(urls)
+        state.update({u: str(today) for u in urls})
+        if sp:
+            sp.parent.mkdir(parents=True, exist_ok=True)
+            sp.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+    return out
+
+
 def to_md(r):
     L = ["# ТоргГид: ночной срез %s" % r["date"], ""]
     m = r.get("metrika") or {}
@@ -515,6 +573,21 @@ def to_md(r):
             L += ["", "Страницы с показами в Bing:"] + ["- %s — %s показов, %s кликов" % tuple(pg) for pg in b["pages"]]
         for k, v in (b.get("errors") or {}).items():
             L.append("- ошибка %s: %s" % (k, str(v)[:200]))
+        L.append("")
+    i = r.get("indexnow")
+    if i:
+        L += ["## IndexNow (страницы в Яндекс без Вебмастера)", ""]
+        if i.get("error"):
+            L.append("- ошибка: %s" % i["error"])
+        L.append("- адресов в sitemap: %s, уже отправляли за 14 дн.: %s, выбрано сегодня: %s" % (
+            i.get("candidates"), i.get("sent_before"), i.get("picked")))
+        if i.get("by_kind"):
+            L.append("- из них: " + ", ".join("%s %s" % kv for kv in i["by_kind"].items()))
+        if i.get("responses"):
+            L.append("- ответы: " + ", ".join("%s %s" % kv for kv in i["responses"].items()) +
+                     "; принято Яндексом: %s" % i.get("submitted", 0))
+        if i.get("sitemap_errors"):
+            L.append("- ошибки sitemap: %s" % i["sitemap_errors"])
         L.append("")
     g = r.get("gsc")
     if g:
@@ -736,6 +809,7 @@ def main():
     bing_key = os.environ.get("BING_WEBMASTER_KEY")
     if bing_key:
         safe(r, "bing", lambda: bing_block(bing_key, args.queue, args.act, Path(args.out) / "bing-state.json", today))
+    safe(r, "indexnow", lambda: indexnow_block(args.act, Path(args.out) / "indexnow-state.json", today))
     gsc_key = os.environ.get("GSC_SERVICE_ACCOUNT")
     if gsc_key:
         safe(r, "gsc", lambda: gsc_block(gsc_key, today, act=args.act))
