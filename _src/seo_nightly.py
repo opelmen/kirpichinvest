@@ -593,6 +593,8 @@ def to_md(r):
             L.append("- в индексе Bing: %s, обойдено за день: %s, ошибок обхода: %s, закрыто robots: %s (на %s)" % (
                 c.get("in_index"), c.get("crawled"), c.get("crawl_errors"), c.get("blocked"), c.get("date")))
         iss = b.get("issues") or {}
+        if "issues" in b and not iss.get("total") and (c.get("crawl_errors") or 0):
+            L.append("- список ошибок обхода Bing по API пуст (GetCrawlIssues вернул 0 адресов); смотреть в Bing Webmaster вручную")
         if iss.get("total"):
             L.append("- ошибки обхода по видам: " + ", ".join("%s %s" % kv for kv in iss["by_kind"]) +
                      "; по кодам: " + ", ".join("%s — %s" % kv for kv in iss["by_code"][:6]))
