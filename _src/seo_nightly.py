@@ -297,6 +297,38 @@ def webmaster_act(token, queue_path, state_path, today, limit):
 BING = "https://ssl.bing.com/webmaster/api.svc/json"
 
 
+def bing_issue_kind(path):
+    """К какому виду страниц относится адрес с ошибкой обхода Bing (для разбора, что чинить)."""
+    if "/auto/lot/" in path:
+        return "карточки техники"
+    if "/lot/" in path:
+        return "карточки недвижимости"
+    if re.search(r"(\.env|\.git|/proc/|\.aws|\.php|wp-|\.\./|%2e)", path, re.I):
+        return "мусорные пути сканеров"
+    if path.endswith(".html") or path.startswith("/guides/"):
+        return "старые страницы прежнего сайта"
+    return "разделы, регионы, статьи"
+
+
+def bing_issues_summary(rows, live=()):
+    """ТЗ-1г (14.11.2026): ошибки обхода Bing по видам и кодам. Главное — живые адреса из sitemap с ошибкой:
+    их Bing не может прочитать, это чинить в первую очередь; снятые карточки с 404 — ожидаемо."""
+    live = set(live)
+    by_kind, by_code, alive = {}, {}, []
+    for x in rows:
+        u = x.get("Url") or ""
+        path = u.replace(BASE, "") or "/"
+        code = str(x.get("HttpCode") or x.get("Issues") or "?")
+        k = bing_issue_kind(path)
+        by_kind[k] = by_kind.get(k, 0) + 1
+        by_code[code] = by_code.get(code, 0) + 1
+        if u in live:
+            alive.append([path, code])
+    return {"total": len(rows), "by_kind": sorted(by_kind.items(), key=lambda kv: -kv[1]),
+            "by_code": sorted(by_code.items(), key=lambda kv: -kv[1]), "live_in_sitemap": alive[:20],
+            "live_count": len(alive)}
+
+
 def bing_call(method, key, body=None, **params):
     """Bing Webmaster API (JSON): GET с apikey в query, POST — JSON-тело. Ошибка ключа/прав приходит как 4xx с текстом."""
     params["apikey"] = key
@@ -376,7 +408,13 @@ def bing_block(key, queue_path, act, state_path=None, today=None):
         rows = bing_call("GetFeeds", key, siteUrl=site) or []
         return [[x.get("Url", "").replace(BASE, ""), x.get("Status"), x.get("UrlCount"), bing_date(x.get("LastCrawled"))] for x in rows]
 
+    def issues():
+        rows = bing_call("GetCrawlIssues", key, siteUrl=site) or []
+        live, _ = sitemap_urls("/sitemap.xml") if rows else ([], {})
+        return bing_issues_summary(rows, live)
+
     part("crawl", crawl)
+    part("issues", issues)
     part("traffic", traffic)
     part("queries", queries)
     part("pages", pages)
@@ -554,6 +592,12 @@ def to_md(r):
         if c:
             L.append("- в индексе Bing: %s, обойдено за день: %s, ошибок обхода: %s, закрыто robots: %s (на %s)" % (
                 c.get("in_index"), c.get("crawled"), c.get("crawl_errors"), c.get("blocked"), c.get("date")))
+        iss = b.get("issues") or {}
+        if iss.get("total"):
+            L.append("- ошибки обхода по видам: " + ", ".join("%s %s" % kv for kv in iss["by_kind"]) +
+                     "; по кодам: " + ", ".join("%s — %s" % kv for kv in iss["by_code"][:6]))
+            L.append("- из них живые страницы из sitemap: %s%s" % (iss.get("live_count", 0), (" — " + ", ".join(
+                "%s (%s)" % tuple(x) for x in iss["live_in_sitemap"][:10])) if iss.get("live_in_sitemap") else ""))
         t = b.get("traffic") or {}
         if t:
             L.append("- показы за %s дн.: %s, клики: %s" % (t.get("days"), t.get("impressions_7d"), t.get("clicks_7d")))

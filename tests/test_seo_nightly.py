@@ -189,6 +189,21 @@ class RecrawlQueueTests(unittest.TestCase):
             self.assertIn("IndexNow", md)
             self.assertIn("принято Яндексом: 4", md)
 
+    def test_bing_crawl_issues_summary(self):
+        import seo_nightly as sn
+        B = "https://torggid.ru"
+        rows = [{"Url": B + "/torgi/lot/9/", "HttpCode": 404}, {"Url": B + "/auto/lot/a/", "HttpCode": 404},
+                {"Url": B + "/.env", "HttpCode": 403}, {"Url": B + "/torgi/moskva/", "HttpCode": 503},
+                {"Url": B + "/guides/x.html", "HttpCode": 404}]
+        r = sn.bing_issues_summary(rows, [B + "/torgi/moskva/", B + "/torgi/"])
+        self.assertEqual(r["total"], 5)
+        self.assertEqual(dict(r["by_code"])["404"], 3)
+        self.assertEqual(dict(r["by_kind"])["мусорные пути сканеров"], 1)
+        self.assertEqual(dict(r["by_kind"])["старые страницы прежнего сайта"], 1)
+        self.assertEqual(r["live_in_sitemap"], [["/torgi/moskva/", "503"]])
+        md = sn.to_md({"date": "2026-11-14", "bing": {"issues": r}})
+        self.assertIn("живые страницы из sitemap: 1", md)
+
     def test_bing_pick_rotates_and_skips_recent(self):
         import seo_nightly as sn
         from datetime import date
