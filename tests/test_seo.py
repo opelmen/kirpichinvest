@@ -307,7 +307,7 @@ class AutoSectionTests(unittest.TestCase):
             self.assertIn('85 000 км', car)
             self.assertIn('VIN есть', car)
             self.assertIn('<meta property="og:image" content="https://torgi.gov.ru/new/image/1.jpg">', car)
-            self.assertIn('https://app.torggid.ru/auto/gistorgi_auto%3A0_1?from=site_auto_check', car)
+            self.assertIn('https://app.torggid.ru/auto/gistorgi_auto%3A0_1?buy=1&amp;from=site_auto_check', car)  # кнопка «Проверить машину» сразу открывает оплату
             self.assertIn('Похожие машины с торгов', car)
             # ГЕО-5: гость из ИИ-ассистента на технике видит проверку VIN, на недвижимости — подписку
             self.assertIn('data-ai-cta="vin"', car)
