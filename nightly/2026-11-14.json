@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-13T23:09:14+00:00",
+ "generated": "2026-11-14T01:26:21+00:00",
  "date": "2026-11-14",
  "metrika": {
   "day": "2026-11-13",
@@ -95,9 +95,9 @@
     "http:torggid.ru:80"
    ],
    "errors": {
-    "summary": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
-    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "summary": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "excluded_samples": "HTTP 404 {\"host_id\":null,\"error_code\":\"HOST_NOT_LOADED\",\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\"}",
+    "in_search_samples": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}",
     "indexing_samples": "Remote end closed connection without response",
     "queries": "HTTP 404 {\"host_id\":null,\"error_message\":\"Host \\\"https:torggid.ru:443\\\" is not loaded in Ya.Webmaster yet\",\"error_code\":\"HOST_NOT_LOADED\"}"
    },
@@ -315,8 +315,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -325,8 +325,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -335,8 +335,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -345,8 +345,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -355,8 +355,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -365,8 +365,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -375,8 +375,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -385,8 +385,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -395,8 +395,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -405,8 +405,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -415,8 +415,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -425,8 +425,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -435,8 +435,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -445,8 +445,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -455,8 +455,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -465,8 +465,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -475,8 +475,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -485,8 +485,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -495,8 +495,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -505,8 +505,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -515,8 +515,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -525,8 +525,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -535,8 +535,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -545,8 +545,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -555,8 +555,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -565,8 +565,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -575,8 +575,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -585,8 +585,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -595,8 +595,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -605,8 +605,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -615,8 +615,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -625,8 +625,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -635,8 +635,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -645,8 +645,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -655,8 +655,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -665,8 +665,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -675,8 +675,8 @@
       "event_date": "2026-10-07T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -685,8 +685,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -695,8 +695,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -705,8 +705,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -715,8 +715,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -725,8 +725,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -735,8 +735,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -745,8 +745,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -755,8 +755,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -765,8 +765,8 @@
       "event_date": "2026-10-05T00:00:00.000+03:00",
       "last_access": "2026-09-28T00:00:00.000+03:00",
       "event": "REMOVED_FROM_SEARCH",
-      "excluded_url_status": "LOW_QUALITY",
       "bad_http_status": null,
+      "excluded_url_status": "LOW_QUALITY",
       "target_url": null
      },
      {
@@ -775,8 +775,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -785,8 +785,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -795,8 +795,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -805,8 +805,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -815,8 +815,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -825,8 +825,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -835,8 +835,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -845,8 +845,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -855,8 +855,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -865,8 +865,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -875,8 +875,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -885,8 +885,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -895,8 +895,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -905,8 +905,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -915,8 +915,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -925,8 +925,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -935,8 +935,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -945,8 +945,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -955,8 +955,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -965,8 +965,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -975,8 +975,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -985,8 +985,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -995,8 +995,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1005,8 +1005,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1015,8 +1015,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1025,8 +1025,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1035,8 +1035,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1045,8 +1045,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1055,8 +1055,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1065,8 +1065,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1075,8 +1075,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1085,8 +1085,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1095,8 +1095,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1105,8 +1105,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1115,8 +1115,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1125,8 +1125,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1135,8 +1135,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1145,8 +1145,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1155,8 +1155,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1165,8 +1165,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      },
      {
@@ -1175,8 +1175,8 @@
       "event_date": "2026-10-02T00:00:00.000+03:00",
       "last_access": "2026-09-27T00:00:00.000+03:00",
       "event": "APPEARED_IN_SEARCH",
-      "excluded_url_status": null,
       "bad_http_status": null,
+      "excluded_url_status": null,
       "target_url": null
      }
     ]
@@ -1204,37 +1204,22 @@
    },
    "diagnostics": {
     "problems": {
-     "NO_REGIONS": {
+     "INSIGNIFICANT_CGI_PARAMETER": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "NOT_IN_SPRAV": {
+     "URL_ALERT_4XX": {
       "severity": "RECOMMENDATION",
-      "state": "PRESENT",
-      "last_state_update": "2026-09-30T07:41:40.077+03:00"
+      "state": "ABSENT",
+      "last_state_update": null
      },
-     "DISALLOWED_IN_ROBOTS": {
-      "severity": "FATAL",
+     "FAVICON_ERROR": {
+      "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
      "DUPLICATE_CONTENT_ATTRS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_METRIKA_COUNTER_BINDING": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "VIDEOHOST_OFFER_FAILED": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1244,23 +1229,8 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "NOT_MOBILE_FRIENDLY": {
-      "severity": "RECOMMENDATION",
-      "state": "UNDEFINED",
-      "last_state_update": null
-     },
-     "NO_SITEMAP_MODIFICATIONS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
      "URL_ALERT_5XX": {
       "severity": "CRITICAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DOCUMENTS_MISSING_DESCRIPTION": {
-      "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -1269,23 +1239,8 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DOCUMENTS_MISSING_TITLE": {
+     "MAIN_PAGE_REDIRECTS": {
       "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "ERROR_IN_ROBOTS_TXT": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "TOO_MANY_DOMAINS_ON_SEARCH": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "INSIGNIFICANT_CGI_PARAMETER": {
-      "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
      },
@@ -1299,32 +1254,12 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "CONNECT_FAILED": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "NO_SITEMAPS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "PRESENT",
-      "last_state_update": "2026-10-10T08:07:56.042+03:00"
-     },
      "BIG_FAVICON_ABSENT": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "THREATS": {
-      "severity": "FATAL",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "DUPLICATE_PAGES": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_ERROR": {
+     "DISALLOWED_IN_ROBOTS": {
       "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
@@ -1334,27 +1269,37 @@
       "state": "ABSENT",
       "last_state_update": null
      },
-     "URL_ALERT_4XX": {
+     "DOCUMENTS_MISSING_DESCRIPTION": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_REGIONS": {
       "severity": "RECOMMENDATION",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "DNS_ERROR": {
+     "THREATS": {
       "severity": "FATAL",
       "state": "ABSENT",
       "last_state_update": null
      },
-     "FAVICON_ERROR": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
-     },
-     "MAIN_PAGE_REDIRECTS": {
-      "severity": "POSSIBLE_PROBLEM",
-      "state": "ABSENT",
-      "last_state_update": null
+     "NOT_IN_SPRAV": {
+      "severity": "RECOMMENDATION",
+      "state": "PRESENT",
+      "last_state_update": "2026-09-30T07:41:40.077+03:00"
      },
      "ERRORS_IN_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NOT_MOBILE_FRIENDLY": {
+      "severity": "RECOMMENDATION",
+      "state": "UNDEFINED",
+      "last_state_update": null
+     },
+     "NO_METRIKA_COUNTER_BINDING": {
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": null
@@ -1363,6 +1308,61 @@
       "severity": "POSSIBLE_PROBLEM",
       "state": "ABSENT",
       "last_state_update": "2026-10-03T10:33:06.648+03:00"
+     },
+     "NO_SITEMAP_MODIFICATIONS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "TOO_MANY_DOMAINS_ON_SEARCH": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DNS_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "ERROR_IN_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "DOCUMENTS_MISSING_TITLE": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "MAIN_PAGE_ERROR": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_ROBOTS_TXT": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "NO_SITEMAPS": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "PRESENT",
+      "last_state_update": "2026-10-10T08:07:56.042+03:00"
+     },
+     "DUPLICATE_PAGES": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "CONNECT_FAILED": {
+      "severity": "FATAL",
+      "state": "ABSENT",
+      "last_state_update": null
+     },
+     "VIDEOHOST_OFFER_FAILED": {
+      "severity": "POSSIBLE_PROBLEM",
+      "state": "ABSENT",
+      "last_state_update": null
      }
     }
    }
@@ -1386,9 +1386,6 @@
   "probe": "https:contora.store:443: HTTP 504 "
  },
  "bing": {
-  "errors": {
-   "submit": "HTTP 400 {\"ErrorCode\":8,\"Message\":\"ERROR!!! You have exceeded your daily url submission quota : 100\"}"
-  },
   "crawl": {
    "date": "2026-11-09",
    "in_index": 854,
@@ -1405,7 +1402,7 @@
    "live_count": 0
   },
   "traffic": {
-   "impressions_7d": 2,
+   "impressions_7d": 3,
    "clicks_7d": 0,
    "days": 7
   },
@@ -1435,34 +1432,10 @@
     4
    ],
    [
-    "балтым арестованное имущество земельный участок торги",
+    "недвижимость москва толрги",
     1,
     0,
-    6
-   ],
-   [
-    "\"симоновский\" \"17\" \"14\" \"торги\"",
-    1,
-    0,
-    3
-   ],
-   [
-    "site.investmoscow.ru квартира торги ноябрь 2026",
-    1,
-    0,
-    5
-   ],
-   [
-    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
-    1,
-    0,
-    1
-   ],
-   [
-    "с московская 66 офис 411,4 этаж саратов 2 гис",
-    1,
-    0,
-    3
+    4
    ],
    [
     "дом нирнзее нежилое помещение торги",
@@ -1477,16 +1450,10 @@
     3
    ],
    [
-    "недвижимость москва толрги",
+    "\"квартира\" \"торги\" \"2020\" \"раменки\"",
     1,
     0,
-    4
-   ],
-   [
-    "аукционы по продаже недвижимости в москве",
-    1,
-    0,
-    8
+    1
    ],
    [
     "московская 66 офис 411,4 этаж саратов 2 гис",
@@ -1499,6 +1466,36 @@
     1,
     0,
     7
+   ],
+   [
+    "балтым арестованное имущество земельный участок торги",
+    1,
+    0,
+    6
+   ],
+   [
+    "аукционы по продаже недвижимости в москве",
+    1,
+    0,
+    8
+   ],
+   [
+    "\"симоновский\" \"17\" \"14\" \"торги\"",
+    1,
+    0,
+    3
+   ],
+   [
+    "site.investmoscow.ru квартира торги ноябрь 2026",
+    1,
+    0,
+    5
+   ],
+   [
+    "с московская 66 офис 411,4 этаж саратов 2 гис",
+    1,
+    0,
+    3
    ]
   ],
   "pages": [
@@ -1535,18 +1532,24 @@
    "/sitemap.xml"
   ],
   "quota": {
-   "daily": 0,
+   "daily": 100,
    "monthly": 1700
+  },
+  "submitted_urls": 100,
+  "submitted_by_kind": {
+   "разделы и статьи": 100,
+   "недвижимость": 0,
+   "техника": 0
   }
  },
  "indexnow": {
   "candidates": 18501,
-  "sent_before": 7000,
+  "sent_before": 8000,
   "picked": 1000,
   "by_kind": {
-   "разделы и статьи": 45,
-   "недвижимость": 955,
-   "техника": 0
+   "разделы и статьи": 0,
+   "недвижимость": 115,
+   "техника": 885
   },
   "responses": {
    "yandex.com": 200,
@@ -2226,7 +2229,7 @@
   "pages": {
    "/": {
     "status": 200,
-    "ms": 1010,
+    "ms": 865,
     "bytes": 52495,
     "final": "https://torggid.ru/",
     "error": null,
@@ -2240,7 +2243,7 @@
    },
    "/torgi/": {
     "status": 200,
-    "ms": 943,
+    "ms": 1030,
     "bytes": 107471,
     "final": "https://torggid.ru/torgi/",
     "error": null,
@@ -2254,7 +2257,7 @@
    },
    "/torgi/moskva/": {
     "status": 200,
-    "ms": 913,
+    "ms": 1036,
     "bytes": 108701,
     "final": "https://torggid.ru/torgi/moskva/",
     "error": null,
@@ -2268,7 +2271,7 @@
    },
    "/torgi/sankt-peterburg/": {
     "status": 200,
-    "ms": 914,
+    "ms": 1005,
     "bytes": 105626,
     "final": "https://torggid.ru/torgi/sankt-peterburg/",
     "error": null,
@@ -2282,7 +2285,7 @@
    },
    "/auto/": {
     "status": 200,
-    "ms": 1180,
+    "ms": 1295,
     "bytes": 99630,
     "final": "https://torggid.ru/auto/",
     "error": null,
@@ -2296,7 +2299,7 @@
    },
    "/stati/": {
     "status": 200,
-    "ms": 762,
+    "ms": 864,
     "bytes": 39731,
     "final": "https://torggid.ru/stati/",
     "error": null,
@@ -2310,7 +2313,7 @@
    },
    "/proverka-lota/": {
     "status": 200,
-    "ms": 645,
+    "ms": 731,
     "bytes": 38968,
     "final": "https://torggid.ru/proverka-lota/",
     "error": null,
@@ -2324,7 +2327,7 @@
    },
    "/kupit-kvartiru-s-torgov/": {
     "status": 200,
-    "ms": 612,
+    "ms": 677,
     "bytes": 35007,
     "final": "https://torggid.ru/kupit-kvartiru-s-torgov/",
     "error": null,
@@ -2338,7 +2341,7 @@
    },
    "/analitika/": {
     "status": 200,
-    "ms": 769,
+    "ms": 677,
     "bytes": 28823,
     "final": "https://torggid.ru/analitika/",
     "error": null,
@@ -2354,25 +2357,25 @@
   "tech": {
    "/robots.txt": {
     "status": 200,
-    "ms": 477,
+    "ms": 522,
     "bytes": 606,
     "error": null
    },
    "/sitemap.xml": {
     "status": 200,
-    "ms": 483,
+    "ms": 506,
     "bytes": 900,
     "error": null
    },
    "/sitemap-yandex.xml": {
     "status": 200,
-    "ms": 1000,
+    "ms": 863,
     "bytes": 54795,
     "error": null
    },
    "/llms.txt": {
     "status": 200,
-    "ms": 615,
+    "ms": 693,
     "bytes": 30511,
     "error": null
    }
